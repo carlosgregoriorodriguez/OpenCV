@@ -1,26 +1,28 @@
+from numpy import arange
 class Struct:
     def __init__(self, **entries): 
         self.__dict__.update(entries)
 
-
 class Trackbar:
     cls_name = None
-    def __init__ (self,name=None,default=0,max=10,processor=lambda x:x,values=[]):
-        self._name = name
-        self.default = default
-        self.max = max
-        if values:
-            self.max = len(values)-1
-            processor = lambda x:values[x]
-        self.processor = processor
+    def __init__ (self,*args,**kwargs):
+        self._name = kwargs.get('name',None)
+        self.default = kwargs.get('default',0)
+        self.values = kwargs['values'] if 'values' in kwargs else  arange(*args)
+        self.instant = kwargs.get('instant')
         self.parent = None
-        self._set_value(default)
+        self._set_value(self.default)
+
+    @property
+    def max (self):
+        return len(self.values)
+
     def _get_value (self):
         return self._value
     def _set_value (self,value):
-        self._value = self.processor(value)
-        if self.parent: self.parent.paint()
-        self.log('Trackbar %s changed to %g'%(self.name,self._value))
+        self._value = self.values[value]
+        if self.instant and self.parent: self.parent.paint()
+        self.log('Trackbar: %s = %g'%(self.name,self._value))
 
     value = property(_get_value,_set_value)
 
