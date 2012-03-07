@@ -1,4 +1,6 @@
 from numpy import arange
+import types
+
 class Struct:
     def __init__(self, **entries): 
         self.__dict__.update(entries)
@@ -8,14 +10,14 @@ class Trackbar:
     def __init__ (self,*args,**kwargs):
         self._name = kwargs.get('name',None)
         self.default = kwargs.get('default',0)
-        self.values = kwargs['values'] if 'values' in kwargs else  arange(*args)
+        self.values = kwargs['values'] if 'values' in kwargs else args[0] if isinstance(args[0], types.ListType) else arange(*args)
         self.instant = kwargs.get('instant')
         self.parent = None
         self._set_value(self.default)
 
     @property
     def max (self):
-        return len(self.values)
+        return len(self.values)-1
 
     def _get_value (self):
         return self._value

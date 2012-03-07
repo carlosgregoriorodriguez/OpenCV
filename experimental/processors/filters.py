@@ -58,7 +58,7 @@ class LaplacianProcessor(Processor):
         return cv2.Laplacian(img,int(self.laplacian))
 
 class SobelProcessor(Processor):
-    ddepth = Trackbar(values=[0,5])
+    ddepth = Trackbar([0,5])
     dx = Trackbar(2)
     dy = Trackbar(2)
     #ksize = Trackbar(default=0,values=[1,3,5,7])
@@ -75,7 +75,7 @@ class MeanShiftFilteringProcessor(Processor):
 class CannyProcessor(Processor):
     threshold1 = Trackbar(600,default=200)
     threshold2 = Trackbar(600,default=80)
-    aperture = Trackbar(values=[3,5,7])
+    aperture = Trackbar([3,5,7])
     def process(self,img):
         return cv2.Canny(img,threshold1=int(self.threshold1),threshold2=int(self.threshold2),apertureSize=int(self.aperture))
 
