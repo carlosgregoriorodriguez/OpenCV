@@ -1,6 +1,6 @@
 import time, cv2
 
-class Test(object):
+class Visualizer(object):
     _window_name = None
     parent = None
     def __init__(self, debug=True, processors=[]):
@@ -32,7 +32,8 @@ class Test(object):
             processor.contribute_to_test(self)
 
     def paint (self):
-        img = self.get_source()
+        source = self.get_source()
+        img = source
         try:
             before = time.time()
             for processor in self.processors:
@@ -47,7 +48,8 @@ class Test(object):
                     color=(255, 255, 255), thickness = 1, linetype=cv2.CV_AA)        
 
         except Exception, e:
-            img = cv2.cvtColor(img,cv2.COLOR_GRAY2RGB)
+            # img = cv2.cvtColor(source,cv2.COLOR_GRAY2RGB)
+            img = source
             cv2.putText(img=img, text="Error", org=(20, 30), 
                     fontFace=cv2.FONT_HERSHEY_PLAIN, fontScale=1.5, 
                     color=(0, 0, 0), thickness = 3, linetype=cv2.CV_AA)        
@@ -59,9 +61,9 @@ class Test(object):
 
         cv2.imshow(self.window_name,img)
 
-class FramedTest (Test):
+class FramedVisualizer (Visualizer):
     def show (self):
-        super(FramedTest,self).show()
+        super(FramedVisualizer,self).show()
         while True:
             self.paint()
             if (cv2.waitKey (1) != -1):
@@ -70,30 +72,30 @@ class FramedTest (Test):
     def get_source (self):
         return
 
-class ImageTest (Test):
+class ImageVisualizer (Visualizer):
     def __init__(self,*args,**kwargs):
         file = kwargs.pop('file',0)
         self.img = cv2.imread(file)
-        super(ImageTest,self).__init__(*args,**kwargs)
+        super(ImageVisualizer,self).__init__(*args,**kwargs)
     
     def show(self):
-        super(ImageTest,self).show()
+        super(ImageVisualizer,self).show()
         self.paint()
         cv2.waitKey(0)
 
     def get_source (self):
         return self.img
 
-class VideoTest (FramedTest):
+class VideoVisualizer (FramedVisualizer):
     def __init__(self,*args,**kwargs):
         file = kwargs.pop('file')
         self.capture = cv2.VideoCapture(file)
-        super(VideoTest,self).__init__(*args,**kwargs)
+        super(VideoVisualizer,self).__init__(*args,**kwargs)
     def get_source (self):
         return self.capture.read()[1]
 
 
-class CamTest (VideoTest):
+class CamVisualizer (VideoVisualizer):
     def __init__(self,*args,**kwargs):
         kwargs['file'] = kwargs.get('device',0)
-        super(CamTest,self).__init__(*args,**kwargs)
+        super(CamVisualizer,self).__init__(*args,**kwargs)

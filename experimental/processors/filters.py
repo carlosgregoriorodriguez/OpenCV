@@ -53,14 +53,14 @@ class ErodeProcessor(Processor):
         return cv2.erode(img,kernel=0,iterations=2)
 
 class LaplacianProcessor(Processor):
-    laplacian = Trackbar(100)
+    laplacian = Trackbar([0,5])
     def process(self,img):
         return cv2.Laplacian(img,int(self.laplacian))
 
 class SobelProcessor(Processor):
-    ddepth = Trackbar([0,5])
-    dx = Trackbar(2)
-    dy = Trackbar(2)
+    ddepth = Trackbar([0,5],default=1)
+    dx = Trackbar(3)
+    dy = Trackbar(3,default=1)
     #ksize = Trackbar(default=0,values=[1,3,5,7])
     def process(self,img):
         #kx,ky = cv2.getDerivKernels(self.dx, self.dy, self.ksize)
