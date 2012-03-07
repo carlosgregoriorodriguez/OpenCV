@@ -7,6 +7,7 @@ class Struct:
 
 class Trackbar:
     cls_name = None
+    processor = None
     def __init__ (self,*args,**kwargs):
         self._name = kwargs.get('name',None)
         self.default = kwargs.get('default',0)
@@ -29,7 +30,7 @@ class Trackbar:
     value = property(_get_value,_set_value)
 
     def _get_name (self):
-        return self._name or self.cls_name
+        return '%s: %s' %(str(self.processor),self._name or self.cls_name)
     def _set_name (self,name):
         self._name = name
     name = property(_get_name,_set_name)
