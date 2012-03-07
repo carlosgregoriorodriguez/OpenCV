@@ -44,7 +44,7 @@ if __name__ == "__main__":
             img = imgOriginal
 
         if (k == 114):      #if user presser 'r' => Change source (cam ->img)
-            imgOriginal = cv2.imread("beach.jpg",2)
+            imgOriginal = cv2.imread("../img/beach.jpg",2)
             img = imgOriginal
 
         if (k == 113):     #if user presses 'q' => QUIT
