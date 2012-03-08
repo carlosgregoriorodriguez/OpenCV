@@ -14,6 +14,9 @@ class Processor(object):
     __metaclass__ = MetaProcessor
     def __init__ (self,**kwargs):
         self.meta.settings = kwargs
+        for trackbar in self.meta.trackbars:
+            trackbar.processor = self
+
     def contribute_to_test (self,test):
         keys = self.meta.settings.keys()
         for trackbar in self.meta.trackbars:
@@ -24,6 +27,9 @@ class Processor(object):
                 trackbar._value = self.meta.settings[key]
     def process(self,img):
         return img 
+
+    def __str__ (self):
+        return self.__class__.__name__.lower().replace('processor','').capitalize()
 
 class ProcessorMethod (Processor):
     method = None

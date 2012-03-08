@@ -32,6 +32,13 @@ class BlurProcessor(Processor):
     def process(self,img):
         return cv2.blur(img,(int(self.blur),)*2)
 
+class BorderProcessor(Processor):
+    type = Trackbar([cv2.BORDER_DEFAULT,cv2.BORDER_CONSTANT,cv2.BORDER_WRAP,cv2.BORDER_REFLECT_101])
+    length = Trackbar(100,default=50)
+    def process(self,img):
+        l = int(self.length)
+        return cv2.copyMakeBorder(img,l,l,l,l,int(self.type))
+
 class MedianBlurProcessor(Processor):
     blur = Trackbar(3,10,2)
     def process(self,img):
@@ -48,9 +55,14 @@ class GrayScaleProcessor (Processor):
         return cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)
 
 class ErodeProcessor(Processor):
-    erode = Trackbar(1)
+    iterations = Trackbar(50)
     def process(self,img):
-        return cv2.erode(img,kernel=0,iterations=2)
+        return cv2.erode(img,kernel=None,iterations=int(self.iterations))
+
+class DilateProcessor(Processor):
+    iterations = Trackbar(50)
+    def process(self,img):
+        return cv2.dilate(img,kernel=None,iterations=int(self.iterations))
 
 class LaplacianProcessor(Processor):
     laplacian = Trackbar([0,5])
@@ -72,10 +84,25 @@ class MeanShiftFilteringProcessor(Processor):
     def process(self,img):
         return cv2.pyrMeanShiftFiltering(img,int(self.spatial_radius),int(self.color_radius)) #int(self.dx),int(self.dy)
 
+class BoxFilterProcessor(Processor):
+    ksize_x = Trackbar(1,200)
+    ksize_y = Trackbar(1,200)
+    def process(self,img):
+        return cv2.boxFilter(img,-1,(int(self.ksize_x),int(self.ksize_y)))
+
 class CannyProcessor(Processor):
     threshold1 = Trackbar(600,default=200)
     threshold2 = Trackbar(600,default=80)
     aperture = Trackbar([3,5,7])
     def process(self,img):
         return cv2.Canny(img,threshold1=int(self.threshold1),threshold2=int(self.threshold2),apertureSize=int(self.aperture))
+
+
+class ThresholdProcessor(Processor):
+    thresh = Trackbar(256,default=60)
+    maxval = Trackbar(256,default=160)
+    type = Trackbar([cv2.THRESH_BINARY,cv2.THRESH_BINARY_INV,cv2.THRESH_TRUNC,cv2.THRESH_TOZERO,cv2.THRESH_TOZERO_INV])
+    def process(self,img):
+        retVal, newimg = cv2.threshold(img,int(self.thresh),int(self.maxval),self.type.value)
+        return newimg
 
