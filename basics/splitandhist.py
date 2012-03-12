@@ -30,10 +30,12 @@ def labelImages(images, labels, toggleLabels):
 
 if __name__ == "__main__":
 	print "Press T to toggle frame names.";
+	print "      H to toggle general histogram over original image.";
 	print "Usage: ";
 	print "    split.py filename               for filename"
 	print "    slpit.py N                      for camera /dev/videoN"
 
+	showHist = False;
 	toggleLabels = False;
 	video = False;
 	filename = '../img/stop.jpg';
@@ -60,6 +62,8 @@ if __name__ == "__main__":
 			f,img = cam.read();
 		while (img.shape[1] > 320 or img.shape[0] > 350):
 			img = cv2.pyrDown(img);
+		# Copy of the original image
+		original = img.copy();
 		
 		# Splitting image into channels	
 		imgB, imgG, imgR = cv2.split(img);
@@ -78,25 +82,35 @@ if __name__ == "__main__":
 		color = [ (255,0,0),(0,255,0),(0,0,255) ];		
 
 		# For each channel and it's respective color...		
-		for item,col in zip([imgR,imgG,imgB],color):
+		for item,col in zip([imgB,imgG,imgR],color):
 			# Calculating the histogram. Same can be made with numpy.
 			hist_item = cv2.calcHist([item],[0],None,[256],[0,255]);
 			# Normalize histogram from 0 to 255
-			cv2.normalize(hist_item,hist_item,0,255,cv2.NORM_MINMAX)
+			cv2.normalize(hist_item,hist_item,0,255,cv2.NORM_MINMAX);
 			# Round and convert to integers
-			hist=np.int32(np.around(hist_item))
+			hist=np.int32(np.around(hist_item));
 			# Stack the points x coordenates with y values
-			pts = np.column_stack((bins,hist))
+			pts = np.column_stack((bins,hist));
 			# Draw the points with their color
-			cv2.polylines(hrgb,[pts],False,col)
+			cv2.polylines(hrgb,[pts],False,col,2);
 			
 		# Same for HSV
 		for item,col in zip([imgH,imgS,imgV],color):
-			hist_item = cv2.calcHist([item],[0],None,[256],[0,255])
-			cv2.normalize(hist_item,hist_item,0,255,cv2.NORM_MINMAX)
-			hist=np.int32(np.around(hist_item))
-			pts = np.column_stack((bins,hist))
-			cv2.polylines(hhsv,[pts],False,col)
+			hist_item = cv2.calcHist([item],[0],None,[256],[0,255]);
+			cv2.normalize(hist_item,hist_item,0,255,cv2.NORM_MINMAX);
+			hist=np.int32(np.around(hist_item));
+			pts = np.column_stack((bins,hist));
+			cv2.polylines(hhsv,[pts],False,col,2)
+			
+		# Draw a histogram over the original frameza	
+		if (showHist):
+			original = np.flipud(original);
+			hist_item = cv2.calcHist([img],[0],None,[256],[0,255]);
+			cv2.normalize(hist_item,hist_item,0,255,cv2.NORM_MINMAX);
+			hist=np.int32(np.around(hist_item));
+			pts = np.column_stack((bins,hist));
+			cv2.polylines(original,[pts],False,(0,0,0),2)
+			original = np.flipud(original);					
 				
 		# Histograms are drawed from up to down, so we have to flip the images
 		hhsv = np.flipud(hhsv);
@@ -105,7 +119,7 @@ if __name__ == "__main__":
 		# Just labelling each image if T is triggered
 		imgB,imgG, imgR = labelImages([imgB,imgG,imgR], ['blue','green','red'], toggleLabels);
 		imgH, imgS, imgV = labelImages([imgH,imgS,imgV], ['hue','saturation','value'], toggleLabels);	
-		original,hrgb,hhsv = labelImages([img.copy(), hrgb, hhsv],['original','rgb hist','hsv hist'], toggleLabels);
+		original,hrgb,hhsv = labelImages([original, hrgb, hhsv],['original','rgb hist','hsv hist'], toggleLabels);
 
 		# Join all frames into one image.		
 		output = joinImages([[imgR, imgG, imgB],[imgH,imgS,imgV],[original,hrgb,hhsv]]);
@@ -123,6 +137,8 @@ if __name__ == "__main__":
 		if(key != -1):	
 			if (key == 116): #T
 				toggleLabels = not toggleLabels;
+			elif (key == 104): # H
+				showHist = not showHist;
 			else:
 				print "Key "+str(key)+" pressed. Exiting.";
 				break;
