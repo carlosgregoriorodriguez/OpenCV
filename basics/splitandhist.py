@@ -92,7 +92,7 @@ if __name__ == "__main__":
 			# Stack the points x coordenates with y values
 			pts = np.column_stack((bins,hist));
 			# Draw the points with their color
-			cv2.polylines(hrgb,[[pts]],False,col,2);
+			cv2.polylines(hrgb,np.array([pts],np.int32),False,col,2);
 			
 		# Same for HSV
 		for item,col in zip([imgH,imgS,imgV],color):
@@ -100,7 +100,7 @@ if __name__ == "__main__":
 			cv2.normalize(hist_item,hist_item,0,255,cv2.NORM_MINMAX);
 			hist=np.int32(np.around(hist_item));
 			pts = np.column_stack((bins,hist));
-			cv2.polylines(hhsv,[[pts]],False,col,2)
+			cv2.polylines(hhsv,np.array([pts],np.int32),False,col,2)
 			
 		# Draw a histogram over the original frameza	
 		if (showHist):
@@ -109,7 +109,8 @@ if __name__ == "__main__":
 			cv2.normalize(hist_item,hist_item,0,255,cv2.NORM_MINMAX);
 			hist=np.int32(np.around(hist_item));
 			pts = np.column_stack((bins,hist));
-			cv2.polylines(original,[[pts]],False,(0,0,0),2)
+
+			cv2.polylines(original,np.array([pts],np.int32),False,(0,0,0),2)
 			original = np.flipud(original);					
 				
 		# Histograms are drawed from up to down, so we have to flip the images
