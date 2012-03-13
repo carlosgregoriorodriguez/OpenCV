@@ -109,7 +109,7 @@ if __name__ == "__main__":
 			cv2.normalize(hist_item,hist_item,0,255,cv2.NORM_MINMAX);
 			hist=np.int32(np.around(hist_item));
 			pts = np.column_stack((bins,hist));
-			cv2.polylines(original,[pts],False,(0,0,0),2)
+			cv2.polylines(original,[[pts]],False,(0,0,0),2)
 			original = np.flipud(original);					
 				
 		# Histograms are drawed from up to down, so we have to flip the images
