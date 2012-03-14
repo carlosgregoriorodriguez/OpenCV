@@ -12,16 +12,17 @@ if __name__ == "__main__":
     bw = cv2.imread("../../img/stop.jpg",0)    #read image
 
     bwx = np.array(bw,dtype = float)           #convert the array to floats
-
-    bwDFT = cv2.dft(bwx)                       #APPLY DFT and DCT
+    
+    #APPLY DFT
+    bwDFT = cv2.dft(bwx)
+    aux  = cv2.dft(bwDFT,flags=cv2.DFT_INVERSE+cv2.DFT_SCALE)
+    resultF = np.array(aux, dtype = "uint8")
+    
+    #APPLY DCT
     bwDCT = cv2.dct(bwx)
-
-    resultF = np.zeros(bwx.shape)              #Create dst pointers
-    resultC = np.zeros(bwx.shape)
-
-    cv2.dft(bwDFT,resultF,cv2.DFT_INVERSE)
-    cv2.dct(bwDCT,resultC,cv2.DCT_INVERSE)
-
+    aux = cv2.dct(bwDCT,flags=cv2.DCT_INVERSE)
+    resultC = np.array(aux, dtype = "uint8")
+    
     cv2.imshow("ORIGINAL",bw)
     cv2.imshow("FOURIER",bwDFT)
     cv2.imshow("COSINE",bwDCT)
