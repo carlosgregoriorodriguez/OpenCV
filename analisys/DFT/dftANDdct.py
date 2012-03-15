@@ -22,9 +22,11 @@ if __name__ == "__main__":
     
     #APPLY DFT
     bwDFT = cv2.dft(bwx)
-    aux  = cv2.dft(bwDFT,flags=cv2.DFT_INVERSE+cv2.DFT_SCALE)
+    aux  = cv2.dft(bwDFT,flags=cv2.DFT_INVERSE|cv2.DFT_SCALE)
+    print aux
     resultF = np.array(aux, dtype = "uint8")
-    
+    print resultF
+    print '******'
     #APPLY DCT
     bwDCT = cv2.dct(bwx)
     aux = cv2.dct(bwDCT,flags=cv2.DCT_INVERSE)
