@@ -1,4 +1,6 @@
 from __init__ import *
 
-visualizer = CamVisualizer(processors=[BoxFilterProcessor()])
+visualizer = CamSource(
+	Window(processors=[BoxFilterProcessor()])
+)
 visualizer.show()

@@ -1,6 +1,6 @@
 import time, cv2
 
-class Visualizer(object):
+class Window(object):
     _window_name = None
     parent = None
     def __init__(self, debug=True, processors=[]):
@@ -30,14 +30,19 @@ class Visualizer(object):
         cv2.namedWindow(self.window_name)
         for processor in self.processors:
             processor.contribute_to_test(self)
+        cv2.setMouseCallback(self.window_name, self.on_mouse)
 
-    def paint (self):
-        source = self.get_source()
+    def on_mouse(self,*args,**kwargs):
+        for processor in self.processors:
+            processor.on_mouse(*args,**kwargs)
+
+    def paint (self,source):
         img = source
         try:
             before = time.time()
             for processor in self.processors:
                 img = processor.process(img)
+            # img.dtype = np.uint8
             fps = 1/(time.time()-before)
             if self.debug:
                 cv2.putText(img=img, text="%d fps"%fps, org=(20, 20), 
@@ -61,9 +66,26 @@ class Visualizer(object):
 
         cv2.imshow(self.window_name,img)
 
-class FramedVisualizer (Visualizer):
+class Source(object):
+    def __init__(self,*windows):
+        self.windows = windows
+
     def show (self):
-        super(FramedVisualizer,self).show()
+        for window in self.windows:
+            window.show()
+
+    def paint(self):
+        img = self.get_source()
+        for window in self.windows:
+            window.paint(img)
+
+    def get_source (self):
+        return
+
+
+class FramedSource (Source):
+    def show (self):
+        super(FramedSource,self).show()
         while True:
             self.paint()
             if (cv2.waitKey (1) != -1):
@@ -72,30 +94,30 @@ class FramedVisualizer (Visualizer):
     def get_source (self):
         return
 
-class ImageVisualizer (Visualizer):
+class ImageSource (Source):
     def __init__(self,*args,**kwargs):
         file = kwargs.pop('file',0)
         self.img = cv2.imread(file)
-        super(ImageVisualizer,self).__init__(*args,**kwargs)
+        super(ImageSource,self).__init__(*args,**kwargs)
     
     def show(self):
-        super(ImageVisualizer,self).show()
+        super(ImageSource,self).show()
         self.paint()
         cv2.waitKey(0)
 
     def get_source (self):
         return self.img
 
-class VideoVisualizer (FramedVisualizer):
+class VideoSource (FramedSource):
     def __init__(self,*args,**kwargs):
         file = kwargs.pop('file')
         self.capture = cv2.VideoCapture(file)
-        super(VideoVisualizer,self).__init__(*args,**kwargs)
+        super(VideoSource,self).__init__(*args,**kwargs)
     def get_source (self):
         return self.capture.read()[1]
 
 
-class CamVisualizer (VideoVisualizer):
+class CamSource (VideoSource):
     def __init__(self,*args,**kwargs):
         kwargs['file'] = kwargs.get('device',0)
-        super(CamVisualizer,self).__init__(*args,**kwargs)
+        super(CamSource,self).__init__(*args,**kwargs)

@@ -1,4 +1,6 @@
 from __init__ import *
 
-visualizer = CamVisualizer(processors=[MeanShiftFilteringProcessor()])
+visualizer = CamSource(
+	Window(processors=[MeanShiftFilteringProcessor()])
+)
 visualizer.show()
