@@ -6,6 +6,7 @@ visualizer = CamSource(
 		DFTProcessor(flags=None),
 		DFTProcessor(flags=DFTProcessor.invs),
 		FormatInt8()
-	])
+	]),
+        DebugWindow()
 )
 visualizer.show()
