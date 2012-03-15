@@ -38,7 +38,7 @@ if __name__ == "__main__":
 	showHist = False;
 	toggleLabels = False;
 	video = False;
-	filename = '../img/stop.jpg';
+	filename = '../../img/stop.jpg';
 	cam = False;
 	
 	img = None;
