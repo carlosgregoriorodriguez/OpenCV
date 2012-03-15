@@ -1,5 +1,11 @@
 # USAGE:     python dftbasic.py (img path)
 #
+# Shows various images:
+#            ORIGINAL  -  original image (BW) (given trough command terminal)
+#            DFT -> DFT_INV  -  result of applying th dft and afterwards the
+#                                inverse dft.
+#            DCT -> DCT_INV  -  result of applying th dct and afterwards the
+#                                inverse dct.
 #      Press 'q' to quit
 
 
@@ -27,8 +33,8 @@ if __name__ == "__main__":
     #cv2.imshow("FOURIER",bwDFT)
     #cv2.imshow("COSINE",bwDCT)
 
-    cv2.imshow("FOURIER INV.",resultF)
-    cv2.imshow("COSINE INV.",resultC)
+    cv2.imshow("DFT -> DFT_INV",resultF)
+    cv2.imshow("DCT -> DCT_INV",resultC)
 
 
     while True:

@@ -1,5 +1,15 @@
 #USAGE:     python dftbasic.py (img path)
 #
+# Shows various images:
+#       DFT -> DCT_INV  -  Performing inverse-dct on a dft image = normal image
+#       DCT -> DFT_INV  -  Performing inverse-dft on a dct image = nothing
+#       DFT*2 -> DFT_INV/2  -  Normal process on dft multiplying by 2 the dft
+#                               and dividing by 2 the result   = strange image
+#       DCT*2 -> DCT_INV  -  Same as above, with dct, and not applying the last
+#                              division   = strange image
+#       DFT_INV -> DFT  -  Performing first the inverse and afterwards 
+#                           the forward dft   = same as dft image (not sure)
+#
 #      Press 'q' to quit
 
 
