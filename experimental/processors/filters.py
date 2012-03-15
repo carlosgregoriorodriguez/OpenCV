@@ -1,5 +1,6 @@
 import cv2
 from . import Processor, ProcessorMethod, Trackbar
+import numpy as np
 # is_odd = lambda x: x%2!=0 
 # is_even = lambda x: x%2==0 
 # def odd (l):
@@ -105,4 +106,23 @@ class ThresholdProcessor(Processor):
     def process(self,img):
         retVal, newimg = cv2.threshold(img,int(self.thresh),int(self.maxval),self.type.value)
         return newimg
+
+class FloodFillProcessor(Processor):
+    hi = Trackbar(256,default=6)
+    lo = Trackbar(256,default=12)
+    connectivity = Trackbar([4,8],default=0)
+    seed_pt = None
+
+    def process(self,img):
+        h, w = img.shape[:2]
+        mask = np.zeros((h+2, w+2), np.uint8)
+        cv2.floodFill(img, mask, self.seed_pt, (255, 255, 255), (int(self.lo),)*3, (int(self.hi),)*3, int(self.connectivity))
+        cv2.circle(img, self.seed_pt, 3, (0, 0, 255), -1)
+        return img
+
+    def on_mouse(self,event, x, y, flags, param):
+        #print event,flags,cv2.EVENT_FLAG_LBUTTON
+        if flags == cv2.EVENT_FLAG_LBUTTON:
+            self.seed_pt = x, y
+            self.paint()
 

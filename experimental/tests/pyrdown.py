@@ -1,4 +1,6 @@
 from __init__ import *
 
-visualizer = CamVisualizer(processors=[PyrDownProcessor()])
+visualizer = CamSource(
+	Window(processors=[PyrDownProcessor()])
+)
 visualizer.show()

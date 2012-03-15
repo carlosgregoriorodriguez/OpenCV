@@ -1,4 +1,6 @@
 from __init__ import *
 
-visualizer = CamVisualizer(processors=[BorderProcessor()])
+visualizer = CamSource(
+	Window(processors=[BorderProcessor()])
+)
 visualizer.show()

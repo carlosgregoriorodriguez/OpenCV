@@ -1,11 +1,10 @@
 from __init__ import *
 
-#Solo funciona con GrayScaleProcessor
 visualizer = CamSource(
 	Window(processors=[
 		GrayScaleProcessor(),
-		CannyProcessor()
-	]),
-	DebugWindow()
+		DCTProcessor(flags=None),
+		FormatInt8()
+	])
 )
 visualizer.show()

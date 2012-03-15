@@ -1,4 +1,6 @@
 from __init__ import *
 
-visualizer = CamVisualizer(processors=[ErodeProcessor()])
+visualizer = CamSource(
+	Window(processors=[ErodeProcessor()])
+)
 visualizer.show()

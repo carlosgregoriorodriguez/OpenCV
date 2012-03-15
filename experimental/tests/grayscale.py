@@ -1,4 +1,6 @@
 from __init__ import *
 
-visualizer = CamVisualizer(processors=[GrayScaleProcessor()])
+visualizer = CamSource(
+	Window(processors=[GrayScaleProcessor()])
+)
 visualizer.show()

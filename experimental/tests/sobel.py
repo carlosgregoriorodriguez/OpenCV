@@ -1,4 +1,6 @@
 from __init__ import *
 
-visualizer = CamVisualizer(processors=[SobelProcessor()])
+visualizer = CamSource(
+	Window(processors=[SobelProcessor()])
+)
 visualizer.show()

@@ -1,4 +1,6 @@
 from __init__ import *
 
-visualizer = CamVisualizer(processors=[LaplacianProcessor()])
+visualizer = CamSource(
+	Window(processors=[LaplacianProcessor()])
+)
 visualizer.show()

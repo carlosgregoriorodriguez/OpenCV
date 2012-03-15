@@ -1,4 +1,6 @@
 from __init__ import *
 
-visualizer = CamVisualizer(processors=[BlurProcessor()])
+visualizer = CamSource(
+	Window(processors=[BlurProcessor()])
+)
 visualizer.show()

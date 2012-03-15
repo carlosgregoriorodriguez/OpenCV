@@ -1,10 +1,12 @@
 from __init__ import *
 
-#Solo funciona con GrayScaleProcessor
 visualizer = CamSource(
 	Window(processors=[
+		PyrDownProcessor(),
 		GrayScaleProcessor(),
-		CannyProcessor()
+		DFTProcessor(flags=None),
+		SobelProcessor(ddepth=0),
+		DFTProcessor(flags=DFTProcessor.invs),FormatInt8()
 	]),
 	DebugWindow()
 )

@@ -1,6 +1,6 @@
 from __init__ import *
 
 visualizer = CamSource(
-	Window(processors=[MedianBlurProcessor()])
+	Window(processors=[FloodFillProcessor()])
 )
 visualizer.show()

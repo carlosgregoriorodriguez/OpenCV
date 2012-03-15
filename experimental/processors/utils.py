@@ -25,7 +25,7 @@ class Trackbar:
     def _set_value (self,value):
         self._value = self.values[value]
         if self.instant and self.parent: self.parent.paint()
-        self.log('Trackbar: %s = %g'%(self.name,self._value))
+        self.log('Trackbar: %s = %s'%(self.name,str(self._value)))
 
     value = property(_get_value,_set_value)
 
@@ -46,3 +46,4 @@ class Trackbar:
         return float(self.value)
     def __int__ (self):
         return int(self.value)
+
