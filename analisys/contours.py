@@ -66,38 +66,38 @@ if __name__ == "__main__":
 		img = cv2.imread(filename);	
 	original = None;
 	cv2.namedWindow('config', cv2.cv.CV_WINDOW_NORMAL);
-	"""
-	cv2.createTrackbar('number', 'cornerswindow',1,50, dummy);
-	cv2.createTrackbar('distance', 'cornerswindow',1,300, dummy);
-	cv2.createTrackbar('quality/100', 'cornerswindow',1,150, dummy);
-	cv2.createTrackbar('channel', 'cornerswindow',1,6, channelName);
-	cv2.createTrackbar('draw on original', 'cornerswindow',1,1, dummy);
-	"""
 	cv2.createTrackbar("canny tresh1", 'config',600,600, dummy);
 	cv2.createTrackbar("canny tresh2", 'config',300,600, dummy);
 	cv2.createTrackbar('channel', 'config',0,6, channelName);
 	cv2.createTrackbar('draw on original', 'config',0,1, dummy);
+	cv2.createTrackbar('epsilon', 'config',1,10, dummy);
+	cv2.createTrackbar('level', 'config',1,10, dummy);
 	
 	while True:		
 		if (video):
 			f,img = cam.read();
 		# Copy of the original image
 		imgToDraw = None;
-		imgChannel = getChannel(img, cv2.getTrackbarPos("channel","config"));
-		canny = cv2.Canny(imgChannel, cv2.getTrackbarPos("canny tresh1","config"), cv2.getTrackbarPos("canny tresh2","config"))
-		tmpcontours,hierarchy = cv2.findContours(canny.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE);
-		#print contours;
+		epsilon = cv2.getTrackbarPos("epsilon","config");
+		level = cv2.getTrackbarPos("level","config");
+		drawChannel = cv2.getTrackbarPos("channel","config");
 		
-		contours = [cv2.approxPolyDP(cnt, 3, True) for cnt in tmpcontours]
-		print len(contours)
-		#print contours;
+		
+		imgChannel = getChannel(img, drawChannel);
+		
+		
+		canny = cv2.Canny(imgChannel, cv2.getTrackbarPos("canny tresh1","config"), cv2.getTrackbarPos("canny tresh2","config"))
+		rawcontours,hierarchy = cv2.findContours(canny.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE);
+		
+		# Aproximamos la curva por una poly que tiene menos vertices
+		contours = [cv2.approxPolyDP(contour, epsilon, True) for contour in rawcontours];
 		
 		if(cv2.getTrackbarPos("draw on original","config") == 1):
 			imgToShow = img.copy();
 		else:
-			imgToShow = canny.copy();
+			imgToShow = np.zeros(img.shape);
 			
-		cv2.drawContours(imgToShow, contours, -1, (255,0,0));
+		cv2.drawContours(imgToShow, contours, -1, (255,255,255), 1, cv2.CV_AA, hierarchy, level);
 			
 		cv2.imshow('contours', imgToShow);
 		cv2.imshow('canny', canny);
