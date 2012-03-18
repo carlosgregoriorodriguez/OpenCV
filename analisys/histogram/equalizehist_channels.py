@@ -40,8 +40,7 @@ if __name__ == "__main__":
 	cv2.createTrackbar('channel to equalize', 'configwindow',2,3, dummy);
 	cv2.createTrackbar('channel to show', 'configwindow',0,3, dummy);
 	
-	
-	print "here";	
+		
 	while True:		
 		if (video):
 			f,img = cam.read();

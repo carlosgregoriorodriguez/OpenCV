@@ -72,8 +72,6 @@ if __name__ == "__main__":
 	cv2.createTrackbar('channel', 'cornerswindow',1,6, channelName);
 	cv2.createTrackbar('draw on original', 'cornerswindow',1,1, dummy);
 	
-	
-	print "here";	
 	while True:		
 		if (video):
 			f,img = cam.read();
