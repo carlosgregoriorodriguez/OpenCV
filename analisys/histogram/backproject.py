@@ -6,24 +6,40 @@ import sys;
 
 if __name__ == "__main__":
 	video = False;
-	filename = '../../img/stop.jpg';
+	filename = None;
 	soften = True;
 	original = None;
 	img = None;
+	videoSource = 0;
 	
-	print "This example is for video, not for still images, so run: backproject.py 0";
+	print """Backprojection test.
+	Usage:
+		backprojection.py N
+			For streaming from /dev/videoN (if overrided, 0 supposed)
+		backprojection.py filename
+			For still image filename (not recommended for this example)
+			
+	Runtime keys:
+		S	-	toggle blur input image (reduce noise on hue channel)
+		H 	-	take an histogram
+		Q,ESC - quit the program""";
+			
 	
 	if (len(sys.argv)>1):
 		if (len(sys.argv[1])  == 1):
 			video = True;
-			cam = cv2.VideoCapture(int(sys.argv[1]));
-			cam.set(3, 640);
-			cam.set(4, 480);
+			videoSource = int(sys.argv[1]);
 		else:
 			filename = sys.argv[1];
-	if (not video):
+			
+	if video:
+		cam = cv2.VideoCapture(videoSource);
+		cam.set(3, 640);
+		cam.set(4, 480);
+	else:
 		img = cv2.imread(filename);	
 		original = np.copy(img);
+		
 	cv2.namedWindow('backprojection');
 
 	key = -1;
