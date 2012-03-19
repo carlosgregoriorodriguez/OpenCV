@@ -10,6 +10,9 @@ if __name__ == "__main__":
 	soften = True;
 	original = None;
 	img = None;
+	
+	print "This example is for video, not for still images, so run: backproject.py 0";
+	
 	if (len(sys.argv)>1):
 		if (len(sys.argv[1])  == 1):
 			video = True;
