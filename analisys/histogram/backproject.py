@@ -6,7 +6,7 @@ import sys;
 
 if __name__ == "__main__":
 	video = False;
-	filename = '../img/stop.jpg';
+	filename = '../../img/stop.jpg';
 	soften = True;
 	original = None;
 	img = None;
@@ -20,7 +20,7 @@ if __name__ == "__main__":
 			filename = sys.argv[1];
 	if (not video):
 		img = cv2.imread(filename);	
-		original = img.copy();
+		original = np.copy(img);
 	cv2.namedWindow('backprojection');
 
 	key = -1;
@@ -35,11 +35,11 @@ if __name__ == "__main__":
 				soften = not soften;
 				print "Soften: "+str(soften);
 		else:
-			img = original.copy();
+			img = np.copy(original);
 				
-				
-		imgH,imgS,imgV = cv2.split(cv2.cvtColor(img, cv2.cv.CV_RGB2HSV));
 		
+		imgH,imgS,imgV = cv2.split(cv2.cvtColor( img , cv2.cv.CV_RGB2HSV));
+
 		# Creating x coordenates
 		bins = np.arange(256).reshape(256,1);
 		
