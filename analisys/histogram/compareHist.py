@@ -51,7 +51,7 @@ if __name__ == "__main__":
 	
 	firstHist=getPolishedHist(img)
 
-
+	secondHist = False
 
 	# creates the big image where both captures are copied
 	upBorder = 40
@@ -81,7 +81,7 @@ if __name__ == "__main__":
 		#114 --> r
 		if (key == 114):
 
-			# the first histogram and the first captureis are actualized 
+			# the first histogram and the first capture are actualized 
 
 			firstHist = getPolishedHist(img)
 
@@ -97,13 +97,20 @@ if __name__ == "__main__":
 
 			actualHist=getPolishedHist(img)
 
+			secondHist = True
+
+			bigImg[upBorder:img.shape[0]+upBorder,img.shape[1]:bigImg.shape[1],:]=img
+
+			cv2.imshow("captures",bigImg)
+
+
+		if (secondHist):
+
 			distHist = cv2.compareHist(firstHist,actualHist,d[cv2.getTrackbarPos("Distance type","captures")][0])
 
 			bigImg[0:upBorder,0:bigImg.shape[1],:]=blackBorder
 
 			cv2.putText(bigImg,d[cv2.getTrackbarPos("Distance type","captures")][1]+" "+str(distHist),(upBorder,upBorder),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255))
-
-			bigImg[upBorder:img.shape[0]+upBorder,img.shape[1]:bigImg.shape[1],:]=img
 
 			cv2.imshow("captures",bigImg)
 
