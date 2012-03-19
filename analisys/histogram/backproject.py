@@ -5,7 +5,7 @@ import sys;
 
 
 if __name__ == "__main__":
-	video = False;
+	video = True;
 	filename = None;
 	soften = True;
 	original = None;
@@ -13,16 +13,16 @@ if __name__ == "__main__":
 	videoSource = 0;
 	
 	print """Backprojection test.
-	Usage:
-		backprojection.py N
-			For streaming from /dev/videoN (if overrided, 0 supposed)
-		backprojection.py filename
-			For still image filename (not recommended for this example)
-			
-	Runtime keys:
-		S	-	toggle blur input image (reduce noise on hue channel)
-		H 	-	take an histogram
-		Q,ESC - quit the program""";
+    Usage:
+        backprojection.py N
+            For streaming from /dev/videoN (if overrided, 0 supposed)
+        backprojection.py filename
+            For still image filename (not recommended for this example)
+
+    Runtime keys:
+        S	-	toggle blur input image (reduce noise on hue channel)
+        H 	-	take an histogram
+        Q,ESC - quit the program""";
 			
 	
 	if (len(sys.argv)>1):
@@ -30,6 +30,7 @@ if __name__ == "__main__":
 			video = True;
 			videoSource = int(sys.argv[1]);
 		else:
+			video = False;
 			filename = sys.argv[1];
 			
 	if video:
