@@ -9,8 +9,9 @@ def dummy(x):
 
 if __name__ == "__main__":
 
-	# img is obtained as follows: load image -> converted to gray -> threshold binary(threshold = 128, maxval = 255)
-	img = cv2.threshold(cv2.cvtColor(cv2.imread('../img/stop.jpg'),cv2.cv.CV_RGB2GRAY), 128, 255, cv2.THRESH_BINARY)[1]
+	#same example as basicContours.py, just to test computation time
+	camera = cv2.VideoCapture(0)
+	img = camera.read()[1]
 	# a black canvas of the size of the image to draw the contours
 	canvas = np.zeros((img.shape[0],img.shape[1]),np.uint8)
 	#create a window
@@ -26,7 +27,11 @@ if __name__ == "__main__":
 	#if the trackbar is at maximum, then all the contours are shown (should be like trackbar at 0)
 	trackbarMax=500
 	cv2.createTrackbar("contour Area","contour",10,trackbarMax,dummy)
+
+
 	while True:		
+		# img is obtained as follows: load image -> converted to gray -> threshold binary(threshold = 128, maxval = 255)
+		img = cv2.threshold(cv2.cvtColor(camera.read()[1],cv2.cv.CV_RGB2GRAY), 128, 255, cv2.THRESH_BINARY)[1]
 		rawContours,hierarchy = cv2.findContours(img.copy(),
 			modeDict[cv2.getTrackbarPos("mode","contour")],
 			cv2.CHAIN_APPROX_SIMPLE)
@@ -45,7 +50,7 @@ if __name__ == "__main__":
 				area = cv2.contourArea(cnt,False)
 				if area<=cv2.getTrackbarPos("contour Area","contour"):
 					smallContours.append(cnt)
-					print "small area", area  #Only for debug purposes, better to comment
+					#print "small area", area  #Only for debug purposes, better to comment
 					
 			cv2.drawContours(aux2,smallContours,-1,(255,255,255))
 			cv2.drawContours(aux,bigContours,-1,(255,255,255))
@@ -56,10 +61,6 @@ if __name__ == "__main__":
 	       		
 		if (cv2.waitKey(5)!=-1):
 			break
-
-
-
-
 
 
 
