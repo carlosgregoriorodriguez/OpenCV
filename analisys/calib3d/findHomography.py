@@ -42,7 +42,7 @@ if __name__ == "__main__":
 	#cv2.createTrackbar('rectSize', 'config',25,100, dummy);
 	#cv2.createTrackbar('histogram threshold', 'config',120,255, dummy);
 	
-	firstimg = cv2.imread('../img/smallchessboard.jpg');
+	firstimg = cv2.imread('../../img/smallchessboard.jpg');
 	
 	patternSize = (9,6);
 	firstimggs = cv2.cvtColor(firstimg, cv2.cv.CV_RGB2GRAY);
