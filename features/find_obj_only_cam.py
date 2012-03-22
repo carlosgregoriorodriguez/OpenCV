@@ -6,7 +6,7 @@ import time
 
 help_message = '''SURF image match 
 
-USAGE: findobj.py [ <image1> <image2> ]
+USAGE: press spacebar to activate first image capture, press another time to capture
 '''
 
 FLANN_INDEX_KDTREE = 1  # bug: flann enums are missing
@@ -68,6 +68,7 @@ def draw_match(img1, img2, p1, p2, status = None, H = None):
 if __name__ == '__main__':
 	captureTriggered = True;
 	key = -1;
+	
 	rectSize = (240,320);
 	
 	
