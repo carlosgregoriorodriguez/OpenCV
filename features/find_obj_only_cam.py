@@ -6,7 +6,8 @@ import time
 
 help_message = '''SURF image match 
 
-USAGE: press spacebar to activate first image capture, press another time to capture
+USAGE: press SPACEBAR to capture first image
+       press ENTER to go to the capture mode
 '''
 
 FLANN_INDEX_KDTREE = 1  # bug: flann enums are missing
@@ -71,6 +72,7 @@ if __name__ == '__main__':
 	
 	rectSize = (240,320);
 	
+	print help_message;
 	
 	img1 = None;
 	
@@ -123,7 +125,7 @@ if __name__ == '__main__':
 			cv2.imshow('find_obj SURF flann', vis_flann)
 		key = cv2.waitKey(5)
 		
-		if (key == 32 and not captureTriggered):
+		if (key == 10):
 			captureTriggered = True;
 		elif (key == 27 or key == 113):
 			break;
