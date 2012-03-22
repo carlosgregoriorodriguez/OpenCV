@@ -11,4 +11,5 @@ from processors.dft import *
 from processors.features import *
 from processors.histogram import *
 from processors.contours import *
+from processors.objdetect import *
 from utils import *
