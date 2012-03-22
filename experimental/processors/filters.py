@@ -108,6 +108,15 @@ class ThresholdProcessor(Processor):
         retVal, newimg = cv2.threshold(img,int(self.thresh),int(self.maxval),self.type.value)
         return newimg
 
+class AdaptiveThresholdProcessor(GrayScaleProcessor):
+    method = Trackbar([cv2.ADAPTIVE_THRESH_MEAN_C, cv2.ADAPTIVE_THRESH_GAUSSIAN_C])
+    maxval = Trackbar(1,256,default=160)
+    type = Trackbar([cv2.THRESH_BINARY,cv2.THRESH_BINARY_INV])
+    blockSize = Trackbar(3,20,2,default=3)
+    def process(self,img):
+        img = super(AdaptiveThresholdProcessor,self).process(img)
+        return cv2.adaptiveThreshold(img, self.maxval.value, self.method.value, self.type.value, self.blockSize.value, 5) 
+
 class FloodFillProcessor(Processor):
     hi = Trackbar(256,default=6)
     lo = Trackbar(256,default=12)
