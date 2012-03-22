@@ -44,7 +44,7 @@ if __name__ == "__main__":
 			cv2.drawContours(aux,contours,-1,(255,255,255))
 		#else
 		else:
-			bigContours = [cnt if cv2.contourArea(cnt,False)>cv2.getTrackbarPos("contour Area","contour") else None for cnt in contours ]
+			bigContours = [cnt if abs(cv2.contourArea(cnt,False))>=cv2.getTrackbarPos("contour Area","contour") else None for cnt in contours ]
 			smallContours=[]
 			for cnt in contours:
 				area = cv2.contourArea(cnt,False)
