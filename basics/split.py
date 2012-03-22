@@ -10,7 +10,7 @@ def joinImages (images):
 	img = np.zeros((len(images)*h, len(images[0])*w,3), np.uint8);
 	for i in range(len(images)):
 		for j in range(len(images[0])):
-			if (images[i][j] != None):
+			if (images[i][j] != None):  
 				if(len(images[i][j].shape) == 3):
 					img[i*h:(i+1)*h,j*w:(j+1)*w] = images[i][j];
 				else:

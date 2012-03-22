@@ -48,7 +48,7 @@ if __name__ == "__main__":
 	cv2.namedWindow('config');
 	
 		
-	cv2.createTrackbar('rectSize', 'config',10,100, dummy);
+	cv2.createTrackbar('rectSize', 'config',25,100, dummy);
 	cv2.createTrackbar('histogram threshold', 'config',120,255, dummy);
 	
 	

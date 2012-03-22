@@ -36,14 +36,14 @@ if __name__ == "__main__":
 		if (video):
 			f,img = cam.read();
 		# Copy of the original image
-		original = img.copy();
+		copy = img.copy();
 		imgGreyscale = cv2.cvtColor(img,cv2.cv.CV_RGB2GRAY);
 		corners = cv2.goodFeaturesToTrack(imgGreyscale, cv2.getTrackbarPos("number","cornerswindow"), float(cv2.getTrackbarPos("quality/100","cornerswindow")+1)/100, cv2.getTrackbarPos("distance","cornerswindow"));
 		if (corners != None):
 			for corner in corners:
-				cv2.ellipse(img, (corner[0][0], corner[0][1]),  (10,10), 0, 0, 360, 255, -1 );
+				cv2.ellipse(copy, (corner[0][0], corner[0][1]),  (10,10), 0, 0, 360, 255, -1 );
 		
-		cv2.imshow('cornerswindow', img);
+		cv2.imshow('cornerswindow', copy);
 		
 		key = cv2.waitKey(5);
 		if (key != -1):
