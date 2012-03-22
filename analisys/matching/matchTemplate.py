@@ -15,7 +15,14 @@ if __name__ == "__main__":
     cv2.imshow("TEMPLATE",tmp)
 
     result1 = cv2.matchTemplate(img,tmp,method=cv2.TM_CCORR)
+    #print "CCORR"
+    #print result1
     cv2.imshow("matchings CCORR",result1)
+
+    #result1a = cv2.matchTemplate(img,tmp,method=cv2.TM_CCORR_NORMED)
+    #print "NORMED"
+    #print result1a
+    #cv2.imshow("matchings CCORR_NORMED",result1a)
 
     result2 = cv2.matchTemplate(img,tmp,method=cv2.TM_SQDIFF)
     cv2.imshow("matchings SQDIFF",result2)
