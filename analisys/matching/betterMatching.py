@@ -28,6 +28,14 @@ if __name__ == "__main__":
         matchingMethod = modeDict[cv2.getTrackbarPos("normed","matchings")][cv2.getTrackbarPos("mode","matchings")]
         result = cv2.matchTemplate(img,tmp,method=matchingMethod)
         cv2.imshow("matchings",result)
+
+        #Find best match
+        minVal, maxVal, minLoc, maxLoc = cv2.minMaxLoc(result)
+        #Draw rectangle around it
+        imgRect = img
+        cv2.rectangle(imgRect,maxLoc,(maxLoc[0]+tmp.shape[0],maxLoc[1]+tmp.shape[1]),155)
+        cv2.imshow("FOUND",imgRect)
+        
         if (cv2.waitKey(5)!=-1):
             break
 

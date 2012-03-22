@@ -19,15 +19,23 @@ if __name__ == "__main__":
     #print result1
     cv2.imshow("matchings CCORR",result1)
 
-    #result1a = cv2.matchTemplate(img,tmp,method=cv2.TM_CCORR_NORMED)
+    result1a = cv2.matchTemplate(img,tmp,method=cv2.TM_CCORR_NORMED)
     #print "NORMED"
     #print result1a
-    #cv2.imshow("matchings CCORR_NORMED",result1a)
+    cv2.imshow("matchings CCORR_NORMED",result1a)
 
     result2 = cv2.matchTemplate(img,tmp,method=cv2.TM_SQDIFF)
     cv2.imshow("matchings SQDIFF",result2)
 
     result3 = cv2.matchTemplate(img,tmp,method=cv2.TM_CCOEFF)
     cv2.imshow("matchings CCOEFF",result3)
+    
+    #Find best match
+    minVal, maxVal, minLoc, maxLoc = cv2.minMaxLoc(result1)
+    #Draw rectangle around it
+    cv2.rectangle(img,maxLoc,(maxLoc[0]+tmp.shape[0],maxLoc[1]+tmp.shape[1]),155)
+    cv2.imshow("FOUND",img)
+
+
 
     cv2.waitKey(0)
