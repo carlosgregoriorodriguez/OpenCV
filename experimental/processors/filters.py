@@ -91,11 +91,12 @@ class BoxFilterProcessor(Processor):
     def process(self,img):
         return cv2.boxFilter(img,-1,(int(self.ksize_x),int(self.ksize_y)))
 
-class CannyProcessor(Processor):
+class CannyProcessor(GrayScaleProcessor):
     threshold1 = Trackbar(600,default=200)
     threshold2 = Trackbar(600,default=80)
     aperture = Trackbar([3,5,7])
     def process(self,img):
+        img = super(CannyProcessor,self).process(img)
         return cv2.Canny(img,threshold1=int(self.threshold1),threshold2=int(self.threshold2),apertureSize=int(self.aperture))
 
 

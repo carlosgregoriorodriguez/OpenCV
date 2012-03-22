@@ -8,4 +8,7 @@ from sources import *
 from processors.formats import *
 from processors.filters import *
 from processors.dft import *
+from processors.features import *
+from processors.histogram import *
+from processors.contours import *
 from utils import *

@@ -46,7 +46,21 @@ class VideoSource (FramedSource):
     def __init__(self,*args,**kwargs):
         file = kwargs.pop('file')
         self.capture = cv2.VideoCapture(file)
+        self.width = kwargs.pop('width',640)
+        self.height = kwargs.pop('height',480)
         super(VideoSource,self).__init__(*args,**kwargs)
+    def _set_width (self,width):
+        self._width = width
+        self.capture.set(3,width)
+    def _get_width (self):
+        return self._width
+    width = property(_get_width, _set_width)
+    def _set_height (self,height):
+        self._height = height
+        self.capture.set(4,height)
+    def _get_height (self):
+        return self._height
+    height = property(_get_width, _set_height)
     def get_source (self):
         return self.capture.read()[1]
 

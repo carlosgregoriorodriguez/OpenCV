@@ -44,6 +44,9 @@ class Processor(object):
     def paint(self):
         self.parent.paint()
 
+    def log(self,*args,**kwargs):
+        self.parent and self.parent.log(*args,**kwargs)
+
     def __str__ (self):
         return self.__class__.__name__.lower().replace('processor','').capitalize()
 
