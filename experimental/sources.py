@@ -1,6 +1,7 @@
 import cv2
 
 class Source(object):
+    quit_keys = (27,113)
     def __init__(self,*windows):
         self.windows = windows
 
@@ -22,8 +23,14 @@ class FramedSource (Source):
         super(FramedSource,self).show()
         while True:
             self.paint()
-            if (cv2.waitKey (1) != -1):
+            key = cv2.waitKey (1)
+            self.on_key(key)
+            if key in self.quit_keys:
                 break
+
+    def on_key(self,key):
+        for window in self.windows:
+            window.on_key(key)
 
     def get_source (self):
         return

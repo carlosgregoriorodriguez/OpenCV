@@ -40,7 +40,10 @@ class Processor(object):
 
     def on_mouse(self,*args,**kwargs):
         pass
-    
+
+    def on_key(self,key):
+        pass
+
     def paint(self):
         self.parent.paint()
 

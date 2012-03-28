@@ -131,8 +131,6 @@ class FloodFillProcessor(Processor):
         return img
 
     def on_mouse(self,event, x, y, flags, param):
-        #print event,flags,cv2.EVENT_FLAG_LBUTTON
         if flags == cv2.EVENT_FLAG_LBUTTON:
             self.seed_pt = x, y
             self.paint()
-

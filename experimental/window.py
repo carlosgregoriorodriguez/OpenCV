@@ -36,6 +36,10 @@ class Window(object):
         for processor in self.processors:
             processor.on_mouse(*args,**kwargs)
 
+    def on_key(self,key):
+        for processor in self.processors:
+            processor.on_key(key)
+
     def paint (self,source):
         img = source
         try:
