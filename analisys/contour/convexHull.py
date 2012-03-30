@@ -27,36 +27,71 @@ if __name__ == "__main__":
 	# a black canvas of the size of the image to draw the contours
 	canvas = np.zeros((img.shape[0],img.shape[1],3),np.uint8)
 
-
 	#create a window
-	cv2.namedWindow("contour")
+	cv2.namedWindow("panel",cv2.cv.CV_WINDOW_NORMAL)
+
+	cv2.cv.MoveWindow("panel",img.shape[1],int(img.shape[0]*1.5))
+
+	cv2.createTrackbar("mode","panel",0,3,dummy)
+	# dictionary with the four constants for mode
+	modeDict = {0:cv2.cv.CV_RETR_EXTERNAL,
+		1:cv2.cv.CV_RETR_LIST ,
+		2:cv2.cv.CV_RETR_CCOMP ,
+		3:cv2.cv.CV_RETR_TREE}
+	#create a trackbar to select contours with bigger or equal area than this trackbar position
+	#if the trackbar is at maximum, then all the contours are shown (should be like trackbar at 0)
+	trackbarMax=7000
+	cv2.createTrackbar("contour Area","panel",10,trackbarMax,dummy)
     
 	#trackbars to select the color for the hulls
-	cv2.createTrackbar("r","contour",10,255,dummy)
-	cv2.createTrackbar("g","contour",10,255,dummy)
-	cv2.createTrackbar("b","contour",10,255,dummy)
+	cv2.createTrackbar("b","panel",10,255,dummy)
+	cv2.createTrackbar("g","panel",10,255,dummy)
+	cv2.createTrackbar("r","panel",10,255,dummy)
 
 	while True:	
 
 		#calculate the contours	
-		rawContours,hierarchy = cv2.findContours(img.copy(),cv2.cv.CV_RETR_LIST,cv2.CHAIN_APPROX_SIMPLE)
+		rawContours,hierarchy = cv2.findContours(img.copy(),modeDict[cv2.getTrackbarPos("mode","panel")],cv2.CHAIN_APPROX_SIMPLE)
 
-		aux = canvas.copy()
+		auxBig = canvas.copy()
+		auxSmall = canvas.copy()
 		
+		bigContours = []
+		smallContours = []
+
+		for cnt in rawContours:
+			area = cv2.contourArea(cnt,False)
+			
+			if (area>=cv2.getTrackbarPos("contour Area","panel")):
+				bigContours.append(cnt)
+			else:
+				smallContours.append(cnt)
+
 		# replace contours with convexHull
-		hulls = [cv2.convexHull(cnt) for cnt in rawContours]
+		bigHulls = [cv2.convexHull(cnt) for cnt in bigContours]
 		#replace the contours with polynoms
-		polynoms = [cv2.approxPolyDP(cnt,3,True) for cnt in rawContours]
+		bigPolynoms = [cv2.approxPolyDP(cnt,3,True) for cnt in bigContours]
+
+		smallHulls = [cv2.convexHull(cnt) for cnt in smallContours]
+		smallPolynoms = [cv2.approxPolyDP(cnt,3,True) for cnt in smallContours]
 
 		#fill the hulls with the selected color
-		cv2.drawContours(aux,hulls,-1,
-			(cv2.getTrackbarPos("r","contour"),cv2.getTrackbarPos("g","contour"),cv2.getTrackbarPos("b","contour")),
+		cv2.drawContours(auxBig,bigHulls,-1,
+			(cv2.getTrackbarPos("b","panel"),cv2.getTrackbarPos("g","panel"),cv2.getTrackbarPos("r","panel")),
 			cv2.cv.CV_FILLED)
 		#paint the polinoms over the hulls
-		cv2.drawContours(aux,polynoms,-1,(255,255,255))
+		cv2.drawContours(auxBig,bigPolynoms,-1,(255,255,255))
+
+		#fill the hulls with the selected color
+		cv2.drawContours(auxSmall,smallHulls,-1,
+			(cv2.getTrackbarPos("b","panel"),cv2.getTrackbarPos("g","panel"),cv2.getTrackbarPos("r","panel")),
+			cv2.cv.CV_FILLED)
+		#paint the polinoms over the hulls
+		cv2.drawContours(auxSmall,smallPolynoms,-1,(255,255,255))
 
 		#cv2.imshow("passed img transformed",img)
-		cv2.imshow("contour",aux)
+		cv2.imshow("bigContours",auxBig)
+		cv2.imshow("smallContours",auxSmall)
 
 		
 		if (cv2.waitKey(5)!=-1):
