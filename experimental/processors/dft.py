@@ -8,7 +8,7 @@ class DFTProcessor(Processor):
     invs = inverse+scale
     flags = Trackbar([0, inverse, scale, invs])
     def process(self,img):
-        img = np.array(img,dtype = float)
+        img = img.astype(float)
         extra = {}
         if self.flags.value!=None: extra['flags'] = self.flags.value
         img = cv2.dft(img,**extra)
@@ -18,7 +18,7 @@ class DCTProcessor(Processor):
     inverse = cv2.DCT_INVERSE
     flags = Trackbar([None, inverse])
     def process(self,img):
-        img = np.array(img,dtype = float)
+        img = img.astype(float)
         #img.dtype = np.float
         extra = {}
         if self.flags.value!=None: extra['flags'] = self.flags.value
