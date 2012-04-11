@@ -7,6 +7,7 @@ import sys
 def dummy(x):
 	print x
 
+
 if __name__ == "__main__":
 
 
@@ -50,51 +51,64 @@ if __name__ == "__main__":
 
 	while True:	
 
+		defectCanvas = canvas.copy()
+
 		#calculate the contours	
 		rawContours,hierarchy = cv2.findContours(img.copy(),modeDict[cv2.getTrackbarPos("mode","panel")],cv2.CHAIN_APPROX_SIMPLE)
 
-		auxBig = canvas.copy()
-		auxSmall = canvas.copy()
-		
-		bigContours = []
-		smallContours = []
-
+		defects = []
 		for cnt in rawContours:
-			area = cv2.contourArea(cnt,False)
-			
-			if (area>=cv2.getTrackbarPos("contour Area","panel")):
-				bigContours.append(cnt)
-			else:
-				smallContours.append(cnt)
+			if cv2.contourArea(cnt,False)>=cv2.getTrackbarPos("contour Area","panel"):
+				defect = cv2.cv.ConvexityDefects(cv2.cv.fromarray(cnt),cv2.convexHull(cnt),cv2.cv.fromarray(cnt))
+				defects.append(defect)
 
-		# replace contours with convexHull
-		bigHulls = [cv2.convexHull(cnt) for cnt in bigContours]
-		#replace the contours with polynoms
-		bigPolynoms = [cv2.approxPolyDP(cnt,3,True) for cnt in bigContours]
+		#polyAndHull = [(cv2.approxPolyDP(cnt,3,True),cv2.convexHull(cnt)) if cv2.contourArea(cnt,False)>=cv2.getTrackbarPos("contour Area","panel") else None for cnt in rawContours]
+		
+		#if not polyAndHull:
+		#	print "polyAndHull vacio"
 
-		smallHulls = [cv2.convexHull(cnt) for cnt in smallContours]
-		smallPolynoms = [cv2.approxPolyDP(cnt,3,True) for cnt in smallContours]
+		#for pair in polyAndHull:
+		#	print cv2.cv.ConvexityDefects(pair[0],pair[1],defect)
 
-		#fill the hulls with the selected color
-		cv2.drawContours(auxBig,bigHulls,-1,
-			(cv2.getTrackbarPos("b","panel"),cv2.getTrackbarPos("g","panel"),cv2.getTrackbarPos("r","panel")),
-			cv2.cv.CV_FILLED)
-		#paint the polinoms over the hulls
-		cv2.drawContours(auxBig,bigPolynoms,-1,(255,255,255))
+		#if not defects:
+		#	print "vacio"
 
 		#fill the hulls with the selected color
-		cv2.drawContours(auxSmall,smallHulls,-1,
-			(cv2.getTrackbarPos("b","panel"),cv2.getTrackbarPos("g","panel"),cv2.getTrackbarPos("r","panel")),
-			cv2.cv.CV_FILLED)
+		#hulls = [pair[1] for pair in polyAndHull]
+
+		#cv2.drawContours(defectCanvas,hulls,-1,
+		#	(cv2.getTrackbarPos("b","panel"),cv2.getTrackbarPos("g","panel"),cv2.getTrackbarPos("r","panel")),
+		#	cv2.cv.CV_FILLED)
 		#paint the polinoms over the hulls
-		cv2.drawContours(auxSmall,smallPolynoms,-1,(255,255,255))
+		cv2.drawContours(defectCanvas,defects,-1,(255,255,255))
+
+		
 
 		#cv2.imshow("passed img transformed",img)
-		cv2.imshow("bigContours",auxBig)
-		cv2.imshow("smallContours",auxSmall)
+		cv2.imshow("defects",defectCanvas)
 
 		
 		if (cv2.waitKey(5)!=-1):
 			break
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
