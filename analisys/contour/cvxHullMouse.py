@@ -42,19 +42,21 @@ if __name__ == "__main__":
 	#if the trackbar is at maximum, then all the contours are shown (should be like trackbar at 0)
 	trackbarMax=7000
 	cv2.createTrackbar("contour Area","panel",10,trackbarMax,dummy)
-    
+	cv2.createTrackbar("line","panel",3,5,dummy)    
 
 	# create a window to add the mouse event
 	cv2.namedWindow("hulls")
+
 
 	# auxiliar method
 	def toList(hull):
 		pointList = [x[0] for x in hull]
 		return pointList
+		
 
 	# method to calculate if a point is in a hull
 	def inHull(point):
-		for hull in bigHulls:
+		for hull in sorted(bigHulls,key=cv2.contourArea):
 			pointList = toList(hull)
 			firstQ,secondQ,thirdQ,fourthQ = False,False,False,False
 			for p in pointList:
@@ -98,7 +100,7 @@ if __name__ == "__main__":
 				bigHulls.append(cv2.convexHull(cnt))
 			
 		# paint the contours of the hulls
-		cv2.drawContours(canvasAux,bigHulls,-1,(255,255,255),3)
+		cv2.drawContours(canvasAux,bigHulls,-1,(255,255,255),cv2.getTrackbarPos("line","panel"))
 		
 		# if a hull was selected, fill it white
 		if hullOfPoint!=None:
