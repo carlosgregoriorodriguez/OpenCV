@@ -71,6 +71,7 @@ class App:
             cv2.imshow('lk_track', vis)
 
             ch = cv2.waitKey(1)
+            ch = -1 if ch == -1 else ch & 255
             if ch == 27:
                 break
 

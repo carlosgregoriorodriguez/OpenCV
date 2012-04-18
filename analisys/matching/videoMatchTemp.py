@@ -49,8 +49,8 @@ if __name__ == "__main__":
 		
 		img = camera.read()[1]
 		
-		key = cv2.waitKey(5)
-
+		key = cv2.waitKey(5);
+		key = -1 if key==-1 else key & 255;
 		if (key == 32):
 			#takes the template from the image
 			fixedTemp = True
