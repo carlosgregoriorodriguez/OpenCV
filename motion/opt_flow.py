@@ -70,6 +70,7 @@ if __name__ == '__main__':
             cv2.imshow('glitch', cur_glitch)
 
         ch = cv2.waitKey(5)
+        ch = -1 if ch==-1 else ch & 255
         if ch == 27:
             break
         if ch == ord('1'):
