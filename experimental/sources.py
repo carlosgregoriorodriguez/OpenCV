@@ -77,4 +77,12 @@ class CamSource (VideoSource):
         kwargs['file'] = kwargs.get('device',0)
         super(CamSource,self).__init__(*args,**kwargs)
 
+from window import Window
+def view(source,*processors):
+    visualizer = source(
+      Window(processors=processors)
+    )
+    visualizer.show()
+    return visualizer
 
+def camview(*processors): return view(CamSource, *processors)

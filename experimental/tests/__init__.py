@@ -5,6 +5,7 @@ sys.path.append(
 
 from window import *
 from sources import *
+from processors import *
 from processors.formats import *
 from processors.filters import *
 from processors.dft import *

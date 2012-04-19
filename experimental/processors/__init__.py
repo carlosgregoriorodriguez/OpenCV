@@ -53,6 +53,39 @@ class Processor(object):
     def __str__ (self):
         return self.__class__.__name__.lower().replace('processor','').capitalize()
 
+import types
+
+def processor(*args,**kwargs):
+    if args:
+        func = args[0]
+        processors = args[1:]
+    else:
+        func = None
+        processors = tuple()
+    # def process(self,*args,**kwargs):
+    #     return func(*args,**kwargs)
+    final = not kwargs and (type(func)==types.FunctionType or type(func)==types.MethodType)
+
+    if not final and func: processors = (func,)+processors
+    # processors += 
+    def dec(f):
+        def process(self,img):
+            img = super(c,self).process(img)
+            trackbar_values = dict([(t.cls_name,getattr(self,t.cls_name).value) for t in self.meta.trackbars]) if f != func else {}
+            return f(img,**trackbar_values)
+
+        # print kwargs
+        # class prueba(processors or Processor):
+        #     def process(self,img):
+        #         img = super(prueba,self).process(img)
+        #         return func(img)
+        # return prueba
+        kwargs['process'] = process 
+        c =  type(f.func_name, processors or (Processor,), kwargs)
+        return c
+    return dec(func) if final else dec
+        
+
 class ProcessorMethod (Processor):
     method = None
     method_args = []

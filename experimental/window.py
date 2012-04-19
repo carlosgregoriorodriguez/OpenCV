@@ -92,6 +92,8 @@ class Window(object):
                 all_img.append(img)
             # img.dtype = np.uint8
             fps = 1/(time.time()-before)
+
+            img = all_img[self.stop_processor]
             if self.debug:
                 cv2.putText(img=img, text="%d fps"%fps, org=(20, 20), 
                     fontFace=cv2.FONT_HERSHEY_PLAIN, fontScale=1.0, 
@@ -99,8 +101,6 @@ class Window(object):
                 cv2.putText(img=img, text="%d fps"%fps, org=(20, 20), 
                     fontFace=cv2.FONT_HERSHEY_PLAIN, fontScale=1.0, 
                     color=(255, 255, 255), thickness = 1, linetype=cv2.CV_AA)        
-
-            img = all_img[self.stop_processor]
 
             if self.show_process: cv2.imshow(self.processor_window,self.joinImages(all_img))
 
