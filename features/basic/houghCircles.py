@@ -13,7 +13,12 @@ def dummy2(x):
 
 if __name__ == '__main__':
 
-	img = cv2.imread("../img/stop.jpg",0);  #0 for grayscale
+	imgAUX = cv2.imread("../img/stop.jpg",0);  #0 for grayscale
+
+	#apply GaussianBlur to smoothen image (reduces the number of false circles detected)
+	img = cv2.GaussianBlur(imgAUX, ksize = (3,3), sigma1= 0);
+
+	#cv2.imshow("GaussianBlur",img)
 
 	#create trackbar window
 	cv2.namedWindow("Trackbars");
@@ -44,7 +49,8 @@ if __name__ == '__main__':
 		# 		maxRadius=cv2.getTrackbarPos("maxRadius","Trackbars"));
 
 		print(hghcrcl);
-
+		hghcrcl = hghcrcl[0];
+		
 		for circle in hghcrcl:
 			posX = circle[0];
 			posY = circle[1];

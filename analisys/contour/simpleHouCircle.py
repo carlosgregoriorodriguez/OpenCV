@@ -28,6 +28,10 @@ if __name__ == "__main__":
 		imgCopy = img.copy()
 		imgCopy = cv2.cvtColor(imgCopy,cv2.cv.CV_RGB2GRAY)
 
+		#apply GaussianBlur to smoothen image (reduces the number of false circles detected)
+		#imgCopy = cv2.GaussianBlur(imgCopy, ksize = (3,3), sigma1= 0)
+
+
 		maxval = cv2.getTrackbarPos("threshold maxval","panel")
 		thresh = cv2.getTrackbarPos("threshold thresh","panel")
 
