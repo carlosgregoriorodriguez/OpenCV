@@ -1,7 +1,6 @@
 from __init__ import *
 import numpy as np
 import cv2
-import itertools as it
 
 def inside(r, q):
     rx, ry, rw, rh = r
