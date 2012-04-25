@@ -3,7 +3,7 @@ import numpy as np;
 import sys;
 
 
-SCREEN_SIZE = (800, 600)
+SCREEN_SIZE = (640,480)
 
 from math import radians 
 
@@ -76,8 +76,16 @@ class Cube(object):
 		glColor( self.color )
 
 		# Adjust all the vertices so that the cube is at self.position
-		vertices = [tuple(Vector3(v) + self.position) for v in self.vertices]
-
+		vertices = [tuple(Vector3(v)) for v in self.vertices]
+		print "rendering cube";
+		glPushMatrix();
+		glLoadIdentity();
+		glRotate(R[0]*180/np.pi,1,0,0);
+		glRotate(R[1]*180/np.pi,0,1,0);
+		glRotate(R[2]*180/np.pi,0,0,1);
+		glTranslate(*self.T);
+		glScale(10.,10.,10.);
+		#glRotate(self.R);
 		# Draw all 6 faces of the cube
 		glBegin(GL_QUADS)
 
@@ -93,6 +101,7 @@ class Cube(object):
 			glVertex( vertices[v4] )            
 
 		glEnd()  
+		glPopMatrix();
 		
 class World(object):
     
@@ -124,23 +133,22 @@ class World(object):
         self.display_list = None
     
     def render(self):
-                
-        if self.display_list is None:
-            
-            # Create a display list
-            self.display_list = glGenLists(1)                
-            glNewList(self.display_list, GL_COMPILE)
-            
-            # Draw the cubes
-            self.chessboard.render()
-                
-            # End the display list
-            glEndList()
-            
-        else:
-            
-            # Render the display list            
-            glCallList(self.display_list)		
+		# Create a display list
+		#self.display_list = glGenLists(1)                
+		#glNewList(self.display_list, GL_COMPILE)
+		
+		# Draw the cubes
+		self.chessboard.render()
+		    
+		# End the display list
+		#glEndList()
+#                
+#        if self.display_list is None:
+#                
+#            
+#        else:
+#                    
+#            glCallList(self.display_list)		
 
 
 if __name__ == "__main__":
@@ -209,7 +217,7 @@ if __name__ == "__main__":
 	# Camera transform matrix
 	camera_matrix = Matrix44()
 	camera_matrix.translate = (10.0, .6, 10.0)
-	camera_matrix.translate = (-10.0, -1.0, -1.0)
+	camera_matrix.translate = (0.0, 0.0, -40.0)
 	
 	# Initialize speeds and directions
 	rotation_direction = Vector3()
@@ -238,7 +246,8 @@ if __name__ == "__main__":
 		
 		if patternWasFound:
 			R,T = cv2.solvePnP(patternPoints, corners, cameraMatrix, distCoefs);
-		
+			world.chessboard.T = T*-1
+			world.chessboard.R = R;
 			# Pygame
 			# Clear screen
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -252,13 +261,13 @@ if __name__ == "__main__":
 			rotation_direction.set(0.0, 0.0, 0.0)
 			movement_direction.set(0.0, 0.0, 0.0)
 			# Modify direction vectors for key presses
-			if (pressed[K_LEFT] or key == 82):
+			if (pressed[K_LEFT] or key == 81):
 				rotation_direction.y = +1.0
-			elif pressed[K_RIGHT]:
+			elif (pressed[K_RIGHT] or key == 83):
 				rotation_direction.y = -1.0
-			if (pressed[K_UP] or key == 83):
+			if (pressed[K_UP] or key == 82):
 				rotation_direction.x = -1.0
-			elif pressed[K_DOWN]:
+			elif (pressed[K_DOWN] or key == 84):
 				rotation_direction.x = +1.0
 			if pressed[K_z]:
 				rotation_direction.z = -1.0
@@ -273,15 +282,10 @@ if __name__ == "__main__":
 			rotation = rotation_direction * rotation_speed * time_passed_seconds
 			rotation_matrix = Matrix44.xyz_rotation(*rotation)        
 			
-			camera_matrix = Matrix44()
-			
-			rotation_matrix = Matrix44.xyz_rotation(*R)     
+#			rotation_matrix = Matrix44.xyz_rotation(*R)     
 			camera_matrix *= rotation_matrix
-			print camera_matrix;
-			try:
-				camera_matrix.translate = tuple(T);
-			except:
-				print "no T";
+#			camera_matrix.translate = tuple(T);
+			
 			print camera_matrix;
 			print rotation_matrix;
 		
@@ -306,6 +310,9 @@ if __name__ == "__main__":
 		
 		
 		key = cv2.waitKey(5);
+		key = -1 if key == -1 else key & 255;
+		if (key != -1):
+			print key;
 		if (key == 27 or key == 113):
 			print "Quiting...";
 			break;
