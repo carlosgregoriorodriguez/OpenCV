@@ -3,7 +3,7 @@ import numpy as np;
 import sys;
 
 if __name__ == "__main__":
-	squareSize = 2.8;
+	squareSize = 1.0;
 	videoSource = 0;
 	
 	cam = cv2.VideoCapture(videoSource);
@@ -41,6 +41,12 @@ if __name__ == "__main__":
 			objPoints.append(patternPoints)
 			frameSkip = 10;
 	
+	h, w = img.shape[:2]
+	# Camera intrinsec
+	cameraMatrix = None;
+	distCoefs = None;
+	rms, cameraMatrix, distCoefs, rvecs, tvecs = cv2.calibrateCamera(objPoints+[patternPoints], imgPoints+[corners], (w, h), cameraMatrix, distCoefs)
+	
 	while True:
 		f, img = cam.read();
 		h, w = img.shape[:2]
@@ -56,17 +62,11 @@ if __name__ == "__main__":
 		cv2.imshow("main",img);
 
 		
-		h, w = img.shape[:2]
 		
 		if patternWasFound:
-			camera_matrix = None;
-			dist_coefs = None;
-			rms, camera_matrix, dist_coefs, rvecs, tvecs = cv2.calibrateCamera(objPoints+[patternPoints], imgPoints+[corners], (w, h), camera_matrix, dist_coefs)
-			print "RMS:", rms
-			print "camera matrix:\n", camera_matrix
-			print "distortion coefficients: ", dist_coefs.ravel()
-			print "rvecs: ",rvecs[-1]
-			print "tvecs: ",tvecs[-1]
+			rvec,tvec = cv2.solvePnP(patternPoints, corners, cameraMatrix, distCoefs);
+			print "rvecs: ",rvec
+			print "tvecs: ",tvec
 		
 		key = cv2.waitKey(5);
 		if (key == 27 or key == 113):
