@@ -13,11 +13,8 @@ while not display.isDone():
 		normaldisplay = not(normaldisplay)
 
 	img = vc.getImage().scale(.3) #.flipHorizontal()
-	for color in colors:
-		dist = img.colorDistance(color).dilate(2)
-		segmented = dist.stretch(180,255)
-		blobs = segmented.findBlobs()
-		candidates += blobs
+	blobs = img.findCircles()
+	candidates += blobs
 
 	if candidates:
 		#circles = blobs
