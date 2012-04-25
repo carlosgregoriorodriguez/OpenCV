@@ -1,11 +1,12 @@
 import SimpleCV
-
+import time
 display = SimpleCV.Display()
-vc = SimpleCV.VirtualCamera("00219.mts", "video")
+vc = SimpleCV.VirtualCamera("video.mts", "video")
 normaldisplay = True
 
 colors = [SimpleCV.Color.RED, SimpleCV.Color.GREEN, SimpleCV.Color.MAROON]
 while not display.isDone():
+	before = time.time()
 	candidates = []
 
 	if display.mouseRight:
@@ -25,6 +26,7 @@ while not display.isDone():
 			radius = circle.radius()
 			if radius<=10:
 				img.drawCircle((circle.x, circle.y), radius,SimpleCV.Color.RED,min(radius,3))
+	fps = 1/(time.time()-before)
 
 	if normaldisplay:
 		img.show()

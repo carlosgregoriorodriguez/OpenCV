@@ -3,7 +3,7 @@ import colorsys
 import time
 
 display = SimpleCV.Display()
-vc = SimpleCV.VirtualCamera("00219.mts", "video")
+vc = SimpleCV.VirtualCamera("video.mts", "video")
 normaldisplay = True
 rgb_color_indicators = [
 	(133,226,157), # Soft Green

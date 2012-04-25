@@ -3,7 +3,7 @@ import colorsys
 import time
 
 display = SimpleCV.Display()
-vc = SimpleCV.VirtualCamera("00219.mts", "video")
+vc = SimpleCV.VirtualCamera("video.mts", "video")
 normaldisplay = True
 rgb_color_indicators = [
 	(133,226,157), # Soft Green
@@ -13,7 +13,8 @@ rgb_color_indicators = [
 	(110,160,220), # Soft Metalized Blue
 ]
 # hsv_color_indicators = [colorsys.rgb_to_hls(*c) for c in rgb_color_indicators]
-scale = 0.3
+scale = 0.2
+blobs = []
 while not display.isDone():
 	before = time.time()
 	candidates = []
@@ -26,13 +27,13 @@ while not display.isDone():
 		if a: dist = dist | a #dist.stretch(215,255)
 		a = dist
 	blobs = a.findBlobs() or []
-	candidates += blobs
+	candidates += blobs or []
 	if candidates:
 		#circles = blobs
 		#circles = candidates.filter([b.isCircle(.3) for b in candidates])
 		for circle in candidates:
 			radius = circle.radius()+2
-			if 5*scale+2<radius<36*scale: img.drawCircle((circle.x, circle.y), radius,SimpleCV.Color.RED,min(radius,2))
+			if 6*scale+2<radius<36*scale: img.drawCircle((circle.x, circle.y), radius,SimpleCV.Color.RED,min(radius,2))
 
 	fps = 1/(time.time()-before)
 	if normaldisplay:
