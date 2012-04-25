@@ -58,6 +58,7 @@ class GrayScaleProcessor (Processor):
 class ErodeProcessor(Processor):
     iterations = Trackbar(50)
     def process(self,img):
+        print 'a',self,self.__class__.__bases__
         return cv2.erode(img,kernel=None,iterations=int(self.iterations))
 
 class DilateProcessor(Processor):

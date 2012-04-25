@@ -1,0 +1,82 @@
+Semana 1:
+	Objetivos:
+
+	
+	El primer objetivo es detectar si efectivamente la imagen presenta 
+	una herida suturada, para descartar la imagen o seguir tratándola.
+	Después se pretende conseguir un ROI (rectangle of interest)
+	centrado en la herida. Para ello primero se aislará toda la
+	superficie de piel del resto de la imagen (la herida está contenida 
+	en la piel) y luego el mínimo rectángulo que contenga al 
+	contorno de la herida.
+	Una vez obtenido el ROI se pasa a estudiar los objetos de interés
+	de la herida, el ancho de la herida, los puntos de sutura y la
+	coloración de la piel al rededor de la herida. Estos objetos de
+	interés contienen información sobre la evolución de la herida.
+
+	-detectar la herida
+	(para saber si la imagen es interesante)
+		->houghLines
+		->contornos
+		->matchShape
+
+	-aislar toda la superficie de carne y el contorno de la herida 
+	(conseguir un ROI)
+		->watershed/floodfill
+		->contorno
+		->threshold sobre histogramas
+
+	-detectar grapas o puntos
+	(poder contarlas para ver si se ha perdido un punto)
+		->houghLines
+		->paralelas
+
+	-distinguir grapas de hilos
+		->histogramas
+		-shapes
+
+	-distinguir hematomas de infección y de betadine
+		-histograma ¿?
+
+
+	Consideraciones y Problemas:
+	-diferentes colores de piel
+		-> ya que la piel abarcará gran parte de la foto, 
+			un histograma deberá tener un pico en ese color
+
+	-herida en zona con pelo
+		->en las imagenes se ven como pequeñas lineas negras,
+			se pueden confundir con hilos
+
+	-aparecen ropa u otros elementos (mucho ruido)
+		->muchos colores (ruido en el histograma)
+		->contornos y lineas (ruido en los shapes o houghLines)
+
+	-diferentes tipos de puntos (problemas con chape)
+		-> al haber puntos internos, ya no se pueden buscar
+			shapes tan restringidos
+
+	-herida no siempre recta (problema con houghLines)
+		-> a veces se tienen que hacer incisiones curvas
+			o tres heridas para laparoscopias
+	
+	-longitud y grosor de las grapas e hilos
+		-> como el grosor y la longitud de las grapas es algo 
+			conocido y controlado, se puede usar esa
+			información como referencia para medir la herida
+	
+	-alineación de los puntos o grapas
+
+
+	PROGRESOS:
+	-he estudiado diferentes espacios de color para encontrar el más 	apropiado para los histogramas, i.e hue de HSV. Entre otros he
+	visto YCrCb, HSV y HLV.
+
+	-he estudiado diferentes métodos para marcar diferentes zonas de 
+	color de una foto. Entre otras histogramas+threshold y floodfill
+
+	-he estudiado diferentes algoritmos para separar componentes 		conexas de una foto ¿?
+
+	-otros: Mahalanobis distance, artículo "Natural color image 		segmentation" by Xu Jie, Shi Peng-fei
+
+
