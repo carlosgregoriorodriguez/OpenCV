@@ -23,7 +23,7 @@ while not display.isDone():
 		normaldisplay = not(normaldisplay)
 	img = vc.getImage().scale(scale) #.bilateralFilter() #.flipHorizontal()
 	for color in rgb_color_indicators:
-		dist = img.colorDistance(color).invert().dilate(1).stretch(215,255) #hueDistance
+		dist = img.colorDistance(color).invert().binarize(215,255).erode(1).invert() #hueDistance
 		if a: dist = dist | a #dist.stretch(215,255)
 		a = dist
 	blobs = a.findBlobs() or []
