@@ -48,14 +48,22 @@ class Cube(object):
     
 	num_faces = 6
 
-	vertices = [ (0.0, 0.0, 1.0),
-				(1.0, 0.0, 1.0),
+#	vertices = [ (0.0, 0.0, 1.0),
+#				(1.0, 0.0, 1.0),
+#				(1.0, 1.0, 1.0),
+#				(0.0, 1.0, 1.0),
+#				(0.0, 0.0, 0.0),
+#				(1.0, 0.0, 0.0),
+#				(1.0, 1.0, 0.0),
+#				(0.0, 1.0, 0.0) ]
+	vertices = [ (-1.0, -1.0, 1.0),
+				(1.0, -1.0, 1.0),
 				(1.0, 1.0, 1.0),
-				(0.0, 1.0, 1.0),
-				(0.0, 0.0, 0.0),
-				(1.0, 0.0, 0.0),
-				(1.0, 1.0, 0.0),
-				(0.0, 1.0, 0.0) ]
+				(-1.0, 1.0, 1.0),
+				(-1.0, -1.0, -1.0),
+				(1.0, -1.0, -1.0),
+				(1.0, 1.0, -1.0),
+				(-1.0, 1.0, -1.0) ]
 
 	normals = [ (0.0, 0.0, +1.0),  # front
 				(0.0, 0.0, -1.0),  # back
@@ -80,11 +88,11 @@ class Cube(object):
 		print "rendering cube";
 		glPushMatrix();
 		glLoadIdentity();
-		glRotate(R[0]*180/np.pi,1,0,0);
-		glRotate(R[1]*180/np.pi,0,1,0);
-		glRotate(R[2]*180/np.pi,0,0,1);
 		glTranslate(*self.T);
-		glScale(10.,10.,10.);
+		glRotate(R[1]*180/np.pi,1,0,0);
+		glRotate(R[0]*180/np.pi,0,1,0);
+		glRotate(R[2]*180/np.pi,0,0,1);
+		glScale(5.,5.,1.);
 		#glRotate(self.R);
 		# Draw all 6 faces of the cube
 		glBegin(GL_QUADS)
@@ -246,8 +254,9 @@ if __name__ == "__main__":
 		
 		if patternWasFound:
 			R,T = cv2.solvePnP(patternPoints, corners, cameraMatrix, distCoefs);
-			world.chessboard.T = T*-1
+			world.chessboard.T = T*-2;
 			world.chessboard.R = R;
+			print R*180/np.pi;
 			# Pygame
 			# Clear screen
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
