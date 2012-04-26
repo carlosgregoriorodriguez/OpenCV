@@ -1,0 +1,95 @@
+
+                           PROYECTO - ANALISIS DE VIDEO
+                                 Guillermo Monge
+
+RESUMEN:
+
+	El proyecto tiene dos objetivos principales. El primero consiste en video con el 	la detección de manera automática los cambios de escena (y diferenciarlos de los
+	cambios de plano). El segundo objetivo es un tanto más ambicioso, detectar los
+	distintos personajes que aparecen en el video y poder sacar datos de esto, como
+	las escenas o tiempo que aparece un personaje en el video, o incluso la busqueda
+	de escenas en las que un subconjunto de personajes coincidan.
+
+GUION BASICO:
+
+	1- Elaboración y manejo de herramientas básicas para el manejo de video.
+
+	2- Estudio y definición de medidas sobre las imágenes que ayuden a determinar
+		si dos frames pertenecen a la misma escena/plano o no.
+
+	3- Desarrollo de una estructura de datos abstracta con la que vayamos almacenando
+		datos sobre la escena/plano/personaje
+
+	4- Aprendizaje de una mejor utilización de las herramientas de detección de caras
+		y personas
+
+	5- Aprendizaje de una mejor utilización de las herramientas de tracking de puntos		críticos ( goodFeatures, SURF y FLANN )
+
+	6- De manera equivalente a las escenas intentar definir un mismo tipo de medida
+		que determine si dos caras son del mismo personaje o no.
+
+
+DIARIO:
+
+Semana 1- Durante los primeros días he empleado el tiempo en elaborar el guión básico
+	del proyecto (expuesto arriba) y a la creación de unos programas básicos de 
+	manejo de video (hello_video.py), el cual carga un video sobre el que podemos
+	llevar varias acciones:
+		-transformaciones de tamaño (pyrUp , pyrDown)
+		-cambio de canal de color a blanco y negro y vice versa
+		-captura y guardado de frames
+		-aceleración y deceleración del framerate
+
+	  Se me ocurrió que es posible que sea más fácil si me restrinjo a snippets de
+	SitComs ya que tienen un número reducido de personajes principales, y sobre todo
+	de escenarios fijos sobre los cuales se desarrollan las escenas. Es posible que
+	para una primera aproximación también sea útil si tomo dibujos animados ya que
+	las imágenes son mucho más controlables. He tomado un snippet de la serie 
+	"Family Guy" sobre la cual empezar a trabajar.
+
+	  Una vez con el programa de captura de frames, guardé diversos frames del
+	snippet mencionado, y probé a ver la diferencia entre los frames por una
+	simple resta de las imágenes (método que a partir de ahora denominaré como
+	Raw Substraction o RS). El método no fue muy fructífero, por lo que pretendo
+	la semana que viene trabajar con histogramas y la herramienta compareHistogram.
+
+	  Encontré en YouTube dos videos interesantes con relación con el proyecto:
+
+          -OpenCV Face Extraction / Detection + Processing ( http://tinyurl.com/cvw9zze )
+		Detecta, extrae y guarda caras de la película Matrix Revolutions
+
+	  -Predator: Camera That Learns ( http://tinyurl.com/3j463wp )
+		Utiliza un sistema de machine learning muy parecido al que quiero
+		implementar en la estructura de datos, sobre todo a la hora de
+		definir la distancia entre caras de personajes distintos
+		También enseña posibles aplicaciones muy interesantes como estabilizar
+		una imagen
+
+	  Empecé a organizar de manera esquemática la estructura de datos para las caras
+	y escenas. Espero poder tenerla casi desarrollada entera para la tercera semana.
+
+
+
+Semana 2- Ya que las pruebas con el RS de distintos frames los había llevado a cabo
+	sobre la consola directamente, los plasmé en un pequeño programa a modo de
+	ejemplo básico (frameDif.py). Posteriormente, en otro programa (rawSubsVideo.py)
+	depuré la manera de trabajar con la misma técnica: el programa muestra el video
+	y permite la captura de un frame. Cuando se captura un frame, también muestra
+	el RS del frame capturado y el video. De esta manera, parece que si que se puede
+	utilizar el método RS para una primera definición básica de distancia entre
+	frames para la detección de cambio de escena. Aún así, sigue pareciendo mejor
+	opción utilizar histogramas.
+
+	    NOTA - en el RS del frame con el video aparecen pequeños fallos, que muy
+		posiblemente estén causados por ruido. Aplicar filtros para intentar
+		reducirlo o eliminarlo.
+
+	  Continué con la estructura de datos para las caras y escenas.
+
+
+	  
+
+
+
+
+
