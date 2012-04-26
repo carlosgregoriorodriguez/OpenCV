@@ -17,7 +17,7 @@ USAGE:      SPACE - capture frames. (press f to toggle between b/w and color cap
      QUIT: press either q or ESC
 '''
 
-MAXframes = 5      #Maximum number of frames allowed to store
+MAXframes = 20      #Maximum number of frames allowed to store
 
 START = cv2.getTickCount()
 
@@ -25,7 +25,7 @@ START = cv2.getTickCount()
 def clock():
     return (cv2.getTickCount() - START)/ cv2.getTickFrequency()
 
-def captureFrame(frame,bwFR):
+def captureFrame(frame,bwFR,n):
 	time = clock()
 	frameCopy = frame.copy()
 	print("Frame captured")
@@ -34,6 +34,7 @@ def captureFrame(frame,bwFR):
 		frameCopy = cv2.cvtColor(frameCopy,cv.CV_RGB2GRAY)
 
 	cv2.imshow("CAPTURE %d" %(time) , frameCopy)
+	cv2.imwrite("frame%d.jpg" %(n), frameCopy)
 
 
 def main():
@@ -71,7 +72,7 @@ def main():
 		if bwVid:
 			frame = cv2.cvtColor(frame,cv.CV_RGB2GRAY)
 
-		cv2.imshow("COOKIN SOUL - Aqui te pillo aqui temazo",frame)
+		cv2.imshow("FAMILY GUY Snippet",frame)
 
 
 		if (key == 98):  # b --> Black and White VIDEO
@@ -85,7 +86,7 @@ def main():
 			print("Black and White capture frames changed to: %r" % (bwFR) )
 
 		if (key == 32):  #SPACE  --> Capture Frame
-			captureFrame(frame = frameOriginal, bwFR = bwFR)
+			captureFrame(frame = frameOriginal, bwFR = bwFR, n= counter)
 			counter += 1
 			if (counter < MAXframes):
 				print("Memory for %d more" %(MAXframes - counter))
