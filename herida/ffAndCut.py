@@ -62,11 +62,11 @@ def doAndPack(img):
 	canvasInv = cv2.threshold(canvas, 100, 255, cv2.THRESH_BINARY_INV)[1]
 	
 	cuttedImg = cutImage(img,canvasInv)
-
-	rho = 
-	theta
+	cannyImg = 
+	#rho = 
+	#theta
 	
-	lines = cv2.HoughLines(cuttedImg, rho, theta, threshold)
+	#lines = cv2.HoughLines(cuttedImg, rho, theta, threshold)
 
 	background = np.zeros((h*2,w*3),np.uint8)
 	background[0:h,0:w]=cv2.cvtColor(img,cv2.cv.CV_RGB2GRAY)
