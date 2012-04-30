@@ -4,7 +4,8 @@
 
 RESUMEN:
 
-	El proyecto tiene dos objetivos principales. El primero consiste en video con el 	la detección de manera automática los cambios de escena (y diferenciarlos de los
+	El proyecto tiene dos objetivos principales. El primero consiste en video con el
+	la detección de manera automática los cambios de escena (y diferenciarlos de los
 	cambios de plano). El segundo objetivo es un tanto más ambicioso, detectar los
 	distintos personajes que aparecen en el video y poder sacar datos de esto, como
 	las escenas o tiempo que aparece un personaje en el video, o incluso la busqueda
@@ -23,7 +24,8 @@ GUION BASICO:
 	4- Aprendizaje de una mejor utilización de las herramientas de detección de caras
 		y personas
 
-	5- Aprendizaje de una mejor utilización de las herramientas de tracking de puntos		críticos ( goodFeatures, SURF y FLANN )
+	5- Aprendizaje de una mejor utilización de las herramientas de tracking de puntos
+		críticos ( goodFeatures, SURF y FLANN )
 
 	6- De manera equivalente a las escenas intentar definir un mismo tipo de medida
 		que determine si dos caras son del mismo personaje o no.
@@ -78,11 +80,28 @@ Semana 2- Ya que las pruebas con el RS de distintos frames los había llevado a 
 	el RS del frame capturado y el video. De esta manera, parece que si que se puede
 	utilizar el método RS para una primera definición básica de distancia entre
 	frames para la detección de cambio de escena. Aún así, sigue pareciendo mejor
-	opción utilizar histogramas.
+	opción utilizar histogramas. En un intento de mejorar el manejo del programa,
+	creé otro programa ( RSvideo-1wndw.py ) practicamente igual que el anterior, 
+	pero con todos los vídeos e imágenes en la misma pantalla. Sin embargo, tarda
+	demasiado tiempo en hacer la conversión y no queda bien.
 
 	    NOTA - en el RS del frame con el video aparecen pequeños fallos, que muy
 		posiblemente estén causados por ruido. Aplicar filtros para intentar
 		reducirlo o eliminarlo.
+
+	  Los intentos de  reducir el ruido que aparece al hacer la diferencia de
+	frames no han sido muy fructíferos. Sigue apareciendo el ruido, aunque ahora
+	mucho más difuminado que antes. Sin embargo, cuanto más blur-eada la imagen,
+	los cambios de escena son más drásticos en el método RS. 
+
+	  Los métodos utilizados para la reducción del sonido, se basaban en difuminar
+	la imagen. En el programa ( rawSubsVideo.py ) se pueden cambiar los parámetros
+	(y combinar) los dos principales:
+		1 - Mediante cv2.blur (el resultado es muy parecido a si se hubiese
+			aplicado un gaussianBlur o un medianBlur). No hay casi
+			reducción en la velocidad.
+		2 - Mediante pyrDown + pyrUp (repetido un número controlado de veces).
+			Esta vez la reducción en la velocidad es considerable.
 
 	  Continué con la estructura de datos para las caras y escenas.
 

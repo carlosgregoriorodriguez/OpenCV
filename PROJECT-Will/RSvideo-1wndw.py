@@ -24,8 +24,8 @@ USAGE:      SPACE - capture frame. From then on the video will be the raw
      QUIT: press either q or ESC
 '''
 
-imgWidth = 480
-imgHeight = 368 
+imgWidth = 200
+imgHeight = 153 
 
 
 def main():
@@ -39,8 +39,8 @@ def main():
 
 	while True: 
 
-		succesFlag , frame = vid.read()
-		#frame = cv2.resize(src=frameOriginal, dsize=(imgWidth,imgHeight))
+		succesFlag , frameOriginal = vid.read()
+		frame = cv2.resize(src=frameOriginal, dsize=(imgWidth,imgHeight))
 		BWframe = cv2.cvtColor(frame,cv.CV_RGB2GRAY)
 
 		result = np.zeros((imgHeight,imgWidth*3,3),np.uint8)
@@ -62,37 +62,55 @@ def main():
 			print "Frame captured"
 
 		
-		if doRS:
-			if bw:
+		# if doRS:
+		# 	if bw:
 				
-				for x in range(imgHeight):
-					for y in range(imgWidth):
-						#cv2.imshow("frame capture",BWcapture)
-						resultBW[x,2*imgWidth+y] = BWcapture[x,y]
+		# 		for x in range(imgHeight):
+		# 			for y in range(imgWidth):
+		# 				#cv2.imshow("frame capture",BWcapture)
+		# 				resultBW[x,2*imgWidth+y] = BWcapture[x,y]
 
-						#cv2.imshow("Snippet [Raw substraction]",frame - BWcapture)
-						resultBW[x,imgWidth+y] = BWframe[x,y] - BWcapture[x,y]
+		# 				#cv2.imshow("Snippet [Raw substraction]",frame - BWcapture)
+		# 				resultBW[x,imgWidth+y] = BWframe[x,y] - BWcapture[x,y]
 
 
-			else:
+		# 	else:
 				
-				for c in range(3):
+		# 		for c in range(3):
 					
-					for x in range(imgHeight):
-						for y in range(imgWidth):
-							#cv2.imshow("frame capture",capture)
-							result[x,2*imgWidth+y,c] = capture[x,y,c]
+		# 			for x in range(imgHeight):
+		# 				for y in range(imgWidth):
+		# 					#cv2.imshow("frame capture",capture)
+		# 					result[x,2*imgWidth+y,c] = capture[x,y,c]
 
-							#cv2.imshow("Snippet [Raw substraction]",frame - capture)			
-							result[x,imgWidth+y,c] = frame[x,y,c] - capture[x,y,c]
+		# 					#cv2.imshow("Snippet [Raw substraction]",frame - capture)			
+		# 					result[x,imgWidth+y,c] = frame[x,y,c] - capture[x,y,c]
 
-				
-		
+
 		for x in range(imgHeight):
 			for y in range(imgWidth):
 				#cv2.imshow("FAMILY GUY Snippet [ORIGINAL]",frame)
 				resultBW[x,y] = BWframe[x,y]
-				result[x,y] = frame[x,y]
+				
+				for c in range(3):
+					result[x,y,c] = frame[x,y,c]
+
+				if doRS:
+
+					if bw:
+
+						resultBW[x,2*imgWidth+y] = BWcapture[x,y]
+
+						resultBW[x,imgWidth+y] = BWframe[x,y] - BWcapture[x,y]
+
+					else:
+						for c in range(3):
+
+							result[x,2*imgWidth+y,c] = capture[x,y,c]
+
+							result[x,imgWidth+y,c] = frame[x,y,c] - capture[x,y,c]
+
+
 
 		if bw:
 			cv2.imshow("Family Guy color Snippet",result)
