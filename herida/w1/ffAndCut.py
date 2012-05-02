@@ -76,7 +76,7 @@ def doAndPack(img):
 if __name__ == "__main__":
 
 
-	path = 'images/*.jpg'
+	path = '../images/*.jpg'
 	imageNames = glob(path)
 	imgIndex = 0
 	img = cv2.imread(imageNames[imgIndex])	
