@@ -103,6 +103,17 @@ Semana 2- Ya que las pruebas con el RS de distintos frames los había llevado a 
 		2 - Mediante pyrDown + pyrUp (repetido un número controlado de veces).
 			Esta vez la reducción en la velocidad es considerable.
 
+	  ( Histogram1.py ) Tras empezar a calcular los histogramas de cada frame
+	capturado, con un simple vistazo se puede ver que esta técnica parece mucho
+	más precisa a la hora de detectar cambios en la imagen, sobre todo cuando son
+	cambios más bruscos (como de cambios de background, en vez de meros movimientos
+	de los personajes).
+
+	  La siguiente etapa es la del uso de las herramientas para comparar histogramas
+	ver si estas son útiles para la detección de los tipos de cambios que queremos,
+	y si no, intentar definir una distancia nueva.
+
+
 	  Continué con la estructura de datos para las caras y escenas.
 
 
