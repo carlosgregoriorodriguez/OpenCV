@@ -52,7 +52,7 @@ Semana 1:
 		->muchos colores (ruido en el histograma)
 		->contornos y lineas (ruido en los shapes o houghLines)
 
-	-diferentes tipos de puntos (problemas con chape)
+	-diferentes tipos de puntos (problemas con shape)
 		-> al haber puntos internos, ya no se pueden buscar
 			shapes tan restringidos
 
@@ -78,5 +78,13 @@ Semana 1:
 	-he estudiado diferentes algoritmos para separar componentes 		conexas de una foto ¿?
 
 	-otros: Mahalanobis distance, artículo "Natural color image 		segmentation" by Xu Jie, Shi Peng-fei
+
+	-para detectar las grapas he optado por hacerlo detectando contornos
+	de una imagen pasada por canny. Esta aproximación simple es muy poco
+	robusta, encuentra miles de contornos unipuntuales aislados en cada 
+	grapa. Sigo dos variantes. La primera es unir los contornos 
+	unipuntuales a mano si están cerca unos de otros. Es un método 
+	costoso. La segunda es filtrar la imagen antes del canny o después, 
+	para hacer más uniforme el contorno de las grapas.
 
 
