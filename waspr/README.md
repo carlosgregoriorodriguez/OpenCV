@@ -6,6 +6,8 @@ Para poder ejecutar los ejemplos necesitas tener instalado
   - Numpy
   - Scipy
   - Pygame
+  - PyOpenGL
+  - PIL
 
 Otros
 -----
