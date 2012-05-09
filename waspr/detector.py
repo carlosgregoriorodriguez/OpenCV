@@ -6,57 +6,64 @@ import random
 import cv
 from PIL import Image
 import pygame
+from heatmap import Heatmap, Point
 
 display = SimpleCV.Display()
 vc = SimpleCV.VirtualCamera("video.mts", "video")
-normaldisplay = False
-rgb_color_indicators = [
-	(133,226,157), # Soft Green
-	(62,90,149), # Deep Blue
-	# (93,172,242), # Soft Blue
-	# (115,156,212), # Soft Metalized Blue
-	(110,160,220), # Soft Metalized Blue
-]
-# hsv_color_indicators = [colorsys.rgb_to_hls(*c) for c in rgb_color_indicators]
+normaldisplay = True
 scale = 0.18
-blobs = []
 hm = None
 points = []
+
+class Swarm(object):
+	frame = 0
+	def __init__(self):
+		pass
+
+	def find_wasps(self,img):
+		distances = {}
+		for color in Wasp.colors:
+			distances[color] = img.colorDistance(color).invert().binarize(225,255).erode(2).dilate(1).invert() #hueDistance
+
+		mix = reduce(lambda x,y:x | y, distances.values())
+		candidates = mix.findBlobs() or []
+		for circle in candidates:
+			radius = circle.radius()+2
+			if 6*scale+2<radius<36*scale:
+				for color,distance in distances.items():
+					if distance[circle.x,circle.y]:
+						yield color, circle
+						break
+class Wasp(object):
+	colors = [
+		(133,226,157), # Soft Green
+		(62,90,149), # Deep Blue
+		(110,160,220) # Soft Metalized Blue
+	]
+
+sw = Swarm()
+
 while not display.isDone():
 	before = time.time()
-	candidates = []
 	if display.mouseRight:
 		normaldisplay = not(normaldisplay)
 	img = vc.getImage().scale(scale) #.bilateralFilter() #.flipHorizontal()
 	if not hm:
-		hm = HeatMap(0, img.width, 0, img.height)
-		hm.invert_y = True
-	distances = {}
-	for color in rgb_color_indicators:
-		distances[color] = img.colorDistance(color).invert().binarize(225,255).erode(2).dilate(1).invert() #hueDistance
-		# if a: dist = dist | a #dist.stretch(215,255)
-		# a = dist
-	mix = reduce(lambda x,y:x | y, distances.values())
-	blobs = mix.findBlobs() or []
-	candidates += blobs or []
-	if candidates:
-		#circles = blobs
-		#circles = candidates.filter([b.isCircle(.3) for b in candidates])
-		for circle in candidates:
-			radius = circle.radius()+2
-			if 6*scale+2<radius<36*scale:
-				img.drawCircle((circle.x, circle.y), radius,SimpleCV.Color.RED,min(radius,2))
+		hm = Heatmap(img.width, img.height)
 
-		points = [(circle.x, circle.y) for circle in candidates]
-		hm.add_points(points, 12)
+	for color, circle in sw.find_wasps(img):
+		radius = circle.radius()
+		img.drawCircle((circle.x, circle.y), radius,SimpleCV.Color.RED,min(radius,2))
+		hm.addPoint(Point(circle.x,circle.y), 10)
 
 	fps = 1/(time.time()-before)
 	if normaldisplay:
 		img.drawText('%d fps'%fps,0,0)
 		img.show()
 	else:
-		hm.transform_color(.3)
-		image_heat = hm.get_PIL()
+		#hm.transform_color(.3)
+		#image_heat = hm.get_PIL()
+		image_heat = hm.transform()
 		surface = pygame.image.fromstring(image_heat.tostring(), image_heat.size, image_heat.mode)
 		heat = SimpleCV.Image(surface)
 		heat.show()
