@@ -36,8 +36,24 @@ class Swarm(object):
 						yield color, circle
 						break
 	def relation_wasps(self,ccs):
-		for color,circle in ccs: pass
+		next_positions, prev_positions = {}, {}
+		for color,circle in ccs:
+			if color not in next_positions: next_positions[color] = []
+			next_positions[color].append((circle.x,circle.y))
 
+		if self.wasps:
+			for wasp in self.wasps:
+				if wasp.color not in prev_positions: prev_positions[wasp.color] = []
+				prev_positions[wasp.color].append(wasp.last_position)
+
+
+			for color, positions in next_positions.items():
+				tree = spatial.KDTree(positions)
+				print tree.data
+
+		else:
+			
+			
 	def advance(self):
 		self.frame += 1
 
@@ -50,9 +66,11 @@ class Wasp(object):
 		COLOR_DEEPBLUE,
 		COLOR_SOFTBLUE
 	]
+
 	def __init__(self,frame=0):
 		self.last_frame = frame
 		self.positions = []
+		self._color = None
 
 	@property
 	def last_position(self):
@@ -78,7 +96,10 @@ while not display.isDone():
 	if not hm:
 		hm = Heatmap(img.width, img.height)
 
-	for color, circle in sw.find_wasps(img):
+	wasps = list(sw.find_wasps(img))
+	sw.relation_wasps(wasps)
+
+	for color, circle in wasps:
 		radius = circle.radius()
 		img.drawCircle((circle.x, circle.y), radius,color,min(radius,2))
 		hm.addPoint(Point(circle.x,circle.y), 10)
