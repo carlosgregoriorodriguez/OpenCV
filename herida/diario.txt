@@ -69,16 +69,22 @@ Semana 1:
 
 
 	PROGRESOS:
-	-he estudiado diferentes espacios de color para encontrar el más 	apropiado para los histogramas, i.e hue de HSV. Entre otros he
+	Semana 1:
+	-he estudiado diferentes espacios de color para encontrar el más 
+	apropiado para los histogramas, i.e hue de HSV. Entre otros he
 	visto YCrCb, HSV y HLV.
 
 	-he estudiado diferentes métodos para marcar diferentes zonas de 
 	color de una foto. Entre otras histogramas+threshold y floodfill
 
-	-he estudiado diferentes algoritmos para separar componentes 		conexas de una foto ¿?
+	-he estudiado diferentes algoritmos para separar componentes 	
+	conexas de una foto ¿?
 
-	-otros: Mahalanobis distance, artículo "Natural color image 		segmentation" by Xu Jie, Shi Peng-fei
+	-otros: Mahalanobis distance, artículo "Natural color image 		
+	segmentation" by Xu Jie, Shi Peng-fei
 
+
+	Semana 2:
 	-para detectar las grapas he optado por hacerlo detectando contornos
 	de una imagen pasada por canny. Esta aproximación simple es muy poco
 	robusta, encuentra miles de contornos unipuntuales aislados en cada 
@@ -86,5 +92,27 @@ Semana 1:
 	unipuntuales a mano si están cerca unos de otros. Es un método 
 	costoso. La segunda es filtrar la imagen antes del canny o después, 
 	para hacer más uniforme el contorno de las grapas.
+
+	-Para filtrar la imagen antes de aplicar canny, primero se aplica un 
+	bluff para eliminar ruido y luego adaptative threshold para volver a 
+	perfilar los bordes difuminados en el blur.
+	Este método da buenos resultados, pero los parámetros de las funciones
+	tienen que calibrarse a mano y varían mucho de imagen a imagen.
+
+
+	Semana 3:
+	
+	-Los resultados de la semana anterior, aunque positivos, son muy 
+	dependientes de la foto que se le pase. Por lo tanto hay que calibrar
+	los parámetros de entrada a mano.
+	Primero busco mejores imágenes, con más resolución y mayor tamaño.
+	Con estas imágenes los parámetros se estabilizan, pero algunas imágenes 
+	siguen presentando problemas. Sobre todo imágenes con 
+
+
+
+
+
+
 
 
