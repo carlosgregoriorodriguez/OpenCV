@@ -7,18 +7,19 @@ import cv
 from PIL import Image
 import pygame
 from heatmap import Heatmap, Point
+import numpy as np
+from scipy import spatial
 
 display = SimpleCV.Display()
 vc = SimpleCV.VirtualCamera("video.mts", "video")
 normaldisplay = True
 scale = 0.18
 hm = None
-points = []
 
 class Swarm(object):
-	frame = 0
 	def __init__(self):
-		pass
+		self.frame = 0
+		self.wasps = []
 
 	def find_wasps(self,img):
 		distances = {}
@@ -31,15 +32,41 @@ class Swarm(object):
 			radius = circle.radius()+2
 			if 6*scale+2<radius<36*scale:
 				for color,distance in distances.items():
-					if distance[circle.x,circle.y]:
+					if distance[circle.x,circle.y][0]:
 						yield color, circle
 						break
+	def relation_wasps(self,ccs):
+		for color,circle in ccs: pass
+
+	def advance(self):
+		self.frame += 1
+
 class Wasp(object):
+	COLOR_SOFTGREEN = (133,226,157)
+	COLOR_DEEPBLUE = (62,90,149)
+	COLOR_SOFTBLUE = (110,160,220)
 	colors = [
-		(133,226,157), # Soft Green
-		(62,90,149), # Deep Blue
-		(110,160,220) # Soft Metalized Blue
+		COLOR_SOFTGREEN,
+		COLOR_DEEPBLUE,
+		COLOR_SOFTBLUE
 	]
+	def __init__(self,frame=0):
+		self.last_frame = frame
+		self.positions = []
+
+	@property
+	def last_position(self):
+		return self.positions[-1] if self.positions else None
+
+	def update_position(self,position,frame):
+		steps = frame-self.last_frame
+		if steps<1: return
+		elif steps==1: self.positions.append(position)
+		else:
+			last_position = self.last_position
+			self.positions += zip(
+				np.linspace(last_position[0],position[0],steps),
+				np.linspace(last_position[1],position[1],steps))[1:]
 
 sw = Swarm()
 
@@ -53,8 +80,10 @@ while not display.isDone():
 
 	for color, circle in sw.find_wasps(img):
 		radius = circle.radius()
-		img.drawCircle((circle.x, circle.y), radius,SimpleCV.Color.RED,min(radius,2))
+		img.drawCircle((circle.x, circle.y), radius,color,min(radius,2))
 		hm.addPoint(Point(circle.x,circle.y), 10)
+
+	sw.advance()
 
 	fps = 1/(time.time()-before)
 	if normaldisplay:
@@ -67,4 +96,5 @@ while not display.isDone():
 		surface = pygame.image.fromstring(image_heat.tostring(), image_heat.size, image_heat.mode)
 		heat = SimpleCV.Image(surface)
 		heat.show()
+
 		#mix.show()
