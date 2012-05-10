@@ -64,10 +64,10 @@ if __name__ == "__main__":
 	def showHistory(history):
 		l = len(history)
 		if l>0:
-			historyCanvas = np.zeros((476,l*266,3), np.uint8)
+			historyCanvas = np.zeros((476,((l/2)+1)*266,3), np.uint8)
 			for elem in enumerate(history):
 				if elem[0]%2:
-					historyCanvas[0:476,elem[0]*266:(elem[0]+1)*266,:]=elem[1]
+					historyCanvas[0:476,elem[0]/2*266:(elem[0]/2+1)*266,:]=elem[1]
 		else:
 			historyCanvas = np.zeros((50,50,3), np.uint8)
 

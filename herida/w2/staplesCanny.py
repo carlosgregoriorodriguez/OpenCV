@@ -17,7 +17,7 @@ def stapleCont(img,minArea,maxArea,direction):
 		minArea = aux
 
 	h, w = img.shape[:2]
-	canvas = np.zeros((h,w), np.uint8)
+	canvas = np.zeros((h,w,3), np.uint8)
 
 	rawContours,hierarchy = cv2.findContours(img.copy(),
 		cv2.cv.CV_RETR_LIST,
@@ -54,27 +54,27 @@ def stapleCont(img,minArea,maxArea,direction):
 				directionHist[0]+=1
 				contByDirection[0].append(bigCont[vect[0]])
 				if direction==0 or direction==4:
-					p2 = (p[0]+10*v[0],p[1]+10*v[1])
-					cv2.line(canvas,p,p2,(255,255,255))	
+					p2 = (p[0]+20*v[0],p[1]+20*v[1])
+					cv2.line(canvas,p,p2,(0,0,255),3)	
 			else:
 				directionHist[3]+=1
 				contByDirection[3].append(bigCont[vect[0]])
 				if direction==3 or direction==4:
-					p2 = (p[0]+10*v[0],p[1]+10*v[1])
-					cv2.line(canvas,p,p2,(255,255,255))
+					p2 = (p[0]+20*v[0],p[1]+20*v[1])
+					cv2.line(canvas,p,p2,(0,0,255),3)
 		else:
 			if ((v[0]>=0 and v[1]<0) or (v[0]<=0 and v[1]>0)) :
 				directionHist[1]+=1
 				contByDirection[1].append(bigCont[vect[0]])
 				if direction==1 or direction==4:
-					p2 = (p[0]+10*v[0],p[1]+10*v[1])
-					cv2.line(canvas,p,p2,(255,255,255))
+					p2 = (p[0]+20*v[0],p[1]+20*v[1])
+					cv2.line(canvas,p,p2,(0,0,255),3)
 			else:
 				directionHist[2]+=1
 				contByDirection[2].append(bigCont[vect[0]])
 				if direction==2 or direction==4:
-					p2 = (p[0]+10*v[0],p[1]+10*v[1])
-					cv2.line(canvas,p,p2,(255,255,255))
+					p2 = (p[0]+20*v[0],p[1]+20*v[1])
+					cv2.line(canvas,p,p2,(0,0,255),3)
 
 	if direction == 5:
 		cv2.drawContours(canvas,
@@ -83,19 +83,21 @@ def stapleCont(img,minArea,maxArea,direction):
 	else:
 		cv2.drawContours(canvas, bigCont, -1, (255,255,255))
 	
-	return canvas #bigCont
+	return canvas
 
 
 
 def doAndPack(img,thresh,minArea,maxArea,direction):
-	h, w = img.shape[:2]
+	
+
+	h, w = 375,450
 	canny = cv2.Canny(cv2.cvtColor(img,cv2.cv.CV_RGB2GRAY), thresh, thresh)
 	contoursCanvas = stapleCont(canny,minArea,maxArea,direction)
 	
-	background = np.zeros((h,w*3),np.uint8)
-	background[0:h,0:w]=cv2.cvtColor(img,cv2.cv.CV_RGB2GRAY)
-	background[0:h,w:2*w]=canny
-	background[0:h,2*w:3*w]=contoursCanvas
+	background = np.zeros((h,w*3,3),np.uint8)
+	background[0:h,0:w,0:3]=cv2.resize(img,(w,h))
+	background[0:h,w:2*w,0]=cv2.resize(canny,(w,h))
+	background[0:h,2*w:3*w,0:3]=cv2.resize(contoursCanvas,(w,h))
 	return background
 
 
@@ -104,13 +106,13 @@ def doAndPack(img,thresh,minArea,maxArea,direction):
 if __name__ == "__main__":
 
 
-	path = '../images/contourOnly/*.jpg'
+	path = '../images/*.jpg'
 	imageNames = glob(path)
 	imgIndex = 0
 	img = cv2.imread(imageNames[imgIndex])	
 	
 	cv2.namedWindow('panel',cv2.cv.CV_WINDOW_NORMAL)
-	cv2.createTrackbar('thresh','panel',0,1000,dummy)
+	cv2.createTrackbar('thresh','panel',1000,1000,dummy)
 	cv2.createTrackbar('minArea','panel',0,500,dummy)
 	cv2.createTrackbar('maxArea','panel',5000,5000,dummy)
 	cv2.createTrackbar('direction','panel',0,5,dummy)
