@@ -52,8 +52,8 @@ class Swarm(object):
 				print tree.data
 
 		else:
-			
-			
+			pass
+
 	def advance(self):
 		self.frame += 1
 
