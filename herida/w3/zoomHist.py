@@ -34,10 +34,11 @@ def getHistogram(img):
 
 if __name__ == "__main__":
 	
-	path = '../images/contourOnly/*.jpg'
+	path = '../images/*.jpg'
 	imageNames = glob(path)
 	imgIndex = 0
 	img = cv2.imread(imageNames[imgIndex])
+	img = cv2.resize(img,(min(img.shape[1],1250),min(img.shape[0],750)))
 	showImg = img.copy()
 
 	cv2.namedWindow('image',cv2.cv.CV_WINDOW_AUTOSIZE)
@@ -53,7 +54,7 @@ if __name__ == "__main__":
 		center = (x,y)
 		pt1 = (x-50,y-50)
 		pt2 = (x+50,y+50)
-		cv2.rectangle(showImg, pt1, pt2, (0,0,255), thickness=3)
+		cv2.rectangle(showImg, pt1, pt2, (0,0,255), thickness=2)
 		patch = cv2.pyrUp(cv2.getRectSubPix(img, (100,100), center))
 		canvas[0:200,0:200,:]=patch
 		canvas[210:466,0:256,:]=getHistogram(patch)
@@ -89,10 +90,12 @@ if __name__ == "__main__":
 	 	if (key==120):
 	 		imgIndex = (imgIndex+1,imgIndex)[imgIndex==(len(imageNames)-1)]
 	 		img = cv2.imread(imageNames[imgIndex])
+	 		img = cv2.resize(img,(min(img.shape[1],1250),min(img.shape[0],750)))
 	 		showImg=img.copy()
 	 	elif (key==122):
 	 		imgIndex = (imgIndex-1,imgIndex)[imgIndex==0]
 	 		img = cv2.imread(imageNames[imgIndex])
+	 		img = cv2.resize(img,(min(img.shape[1],1250),min(img.shape[0],750)))
 	 		showImg=img.copy()
 	 	elif (key != -1):
 	 		break
