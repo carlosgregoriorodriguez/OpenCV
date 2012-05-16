@@ -25,7 +25,69 @@ def blurAndAT(img,iterations,ksizeBlur,ksizeAT):
 	return bwImg
 
 
-def stapleCont(img,minArea,maxArea,direction):
+def findFrame(contours,canvas,axis):
+
+	#compute the width and height of a square
+	sqNum = 3
+	lw = canvas.shape[1]/sqNum
+	lh = canvas.shape[0]/sqNum
+
+	
+	if axis==0: #vertical frames	
+		hist = [0,]*sqNum #create a histogram to store the info about the contours
+		for cont in contours:
+			center,r = cv2.minEnclosingCircle(cont) #we simplify computations.
+			x = center[0]
+			for i in range(sqNum):
+				#if "center is in the frame"  or   the circle intersects the frame
+				if(i*lw<x and (i+1)*lw>x) or (abs(x-i*lw)<r or abs(x-(i+1)*lw)<r):
+					hist[i]+=1
+		#paint the info stored in hist
+		for i in enumerate(hist):
+			if i[1]!=0:
+				plane = np.ones((canvas.shape[0],lw),np.uint8)*125
+				canvas[:,i[0]*lw:(i[0]+1)*lw,1]=plane	
+	
+	if axis==1: #horizontal frames	
+		hist = [0,]*sqNum #create a histogram to store the info about the contours
+		for cont in contours:
+			center,r = cv2.minEnclosingCircle(cont) #we simplify computations.
+			y = center[1]
+			for i in range(sqNum):
+				#if "center is in the frame"  or   the circle intersects the frame
+				if(i*lh<y and (i+1)*lh>y)or(abs(y-i*lh)<r or abs(y-(i+1)*lh)<r):
+					hist[i]+=1
+		#paint the info stored in hist
+		for i in enumerate(hist):
+			if i[1]!=0:
+				plane = np.ones((lh,canvas.shape[0]),np.uint8)*125
+				canvas[i[0]*lh:(i[0]+1)*lh,:,1]=plane	
+	
+	if axis==2:#horizontal and vertical frames
+		sqHist = [] #create an appropiate histogram (2D)
+		for i in range(sqNum):
+			aux = [0,]*sqNum
+			sqHist.append(aux)
+
+		for cont in contours:
+			center,r = cv2.minEnclosingCircle(cont)
+			x,y = center[0],center[1]
+			for i in range(sqNum):
+				#if "center is in the vertical frame"  or   the circle intersects the vertical frame
+				if(i*lw<x and (i+1)*lw>x)or(abs(x-i*lw)<r or abs(x-(i+1)*lw)<r):
+					for j in range(sqNum):
+						#if "center is in the horizontal frame" or the circle intersects the horizontal frame
+						if(j*lh<y and (j+1)*lh>y)or(abs(y-j*lh)<r or abs(y-(j+1)*lh)<r):
+							sqHist[j][i]+=1
+		#paint the result
+		for row in enumerate(sqHist):
+			for column in enumerate(row[1]):
+				if column[1]!=0:
+					plane = np.ones((lh,lw),np.uint8)*125
+					canvas[row[0]*lh:(row[0]+1)*lh,column[0]*lw:(column[0]+1)*lw,1]=plane	
+
+
+def stapleCont(img,minArea,maxArea,direction,frameIt):
 	
 	if minArea>maxArea:
 		aux = maxArea
@@ -33,7 +95,7 @@ def stapleCont(img,minArea,maxArea,direction):
 		minArea = aux
 
 	h, w = img.shape[:2]
-	canvas = np.zeros((h,w), np.uint8)
+	canvas = np.zeros((h,w,3), np.uint8)
 
 	rawContours,hierarchy = cv2.findContours(img.copy(),
 		cv2.cv.CV_RETR_LIST,
@@ -71,26 +133,26 @@ def stapleCont(img,minArea,maxArea,direction):
 				contByDirection[0].append(bigCont[vect[0]])
 				if direction==0 or direction==4:
 					p2 = (p[0]+10*v[0],p[1]+10*v[1])
-					cv2.line(canvas,p,p2,(255,255,255))	
+					cv2.line(canvas,p,p2,(0,0,255),2)	
 			else:
 				directionHist[3]+=1
 				contByDirection[3].append(bigCont[vect[0]])
 				if direction==3 or direction==4:
 					p2 = (p[0]+10*v[0],p[1]+10*v[1])
-					cv2.line(canvas,p,p2,(255,255,255))
+					cv2.line(canvas,p,p2,(0,0,255),2)
 		else:
 			if ((v[0]>=0 and v[1]<0) or (v[0]<=0 and v[1]>0)) :
 				directionHist[1]+=1
 				contByDirection[1].append(bigCont[vect[0]])
 				if direction==1 or direction==4:
 					p2 = (p[0]+10*v[0],p[1]+10*v[1])
-					cv2.line(canvas,p,p2,(255,255,255))
+					cv2.line(canvas,p,p2,(0,0,255),2)
 			else:
 				directionHist[2]+=1
 				contByDirection[2].append(bigCont[vect[0]])
 				if direction==2 or direction==4:
 					p2 = (p[0]+10*v[0],p[1]+10*v[1])
-					cv2.line(canvas,p,p2,(255,255,255))
+					cv2.line(canvas,p,p2,(0,0,255),2)
 
 	if direction == 5:
 		cv2.drawContours(canvas,
@@ -99,19 +161,22 @@ def stapleCont(img,minArea,maxArea,direction):
 	else:
 		cv2.drawContours(canvas, bigCont, -1, (255,255,255))
 	
+	findFrame(bigCont,canvas,2)
+
 	return canvas #bigCont
 
 
 
 def doAndPack(img,ksizeBlur,ksizeAT,minArea,maxArea,direction):
-	h, w = img.shape[:2]
-	blat = blurAndAT(img,2,ksizeBlur,ksizeAT)
-	contoursCanvas = stapleCont(blat,minArea,maxArea,direction)
 	
-	background = np.zeros((h,w*3),np.uint8)
-	background[0:h,0:w]=cv2.cvtColor(img,cv2.cv.CV_RGB2GRAY)
-	background[0:h,w:2*w]=blat
-	background[0:h,2*w:3*w]=contoursCanvas
+	h, w = 375,450
+	blat = blurAndAT(img,2,ksizeBlur,ksizeAT)
+	contoursCanvas = stapleCont(blat,minArea,maxArea,direction,1)
+	
+	background = np.zeros((h,w*3,3),np.uint8)
+	background[0:h,0:w,0:3]=cv2.resize(img,(w,h))
+	background[0:h,w:2*w,0]=cv2.resize(blat,(w,h))
+	background[0:h,2*w:3*w,0:3]=cv2.resize(contoursCanvas,(w,h))
 	return background
 
 
@@ -120,7 +185,7 @@ def doAndPack(img,ksizeBlur,ksizeAT,minArea,maxArea,direction):
 if __name__ == "__main__":
 
 
-	path = '../images/contourOnly/*.jpg'
+	path = '../images/*.jpg'
 	imageNames = glob(path)
 	imgIndex = 0
 	img = cv2.imread(imageNames[imgIndex])	
