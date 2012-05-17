@@ -6,7 +6,7 @@
 #    Press 'S' to make video go slower
 #    Press 'R' to clear Histograms window
 #
-#    Willie - week 2 a.P. (after Project)
+#    Willie - week 3 a.P. (after Project)
 
 
 import cv2
@@ -33,31 +33,6 @@ USAGE:      SPACE - capture frame
      QUIT: press either q or ESC
 '''
 
-def getHistogram(img):
-
-	# First calculate histogram
-	histogram = cv2.calcHist([img],[0],None,[256],[0,255]) 
-	
-	# Normalize obtained histogram	
-	cv2.normalize(histogram,histogram,0,255,cv2.NORM_MINMAX)
-		
-	return histogram
-
-
-def printHistogram(histogram,canvas,withColor):
-
-	h = np.int32(np.around(histogram))
-	pts = np.column_stack((bins,h))
-	color = None
-	if withColor:
-		color = (rd.randint(0,255),rd.randint(0,255),rd.randint(0,255))
-	else:
-		color = 50
-
-	cv2.polylines(canvas,np.array([pts],np.int32),False,color,2)
-
-	return canvas
-
 
 def main():
 
@@ -77,11 +52,16 @@ def main():
 	cv2.namedWindow("Histograms")
 	cv.MoveWindow("Histograms",600,20)
 
+	#cv2.createTrackbar("number of pyrDown's","PYRDOWN-together",0,100,dummyP)
+
+
 	while True: 
 
 		if not pause:
 			succesFlag , frameOriginal = vid.read()
 			frame = cv2.cvtColor(frameOriginal,cv.CV_RGB2GRAY)
+
+			frame = cv2.pyrDown(cv2.pyrDown(cv2.pyrDown(cv2.pyrDown(cv2.pyrDown(frame)))))
 
 		key = cv2.waitKey(speed)
 
@@ -113,12 +93,6 @@ def main():
 			frames.append(capture)
 
 
-			hist = getHistogram(img= capture)
-
-			histResult = printHistogram(histogram= hist, canvas= histResult, withColor= True)
-
-			capture = printHistogram(histogram= hist, canvas= capture, withColor= False)
-
 			cv2.imshow("frame %d capture"%(n),cv2.pyrDown(capture))
 			a = None
 			if (n%12 < 6):
@@ -127,8 +101,6 @@ def main():
 				a = 550
 			cv.MoveWindow("frame %d capture"%(n),(n%6)*190 + 50,a)
 
-		hh = getHistogram(img= frame)
-		frame = printHistogram(histogram= hh, canvas= frame , withColor= False)
 		
 		cv2.imshow("ORIGINAL",frame)
 		cv.MoveWindow("ORIGINAL",50,20)
@@ -136,7 +108,7 @@ def main():
 		if (len(frames) > 0):
 			#for img in frames:
 
-			cv2.imshow("Histograms",histResult)  
+			cv2.imshow("Raw-Substraction",cv2.resize(cv2.absdiff(frame,capture), (480,368) )) 
 	
 		if debugging:
 			cv2.imshow("FAMILY GUY Snippet [ORIGINAL]",cv2.pyrDown(frameOriginal))

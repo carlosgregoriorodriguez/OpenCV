@@ -135,7 +135,7 @@ def main():
 					cv2.imshow("frame capture",capture)
 					cv.MoveWindow("frame capture",150,450)
 
-				cv2.imshow("Snippet [Raw substraction]",frame - capture)
+				cv2.imshow("Snippet [Raw substraction]",cv2.absdiff(frame,capture))
 			
 	
 		if debugging:

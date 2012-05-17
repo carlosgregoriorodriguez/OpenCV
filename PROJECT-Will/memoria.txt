@@ -116,6 +116,43 @@ Semana 2- Ya que las pruebas con el RS de distintos frames los había llevado a 
 
 	  Continué con la estructura de datos para las caras y escenas.
 
+Semana 3- Por terminar de refinar la herramienta de análisis de los histogramas, en el
+	programa Histogram2.py podemos observar el histograma del RGB en vez de en 
+	escala de grises.
+
+	  En la anterior reunión, Carlos y Alfonso me dieron una serie de ideas que
+	durante la semana he ido probando:
+		1 - Utilizar cv2.absdiff en vez de restarlo directamente. Sin embargo,
+			el problema del ruido sigue apareciendo
+		2 - Hacer muchos pyrDown's consecutivos para reducir la imagen a una
+			matriz más simple. Esta si que da muy buenos resultados, se
+			pueden observar en RS-pyrDown-separate.py y 
+			RS-pyrDown-together.py , cuya diferencia es sobre que imagen
+			hacen el pyrDown (together la hace al video nada más procesarlo,
+			y separate toma la captura y luego hace pyrDown por separado a
+			la caputra y al frame del video).
+		3 - Considerar trabajar con el audio para el reconocimiento de personajes.
+			Es una buena idea, y he estado investigando diversas bibliotecas
+			para python, pero es posible que sea me lleve demasiado tiempo
+			hasta que pueda manejarla bien como para meterlo en el proyecto.
+			Las bibliotecas encontradas son:
+				DragonFly - parece muy avanzada con muchas utilidades
+				Audilab - parece más sencilla, no hace mucho más que
+						convertir audio <-> numpy
+
+	  También leí un poco a cerca de compareHist y substracción del background, pero
+	por lo general la idea del pyrDown me parece buena y quiero seguir explorando
+	por ese lado.
+
+	  Ha sido una semana un poco menos productiva, pero la idea del pyrDown parece
+	que pueda servir perfectamente para detectar cambios bruscos de background. 
+	Espero que para la siguiente semana pueda tener ya algún programa que empiece
+	a detectar de manera automática el cambio de plano/escena.
+
+Semana 4- El objetivo principal es el de la detección automática del cambio de 
+	escena/plano. La clave es como detectar que el frame de RS-substraction tiene
+	mucho blanco.
+
 
 	  
 

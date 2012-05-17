@@ -6,7 +6,7 @@
 #    Press 'S' to make video go slower
 #    Press 'R' to clear Histograms window
 #
-#    Willie - week 2 a.P. (after Project)
+#    Willie - week 4 a.P. (after Project)
 
 
 import cv2
@@ -19,6 +19,8 @@ debugging = True   # Boolean variable for debugging
 
 bins = np.arange(256).reshape(256,1)
 
+method_dict = ['CORRELATION' , 'CHISQUARE' , 'INTERSECT', 'BHATTACHARYYA' ]
+
 usage = '''
 USAGE:      SPACE - capture frame
 
@@ -28,10 +30,12 @@ USAGE:      SPACE - capture frame
 
             'S' - makes video run slower
 
-            'R' - clears Histograms window
-
      QUIT: press either q or ESC
 '''
+
+def dummy(p):
+	print "compare histogram method changed to "+method_dict[p]
+
 
 def getHistogram(img):
 
@@ -59,6 +63,11 @@ def printHistogram(histogram,canvas,withColor):
 	return canvas
 
 
+def drawString(text, (x, y), img):
+	cv2.putText(img, text, (x+1, y+1), cv2.FONT_HERSHEY_PLAIN, 1.0, (0, 0, 0), thickness = 2, linetype=cv2.CV_AA)
+	cv2.putText(img, text, (x, y), cv2.FONT_HERSHEY_PLAIN, 1.0, (255, 255, 255), linetype=cv2.CV_AA)
+
+
 def main():
 
 	print usage
@@ -66,16 +75,21 @@ def main():
 	pause = False
 	speed = 20
 
+	# Create black image from which to compare the Raw-Substraction
+	black = np.zeros((368,480),dtype=np.uint8)
+	baseHist = getHistogram(img= black)
+
+	# Load video
 	vid = cv2.VideoCapture("videos/FamilyGuy.mp4")
 
 	# Create list in which captured frames are stored
 	frames = []
-
 	histResult = np.zeros((300,255,3))
 
 	# Create window
-	cv2.namedWindow("Histograms")
-	cv.MoveWindow("Histograms",600,20)
+	cv2.namedWindow("Raw-Substraction")
+	cv2.createTrackbar("method","Raw-Substraction",0,3,dummy)
+
 
 	while True: 
 
@@ -101,23 +115,12 @@ def main():
 				speed -= 5
 				print "speed: "+str(speed)
 
-		if (key == 114):  # press 'R'
-			histResult = np.zeros((300,255,3))
-			print "Histograms window cleared"
-
-
 		if (key == 32):   # press SPACE
 			n = len(frames)
 			print "Frame %d captured"%(n)
 			capture = frame.copy()
 			frames.append(capture)
 
-
-			hist = getHistogram(img= capture)
-
-			histResult = printHistogram(histogram= hist, canvas= histResult, withColor= True)
-
-			capture = printHistogram(histogram= hist, canvas= capture, withColor= False)
 
 			cv2.imshow("frame %d capture"%(n),cv2.pyrDown(capture))
 			a = None
@@ -127,16 +130,29 @@ def main():
 				a = 550
 			cv.MoveWindow("frame %d capture"%(n),(n%6)*190 + 50,a)
 
-		hh = getHistogram(img= frame)
-		frame = printHistogram(histogram= hh, canvas= frame , withColor= False)
 		
 		cv2.imshow("ORIGINAL",frame)
 		cv.MoveWindow("ORIGINAL",50,20)
 
 		if (len(frames) > 0):
 			#for img in frames:
+			frame1 = cv2.pyrDown(cv2.pyrDown(cv2.pyrDown(cv2.pyrDown(cv2.pyrDown(frame)))))
 
-			cv2.imshow("Histograms",histResult)  
+			capture1 = cv2.pyrDown(cv2.pyrDown(cv2.pyrDown(cv2.pyrDown(cv2.pyrDown(capture)))))
+
+			final = cv2.resize(cv2.absdiff(frame1,capture1), (480,368) )
+
+			hh = getHistogram(img= final)
+
+			final = printHistogram(histogram= hh, canvas= final , withColor= False)
+
+			method = cv2.getTrackbarPos("method","Raw-Substraction")
+
+			distance = str(cv2.compareHist(hh,baseHist,method))
+
+			drawString(method_dict[method]+"  "+distance , (20,20),final)
+
+			cv2.imshow("Raw-Substraction",final) 
 	
 		if debugging:
 			cv2.imshow("FAMILY GUY Snippet [ORIGINAL]",cv2.pyrDown(frameOriginal))
