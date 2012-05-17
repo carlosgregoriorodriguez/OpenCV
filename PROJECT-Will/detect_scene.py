@@ -10,7 +10,7 @@ import time
 import numpy as np
 import random as rd
 
-debugging = False                          # Boolean variable for debugging
+debugging = True                          # Boolean variable for debugging
 
 bins = np.arange(256).reshape(256,1)
 
@@ -144,7 +144,7 @@ def main():
 	cv.MoveWindow("Previous scene",775,50)
 
 	# Load video
-	vid = cv2.VideoCapture("videos/FamilyGuy.mp4")
+	vid = cv2.VideoCapture("videos/FamilyGuy.mp4") # MontyPython.mp4 FamilyGuy.mp4  FamGuy2.mp4  FamGuy3.mp4  FamGuy4.mp4
 
 	# Create list in which new scene frames are stored
 	scenes = []
@@ -186,9 +186,13 @@ def main():
 			print "speed: "+str(speed)
 
 		if (key == 102):  # press 'F'
-			if speed != 5:
+			if speed > 5:
 				speed -= 5
-				print "speed: "+str(speed)
+				
+			elif speed > 1:
+				speed -= 1
+
+			print "speed: "+str(speed)
 
 
 		# Implements wait time between searching for another scene
@@ -212,6 +216,8 @@ def main():
 				prev_scene = new_scene				
 				addNewScene(scenes= scenes, new_scene= new_scene, distance= str(distance))
 				cv2.imshow("Previous scene",cv2.pyrDown(frameOriginal))
+
+		prev_scene = frame.copy()
 
 
 		if (key == 27 or key == 113):
