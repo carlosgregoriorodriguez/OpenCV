@@ -109,8 +109,8 @@ def getScreenPos(n):
 
 def drawString(text, (x, y), img):
 
-	cv2.putText(img, text, (x+1, y+1), cv2.FONT_HERSHEY_PLAIN, 2.0, (0, 0, 0), thickness = 2, linetype=cv2.CV_AA)
-	cv2.putText(img, text, (x, y), cv2.FONT_HERSHEY_PLAIN, 2.0, (255, 255, 255), linetype=cv2.CV_AA)
+	cv2.putText(img, text, (x+1, y+1), cv2.FONT_HERSHEY_PLAIN, 2.0, (0, 0, 0), 2,cv2.CV_AA)
+	cv2.putText(img, text, (x, y), cv2.FONT_HERSHEY_PLAIN, 2.0, (255, 255, 255), cv2.CV_AA)
 
 
 def addNewScene(scenes, new_scene, distance):
@@ -165,7 +165,9 @@ def main():
 
 
 		key = cv2.waitKey(speed)
-
+		# Bugfix for large keynumbers
+		key = -1 if key == -1 else key & 255;
+		
 		if (key == 32):  # press SPACE
 			started = True
 			prev_scene = frame.copy()
