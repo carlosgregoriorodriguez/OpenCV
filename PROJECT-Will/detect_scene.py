@@ -10,7 +10,7 @@ import time
 import numpy as np
 import random as rd
 
-debugging = True                          # Boolean variable for debugging
+debugging = False                          # Boolean variable for debugging
 
 bins = np.arange(256).reshape(256,1)
 
