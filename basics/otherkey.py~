@@ -1,0 +1,6 @@
+import cv2
+import numpy as np
+while True:
+	cv2.NamedWindow('test');
+	key = cv2.waitKey(100);
+	print key;

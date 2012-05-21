@@ -1,0 +1,25 @@
+solvepnpcameraposition:
+	First run:
+		solvepnpcameraposition
+	And press space for saving the chessboard position. You have to save
+	10 positions to calibrate the camera. It will be saved into 
+	calib.dat.
+	Next you must see on your screen the camera drawed by pygame opengl. 
+
+findHomography:
+	Reads the camera and tries to transform it to match the original
+	position of chessboard in the smallchessboard.jpg image
+	You can specify an integer as the first argument, it will be
+	considered as the video source, or a filename, which will be taken
+	as the source
+	Pattern must be 9x6 inner corners. Other can be defined in the file
+	
+calibrateMyCamera:
+	Reads the camera, searches for the chessboard and tries to calibrate
+	the camera, printing the tvecs and rvecs for each capture.
+	rvecs and tvecs are the rotation and translation vectors for the
+	current chessboard.
+	Pattern must be 9x6 inner corners. Other can be defined in the file.
+	
+findChessboard:
+	Just an example of findChessboard funcion.

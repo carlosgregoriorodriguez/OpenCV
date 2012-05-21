@@ -8,8 +8,8 @@ from OpenGL.GLU import *
 import pygame
 from pygame.locals import *
 
-from gameobjects.matrix44 import *
-from gameobjects.vector3 import *
+from linearalgebratools.matrix44 import *
+from linearalgebratools.vector3 import *
 
 
 SCREEN_SIZE = (640,480)

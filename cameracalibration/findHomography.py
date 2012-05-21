@@ -2,9 +2,6 @@ import cv2;
 import numpy as np;
 import sys;
 
-def dummy(val):
-	pass;
-
 if __name__ == "__main__":
 	video = True;
 	filename = None;
@@ -17,7 +14,10 @@ if __name__ == "__main__":
 	
 	print """
     Runtime keys:
-        Q,ESC - quit the program""";
+        Q,ESC - quit the program
+    
+    This program calculates the homography of current images to make it
+    match one saved int smallchessboard.jpg""";
 			
 	
 	if (len(sys.argv)>1):
@@ -38,13 +38,9 @@ if __name__ == "__main__":
 		
 	cv2.namedWindow("main");
 	
-		
-	#cv2.createTrackbar('rectSize', 'config',25,100, dummy);
-	#cv2.createTrackbar('histogram threshold', 'config',120,255, dummy);
-	
 	firstimg = cv2.imread('../../img/smallchessboard.jpg');
-	
 	patternSize = (9,6);
+	
 	firstimggs = cv2.cvtColor(firstimg, cv2.cv.CV_RGB2GRAY);
 		
 	patternWasFound0, corners0 = cv2.findChessboardCorners(firstimggs, patternSize);
@@ -87,5 +83,6 @@ if __name__ == "__main__":
 		cv2.imshow("first",firstimg);
 		
 		key = cv2.waitKey(5);	
-		if (key == 27 or key == 113 or key == 1048689 or key == 1048603):
+		key = -1 if key == -1 else key & 255;
+		if (key == 27 or key == 113):
 			break;
