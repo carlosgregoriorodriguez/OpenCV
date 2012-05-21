@@ -2,7 +2,7 @@ import cv2;
 import numpy as np;
 import sys;
 import pickle;
-from pygameview import *;
+from _pygameviewsolvepnp import *;
 from multiprocessing import Process,Array,Lock
 
 
