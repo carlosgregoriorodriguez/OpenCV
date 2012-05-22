@@ -137,7 +137,7 @@ class Camera():
 		# print "rendering cube";
 		glPushMatrix();
 		glLoadIdentity();
-		print self.T;
+#		print self.T;
 		rNorm = np.sqrt(self.R[0]**2+self.R[1]**2+self.R[2]**2);
 		glRotate(rNorm*180/np.pi,self.R[0],-self.R[1],self.R[2]);
 		glTranslate(*self.T);

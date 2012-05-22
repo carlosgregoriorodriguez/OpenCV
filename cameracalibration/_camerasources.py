@@ -12,6 +12,7 @@ class CameraSource:
 		self.src = src;
 		self.cam = cv2.VideoCapture(src);
 		self.w,self.h = resolution;
+		print resolution;
 		self.setResolution(self.w,self.h);
 		self.calibrated = False;
 	

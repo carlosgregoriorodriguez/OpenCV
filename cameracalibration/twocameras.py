@@ -16,10 +16,11 @@ def parse_options():
 	parser.add_option("--firstcalibration", type="string", dest="firstcalibration", help="Calibration data file for the first source of video. If ommited, new calibration will be performed. If not ommited but the file doesn't exist, new calibration will be performed and the data will be saved into the specified file");
 	parser.add_option("--secondsource", type="int", default=1, dest="secondsource", help="Second source of video. Incompatible with --onecamera");
 	parser.add_option("--secondcalibration", type="string", dest="secondcalibration", help="Calibration data file for the second source of video. If ommited, new calibration will be performed. If not ommited but the file doesn't exist, new calibration will be performed and the data will be saved into the specified file. Incompatible with --onecamera. For one camera, the second calibration data is the same as for the first camera (obviously)");
-	parser.add_option("--resolution", type="int", nargs=2, default=(800,600), dest="resolution", help="Cameras resolution");
+	parser.add_option("--resolution", type="int", nargs=2, default=(640,480), dest="resolution", help="Cameras resolution");
 	parser.add_option("--pattern", type="int", nargs=2, default=(6,3), dest="patternsize", help="Pattern size (inner corners)");
 	parser.add_option("--squaresize", type="float", default=1.0, dest="squaresize", help="Square size");
 	return parser.parse_args();
+
 
 def getCorners(img,patternSize):
 	corners = None;
@@ -35,7 +36,7 @@ def getCorners(img,patternSize):
 
 if __name__ == "__main__":
 	(options, args) = parse_options();
-	
+	print options;
 	# Create virtual pattern to calibrate
 	squareSize = options.squaresize;
 	patternSize = options.patternsize;
