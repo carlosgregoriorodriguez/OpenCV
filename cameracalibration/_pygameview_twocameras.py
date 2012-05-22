@@ -130,7 +130,7 @@ class Camera():
 						(3, 2, 6, 7),  # top
 						(0, 1, 5, 4) ] # bottom    
 	def render (self):
-		glColor(self.color);
+		glColor(*self.color);
 		
 		# Adjust all the vertices so that the cube is at self.position
 		vertices = [tuple(Vector3(v)) for v in self.vertices]
@@ -160,7 +160,7 @@ class Camera():
 		glEnd()  
 		glPopMatrix();
 		
-def pygameProcess(Rarr,Tarr,lock):
+def pygameProcess(R1arr,T1arr,R2arr,T2arr,lock,stopped):
 	pygame.init()
 	screen = pygame.display.set_mode(SCREEN_SIZE, HWSURFACE|OPENGL|DOUBLEBUF)
 	
@@ -182,7 +182,7 @@ def pygameProcess(Rarr,Tarr,lock):
 	camera_matrix.translate = (0.0, 0.0, -100.0)
 	
 	
-	while True:
+	while not stopped.is_set():
 		lock.acquire();
 		R1 = np.array(list(R1arr));
 		T1 = np.array(list(T1arr));

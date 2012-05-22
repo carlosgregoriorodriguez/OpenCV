@@ -1,5 +1,6 @@
 import cv2;
 import numpy as np;
+import pickle;
 
 KEY_SPACE = 32;
 KEY_B = 98;
@@ -18,7 +19,7 @@ class CameraSource:
 		self.cam.set(3,w);
 		self.cam.set(4,h);
 	
-	def calibrate(self, patternPoints, captures = 10):
+	def calibrate(self, patternPoints, patternSize, captures = 10):
 		objPoints = []
 		imgPoints = []
 		corners = None;
@@ -53,7 +54,7 @@ class CameraSource:
 			elif (key == KEY_Q or key == KEY_ESC):
 				print "Quiting...";
 				exit();
-				
+		cv2.destroyWindow("Camera %d caliration" % self.src);		
 		# Camera intrinsec
 		cameraMatrix = None;
 		distCoefs = None;
@@ -62,7 +63,7 @@ class CameraSource:
 		# Set this camera as calibrated;
 		self.calibrated = True;
 				
-	def setCalibrationFile(self,filename,patternPoints):
+	def setCalibrationFile(self,filename,patternPoints,patternSize):
 		try:
 			f = open(filename, 'r');
 			self.calibrationData = pickle.load(f);
@@ -71,7 +72,7 @@ class CameraSource:
 		except:
 			print;
 			print "Problem opening %s,let's calibrate it" % filename;
-			self.calibrate(patternPoints);
+			self.calibrate(patternPoints,patternSize);
 			f = open(filename,'w');
 			pickle.dump(self.calibrationData,f);
 			f.close();
@@ -109,12 +110,13 @@ class VirtualCameraSource:
 				
 		cv2.destroyWindow("Virtual camera capture");
 	
-	def calibrate(self,patternPoints,captures):
+	def calibrate(self,patternPoints, patternSize,captures):
 		if not self.realCamera.calibrated:
-			self.realCamera.calibrate(patternPoints, captures);
+			self.realCamera.calibrate(patternPoints,patternSize, captures);
 		self.calibrationData = self.realCamera.getCalibrationData();
+		self.calibrated = True;
 	
-	def setCalibrationFile(self,filename,patternPoints):
+	def setCalibrationFile(self,filename,patternPoints,patternSize):
 		raise BaseException("This is a virtual camera, you can't load calibration data for it");
 	
 	def getCalibrationData(self):
