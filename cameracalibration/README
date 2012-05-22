@@ -1,3 +1,10 @@
+twocameras:
+	Just run with --help option for help.
+	If something doesn't work, probably it works in OpenCV 2.4.0.
+	Please, inform me.
+	
+
+
 solvepnpcameraposition:
 	First run:
 		solvepnpcameraposition
