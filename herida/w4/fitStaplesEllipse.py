@@ -42,43 +42,19 @@ def findFrame(contours,dimension,axis,val,sqNum):
 	#compute the width and height of a square
 	lw = dimension[0]/sqNum
 	lh = dimension[1]/sqNum
-
-	if axis==0: #vertical frames	
-		hist = [0,]*sqNum #create a histogram to store the info about the contours
-		for cont in contours:
-			center,r = cv2.minEnclosingCircle(cont) #we simplify computations.
-			x = center[0]
-			for i in range(sqNum):
-				#if "center is in the frame"  or   the circle intersects the frame
-				if(i*lw<x and (i+1)*lw>x) or (abs(x-i*lw)<r or abs(x-(i+1)*lw)<r):
-					hist[i]+=1
-		
-	if axis==1: #horizontal frames	
-		hist = [0,]*sqNum #create a histogram to store the info about the contours
-		for cont in contours:
-			center,r = cv2.minEnclosingCircle(cont) #we simplify computations.
-			y = center[1]
-			for i in range(sqNum):
-				#if "center is in the frame"  or   the circle intersects the frame
-				if(i*lh<y and (i+1)*lh>y)or(abs(y-i*lh)<r or abs(y-(i+1)*lh)<r):
-					hist[i]+=1
 	
 	if axis==2:#horizontal and vertical frames
-		sqHist = [] #create an appropiate histogram (2D)
-		for i in range(sqNum):
-			aux = [0,]*sqNum
-			sqHist.append(aux)
-
-		for cont in contours:
-			center,r = cv2.minEnclosingCircle(cont)
+		sqHist = np.zeros((sqNum,)*2,np.uint8) #create an appropiate histogram (2D)
+		for cont in contours:	#for every contour, we update the histogram
+			center,r = cv2.minEnclosingCircle(cont) #take the minimal enclosing circle for the contour
 			x,y = center[0],center[1]
-			for i in range(sqNum):
-				#if "center is in the vertical frame"  or   the circle intersects the vertical frame
-				if(i*lw<x and (i+1)*lw>x)or(abs(x-i*lw)<r or abs(x-(i+1)*lw)<r):
-					for j in range(sqNum):
-						#if "center is in the horizontal frame" or the circle intersects the horizontal frame
-						if(j*lh<y and (j+1)*lh>y)or(abs(y-j*lh)<r or abs(y-(j+1)*lh)<r):
-							sqHist[j][i]+=1
+			for row in range(sqNum):
+				#if "center is in the horizontal frame" or the circle intersects the horizontal frame
+				if(row*lh<y and (row+1)*lh>y)or(abs(y-row*lh)<r or abs(y-(row+1)*lh)<r):
+					for col in range(sqNum):
+						#if "center is in the vertical frame"  or   the circle intersects the vertical frame
+						if(col*lw<x and (col+1)*lw>x)or(abs(x-col*lw)<r or abs(x-(col+1)*lw)<r):
+							sqHist[row,col]+=1	
 		return sqHist
 
 
@@ -162,65 +138,79 @@ def stapleContThresh(img,minArea,maxArea,direction):
 	return stapleCont(aux,minArea,maxArea,direction)
 
 
-def paintSQS(sqHist,dimension,val):
-	canvas = np.zeros((dimension[1],dimension[0]),np.uint8)
-	lw = dimension[0]/len(sqHist[0])
-	lh = dimension[1]/len(sqHist)
+def paintSQS(sqHist,img):
+	totalH,totalW = img.shape[:2]
+	rowNum,colNum = sqHist.shape[:2]
+
+	canvas = np.zeros((totalH,totalW),np.uint8)
+	lw = totalW/colNum
+	lh = totalH/rowNum
 	#paint the result
-	for row in enumerate(sqHist):
-		for col in enumerate(row[1]):
-			if col[1]!=0:
-				plane = np.ones((lh,lw),np.uint8)*val
-				canvas[row[0]*lh:(row[0]+1)*lh,col[0]*lw:(col[0]+1)*lw]=plane	
-	return canvas
+	for row in range(rowNum-1):
+		for col in range(colNum-1):
+			print sqHist.shape
+			print [row,rowNum-1]
+			print [col,colNum-1]
+			if sqHist[row][col]!=0:
+				plane = np.ones((lh,lw),np.uint8)*255
+				canvas[row*lh:(row+1)*lh,col*lw:(col+1)*lw]=plane	
+	
+	return cv2.merge([cv2.min(canvas,layer) for layer in cv2.split(img)])
 
 
 def isConnected(row,col,matrix):
 	leftB = max(0,col-1)
-	rightB = min(col+1,len(matrix[0])-1)
+	rightB = min(col+1,matrix.shape[1]-1)
 	upB = max(0,row-1)
-	downB = min(row+1,len(matrix)-1)
-	
+	downB = min(row+1,matrix.shape[0]-1)
 	for i in range(upB,downB+1,1):
 		for j in range(leftB,rightB+1,1):
-			if (i!=row or j!=col) and (matrix[i][j]!=0):
+			if (i!=row or j!=col) and (matrix[i,j]!=0):
 				return True
 	return False
 
 
 def removeNotConnected(sigSquares):
-	for row in enumerate(sigSquares):
-		for col in enumerate(row[1]):
-			if (sigSquares[row[0]][col[0]]!=0) and (not isConnected(row[0],col[0],sigSquares)):
-				sigSquares[row[0]][col[0]]=0
+	for row in range(sigSquares.shape[0]-1):
+		for col in range(sigSquares.shape[1]-1):
+			if (sigSquares[row,col]!=0) and (not isConnected(row,col,sigSquares)):
+				sigSquares[row,col]=0
 
 
-def refine(sigSquares,img,bigCont,minArea,maxArea,direction):#refDim
-	lh,lw=img.shape[0]/len(sigSquares),img.shape[1]/len(sigSquares[0])
+def refine(sigSquares,img,bigCont,minArea,maxArea,direction,refDim):
+	lh,lw=img.shape[0]/sigSquares.shape[0],img.shape[1]/sigSquares.shape[1]
 	mask = np.zeros((img.shape),np.uint8)
-	#refSquares = np.zeros((len(sigSquares)*refDim[1],len(sigSquares[0])*refDim[0]),np.uint8)
-	for row in enumerate(sigSquares):
-		for col in enumerate(row[1]):
+	refSquares = np.zeros((len(sigSquares)*refDim[1],len(sigSquares[0])*refDim[0]),np.uint8)
+	for row in range(sigSquares.shape[0]-1):
+		for col in range(sigSquares.shape[1]-1):
 			#if the square value is greater than 0 (i.e there is a contour in this tile)
 			#then we get the sigSquares of this particular tile
-			if sigSquares[row[0]][col[0]]!=0:
-				patch = img[row[0]*lh:(row[0]+1)*lh,col[0]*lw:(col[0]+1)*lw,:]
+			if sigSquares[row,col]!=0:
+				patch = img[row*lh:(row+1)*lh,col*lw:(col+1)*lw,:]
 				patchCont = stapleContThresh(patch,minArea,maxArea,direction)[1]
 				patchSquares = findFrame(patchCont,(lw,lh),2,255,5)
 				removeNotConnected(patchSquares)
-				mask[row[0]*lh:(row[0]+1)*lh,col[0]*lw:(col[0]+1)*lw,:] = cv2.merge([paintSQS(patchSquares,(lw,lh),255),]*3)
-	return cv2.min(img,mask)
+				refSquares[row*refDim[1]:(row+1)*refDim[1],col*refDim[0]:(col+1)*refDim[0]]=patchSquares
+	return refSquares
+#removeNotConnected(refSquares)
 
 
 def significantSQS(img,bigCont,minArea,maxArea,direction):
 	sigSquares = findFrame(bigCont,(img.shape[1],img.shape[0]),2,255,5)
+	print type(sigSquares)
 	removeNotConnected(sigSquares)
-	refine(sigSquares,img,bigCont,minArea,maxArea,direction)
-	mask = cv2.merge([paintSQS(sigSquares,(img.shape[1],img.shape[0]),255),]*3)
-	return cv2.min(img,mask)
+	sigSquares = refine(sigSquares,img,bigCont,minArea,maxArea,direction,(5,5))
+	print type(sigSquares)
+	aux = paintSQS(sigSquares,np.ones((img.shape),np.uint8)*255)
+	rawContours,hierarchy = cv2.findContours(cv2.split(aux)[0].copy(),
+		cv2.cv.CV_RETR_LIST,cv2.CHAIN_APPROX_SIMPLE)
+	convex = [cv2.convexHull(points) for points in rawContours]
+	cv2.drawContours(img,convex,-1, (0,0,255),3)
+	
+	return img
 	
 
-def doAndPack(img,ksizeBlur,ksizeAT,minArea,maxArea,direction):
+def doAndPack(img,minArea,maxArea,direction):
 	h, w = 375,450
 
 	threshChan,bigCont = stapleContThresh(img,minArea,maxArea,direction)
@@ -248,15 +238,11 @@ if __name__ == "__main__":
 	img = cv2.imread(imageNames[imgIndex])	
 	
 	cv2.namedWindow('panel',cv2.cv.CV_WINDOW_NORMAL)
-	cv2.createTrackbar('ksizeBlur','panel',0,5,dummy)
-	cv2.createTrackbar('ksizeAT','panel',0,4,dummy)
 	cv2.createTrackbar('minArea','panel',0,500,dummy)
 	cv2.createTrackbar('maxArea','panel',5000,5000,dummy)
 	cv2.createTrackbar('direction','panel',0,5,dummy)
 
 	bigImg = doAndPack(img,
-		cv2.getTrackbarPos('ksizeBlur','panel'),
-		cv2.getTrackbarPos('ksizeAT','panel'),
 		cv2.getTrackbarPos('minArea','panel'),
 		cv2.getTrackbarPos('maxArea','panel'),
 		cv2.getTrackbarPos('direction','panel'))
@@ -264,8 +250,6 @@ if __name__ == "__main__":
 	while True:
 
 		bigImg = doAndPack(img,
-		cv2.getTrackbarPos('ksizeBlur','panel'),
-		cv2.getTrackbarPos('ksizeAT','panel'),
 		cv2.getTrackbarPos('minArea','panel'),
 		cv2.getTrackbarPos('maxArea','panel'),
 		cv2.getTrackbarPos('direction','panel'))
