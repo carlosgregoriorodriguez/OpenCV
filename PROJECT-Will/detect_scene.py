@@ -160,12 +160,12 @@ def main():
 
 	while True: 
 
+		# fps
+		before = time.time()
+
 		if not pause:
 			succesFlag , frameOriginal = vid.read()
 			frame = cv2.cvtColor(frameOriginal,cv.CV_RGB2GRAY)
-
-			# Show original video
-			cv2.imshow("ORIGINAL",cv2.pyrDown(frameOriginal))
 
 
 		key = cv2.waitKey(speed)
@@ -222,6 +222,12 @@ def main():
 				cv2.imshow("Previous scene",cv2.pyrDown(frameOriginal))
 
 		prev_scene = frame.copy()
+
+		fps = 1/(time.time()-before) #fps
+
+		# Show original video
+		drawString("fps : "+str(fps), (20 ,20 ), frameOriginal)
+		cv2.imshow("ORIGINAL",cv2.pyrDown(frameOriginal))
 
 
 		if (key == 27 or key == 113):
