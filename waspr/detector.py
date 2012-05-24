@@ -117,5 +117,4 @@ while not display.isDone():
 		surface = pygame.image.fromstring(image_heat.tostring(), image_heat.size, image_heat.mode)
 		heat = SimpleCV.Image(surface)
 		heat.show()
-
 		#mix.show()
