@@ -9,6 +9,7 @@ import cv2.cv as cv
 import time
 import numpy as np
 import random as rd
+import sys
 
 debugging = False                          # Boolean variable for debugging
 
@@ -144,7 +145,10 @@ def main():
 	cv.MoveWindow("Previous scene",775,50)
 
 	# Load video
-	vid = cv2.VideoCapture("videos/FamilyGuy.mp4") # MontyPython.mp4 FamilyGuy.mp4  FamGuy2.mp4  FamGuy3.mp4  FamGuy4.mp4
+	filename = "videos/FamilyGuy.mp4";
+	if (len(sys.argv)>1):
+		filename = sys.argv[1];
+	vid = cv2.VideoCapture(filename) # MontyPython.mp4 FamilyGuy.mp4  FamGuy2.mp4  FamGuy3.mp4  FamGuy4.mp4
 
 	# Create list in which new scene frames are stored
 	scenes = []
