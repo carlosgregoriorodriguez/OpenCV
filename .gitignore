@@ -1,2 +1,4 @@
 *.pyc
 waspr/video.mts
+*.mp4
+*.mpg
