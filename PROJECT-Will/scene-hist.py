@@ -90,8 +90,13 @@ def main():
 	cv2.namedWindow("Raw-Substraction")
 	cv2.createTrackbar("method","Raw-Substraction",0,3,dummy)
 
+	# distance of the actual frame with the last capture
+	distance = 'START'
 
-	while True: 
+
+	while True:
+
+		method = cv2.getTrackbarPos("method","Raw-Substraction")
 
 		if not pause:
 			succesFlag , frameOriginal = vid.read()
@@ -121,8 +126,12 @@ def main():
 			capture = frame.copy()
 			frames.append(capture)
 
+			cap_final = cv2.pyrDown(capture)
 
-			cv2.imshow("frame %d capture"%(n),cv2.pyrDown(capture))
+			drawString(method_dict[method]+"  "+distance , (10,20),cap_final)
+
+
+			cv2.imshow("frame %d capture"%(n),cap_final)
 			a = None
 			if (n%12 < 6):
 				a = 410
@@ -145,8 +154,6 @@ def main():
 			hh = getHistogram(img= final)
 
 			final = printHistogram(histogram= hh, canvas= final , withColor= False)
-
-			method = cv2.getTrackbarPos("method","Raw-Substraction")
 
 			distance = str(cv2.compareHist(hh,baseHist,method))
 
