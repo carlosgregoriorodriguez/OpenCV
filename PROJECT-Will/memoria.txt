@@ -153,6 +153,85 @@ Semana 4- El objetivo principal es el de la detección automática del cambio de
 	escena/plano. La clave es como detectar que el frame de RS-substraction tiene
 	mucho blanco.
 
+	  Tras probar con diversos métodos para intentar la detección de cambio de
+	escenas/planos el que mejores resultados da es una combinación. Consiste en 
+	llevar a cabo bastantes pyrDown's (entre 4 y 6, según el tamaño inicial del video)
+	restar el frame actual del anterior (amos reducidos) y calcular el histograma de
+	la diferencia. Ese histograma de la diferencia (que no es más que el histograma de
+	una imagen negra, con partes más blancas donde hay un cambio entre las imágenes)
+	queremos poder analizarlo para poder detectar cuando "hay mucho blanco"(y por tanto
+	hay una diferencia considerable entre las imágenes). Para ello llevamos a cabo un
+	compareHistogram con el histograma de una imagen completamente negra. Cuanto mayor
+	es la distancia entre los histogramas, mayor será la diferencia entre los frames.
+
+	  Este proceso parece reducir los problemas que surgían al hacer hallar máximos en
+	la diferencia (RS), o al comparar los dos histogramas directamente, ya que es un
+	histograma más normalizado. Para conseguir el objetivo de la detección automática es
+	necesario estudiar un poco las distintas distancias con las que se pueden comparar
+	los histogramas: Correlation, Chi-Square, Intersect y Bhattacharyya.
+
+	  Con el programa ( scene-hist.py ) se pueden observar las diferencias entre frames
+	con cada una de las distancias. Utilizando este programa, analizando el snippet
+	FamilyGuy.mp4 que utilizo como referencia base, he llegado a un par de thresholds.
+
+	  En el programa ( detect_scene.py ) este método explicado anteriormente se lleva a
+	cabo probando los thresholds mencionados. El que mejor funciona (con el video base, y 
+	otros de Family Guy distintos) es la distancia Bhattacharyya.
+
+	  El programa ( detect_scene.py ) procesa un video, y va analizando las diferencias
+	entre frames. Cada vez que detecta un nuevo plano/escena, saca una nueva ventana con
+	el primer frame del nuevo plano.
+
+	  Tras unos pequeños cambios, el programa tiene bastante buena apariencia visual,
+	saca las nuevas escena por filas y columnas distribuidas por toda la pantalla sin
+	cubrir la venatana del video original o la de la anterior escena.
+
+Semana 5- En la reunión descubrimos un pequeño fallo del programa con los trackings (o
+	o movimientos de cámara), ya que los detectaba como nuevas escenas. El problema
+	estaba en que el programa comparaba el nuevo frame con el primer frame de la anterior
+	escena/plano. Comparando el frame actual, con el inmediatamente anterior se elimina
+	este pequeño fallo y reduce a practicamente inexistente la cantidad de falsos
+	positivos (que hasta el momento era muy bajo).
+
+	  Durante la semana he ido probando el programa frente a distintos tipos de video.
+	Los resultados han sido bastante sorprendentes, ya que el programa funciona casi a la
+	perfección con el mismo threshold para la gran mayoría de los videos. Las únicas
+	excepciones encontradas hasta el momento son los videos menos homogeneos. Por ejemplo,
+	un partido de baloncesto. El problema no es tanto el cambio rápido de planos, o
+	incluso planos muy largos, sino los cambios no controlados en la imagen (flashes de
+	cámaras en el pabellón) ya que provocan cambios significantes en los datos de la imagen,
+	pero no a la hora de nuestro ojo. Aun así, quitando estas ocasiones más concretas, el
+	programa funciona muy bien.
+
+	  En vistas a poder aplicarlo en la detección de caras y análisis de personajes en un
+	video, he creado ( detect_compare.py ). El programa sigue el mismo procedimiento de
+	proceso del video y detección de nuevos planos/escenas, sin embargo, cada vez que
+	detecta una nueva escena la compara con todas los frames de escenas anteriores, y si
+	se parece a alguna la considera una "copia" de la anterior, y en vez de aparecer como
+	nueva escena aparece como copia de la anterior (a la misma altura que la ventana de la
+	original). Es posible que esto no sea muy interesante a la hora de escenas, ya que los
+	backgrounds se pueden repetir y queremos considerarlo escenas distintas, pero para la
+	detección de caras/personajes este tipo de estructura va a ser fundamental.
+
+	  Durante la semana, a Oleg le surgieron unos pequeños bugs a la hora del drawLine con
+	su nueva versión de OpenCV 2.4, pero fueron resueltos sin mucho problema.
+
+	  En la reunión se ha sugerido que podría ser interesante probar con el tracking de
+	puntos característicos también. Pero es muy posible que esto baje mucho la eficiencia.
+
+Semana 6- Con respecto a la eficiencia he añadido que salga la velocidad de procesamiento,
+	fps, en la ventana del vieo original para analizar la rapidez. El programa
+	( detect_compare.py ) con speed 1 (lo más rápido) procesa a unos 60~70 fps. Sin embargo,
+	quitando el waitkey, cosa que a efectos práticos no es necesario tanto el pausar el vídeo
+	o poder modificar la velocidad, llega a procesar a unos 300 fps. De hecho, en el portatil
+	de Oleg, el video llegó a procesarse antes de poder cargar todas las imágenes. Esto son
+	muy buenas noticias, ya que es muy interesante poder procesar una película correctamente
+	a alta velocidad, así una película de unas dos horas podría ser procesada en 10~15
+	minutos.
+
+	  El siguiente paso es empezar con la deteccíon de caras, pero para ello está pendiente
+	que el pequeño script de reconocer caras de Syrus funciones correctamente.
+
 
 	  
 
