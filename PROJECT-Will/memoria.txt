@@ -229,6 +229,9 @@ Semana 6- Con respecto a la eficiencia he añadido que salga la velocidad de pro
 	a alta velocidad, así una película de unas dos horas podría ser procesada en 10~15
 	minutos.
 
+	  Oleg añadió que se pueda especificar el video a procesar por la terminal, para no tener
+	que ir a cambiar el código cada vez que se quiere probar otro video.
+
 	  El siguiente paso es empezar con la deteccíon de caras, pero para ello está pendiente
 	que el pequeño script de reconocer caras de Syrus funciones correctamente.
 

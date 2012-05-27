@@ -1,5 +1,6 @@
 #               PROJECT - Video Analysis
 #  Processes video and shows a frame capture for each new scene detected
+#   Compares each new scene with the others, to see if it is a "copy"
 #
 #    Willie - week 5 a.P. (after Project)
 
