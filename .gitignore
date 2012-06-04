@@ -1,2 +1,3 @@
 *.pyc
-waspr/video.mts
+*.mts
+waspr/gpu/pyopencl
