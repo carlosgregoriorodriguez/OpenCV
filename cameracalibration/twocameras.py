@@ -6,7 +6,11 @@ from _pygameview_twocameras import *;
 from _camerasources import *;
 from multiprocessing import Process,Array,Lock,Event;
 from optparse import OptionParser;
+from math import sqrt;
 
+
+from linearalgebratools.matrix44 import *
+from linearalgebratools.vector3 import *
 
 # Command line options parser
 def parse_options():
@@ -33,10 +37,25 @@ def getCorners(img,patternSize):
 	return patternWasFound,corners;
 
 
+def distance(v1,v2):
+	s = 0.0;
+	for i in range(len(v1)):
+		s+= pow((v1[i]-v2[i]),2);
+	return sqrt(s);
+
+def v2s(vector):
+	s = '[';
+	for i,v in enumerate(vector):
+		if (i>0):
+			s+=' ';
+		s+= '%5.3f'%v;
+	s += ']';
+	return s;
+
 
 if __name__ == "__main__":
 	(options, args) = parse_options();
-	print options;
+	print "Options: ",options;
 	# Create virtual pattern to calibrate
 	squareSize = options.squaresize;
 	patternSize = options.patternsize;
@@ -122,6 +141,23 @@ if __name__ == "__main__":
 			R2arr[:] = R2;
 			T2arr[:] = T2;
 			lock.release();
+			
+			rot1 = Matrix44.rotation_about_axis(R1,np.sqrt(R1[0]**2+R1[1]**2+R1[2]**2));
+			print rot1;
+			tvec1 = rot1.rotate(Vector3(T1));
+			rot2 = Matrix44.rotation_about_axis(R2,np.sqrt(R2[0]**2+R2[1]**2+R2[2]**2));
+			tvec2 = rot2.rotate(Vector3(T2));
+			
+			print tvec1;
+			print tvec2;
+			print "Dtvec: ",distance(tvec1,tvec2);
+			
+			
+			
+			print ;
+			print "Distance: ",distance(T1,T2);
+			print "T1: "+v2s(T1);
+			print "T2: "+v2s(T2);
 			
 			# Check if process is started
 			if not p:

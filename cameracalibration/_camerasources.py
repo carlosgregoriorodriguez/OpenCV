@@ -9,12 +9,13 @@ KEY_ESC = 27;
 
 class CameraSource:
 	def __init__(self,src,resolution=(800,600)):
+		print "Creating camera ",src," with resolution ",resolution;
 		self.src = src;
 		self.cam = cv2.VideoCapture(src);
 		self.w,self.h = resolution;
-		print resolution;
 		self.setResolution(self.w,self.h);
 		self.calibrated = False;
+		
 	
 	def setResolution(self,w,h):
 		self.cam.set(3,w);
@@ -89,6 +90,7 @@ class CameraSource:
 		
 class VirtualCameraSource:
 	def __init__(self,realCamera):
+		print "Creating a virtual camera";
 		self.realCamera = realCamera;
 		self.captureNewFrame();
 		self.calibrated = False;

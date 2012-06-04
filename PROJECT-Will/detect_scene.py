@@ -9,6 +9,7 @@ import cv2.cv as cv
 import time
 import numpy as np
 import random as rd
+import sys
 
 debugging = False                          # Boolean variable for debugging
 
@@ -144,7 +145,10 @@ def main():
 	cv.MoveWindow("Previous scene",775,50)
 
 	# Load video
-	vid = cv2.VideoCapture("videos/FamilyGuy.mp4") # MontyPython.mp4 FamilyGuy.mp4  FamGuy2.mp4  FamGuy3.mp4  FamGuy4.mp4
+	filename = "videos/FamilyGuy.mp4";
+	if (len(sys.argv)>1):
+		filename = sys.argv[1];
+	vid = cv2.VideoCapture(filename) # MontyPython.mp4 FamilyGuy.mp4  FamGuy2.mp4  FamGuy3.mp4  FamGuy4.mp4
 
 	# Create list in which new scene frames are stored
 	scenes = []
@@ -156,12 +160,12 @@ def main():
 
 	while True: 
 
+		# fps
+		before = time.time()
+
 		if not pause:
 			succesFlag , frameOriginal = vid.read()
 			frame = cv2.cvtColor(frameOriginal,cv.CV_RGB2GRAY)
-
-			# Show original video
-			cv2.imshow("ORIGINAL",cv2.pyrDown(frameOriginal))
 
 
 		key = cv2.waitKey(speed)
@@ -218,6 +222,12 @@ def main():
 				cv2.imshow("Previous scene",cv2.pyrDown(frameOriginal))
 
 		prev_scene = frame.copy()
+
+		fps = 1/(time.time()-before) #fps
+
+		# Show original video
+		drawString("fps : "+str(fps), (20 ,20 ), frameOriginal)
+		cv2.imshow("ORIGINAL",cv2.pyrDown(frameOriginal))
 
 
 		if (key == 27 or key == 113):

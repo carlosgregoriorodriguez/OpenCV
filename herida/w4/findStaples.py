@@ -195,26 +195,29 @@ def removeNotConnected(sigSquares):
 				sigSquares[row[0]][col[0]]=0
 
 
-def refine(sigSquares,img,bigCont,minArea,maxArea,direction):
+def refine(sigSquares,img,bigCont,minArea,maxArea,direction):#refDim
 	lh,lw=img.shape[0]/len(sigSquares),img.shape[1]/len(sigSquares[0])
-	canvas = np.zeros((img.shape),np.uint8)
+	mask = np.zeros((img.shape),np.uint8)
+	#refSquares = np.zeros((len(sigSquares)*refDim[1],len(sigSquares[0])*refDim[0]),np.uint8)
 	for row in enumerate(sigSquares):
 		for col in enumerate(row[1]):
+			#if the square value is greater than 0 (i.e there is a contour in this tile)
+			#then we get the sigSquares of this particular tile
 			if sigSquares[row[0]][col[0]]!=0:
 				patch = img[row[0]*lh:(row[0]+1)*lh,col[0]*lw:(col[0]+1)*lw,:]
 				patchCont = stapleContThresh(patch,minArea,maxArea,direction)[1]
-				patchSquares = findFrame(patchCont,(lw,lh),2,255,3)
+				patchSquares = findFrame(patchCont,(lw,lh),2,255,5)
 				removeNotConnected(patchSquares)
-				canvas[row[0]*lh:(row[0]+1)*lh,col[0]*lw:(col[0]+1)*lw,:] = cv2.merge([paintSQS(patchSquares,(lw,lh),255),]*3)
-	return cv2.min(img,canvas)
+				mask[row[0]*lh:(row[0]+1)*lh,col[0]*lw:(col[0]+1)*lw,:] = cv2.merge([paintSQS(patchSquares,(lw,lh),255),]*3)
+	return cv2.min(img,mask)
 
 
 def significantSQS(img,bigCont,minArea,maxArea,direction):
 	sigSquares = findFrame(bigCont,(img.shape[1],img.shape[0]),2,255,5)
 	removeNotConnected(sigSquares)
+	refine(sigSquares,img,bigCont,minArea,maxArea,direction)
 	mask = cv2.merge([paintSQS(sigSquares,(img.shape[1],img.shape[0]),255),]*3)
 	return cv2.min(img,mask)
-	#return refine(sigSquares,img,bigCont,minArea,maxArea,direction)
 	
 
 def doAndPack(img,ksizeBlur,ksizeAT,minArea,maxArea,direction):
