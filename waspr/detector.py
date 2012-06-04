@@ -10,6 +10,7 @@ from heatmap import Heatmap, Point
 import numpy as np
 from scipy import spatial
 import math
+from multiprocessing import Process
 
 display = SimpleCV.Display()
 vc = SimpleCV.VirtualCamera("video.mts", "video")
@@ -129,6 +130,11 @@ class Wasp(object):
 				np.linspace(last_position[1],position[1],steps))[1:]
 
 sw = Swarm()
+def program_direction(directionimg, center, scale):
+	theta = get_direction(directionimg,center,50*scale)
+	if theta:
+		external_point = (int(center[0]+ math.cos(theta)*100*scale), int(center[1]+scale*100*math.sin(theta)))
+		directionimg.drawLine(center,external_point,SimpleCV.Color.YELLOW,2)
 
 while not display.isDone():
 	before = time.time()
@@ -143,15 +149,17 @@ while not display.isDone():
 	wasps = list(sw.find_wasps(img))
 	sw.relation_wasps(wasps)
 
+	procs = []
 	for color, circle in wasps:
 		center = (circle.x, circle.y)
-		theta = get_direction(directionimg,center,50*scale)
-		if theta:
-			external_point = (int(center[0]+ math.cos(theta)*100*scale), int(center[1]+scale*100*math.sin(theta)))
-			directionimg.drawLine(center,external_point,SimpleCV.Color.YELLOW,2)
+		#procs.append(Process(target=program_direction, args=(directionimg, center, scale)))
+		program_direction(directionimg, center, scale)
 		radius = circle.radius()
 		img.drawCircle(center, radius,color,min(radius,2))
 		hm.addPoint(Point(circle.x,circle.y), 10)
+
+	for p in procs: p.start()
+	for p in procs: p.join()
 
 	sw.advance()
 
