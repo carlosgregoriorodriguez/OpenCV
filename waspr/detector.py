@@ -9,12 +9,54 @@ import pygame
 from heatmap import Heatmap, Point
 import numpy as np
 from scipy import spatial
+import math
 
 display = SimpleCV.Display()
 vc = SimpleCV.VirtualCamera("video.mts", "video")
 normaldisplay = True
-scale = 0.18
+scale = 0.3
 hm = None
+
+def get_direction(img,center,radius):
+	num = 300
+	theta = np.linspace(0,2*math.pi,num)
+	is_black= False
+	black, white = 0, 0
+	can_white = False
+	black_white = [] #(is_black,theta)
+	candidates = []
+	for t in theta:
+		x = center[0]+radius*math.cos(t)
+		y = center[1]+radius*math.sin(t)
+		c = img.getPixel(int(x),int(y))[0]
+		last_black = t if black>=5 else False
+		last_white = t if white>=5 and white<=20 else False
+		if c==0:
+			if last_white: black_white.append((False,last_white,white))
+			black +=1
+			white = 0
+			#processed.dl().circle((x,y),2,SimpleCV.Color.GREEN)
+		else:
+			if last_black: black_white.append((True,last_black,black))
+			black = 0
+			white +=1
+
+	if len(black_white)>=3:
+		for i in range(len(black_white)-2):
+			if black_white[i][0]==black_white[i+2][0]==True and not black_white[i+1][0]:
+				old_t = black_white[i+1][1]
+				adjusted_t = old_t-(math.pi/num)*black_white[i+1][2]-0.02
+				candidates.append(adjusted_t)
+
+	max_r = radius*2.3
+	for c in candidates:
+		#processed.drawLine(center,(center[0]+ math.cos(c)*r, center[1]+r*math.sin(c)),SimpleCV.Color.BLUE)
+		external_point = (int(center[0]+ math.cos(c)*max_r), int(center[1]+max_r*math.sin(c)))
+		if img.getPixel(*external_point)[0]==0 or len(candidates)==1:
+			return c
+			#processed.drawLine(center,external_point,SimpleCV.Color.YELLOW,2)
+	return None
+
 
 class Swarm(object):
 	def __init__(self):
@@ -93,6 +135,8 @@ while not display.isDone():
 	if display.mouseRight:
 		normaldisplay = not(normaldisplay)
 	img = vc.getImage().scale(scale) #.bilateralFilter() #.flipHorizontal()
+	directionimg = img.convolve([[-1,4],[-1,1]]).stretch(70,220)
+
 	if not hm:
 		hm = Heatmap(img.width, img.height)
 
@@ -100,8 +144,13 @@ while not display.isDone():
 	sw.relation_wasps(wasps)
 
 	for color, circle in wasps:
+		center = (circle.x, circle.y)
+		theta = get_direction(directionimg,center,50*scale)
+		if theta:
+			external_point = (int(center[0]+ math.cos(theta)*100*scale), int(center[1]+scale*100*math.sin(theta)))
+			directionimg.drawLine(center,external_point,SimpleCV.Color.YELLOW,2)
 		radius = circle.radius()
-		img.drawCircle((circle.x, circle.y), radius,color,min(radius,2))
+		img.drawCircle(center, radius,color,min(radius,2))
 		hm.addPoint(Point(circle.x,circle.y), 10)
 
 	sw.advance()
@@ -111,10 +160,12 @@ while not display.isDone():
 		img.drawText('%d fps'%fps,0,0)
 		img.show()
 	else:
+		directionimg.drawText('%d fps'%fps,0,0)
+		directionimg.show()
 		#hm.transform_color(.3)
 		#image_heat = hm.get_PIL()
-		image_heat = hm.transform()
-		surface = pygame.image.fromstring(image_heat.tostring(), image_heat.size, image_heat.mode)
-		heat = SimpleCV.Image(surface)
-		heat.show()
+		# image_heat = hm.transform()
+		# surface = pygame.image.fromstring(image_heat.tostring(), image_heat.size, image_heat.mode)
+		# heat = SimpleCV.Image(surface)
+		# heat.show()
 		#mix.show()
