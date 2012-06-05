@@ -111,6 +111,8 @@ def getSigSquares(contList,imgShape,histDim,thresh):
 	removeNotConnected(sumSq)
 	sumSq = labelConectComp(sumSq)
 	print sumSq
+	sumSq = getCenterComponent(sumSq)
+	print sumSq
 	return paintSqHistogram(sumSq,imgShape,False),sumSq
 
 
@@ -173,17 +175,29 @@ def labelConectComp(sqHist):
  				
  				#update label
  				label+=1
- 				print 'going to label '+str((row,col))+' with label '+str(label)
- 				
+ 				#print 'going to label '+str((row,col))+' with label '+str(label)
  				#put all entries neighboured with the current entry to the same label
  				aux = set()
  				getComponent((row,col),sqHist,aux,False)
  				for tile in aux:
- 					print sqHist[tile[0]][tile[1]]
- 					print label
  					sqHist[tile[0]][tile[1]]=label
- 					print sqHist[tile[0]][tile[1]]
  	return sqHist
+
+def getCenterComponent(sqHist):
+	sqHist = labelConectComp(sqHist)
+	rows,cols = sqHist.shape[:2]
+	centerLabel = sqHist[rows/2][cols/2]
+	print centerLabel
+	print type(sqHist)
+	print sqHist.shape
+	sqHist = cv2.threshold(sqHist,centerLabel-1,255,cv2.cv.CV_THRESH_TOZERO)[1]
+	sqHist = cv2.threshold(sqHist,centerLabel,255,cv2.cv.CV_THRESH_TOZERO_INV)[1]
+	print sqHist
+	return sqHist
+
+
+
+
 
 if __name__ == "__main__":
 
