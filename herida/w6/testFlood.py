@@ -13,7 +13,6 @@ def dummy(x):
 	changeParam = True
 	print x
 
-
 def stapleContThresh(img,dirList,thresh):
 	threshChan = thresholdChannels(img,thresh)
 	return stapleCont(threshChan,dirList)
@@ -29,37 +28,43 @@ def stapleContBlurAT(img,dirList,blatList):
 def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh):
 	h, w = 375,450
 
+	auxImg = cv2.equalizeHist(cv2.cvtColor(img,cv2.cv.CV_BGR2GRAY))
+	eqImg = cv2.merge([auxImg,]*3)
+	backEqImg = cv2.cvtColor(auxImg,cv2.cv.CV_GRAY2BGR)
+
 	aux = []
-	aux.append(stapleContCanny(img,dirList,cannyList))
-	aux.append(stapleContThresh(img,dirList,thresh))
-	aux.append(stapleContBlurAT(img,dirList,blatList))
+	aux.append(stapleContCanny(backEqImg,dirList,cannyList))
+	aux.append(stapleContThresh(backEqImg,dirList,thresh))
+	aux.append(stapleContBlurAT(backEqImg,dirList,blatList))
 
-	#copyImg5 = significantSQS(bigCont,img.shape,(5,5))
-	#copyImg25 = significantSQS(bigCont,img.shape,(25,25))
+	
+	cpImg0,cpImg1,cpImg2 = backEqImg.copy(),backEqImg.copy(),backEqImg.copy()
 
-	#copyImg5 = cv2.merge([cv2.min(copyImg5,layer) for layer in cv2.split(img)])
-	#copyImg25 = cv2.merge([cv2.min(copyImg25,layer) for layer in cv2.split(img)])
-
-	#cv2.drawContours(copyImg5, bigCont, -1, (0,0,255),3)
-	#cv2.drawContours(copyImg25, bigCont, -1, (0,0,255),3)
+	cv2.drawContours(cpImg0, aux[0], -1, (0,0,255),2)
+	cv2.drawContours(cpImg1, aux[1], -1, (0,0,255),2)
+	cv2.drawContours(cpImg2, aux[2], -1, (0,0,255),2)
 
 	img5,sqHist5 = getSigSquares(aux,img.shape,(10,10),relevanceThresh)
-	#img25,sqHist25 = getSigSquares(aux,img.shape,(25,25),relevanceThresh)
 
 	img5 = cv2.merge([cv2.min(img5,layer) for layer in cv2.split(img)])
-	#img25 = cv2.merge([cv2.min(img25,layer) for layer in cv2.split(img)])
 
 	bp5 = bpSignificantSquares(img.copy(),sqHist5,probThresh)
 	#bp25 = bpSignificantSquares(img.copy(),sqHist25,probThresh)
 
+	
 
 	background = np.zeros((h*2,w*3,3),np.uint8)
-	background[0:h,0:w,0:3]=cv2.resize(img,(w,h))
+	#background[0:h,0:w,0:3]=cv2.resize(img,(w,h))
+	background[0:h,0:w,0:3]=cv2.resize(backEqImg,(w,h))
 	background[0:h,w:2*w,0:3]=cv2.resize(img5,(w,h))
-	#background[0:h,2*w:3*w,0:3]=cv2.resize(img25,(w,h))
-	background[h:2*h,w:2*w,0:3]=cv2.resize(bp5,(w,h))
-	#background[h:2*h,2*w:3*w,0:3]=cv2.resize(bp25,(w,h))
+	background[0:h,2*w:3*w,0:3]=cv2.resize(bp5,(w,h))
+	
+	background[h:2*h,0:w,0:3]=cv2.resize(cpImg0,(w,h))
+	background[h:2*h,w:2*w,0:3]=cv2.resize(cpImg1,(w,h))
+	background[h:2*h,2*w:3*w,0:3]=cv2.resize(cpImg2,(w,h))
 	return background
+
+
 
 
 

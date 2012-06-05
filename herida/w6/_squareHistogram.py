@@ -2,14 +2,14 @@ import cv2
 import numpy as np
 
 
-
-def getSqHistogram(contours,dimension,sqNum):
+#computes a Sqare histogram for the contours
+def getSqHistogram(contours,imgShape,sqNum):
 	#compute the width and height of a square
-	lh = dimension[0]/sqNum[0]
-	lw = dimension[1]/sqNum[1]
+	lh = imgShape[0]/sqNum[0]
+	lw = imgShape[1]/sqNum[1]
 	
-	#print "lw "+str(lw)+" dimension[0] "+str(dimension[1])+" sqNum "+str(sqNum[1])
-	#print "lh "+str(lh)+" dimension[1] "+str(dimension[0])+" sqNum "+str(sqNum[0])
+	#print "lw "+str(lw)+" imgShape[0] "+str(imgShape[1])+" sqNum "+str(sqNum[1])
+	#print "lh "+str(lh)+" imgShape[1] "+str(imgShape[0])+" sqNum "+str(sqNum[0])
 
 	sqHist = np.zeros(sqNum,np.uint8) #create an appropiate histogram (2D)
 	for cont in contours:	#for every contour, we update the histogram
@@ -51,7 +51,7 @@ def getSqHistogram(contours,dimension,sqNum):
 
 	return sqHist
 
-
+#paints the square histogram on a blanck canvas
 def paintSqHistogram(sqHist,imgShape,gradual):
 	totalH,totalW = imgShape[0],imgShape[1]
 	rowNum,colNum = sqHist.shape[:2]
@@ -72,44 +72,7 @@ def paintSqHistogram(sqHist,imgShape,gradual):
 	return canvas
 
 
-def getPoints(dimension,sqHist):
-	retPoints = []
-
-	rowNum,colNum = sigSquares.shape[:2]
-	lw = dimension[1]/colNum
-	lh = dimension[0]/rowNum
-
-	for row in range(rowNum):
-		for col in range(colNum):
-			if sigSquares[row][col]!=0:
-				x,y = col*lw,row*lh
-				aux = []
-				for i in range(3):
-					for j in range(3):
-						aux.append((x+(lw/2)*i,y+(lh/2)*j))
-				retPoints.append(aux)
-	return retPoints
-
-
-def significantSQS(bigCont,imgShape,histDim):
-	sqHist = getSqHistogram(bigCont,(imgShape[0],imgShape[1]),histDim)
-	removeNotConnected(sqHist)
-	#aux = paintSqHistogram(sqHist,imgShape,False)
-	return sqHist
-
-
-def getSigSquares(contList,imgShape,histDim,thresh):
-	sumSq = np.zeros(histDim,np.uint8)
-	for contours in contList:
-		sqHist = significantSQS(contours,imgShape,histDim)
-		np.clip(sqHist,0,1,sqHist)
-		sumSq = sumSq+sqHist
-
-	sumSq = cv2.threshold(sumSq,thresh,200,cv2.cv.CV_THRESH_BINARY)[1]
-	removeNotConnected(sumSq)
-	return paintSqHistogram(sumSq,imgShape,False),sumSq
-
-
+#Removes noise from a square histogram
 def removeNotConnected(sqHist):
 	for row in range(sqHist.shape[0]-1):
 		for col in range(sqHist.shape[1]-1):
@@ -129,60 +92,98 @@ def isConnected(row,col,matrix):
 	return False
 
 
+#Container methods, called from outside
+def significantSQS(bigCont,imgShape,histDim):
+	sqHist = getSqHistogram(bigCont,(imgShape[0],imgShape[1]),histDim)
+	removeNotConnected(sqHist)
+	#aux = paintSqHistogram(sqHist,imgShape,False)
+	return sqHist
+
+
+def getSigSquares(contList,imgShape,histDim,thresh):
+	sumSq = np.zeros(histDim,np.uint8)
+	for contours in contList:
+		sqHist = significantSQS(contours,imgShape,histDim)
+		np.clip(sqHist,0,1,sqHist)
+		sumSq = sumSq+sqHist
+
+	sumSq = cv2.threshold(sumSq,thresh,200,cv2.cv.CV_THRESH_BINARY)[1]
+	removeNotConnected(sumSq)
+	sumSq = labelConectComp(sumSq)
+	print sumSq
+	return paintSqHistogram(sumSq,imgShape,False),sumSq
 
 
 
-#quitar todos los parametros y pasarle directamente bigCont y punto
-# def refineSqHistogram (sqHist,bigCont,imgShape):
-# 	lh,lw=imgShape[0]/sqHist.shape[0],imgShape[1]/sqHist.shape[1]
-	
-# 	mask = np.zeros((imgShape),np.uint8)
-	
-# 	refSquares = np.zeros((sqHist.shape[0]**2,sqHist.shape[1]**2),np.uint8)
-	
-# 	for row in range(sqHist.shape[0]-1):
-# 		for col in range(sqHist.shape[1]-1):
-# 			#if the square value is greater than 0 (i.e there is a contour in this tile)
-# 			#then we get the sqHist of this particular tile
-# 			if sqHist[row,col]!=0:
-# 				getSqHistogram(bigCont,dimension,sqNum)
-# 				refSquares[row*refDim[1]:(row+1)*refDim[1],col*refDim[0]:(col+1)*refDim[0]]=patchSquares
-# 	return refSquares
-#removeNotConnected(refSquares)
+#not used yet
+def getPoints(imgShape,sqHist):
+	retPoints = []
+
+	rowNum,colNum = sqHist.shape[:2]
+	lw = imgShape[1]/colNum
+	lh = imgShape[0]/rowNum
+
+	for row in range(rowNum):
+		for col in range(colNum):
+			if sqHist[row][col]!=0:
+				x,y = col*lw,row*lh
+				aux = []
+				for i in range(3):
+					for j in range(3):
+						aux.append((x+(lw/2)*i,y+(lh/2)*j))
+				retPoints.append(aux)
+	return retPoints
 
 
-# def isContained(pt,contours):
-# 	for cont in contours:
-# 		if cv2.pointPolygonTest(cont, pt, False)>=0:
-# 			return True
-# 	return False
+#tests if a point is in a contour
+def isContained(pt,contours):
+ 	for cont in contours:
+ 		if cv2.pointPolygonTest(cont, pt, False)>=0:
+ 			return True
+ 	return False
 
 
-# def getComponent(row,col,sigSquares,neig,diagonalNeig):
-# 	if row>=0 and row<sigSquares.shape[0] and col>=0 and col<sigSquares.shape[1] and sigSquares[row][col]<0 and (row,col) not in neig:
-# 		neig.add((row,col))
-# 		getComponent(row-1,col,sigSquares,neig,diagonalNeig)
-# 		getComponent(row+1,col,sigSquares,neig,diagonalNeig)
-# 		getComponent(row,col-1,sigSquares,neig,diagonalNeig)
-# 		getComponent(row,col+1,sigSquares,neig,diagonalNeig)
-# 		#print neig
+def getComponent(entry,sqHist,neig,diagonalNeig):
+	row = entry[0]
+	col = entry[1]
+	if row>=0 and row<sqHist.shape[0] and col>=0 and col<sqHist.shape[1] and sqHist[row][col]<0 and entry not in neig:
+		neig.add(entry)
+		neig.update(getComponent((row-1,col),sqHist,neig,diagonalNeig))
+		neig.update(getComponent((row+1,col),sqHist,neig,diagonalNeig))
+		neig.update(getComponent((row,col-1),sqHist,neig,diagonalNeig))
+		neig.update(getComponent((row,col+1),sqHist,neig,diagonalNeig))
+	return neig
 
 
-# def labelConectComp(sigSquares):
-# 	#print sigSquares
-# 	sigSquares= sigSquares*(-1)
-# 	#print sigSquares
-# 	label = 0
-# 	for row in range(sigSquares.shape[0]-1):
-# 		for col in range(sigSquares.shape[1]-1):
-# 			if sigSquares[row][col]<0:
-# 				label+=1
-# 				aux = set()
-# 				getComponent(row,col,sigSquares,aux,False)
-# 				for tile in aux:
-# 					sigSquares[tile[0]][tile[1]]=label
-# 	#print sigSquares
-
+def labelConectComp(sqHist):
+ 	#print sqHist
+ 	
+ 	#put all positive entries to negative
+ 	sqHist= sqHist*(-1)
+ 	#print sqHist
+ 	
+ 	#create the current label variable
+ 	label = 0
+ 	
+ 	#move through all sqHist
+ 	for row in range(sqHist.shape[0]):
+ 		for col in range(sqHist.shape[1]):
+ 			#if the entry at row,col is relevant and not labeled yet
+ 			if sqHist[row][col]<0:
+ 				
+ 				#update label
+ 				label+=1
+ 				print 'going to label '+str((row,col))+' with label '+str(label)
+ 				
+ 				#put all entries neighboured with the current entry to the same label
+ 				aux = set()
+ 				getComponent((row,col),sqHist,aux,False)
+ 				for tile in aux:
+ 					print sqHist[tile[0]][tile[1]]
+ 					print label
+ 					sqHist[tile[0]][tile[1]]=label
+ 					print sqHist[tile[0]][tile[1]]
+ 	return sqHist
 
 if __name__ == "__main__":
 
