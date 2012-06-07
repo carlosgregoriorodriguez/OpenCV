@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-
+from _utils import *
 
 #computes a Sqare histogram for the contours
 def getSqHistogram(contours,imgShape,sqNum):
@@ -51,6 +51,7 @@ def getSqHistogram(contours,imgShape,sqNum):
 
 	return sqHist
 
+
 #paints the square histogram on a blanck canvas
 def paintSqHistogram(sqHist,imgShape,gradual):
 	totalH,totalW = imgShape[0],imgShape[1]
@@ -100,6 +101,7 @@ def significantSQS(bigCont,imgShape,histDim):
 	return sqHist
 
 
+
 def getSigSquares(contList,imgShape,histDim,thresh):
 	sumSq = np.zeros(histDim,np.uint8)
 	for contours in contList:
@@ -110,39 +112,10 @@ def getSigSquares(contList,imgShape,histDim,thresh):
 	sumSq = cv2.threshold(sumSq,thresh,200,cv2.cv.CV_THRESH_BINARY)[1]
 	removeNotConnected(sumSq)
 	sumSq = labelConectComp(sumSq)
-	print sumSq
+	#print sumSq
 	sumSq = getCenterComponent(sumSq)
-	print sumSq
+	#print sumSq
 	return paintSqHistogram(sumSq,imgShape,False),sumSq
-
-
-
-#not used yet
-def getPoints(imgShape,sqHist):
-	retPoints = []
-
-	rowNum,colNum = sqHist.shape[:2]
-	lw = imgShape[1]/colNum
-	lh = imgShape[0]/rowNum
-
-	for row in range(rowNum):
-		for col in range(colNum):
-			if sqHist[row][col]!=0:
-				x,y = col*lw,row*lh
-				aux = []
-				for i in range(3):
-					for j in range(3):
-						aux.append((x+(lw/2)*i,y+(lh/2)*j))
-				retPoints.append(aux)
-	return retPoints
-
-
-#tests if a point is in a contour
-def isContained(pt,contours):
- 	for cont in contours:
- 		if cv2.pointPolygonTest(cont, pt, False)>=0:
- 			return True
- 	return False
 
 
 def getComponent(entry,sqHist,neig,diagonalNeig):
@@ -183,21 +156,58 @@ def labelConectComp(sqHist):
  					sqHist[tile[0]][tile[1]]=label
  	return sqHist
 
+
+#gets the component containing the center pixel or the nearest component to this pixel
 def getCenterComponent(sqHist):
 	sqHist = labelConectComp(sqHist)
 	rows,cols = sqHist.shape[:2]
 	centerLabel = sqHist[rows/2][cols/2]
-	print centerLabel
-	print type(sqHist)
-	print sqHist.shape
-	sqHist = cv2.threshold(sqHist,centerLabel-1,255,cv2.cv.CV_THRESH_TOZERO)[1]
-	sqHist = cv2.threshold(sqHist,centerLabel,255,cv2.cv.CV_THRESH_TOZERO_INV)[1]
-	print sqHist
+	dist = 0
+	if cv2.minMaxLoc(sqHist)[1]!=0:
+		while centerLabel == 0:
+			dist += 1
+			distRect = sqHist[max(0,rows/2-dist):min(rows-1,rows/2+dist),max(0,cols/2-dist):min(cols-1,cols/2+dist)]
+			centerLabel = cv2.minMaxLoc(distRect)[1]
+			if (distRect.shape[0]==rows and distRect.shape[1]==cols):
+				break
+
+
+	aux =np.zeros((sqHist.shape),np.uint8)
+	aux[:,:]=sqHist
+	sqHist = intervalThreshold(aux,(centerLabel,centerLabel))
+	# sqHist = cv2.threshold(aux,centerLabel-1,255,cv2.cv.CV_THRESH_TOZERO)[1]
+	# sqHist = cv2.threshold(aux,centerLabel,255,cv2.cv.CV_THRESH_TOZERO_INV)[1]
 	return sqHist
 
 
 
 
+#not used yet
+def getPoints(imgShape,sqHist):
+	retPoints = []
+
+	rowNum,colNum = sqHist.shape[:2]
+	lw = imgShape[1]/colNum
+	lh = imgShape[0]/rowNum
+
+	for row in range(rowNum):
+		for col in range(colNum):
+			if sqHist[row][col]!=0:
+				x,y = col*lw,row*lh
+				aux = []
+				for i in range(3):
+					for j in range(3):
+						aux.append((x+(lw/2)*i,y+(lh/2)*j))
+				retPoints.append(aux)
+	return retPoints
+
+
+#tests if a point is in a contour
+def isContained(pt,contours):
+ 	for cont in contours:
+ 		if cv2.pointPolygonTest(cont, pt, False)>=0:
+ 			return True
+ 	return False
 
 if __name__ == "__main__":
 

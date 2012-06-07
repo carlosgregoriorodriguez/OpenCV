@@ -27,38 +27,49 @@ def stapleContBlurAT(img,dirList,blatList):
 
 def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh):
 	h, w = 375,450
+	
+	aux = []
+	for channel in cv2.split(img):
+		aux.append(cv2.equalizeHist(channel))
 
-	auxImg = cv2.equalizeHist(cv2.cvtColor(img,cv2.cv.CV_BGR2GRAY))
-	eqImg = cv2.merge([auxImg,]*3)
-	backEqImg = cv2.cvtColor(auxImg,cv2.cv.CV_GRAY2BGR)
+	backEqImg = cv2.merge(aux)
+	
 
 	aux = []
 	aux.append(stapleContCanny(backEqImg,dirList,cannyList))
-	aux.append(stapleContThresh(backEqImg,dirList,thresh))
+	#es buena idea pasar esta? No es mejor una imagen en BGR?
+	aux.append(stapleContThresh(img,dirList,thresh))
 	aux.append(stapleContBlurAT(backEqImg,dirList,blatList))
 
 	
-	cpImg0,cpImg1,cpImg2 = backEqImg.copy(),backEqImg.copy(),backEqImg.copy()
+	cpImg0,cpImg1,cpImg2 = backEqImg.copy(),img.copy(),backEqImg.copy()
 
-	cv2.drawContours(cpImg0, aux[0], -1, (0,0,255),2)
-	cv2.drawContours(cpImg1, aux[1], -1, (0,0,255),2)
-	cv2.drawContours(cpImg2, aux[2], -1, (0,0,255),2)
+	percent = 0.01
+	line = int(min(img.shape[0]*percent,img.shape[1]*percent))
+
+	cv2.drawContours(cpImg0, aux[0], -1, (0,0,255),line)
+	cv2.drawContours(cpImg1, aux[1], -1, (0,0,255),line)
+	cv2.drawContours(cpImg2, aux[2], -1, (0,0,255),line)
 
 	img5,sqHist5 = getSigSquares(aux,img.shape,(10,10),relevanceThresh)
 
 	img5 = cv2.merge([cv2.min(img5,layer) for layer in cv2.split(img)])
 
-	bp5 = bpSignificantSquares(img.copy(),sqHist5,probThresh)
-	#bp25 = bpSignificantSquares(img.copy(),sqHist25,probThresh)
-
-	
+	bpComponent = bpSignificantSquares(img.copy(),sqHist5,probThresh)[1]
+	#bp5 = bpSignificantSquares(img.copy(),sqHist5,probThresh)
+	#retList = bpSignificantSquares(img.copy(),sqHist5,probThresh)
+	#bp5 = retList[0]
+	#bpComponent = retList[1]
 
 	background = np.zeros((h*2,w*3,3),np.uint8)
 	#background[0:h,0:w,0:3]=cv2.resize(img,(w,h))
 	background[0:h,0:w,0:3]=cv2.resize(backEqImg,(w,h))
 	background[0:h,w:2*w,0:3]=cv2.resize(img5,(w,h))
-	background[0:h,2*w:3*w,0:3]=cv2.resize(bp5,(w,h))
-	
+	#background[0:h,w:2*w,0:3]=cv2.resize(bp5,(w,h))
+	#background[0:h,2*w:3*w,0:3]=cv2.resize(bp5,(w,h))
+	background[0:h,2*w:3*w,0:3]=cv2.resize(bpComponent,(w,h))
+
+
 	background[h:2*h,0:w,0:3]=cv2.resize(cpImg0,(w,h))
 	background[h:2*h,w:2*w,0:3]=cv2.resize(cpImg1,(w,h))
 	background[h:2*h,2*w:3*w,0:3]=cv2.resize(cpImg2,(w,h))
@@ -85,7 +96,7 @@ if __name__ == "__main__":
 	cv2.namedWindow('panel canny',cv2.cv.CV_WINDOW_NORMAL)
 	cv2.namedWindow('panel blat',cv2.cv.CV_WINDOW_NORMAL)
 	cv2.namedWindow('panel direction',cv2.cv.CV_WINDOW_NORMAL)
-	cv2.createTrackbar('minArea','panel direction',0,500,dummy)
+	cv2.createTrackbar('minArea','panel direction',5,500,dummy)
 	cv2.createTrackbar('maxArea','panel direction',5000,5000,dummy)
 	cv2.createTrackbar('direction','panel direction',5,5,dummy)
 	cv2.createTrackbar('canny thresh1','panel canny',700,700,dummy)
@@ -95,7 +106,7 @@ if __name__ == "__main__":
 	cv2.createTrackbar('ksizeBlur X','panel blat',0,4,dummy)
 	cv2.createTrackbar('ksizeBlur Y','panel blat',0,4,dummy)
 	cv2.createTrackbar('ksizeAT','panel blat',0,4,dummy)
-	cv2.createTrackbar('relevanceThresh','panel',0,3,dummy)
+	cv2.createTrackbar('relevanceThresh','panel',3,3,dummy)
 	cv2.createTrackbar('probThresh','panel',1,256,dummy)
 
 	dirList = [cv2.getTrackbarPos('minArea','panel direction'),
