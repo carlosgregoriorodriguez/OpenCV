@@ -29,22 +29,21 @@ def stapleContBlurAT(img,dirList,blatList):
 def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh):
 	h, w = 375,450
 	
+	#get different formats of the original image	
 	aux = []
 	for channel in cv2.split(img):
 		aux.append(cv2.equalizeHist(channel))
 
 	backEqImg = cv2.merge(aux)
 	
-
+	#apply the image in the format that suits best to the different algorithms 
 	aux = []
 	aux.append(stapleContCanny(backEqImg,dirList,cannyList))
-	#es buena idea pasar esta? No es mejor una imagen en BGR?
 	aux.append(stapleContThresh(img,dirList,thresh))
 	aux.append(stapleContBlurAT(backEqImg,dirList,blatList))
 
-	
+	#paint the contours for showing them later
 	cpImg0,cpImg1,cpImg2 = backEqImg.copy(),img.copy(),backEqImg.copy()
-
 	percent = 0.01
 	line = int(min(img.shape[0]*percent,img.shape[1]*percent))
 
@@ -52,6 +51,7 @@ def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh):
 	cv2.drawContours(cpImg1, aux[1], -1, (0,0,255),line)
 	cv2.drawContours(cpImg2, aux[2], -1, (0,0,255),line)
 
+	#get the squareHistogram for all the contours, see _squareHistogram.getSigSquare
 	img5,sqHist5 = getSigSquares(aux,img.shape,(10,10),relevanceThresh)
 
 	img5 = cv2.merge([cv2.min(img5,layer) for layer in cv2.split(img)])

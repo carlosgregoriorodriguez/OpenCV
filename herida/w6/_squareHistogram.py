@@ -96,25 +96,30 @@ def isConnected(row,col,matrix):
 #Container methods, called from outside
 def significantSQS(bigCont,imgShape,histDim):
 	sqHist = getSqHistogram(bigCont,(imgShape[0],imgShape[1]),histDim)
-	removeNotConnected(sqHist)
-	#aux = paintSqHistogram(sqHist,imgShape,False)
+	removeNotConnected(sqHist) #not connected is considered noise
 	return sqHist
 
 
 
 def getSigSquares(contList,imgShape,histDim,thresh):
+	#create a blank canvas to buffer the sum of the sqHists of all elements of the list
 	sumSq = np.zeros(histDim,np.uint8)
+	#for each list of contours get the sqHist, clip it to [0,1] (convert it to binary image)
+	#and add it to the blank canvas
 	for contours in contList:
 		sqHist = significantSQS(contours,imgShape,histDim)
 		np.clip(sqHist,0,1,sqHist)
 		sumSq = sumSq+sqHist
 
+	#threshold entries, i.e. consider entries that appear in more than 'thresh' sqHist
 	sumSq = cv2.threshold(sumSq,thresh,200,cv2.cv.CV_THRESH_BINARY)[1]
+	#remove not connected single entries, again, noise
 	removeNotConnected(sumSq)
-	sumSq = labelConectComp(sumSq)
-	#print sumSq
-	sumSq = getCenterComponent(sumSq)
-	#print sumSq
+	#label the connected components in sumSq
+	#then get the component that is closer to the center of the image and remove the rest of them
+	#sumSq = getCenterComponent(sumSq)
+	sumSq = getComponentOf(sumSq,(sumSq.shape[0]/2,sumSq.shape[1]/2),True)
+
 	return paintSqHistogram(sumSq,imgShape,False),sumSq
 
 
@@ -129,41 +134,6 @@ def getComponent(entry,sqHist,neig,diagonalNeig):
 		neig.update(getComponent((row,col+1),sqHist,neig,diagonalNeig))
 	return neig
 
-
-#hacer esto con floodfill:
-#busca máximo con minmaxloc
-#hace clip a [0,1]
-#hace floodfill con la posicion del maximo y lo pone a -1
-#busca sucesivos maximos para hacer floodfill en ellos con -i donde i es la iteracion del bucle
-#luego multiplica por -1 toda la matriz
-#
-#PASARLO A _UTILS!!
-
-# def labelConectComp(sqHist):
-#  	#print sqHist
- 	
-#  	#put all positive entries to negative
-#  	sqHist= sqHist*(-1)
-#  	#print sqHist
- 	
-#  	#create the current label variable
-#  	label = 0
- 	
-#  	#move through all sqHist
-#  	for row in range(sqHist.shape[0]):
-#  		for col in range(sqHist.shape[1]):
-#  			#if the entry at row,col is relevant and not labeled yet
-#  			if sqHist[row][col]<0:
- 				
-#  				#update label
-#  				label+=1
-#  				#print 'going to label '+str((row,col))+' with label '+str(label)
-#  				#put all entries neighboured with the current entry to the same label
-#  				aux = set()
-#  				getComponent((row,col),sqHist,aux,False)
-#  				for tile in aux:
-#  					sqHist[tile[0]][tile[1]]=label
-#  	return sqHist
 
 
 #gets the component containing the center pixel or the nearest component to this pixel
