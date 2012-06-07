@@ -3,6 +3,7 @@ import numpy as np
 import sys
 from glob import glob
 import math
+from _utils import *
 from _findStaples import *
 from _getContours import *
 from _squareHistogram import *

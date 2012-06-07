@@ -3,6 +3,7 @@ import numpy as np
 import sys
 from glob import glob
 import math
+from _utils import *
 from _findStaples import *
 from _getContours import *
 from _squareHistogram import *
@@ -56,17 +57,10 @@ def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh):
 	img5 = cv2.merge([cv2.min(img5,layer) for layer in cv2.split(img)])
 
 	bpComponent = bpSignificantSquares(img.copy(),sqHist5,probThresh)[1]
-	#bp5 = bpSignificantSquares(img.copy(),sqHist5,probThresh)
-	#retList = bpSignificantSquares(img.copy(),sqHist5,probThresh)
-	#bp5 = retList[0]
-	#bpComponent = retList[1]
 
 	background = np.zeros((h*2,w*3,3),np.uint8)
-	#background[0:h,0:w,0:3]=cv2.resize(img,(w,h))
 	background[0:h,0:w,0:3]=cv2.resize(backEqImg,(w,h))
 	background[0:h,w:2*w,0:3]=cv2.resize(img5,(w,h))
-	#background[0:h,w:2*w,0:3]=cv2.resize(bp5,(w,h))
-	#background[0:h,2*w:3*w,0:3]=cv2.resize(bp5,(w,h))
 	background[0:h,2*w:3*w,0:3]=cv2.resize(bpComponent,(w,h))
 
 

@@ -130,36 +130,45 @@ def getComponent(entry,sqHist,neig,diagonalNeig):
 	return neig
 
 
-def labelConectComp(sqHist):
- 	#print sqHist
+#hacer esto con floodfill:
+#busca máximo con minmaxloc
+#hace clip a [0,1]
+#hace floodfill con la posicion del maximo y lo pone a -1
+#busca sucesivos maximos para hacer floodfill en ellos con -i donde i es la iteracion del bucle
+#luego multiplica por -1 toda la matriz
+#
+#PASARLO A _UTILS!!
+
+# def labelConectComp(sqHist):
+#  	#print sqHist
  	
- 	#put all positive entries to negative
- 	sqHist= sqHist*(-1)
- 	#print sqHist
+#  	#put all positive entries to negative
+#  	sqHist= sqHist*(-1)
+#  	#print sqHist
  	
- 	#create the current label variable
- 	label = 0
+#  	#create the current label variable
+#  	label = 0
  	
- 	#move through all sqHist
- 	for row in range(sqHist.shape[0]):
- 		for col in range(sqHist.shape[1]):
- 			#if the entry at row,col is relevant and not labeled yet
- 			if sqHist[row][col]<0:
+#  	#move through all sqHist
+#  	for row in range(sqHist.shape[0]):
+#  		for col in range(sqHist.shape[1]):
+#  			#if the entry at row,col is relevant and not labeled yet
+#  			if sqHist[row][col]<0:
  				
- 				#update label
- 				label+=1
- 				#print 'going to label '+str((row,col))+' with label '+str(label)
- 				#put all entries neighboured with the current entry to the same label
- 				aux = set()
- 				getComponent((row,col),sqHist,aux,False)
- 				for tile in aux:
- 					sqHist[tile[0]][tile[1]]=label
- 	return sqHist
+#  				#update label
+#  				label+=1
+#  				#print 'going to label '+str((row,col))+' with label '+str(label)
+#  				#put all entries neighboured with the current entry to the same label
+#  				aux = set()
+#  				getComponent((row,col),sqHist,aux,False)
+#  				for tile in aux:
+#  					sqHist[tile[0]][tile[1]]=label
+#  	return sqHist
 
 
 #gets the component containing the center pixel or the nearest component to this pixel
 def getCenterComponent(sqHist):
-	sqHist = labelConectComp(sqHist)
+	sqHist = labelConnectedComponents(sqHist)
 	rows,cols = sqHist.shape[:2]
 	centerLabel = sqHist[rows/2][cols/2]
 	dist = 0
@@ -171,12 +180,9 @@ def getCenterComponent(sqHist):
 			if (distRect.shape[0]==rows and distRect.shape[1]==cols):
 				break
 
-
 	aux =np.zeros((sqHist.shape),np.uint8)
 	aux[:,:]=sqHist
 	sqHist = intervalThreshold(aux,(centerLabel,centerLabel))
-	# sqHist = cv2.threshold(aux,centerLabel-1,255,cv2.cv.CV_THRESH_TOZERO)[1]
-	# sqHist = cv2.threshold(aux,centerLabel,255,cv2.cv.CV_THRESH_TOZERO_INV)[1]
 	return sqHist
 
 
