@@ -27,22 +27,25 @@ def stapleContBlurAT(img,dirList,blatList):
 	return stapleCont(threshChan,dirList)
 
 def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh):
+	print '-----------------------------'
+	print 'NEW IMAGE'
+	print '-----------------------------'
 	h, w = 375,450
 	
 	aux = []
 	for channel in cv2.split(img):
 		aux.append(cv2.equalizeHist(channel))
 
-	backEqImg = cv2.merge(aux)
+	eqImg = cv2.merge(aux)
 	
 
 	aux = []
-	aux.append(stapleContCanny(backEqImg,dirList,cannyList))
+	aux.append(stapleContCanny(eqImg,dirList,cannyList))
 	aux.append(stapleContThresh(img,dirList,thresh))
-	aux.append(stapleContBlurAT(backEqImg,dirList,blatList))
+	aux.append(stapleContBlurAT(eqImg,dirList,blatList))
 
 	
-	cpImg0,cpImg1,cpImg2 = backEqImg.copy(),img.copy(),backEqImg.copy()
+	cpImg0,cpImg1,cpImg2 = eqImg.copy(),img.copy(),eqImg.copy()
 
 	percent = 0.01
 	line = int(min(img.shape[0]*percent,img.shape[1]*percent))
@@ -50,6 +53,7 @@ def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh):
 	cv2.drawContours(cpImg0, aux[0], -1, (0,0,255),line)
 	cv2.drawContours(cpImg1, aux[1], -1, (0,0,255),line)
 	cv2.drawContours(cpImg2, aux[2], -1, (0,0,255),line)
+
 
 	img0 = getSigSquares([aux[0],],img.shape,(10,10),0)[0]
 	img1 = getSigSquares([aux[1],],img.shape,(10,10),0)[0]
@@ -63,9 +67,13 @@ def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh):
 	img2 = cv2.merge([cv2.min(img2,layer) for layer in cv2.split(cpImg2)])
 
 	background = np.zeros((h*2,w*3,3),np.uint8)
-	background[0:h,0:w,0:3]=cv2.resize(img,(w,h))
-	background[0:h,w:2*w,0:3]=cv2.resize(backEqImg,(w,h))
-	background[0:h,2*w:3*w,0:3]=cv2.resize(intersecImg,(w,h))
+	# background[0:h,0:w,0:3]=cv2.resize(img,(w,h))
+	# background[0:h,w:2*w,0:3]=cv2.resize(eqImg,(w,h))
+	# background[0:h,2*w:3*w,0:3]=cv2.resize(intersecImg,(w,h))
+
+	background[0:h,0:w,0:3]=cv2.resize(cpImg0,(w,h))
+	background[0:h,w:2*w,0:3]=cv2.resize(cpImg1,(w,h))
+	background[0:h,2*w:3*w,0:3]=cv2.resize(cpImg2,(w,h))
 
 	background[h:2*h,0:w,0:3]=cv2.resize(img0,(w,h))
 	background[h:2*h,w:2*w,0:3]=cv2.resize(img1,(w,h))

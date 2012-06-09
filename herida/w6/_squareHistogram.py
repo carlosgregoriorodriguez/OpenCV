@@ -113,77 +113,84 @@ def getSigSquares(contList,imgShape,histDim,thresh):
 
 	#threshold entries, i.e. consider entries that appear in more than 'thresh' sqHist
 	sumSq = cv2.threshold(sumSq,thresh,200,cv2.cv.CV_THRESH_BINARY)[1]
+	print 'in getSigSquares'
+	print sumSq
 	#remove not connected single entries, again, noise
 	removeNotConnected(sumSq)
 	#label the connected components in sumSq
 	#then get the component that is closer to the center of the image and remove the rest of them
 	#sumSq = getCenterComponent(sumSq)
-	sumSq = getComponentOf(sumSq,(sumSq.shape[0]/2,sumSq.shape[1]/2),True)
+	print '-----------------------------------'
+	print 'getComponentOf'
+	print '-----------------------------------'
+	sumSq = getComponentOf(sumSq,(sumSq.shape[1]/2,sumSq.shape[0]/2),True)
+	print '-----------------------------------'
+	print 'out of getComponentOf'
+	print '-----------------------------------'
 
+	print sumSq
 	return paintSqHistogram(sumSq,imgShape,False),sumSq
 
 
-def getComponent(entry,sqHist,neig,diagonalNeig):
-	row = entry[0]
-	col = entry[1]
-	if row>=0 and row<sqHist.shape[0] and col>=0 and col<sqHist.shape[1] and sqHist[row][col]<0 and entry not in neig:
-		neig.add(entry)
-		neig.update(getComponent((row-1,col),sqHist,neig,diagonalNeig))
-		neig.update(getComponent((row+1,col),sqHist,neig,diagonalNeig))
-		neig.update(getComponent((row,col-1),sqHist,neig,diagonalNeig))
-		neig.update(getComponent((row,col+1),sqHist,neig,diagonalNeig))
-	return neig
+# def getComponent(entry,sqHist,neig,diagonalNeig):
+# 	row = entry[0]
+# 	col = entry[1]
+# 	if row>=0 and row<sqHist.shape[0] and col>=0 and col<sqHist.shape[1] and sqHist[row][col]<0 and entry not in neig:
+# 		neig.add(entry)
+# 		neig.update(getComponent((row-1,col),sqHist,neig,diagonalNeig))
+# 		neig.update(getComponent((row+1,col),sqHist,neig,diagonalNeig))
+# 		neig.update(getComponent((row,col-1),sqHist,neig,diagonalNeig))
+# 		neig.update(getComponent((row,col+1),sqHist,neig,diagonalNeig))
+# 	return neig
 
 
-
+#obsolet!!
 #gets the component containing the center pixel or the nearest component to this pixel
-def getCenterComponent(sqHist):
-	sqHist = labelConnectedComponents(sqHist)
-	rows,cols = sqHist.shape[:2]
-	centerLabel = sqHist[rows/2][cols/2]
-	dist = 0
-	if cv2.minMaxLoc(sqHist)[1]!=0:
-		while centerLabel == 0:
-			dist += 1
-			distRect = sqHist[max(0,rows/2-dist):min(rows-1,rows/2+dist),max(0,cols/2-dist):min(cols-1,cols/2+dist)]
-			centerLabel = cv2.minMaxLoc(distRect)[1]
-			if (distRect.shape[0]==rows and distRect.shape[1]==cols):
-				break
+# def getCenterComponent(sqHist):
+# 	sqHist = labelConnectedComponents(sqHist)
+# 	rows,cols = sqHist.shape[:2]
+# 	centerLabel = sqHist[rows/2][cols/2]
+# 	dist = 0
+# 	if cv2.minMaxLoc(sqHist)[1]!=0:
+# 		while centerLabel == 0:
+# 			dist += 1
+# 			distRect = sqHist[max(0,rows/2-dist):min(rows-1,rows/2+dist),max(0,cols/2-dist):min(cols-1,cols/2+dist)]
+# 			centerLabel = cv2.minMaxLoc(distRect)[1]
+# 			if (distRect.shape[0]==rows and distRect.shape[1]==cols):
+# 				break
 
-	aux =np.zeros((sqHist.shape),np.uint8)
-	aux[:,:]=sqHist
-	sqHist = intervalThreshold(aux,(centerLabel,centerLabel))
-	return sqHist
-
-
+# 	aux =np.zeros((sqHist.shape),np.uint8)
+# 	aux[:,:]=sqHist
+# 	sqHist = intervalThreshold(aux,(centerLabel,centerLabel))
+# 	return sqHist
 
 
 #not used yet
-def getPoints(imgShape,sqHist):
-	retPoints = []
+# def getPoints(imgShape,sqHist):
+# 	retPoints = []
 
-	rowNum,colNum = sqHist.shape[:2]
-	lw = imgShape[1]/colNum
-	lh = imgShape[0]/rowNum
+# 	rowNum,colNum = sqHist.shape[:2]
+# 	lw = imgShape[1]/colNum
+# 	lh = imgShape[0]/rowNum
 
-	for row in range(rowNum):
-		for col in range(colNum):
-			if sqHist[row][col]!=0:
-				x,y = col*lw,row*lh
-				aux = []
-				for i in range(3):
-					for j in range(3):
-						aux.append((x+(lw/2)*i,y+(lh/2)*j))
-				retPoints.append(aux)
-	return retPoints
+# 	for row in range(rowNum):
+# 		for col in range(colNum):
+# 			if sqHist[row][col]!=0:
+# 				x,y = col*lw,row*lh
+# 				aux = []
+# 				for i in range(3):
+# 					for j in range(3):
+# 						aux.append((x+(lw/2)*i,y+(lh/2)*j))
+# 				retPoints.append(aux)
+# 	return retPoints
 
 
-#tests if a point is in a contour
-def isContained(pt,contours):
- 	for cont in contours:
- 		if cv2.pointPolygonTest(cont, pt, False)>=0:
- 			return True
- 	return False
+# #tests if a point is in a contour
+# def isContained(pt,contours):
+#  	for cont in contours:
+#  		if cv2.pointPolygonTest(cont, pt, False)>=0:
+#  			return True
+#  	return False
 
 if __name__ == "__main__":
 

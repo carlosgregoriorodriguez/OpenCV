@@ -3,7 +3,6 @@ import numpy as np
 import sys
 from glob import glob
 import math
-from time import clock
 from _utils import *
 from _findStaples import *
 from _getContours import *
@@ -28,76 +27,59 @@ def stapleContBlurAT(img,dirList,blatList):
 	return stapleCont(threshChan,dirList)
 
 def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh):
+	print '-----------------------------'
 	print 'NEW IMAGE'
-	print 'current time: '+str(clock())
-
+	print '-----------------------------'
 	h, w = 375,450
 	
-	#get different formats of the original image	
 	aux = []
 	for channel in cv2.split(img):
 		aux.append(cv2.equalizeHist(channel))
 
-	backEqImg = cv2.merge(aux)
+	eqImg = cv2.merge(aux)
 	
-	#apply the image in the format that suits best to the different algorithms 
-	aux = []
-	print 'BEFORE GETTING THE CONTOURS'
-	myTime = clock()
-	print 'first contour at: '+str(clock())
-	aux.append(stapleContCanny(backEqImg,dirList,cannyList))
-	print '====>takes '+str(clock()-myTime)
-	myTime = clock()
-	print 'second contour at: '+str(clock())
-	aux.append(stapleContThresh(img,dirList,thresh))
-	print '====>takes '+str(clock()-myTime)
-	myTime = clock()
-	print 'third contour at: '+str(clock())
-	aux.append(stapleContBlurAT(backEqImg,dirList,blatList))
-	print '====>takes '+str(clock()-myTime)
-	myTime = clock()
 
-	#paint the contours for showing them later
-	print 'paint the contours '+str(clock())
-	cpImg0,cpImg1,cpImg2 = backEqImg.copy(),img.copy(),backEqImg.copy()
+	aux = []
+	aux.append(stapleContCanny(eqImg,dirList,cannyList))
+	aux.append(stapleContThresh(img,dirList,thresh))
+	aux.append(stapleContBlurAT(eqImg,dirList,blatList))
+
+	
+	cpImg0,cpImg1,cpImg2 = eqImg.copy(),img.copy(),eqImg.copy()
+
 	percent = 0.01
 	line = int(min(img.shape[0]*percent,img.shape[1]*percent))
+
 	cv2.drawContours(cpImg0, aux[0], -1, (0,0,255),line)
 	cv2.drawContours(cpImg1, aux[1], -1, (0,0,255),line)
 	cv2.drawContours(cpImg2, aux[2], -1, (0,0,255),line)
-	print '====>takes '+str(clock()-myTime)
-	myTime = clock()
-
-	#get the squareHistogram for all the contours, see _squareHistogram.getSigSquare
-	print 'get significant squares '+str(clock())
-	img5,sqHist5 = getSigSquares(aux,img.shape,(10,10),relevanceThresh)
-	print '====>takes '+str(clock()-myTime)
-	myTime = clock()
 
 
-	img5 = cv2.merge([cv2.min(img5,layer) for layer in cv2.split(img)])
+	img0 = getSigSquares([aux[0],],img.shape,(10,10),0)[0]
+	img1 = getSigSquares([aux[1],],img.shape,(10,10),0)[0]
+	img2 = getSigSquares([aux[2],],img.shape,(10,10),0)[0]
 
+	intersecImg = cv2.min(img0,cv2.min(img1,img2))
+	intersecImg = cv2.merge([cv2.min(intersecImg,layer) for layer in cv2.split(img)])
 
-	#do backproyection for every non trivial entry in sqHist
-	print 'backproyection '+str(clock())
-	bpGeneral, bpComponent = bpSignificantSquares(img.copy(),sqHist5,probThresh)
-	print '====>takes '+str(clock()-myTime)
-	myTime = clock()
+	img0 = cv2.merge([cv2.min(img0,layer) for layer in cv2.split(cpImg0)])
+	img1 = cv2.merge([cv2.min(img1,layer) for layer in cv2.split(cpImg1)])
+	img2 = cv2.merge([cv2.min(img2,layer) for layer in cv2.split(cpImg2)])
 
-	print 'build the canvas'
 	background = np.zeros((h*2,w*3,3),np.uint8)
-	background[0:h,0:w,0:3]=cv2.resize(img5,(w,h))
-	background[0:h,w:2*w,0:3]=cv2.resize(bpGeneral,(w,h))
-	background[0:h,2*w:3*w,0:3]=cv2.resize(bpComponent,(w,h))
+	background[0:h,0:w,0:3]=cv2.resize(img,(w,h))
+	background[0:h,w:2*w,0:3]=cv2.resize(eqImg,(w,h))
+	background[0:h,2*w:3*w,0:3]=cv2.resize(intersecImg,(w,h))
 
+	# background[0:h,0:w,0:3]=cv2.resize(cpImg0,(w,h))
+	# background[0:h,w:2*w,0:3]=cv2.resize(cpImg1,(w,h))
+	# background[0:h,2*w:3*w,0:3]=cv2.resize(cpImg2,(w,h))
 
-	background[h:2*h,0:w,0:3]=cv2.resize(cpImg0,(w,h))
-	background[h:2*h,w:2*w,0:3]=cv2.resize(cpImg1,(w,h))
-	background[h:2*h,2*w:3*w,0:3]=cv2.resize(cpImg2,(w,h))
-	print '====>takes '+str(clock()-myTime)
-	myTime = clock()
-
+	background[h:2*h,0:w,0:3]=cv2.resize(img0,(w,h))
+	background[h:2*h,w:2*w,0:3]=cv2.resize(img1,(w,h))
+	background[h:2*h,2*w:3*w,0:3]=cv2.resize(img2,(w,h))
 	return background
+
 
 
 
