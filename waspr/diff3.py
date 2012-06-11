@@ -20,7 +20,12 @@ while not display.isDone():
 	img = vcimg.scale(scale).convolve(kernel) #.bilateralFilter() #.flipHorizontal()
 	diff = cleans-img
 	#diff = diff.binarize(-1)
-	diff = diff.grayscale()
+	diff = diff.binarize(-1).grayscale().dilate(1).erode(2)
+	blobs = (diff.invert()).findBlobs()
+	
+	if blobs:
+		for blob in blobs:
+			img.drawCircle((blob.x, blob.y), 10,SimpleCV.Color.RED,3)
 
 	fps = 1/(time.time()-before)
 	if normaldisplay:

@@ -7,7 +7,7 @@ vc = SimpleCV.VirtualCamera("video.mts", "video")
 normaldisplay = True
 clean = SimpleCV.Image('images/clean.png')
 
-scale = 0.5
+scale = 0.2
 blobs = []
 kernel = [[1,1,-1],[2,1,-2],[1,-1,1]]
 kernel = [[1,2],[-1,2]]
@@ -20,7 +20,7 @@ while not display.isDone():
 	img = vcimg.scale(scale).convolve(kernel) #.bilateralFilter() #.flipHorizontal()
 	diff = cleans-img
 	#diff = diff.binarize(-1)
-	diff = diff.binarize(-1).grayscale().erode(2).dilate(4)
+	diff = diff.binarize(-1).grayscale().dilate(1).erode(2)
 
 	fps = 1/(time.time()-before)
 	if normaldisplay:
