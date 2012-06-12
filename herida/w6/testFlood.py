@@ -9,6 +9,7 @@ from _findStaples import *
 from _getContours import *
 from _squareHistogram import *
 from _fleshBackProyection import *
+from _findSpot import *
 
 def dummy(x):
 	global changeParam
@@ -84,11 +85,20 @@ def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh):
 	print '====>takes '+str(clock()-myTime)
 	myTime = clock()
 
+	print 'dilate '+str(clock())
+	kernel = np.ones((3,3),np.uint8)*255
+	bpComponentDilated = cv2.dilate(bpComponent.copy(),kernel,iterations=3,borderType=cv2.BORDER_CONSTANT,borderValue=0)
+	#bpComponentDilated = cv2.erode(bpComponent.copy(),kernel,iterations=1,borderType=cv2.BORDER_CONSTANT,borderValue=0)
+	print '====>takes '+str(clock()-myTime)
+
+	#spotImg = bpContours(backEqImg.copy(),cv2.split(bpComponentDilated)[0])
+
 	print 'build the canvas'
 	background = np.zeros((h*2,w*3,3),np.uint8)
 	background[0:h,0:w,0:3]=cv2.resize(img5,(w,h))
-	background[0:h,w:2*w,0:3]=cv2.resize(bpGeneral,(w,h))
-	background[0:h,2*w:3*w,0:3]=cv2.resize(bpComponent,(w,h))
+	#background[0:h,w:2*w,0:3]=cv2.resize(bpComponentDilated,(w,h))
+	background[0:h,w:2*w,0:3]=cv2.resize(bpComponent,(w,h))
+	background[0:h,2*w:3*w,0:3]=cv2.resize(bpComponentDilated,(w,h))
 
 
 	background[h:2*h,0:w,0:3]=cv2.resize(cpImg0,(w,h))

@@ -102,6 +102,7 @@ def significantSQS(bigCont,imgShape,histDim):
 
 
 def getSigSquares(contList,imgShape,histDim,thresh):
+	print 'in getSigSquares'
 	#create a blank canvas to buffer the sum of the sqHists of all elements of the list
 	sumSq = np.zeros(histDim,np.uint8)
 	#for each list of contours get the sqHist, clip it to [0,1] (convert it to binary image)
@@ -110,10 +111,9 @@ def getSigSquares(contList,imgShape,histDim,thresh):
 		sqHist = significantSQS(contours,imgShape,histDim)
 		np.clip(sqHist,0,1,sqHist)
 		sumSq = sumSq+sqHist
-
+	print sumSq
 	#threshold entries, i.e. consider entries that appear in more than 'thresh' sqHist
 	sumSq = cv2.threshold(sumSq,thresh,200,cv2.cv.CV_THRESH_BINARY)[1]
-	print 'in getSigSquares'
 	print sumSq
 	#remove not connected single entries, again, noise
 	removeNotConnected(sumSq)
