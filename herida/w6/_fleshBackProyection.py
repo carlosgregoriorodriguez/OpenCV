@@ -18,11 +18,9 @@ def getHist(img):
 	for hueIndex in range(histSize[0]):
 		for satIndex in range(histSize[1]):
 			x+=hist[hueIndex][satIndex]
-	y=0
 	for hueIndex in range(histSize[0]):
 		for satIndex in range(histSize[1]):
 			hist[hueIndex][satIndex]=round((hist[hueIndex][satIndex]/x)*100,2)
-			y+=hist[hueIndex][satIndex]
 
 	scale = 20
 	normCanvas = np.zeros((histSize[0]*scale,histSize[1]*scale,3),np.uint8)

@@ -12,7 +12,6 @@ def intervalThreshold(img,interval):
 	return img
 
 
-
 def labelConnectedComponents(img):
 	print '-LCC-'
 	upBond = 100
@@ -52,67 +51,93 @@ def labelConnectedComponents(img):
 
 
 
-#returns a binary image with 1 for the conected component nearest to the point and 0 the rest
-#point in normal format, point=(column,row)
 def getComponentOf(img,point,nonTrivial):
 	print '-COF-'
-	#print '-COF-labelConnectedComponent'
 	myTime = clock()
 	mask = np.clip(img,0,1)
-	print '-COF-mask'+str(type(mask))
-	print mask
-	#print '-COF- ===>takes '+str(clock()-myTime)
 	rows,cols = mask.shape[:2]
-	pr,pc = point[1],point[0] #pr is point row, pc is point column
-	#print pr
-	#print pc
-	label = 0
-	labelPoint = point
-	#if the point is in the image
-	if(pr>=0 and pr<rows and pc>=0 and pc<cols):
-		#print 'in first if'
-		#get the label of the point
-		label = mask[pr][pc]
-		#if the nearest non trivial componen is asked (trivial = label 0)
-		#and the matrix has non zero elements
-		#and the point is in the trivial component (component with label 0)
-		print '-COF- before if with data:'
-		print 'label '+str(label)+' nonTrivial '+str(nonTrivial)+' maxValue '+str(cv2.minMaxLoc(mask)[1])
+	rawContours,hierarchy = cv2.findContours(mask.copy(),
+		cv2.cv.CV_RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+	if len(rawContours)>0:
+		distance = []
+		for cont in rawContours:
+			aux = cv2.pointPolygonTest(cont, point, True)
+			if aux >= 0:
+				retMask = np.zeros(img.shape,np.uint8)
+				cv2.drawContours(retMask,[cont],-1,(1,1,1),-1)
+				return retMask
+			else:
+				distance.append(aux)
 
-		if nonTrivial and cv2.minMaxLoc(mask)[1]>0 and label==0:
-			print 'in second if'
-			dist = 0
-			#while the label is 0 compute a square of increasing dimension centered on the point
-			#and look for the maximum
-			while label == 0:
-				#increase the distance
-				dist += 1
-				print 'in while'
-				print 'label '+str(label)
-				print 'dist '+str(dist)
+		retMask = np.zeros(img.shape,np.uint8)
+		cv2.drawContours(retMask,rawContours,distance.index(max(distance)),(1,1,1),-1)
+		return retMask
+	else:
+		retMask = np.zeros(img.shape,np.uint8)
+		return retMask
+		
 
-				#get the square of distance dist and centered on the point
-				distRect = mask[max(0,pr-dist):min(rows,pr+dist),max(0,pc-dist):min(cols,pc+dist)]
-				#the nearest label will be the first component that appears in this increasing square
-				auxList = cv2.minMaxLoc(distRect)
-				label = auxList[1]
-				labelPoint = (auxList[3][0]+pc-dist,auxList[3][1]+pr-dist)
-				print labelPoint
-				print 'distRect shape = '+str(distRect.shape)
-				print 'mask shape = '+str(mask.shape)
-				#if the increasing square reaches the dimension of the whole image break
-				if (distRect.shape[0]==rows and distRect.shape[1]==cols):
-					break
-		auxMask = np.zeros((mask.shape[0]+2,mask.shape[1]+2),np.uint8)
-		print '-COF- before floodFill with parameters:'
-		print '-COF- mask shape: '+str(mask.shape)
-		print 'labelPoint: '+str(labelPoint)
-		print mask[labelPoint[1]-5:labelPoint[1]+5,labelPoint[0]-5:labelPoint[0]+5]
-		cv2.floodFill(mask, auxMask, labelPoint, [255,]*3, [0,]*3, [0,]*3, cv2.cv.CV_FLOODFILL_FIXED_RANGE)
-		print mask[labelPoint[1]-5:labelPoint[1]+5,labelPoint[0]-5:labelPoint[0]+5]
-		mask = cv2.threshold(mask,200,1,cv2.cv.CV_THRESH_BINARY)[1]	
-		print mask[labelPoint[1]-5:labelPoint[1]+5,labelPoint[0]-5:labelPoint[0]+5]
-	return mask	
+#returns a binary image with 1 for the conected component nearest to the point and 0 the rest
+#point in normal format, point=(column,row)
+# def getComponentOf(img,point,nonTrivial):
+# 	print '-COF-'
+# 	#print '-COF-labelConnectedComponent'
+# 	myTime = clock()
+# 	mask = np.clip(img,0,1)
+# 	print '-COF-mask'+str(type(mask))
+# 	print mask
+# 	#print '-COF- ===>takes '+str(clock()-myTime)
+# 	rows,cols = mask.shape[:2]
+# 	pr,pc = point[1],point[0] #pr is point row, pc is point column
+# 	#print pr
+# 	#print pc
+# 	label = 0
+# 	labelPoint = point
+# 	#if the point is in the image
+# 	if(pr>=0 and pr<rows and pc>=0 and pc<cols):
+# 		#print 'in first if'
+# 		#get the label of the point
+# 		label = mask[pr][pc]
+# 		#if the nearest non trivial componen is asked (trivial = label 0)
+# 		#and the matrix has non zero elements
+# 		#and the point is in the trivial component (component with label 0)
+# 		print '-COF- before if with data:'
+# 		print 'label '+str(label)+' nonTrivial '+str(nonTrivial)+' maxValue '+str(cv2.minMaxLoc(mask)[1])
+
+# 		if nonTrivial and cv2.minMaxLoc(mask)[1]>0 and label==0:
+# 			print 'in second if'
+# 			dist = 0
+# 			#while the label is 0 compute a square of increasing dimension centered on the point
+# 			#and look for the maximum
+# 			while label == 0:
+# 				#increase the distance
+# 				dist += 1
+# 				print 'in while'
+# 				print 'label '+str(label)
+# 				print 'dist '+str(dist)
+
+# 				#get the square of distance dist and centered on the point
+# 				distRect = mask[max(0,pr-dist):min(rows,pr+dist),max(0,pc-dist):min(cols,pc+dist)]
+# 				#the nearest label will be the first component that appears in this increasing square
+# 				auxList = cv2.minMaxLoc(distRect)
+# 				label = auxList[1]
+# 				labelPoint = (auxList[3][0]+pc-dist,auxList[3][1]+pr-dist)
+# 				print labelPoint
+# 				print 'distRect shape = '+str(distRect.shape)
+# 				print 'mask shape = '+str(mask.shape)
+# 				#if the increasing square reaches the dimension of the whole image break
+# 				if (distRect.shape[0]==rows and distRect.shape[1]==cols):
+# 					break
+# 		auxMask = np.zeros((mask.shape[0]+2,mask.shape[1]+2),np.uint8)
+# 		print '-COF- before floodFill with parameters:'
+# 		print '-COF- mask shape: '+str(mask.shape)
+# 		print 'labelPoint: '+str(labelPoint)
+# 		print mask[labelPoint[1]-5:labelPoint[1]+5,labelPoint[0]-5:labelPoint[0]+5]
+# 		cv2.floodFill(mask, auxMask, labelPoint, [255,]*3, [0,]*3, [0,]*3, cv2.cv.CV_FLOODFILL_FIXED_RANGE)
+# 		print mask[labelPoint[1]-5:labelPoint[1]+5,labelPoint[0]-5:labelPoint[0]+5]
+# 		mask = cv2.threshold(mask,200,1,cv2.cv.CV_THRESH_BINARY)[1]	
+# 		print mask[labelPoint[1]-5:labelPoint[1]+5,labelPoint[0]-5:labelPoint[0]+5]
+# 	return mask	
 
 
 #returns a binary image with 1 for the conected component nearest to the point and 0 the rest

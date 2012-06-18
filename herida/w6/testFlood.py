@@ -76,7 +76,7 @@ def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh):
 	myTime = clock()
 
 
-	img5 = cv2.merge([cv2.min(img5,layer) for layer in cv2.split(img)])
+	img5 = cv2.merge([cv2.min(img5,layer) for layer in cv2.split(backEqImg)])
 
 
 	#do backproyection for every non trivial entry in sqHist
@@ -91,15 +91,15 @@ def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh):
 	#bpComponentDilated = cv2.erode(bpComponent.copy(),kernel,iterations=1,borderType=cv2.BORDER_CONSTANT,borderValue=0)
 	print '====>takes '+str(clock()-myTime)
 
-	#spotImg = bpContours(backEqImg.copy(),cv2.split(bpComponentDilated)[0])
+	spotImg = findColorMarks(backEqImg.copy(),cv2.split(bpComponentDilated)[0])
 
 	print 'build the canvas'
 	background = np.zeros((h*2,w*3,3),np.uint8)
 	background[0:h,0:w,0:3]=cv2.resize(img5,(w,h))
 	#background[0:h,w:2*w,0:3]=cv2.resize(bpComponentDilated,(w,h))
 	background[0:h,w:2*w,0:3]=cv2.resize(bpComponent,(w,h))
-	background[0:h,2*w:3*w,0:3]=cv2.resize(bpComponentDilated,(w,h))
-
+	#background[0:h,2*w:3*w,0:3]=cv2.resize(bpComponentDilated,(w,h))
+	background[0:h,2*w:3*w,0:3]=cv2.resize(spotImg,(w,h))
 
 	background[h:2*h,0:w,0:3]=cv2.resize(cpImg0,(w,h))
 	background[h:2*h,w:2*w,0:3]=cv2.resize(cpImg1,(w,h))
@@ -133,14 +133,14 @@ if __name__ == "__main__":
 	cv2.createTrackbar('minArea','panel direction',5,500,dummy)
 	cv2.createTrackbar('maxArea','panel direction',5000,5000,dummy)
 	cv2.createTrackbar('direction','panel direction',5,5,dummy)
-	cv2.createTrackbar('canny thresh1','panel canny',700,700,dummy)
+	cv2.createTrackbar('canny thresh1','panel canny',500,700,dummy)
 	cv2.createTrackbar('canny thresh2','panel canny',700,700,dummy)
 	cv2.createTrackbar('thresh','panel',180,255,dummy)
 	cv2.createTrackbar('iterations','panel blat',1,10,dummy)
-	cv2.createTrackbar('ksizeBlur X','panel blat',0,4,dummy)
-	cv2.createTrackbar('ksizeBlur Y','panel blat',0,4,dummy)
-	cv2.createTrackbar('ksizeAT','panel blat',0,4,dummy)
-	cv2.createTrackbar('relevanceThresh','panel',3,3,dummy)
+	cv2.createTrackbar('ksizeBlur X','panel blat',3,4,dummy)
+	cv2.createTrackbar('ksizeBlur Y','panel blat',3,4,dummy)
+	cv2.createTrackbar('ksizeAT','panel blat',2,4,dummy)
+	cv2.createTrackbar('relevanceThresh','panel',2,3,dummy)
 	cv2.createTrackbar('probThresh','panel',1,256,dummy)
 
 	dirList = [cv2.getTrackbarPos('minArea','panel direction'),
