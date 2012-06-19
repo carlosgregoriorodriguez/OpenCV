@@ -44,8 +44,8 @@ def faceDetect(frame):
 	flags = 0
 
 	faces = cascade.detectMultiScale(frame, scaleFactor, minNeighbors, flags, minSize, maxSize)
-	
-	showFaces(frame= frame, faces=faces)
+	return faces
+	#showFaces(frame= frame, faces=faces)
 
 
 def showFaces(frame, faces):
@@ -63,7 +63,9 @@ def main():
 	print usage
 
 	pause = False
-	speed = 1
+	speed = 20
+	frameCounter = 0
+	faces = None
 
 
 	# Load video
@@ -74,6 +76,8 @@ def main():
 
 
 	while True:
+
+		frameCounter += 1
 		
 		#fps
 		before = time.time()
@@ -89,7 +93,12 @@ def main():
 
 		key = cv2.waitKey(speed)
 
-		faceDetect(frame)
+		if frameCounter > 15:
+			faces = faceDetect(frame)
+			frameCounter = 0
+
+		if faces != None:
+			frame = showFaces(frame= frame, faces= faces)
 
 		#fps
 		fps = 1/(time.time()-before)
