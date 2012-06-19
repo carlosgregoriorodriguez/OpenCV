@@ -51,11 +51,32 @@ def markColors(probMask):
 		else:
 			interval = (i*step,(i+1)*step)
 			layer = np.clip(intervalThreshold(probMask.copy(),interval),0,1)*i*step
-			canvas[:,:,i%3]=canvas[:,:,i%3]+layer
+	
 		layer = cv2.merge([layer,]*3)
 		canvas[:,:,:]=canvas[:,:,:]+layer
 	return canvas
 
+
+def identifyLevels(probMask):
+	canvas = np.zeros((probMask.shape[0],probMask.shape[1],3),np.uint8)
+	maxVal = cv2.minMaxLoc(probMask)[1]
+	step = int(maxVal/5)
+
+	for i in range(5):
+		interval = (i*step,(i+1)*step)
+		if i == 0:
+			layer = np.clip(intervalThreshold(probMask.copy(),interval),0,1)*50
+			layer = cv2.merge([layer,]*3)
+			canvas[:,:,:]=canvas[:,:,:]+layer
+		elif i == 4:
+			layer = np.clip(intervalThreshold(probMask.copy(),interval),0,1)*255
+			layer = cv2.merge([layer,]*3)
+			canvas[:,:,:]=canvas[:,:,:]+layer
+		else:
+			layer = np.clip(intervalThreshold(probMask.copy(),interval),0,1)*255
+			canvas[:,:,i-1]=canvas[:,:,i-1]+layer
+
+	return canvas
 
 def findColorMarks(img,mask):
 	cuttedImg = cv2.merge([cv2.min(mask,layer) for layer in cv2.split(img)])
@@ -63,7 +84,7 @@ def findColorMarks(img,mask):
 	cuttedImgBP = getHistRGB(cuttedImg,mask)
 	cuttedImgBP = cv2.min(cuttedImgBP,mask)
 	#return cv2.merge([cuttedImgBP,]*3)
-	return markColors(cuttedImgBP)
+	return identifyLevels(cuttedImgBP)
 
 
 
