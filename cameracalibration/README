@@ -1,3 +1,9 @@
+gpsmethod:
+	Tries to calculate the position of the second camera in the first
+	camera's base. Doesn't seem to work, because if you try to calculate
+	first camera coordinates in first camera base, it doesn't return 
+	(0,0,0).
+
 twocameras:
 	Just run with --help option for help.
 	If something doesn't work, probably it works in OpenCV 2.4.0.
