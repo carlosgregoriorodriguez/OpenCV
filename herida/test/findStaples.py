@@ -8,8 +8,6 @@ from _utils import *
 from _findStaples import *
 from _getContours import *
 from _squareHistogram import *
-from _fleshBackProyection import *
-from _findSpot import *
 
 def dummy(x):
 	global changeParam
@@ -28,7 +26,7 @@ def stapleContBlurAT(img,dirList,blatList):
 	threshChan = blurAndAT(img,blatList)
 	return stapleCont(threshChan,dirList)
 
-def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh,level):
+def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh):
 	print 'NEW IMAGE'
 	print 'current time: '+str(clock())
 
@@ -78,31 +76,13 @@ def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh,l
 
 	img5 = cv2.merge([cv2.min(img5,layer) for layer in cv2.split(backEqImg)])
 
-
-	#do backproyection for every non trivial entry in sqHist
-	print 'backproyection '+str(clock())
-	bpGeneral, bpComponent = bpSignificantSquares(img.copy(),sqHist5,probThresh)
-	print '====>takes '+str(clock()-myTime)
-	myTime = clock()
-
-	print 'dilate '+str(clock())
-	kernel = np.ones((3,3),np.uint8)*255
-	bpComponentDilated = cv2.dilate(bpComponent.copy(),kernel,iterations=3,borderType=cv2.BORDER_CONSTANT,borderValue=0)
-	#bpComponentDilated = cv2.erode(bpComponent.copy(),kernel,iterations=1,borderType=cv2.BORDER_CONSTANT,borderValue=0)
-	print '====>takes '+str(clock()-myTime)
-
-	#spotImg = findColorMarks(backEqImg.copy(),cv2.split(bpComponentDilated)[0])
-	spotImg,medianSpotImg = findSpotsInRed(img.copy(),cv2.split(bpComponentDilated)[0],10,level)
-
-
 	print 'build the canvas'
 	background = np.zeros((h*2,w*3,3),np.uint8)
-	background[0:h,0:w,0:3]=cv2.resize(img5,(w,h))
+	background[0:h,0:w,0:3]=cv2.resize(img,(w,h))
 	#background[0:h,w:2*w,0:3]=cv2.resize(bpComponentDilated,(w,h))
-	#background[0:h,w:2*w,0:3]=cv2.resize(bpComponent,(w,h))
+	background[0:h,w:2*w,0:3]=cv2.resize(backEqImg,(w,h))
 	#background[0:h,2*w:3*w,0:3]=cv2.resize(bpComponentDilated,(w,h))
-	background[0:h,w:2*w,0:3]=cv2.resize(medianSpotImg,(w,h))
-	background[0:h,2*w:3*w,0:3]=cv2.resize(spotImg,(w,h))
+	background[0:h,2*w:3*w,0:3]=cv2.resize(img5,(w,h))
 
 	background[h:2*h,0:w,0:3]=cv2.resize(cpImg0,(w,h))
 	background[h:2*h,w:2*w,0:3]=cv2.resize(cpImg1,(w,h))
@@ -144,8 +124,6 @@ if __name__ == "__main__":
 	cv2.createTrackbar('ksizeBlur Y','panel blat',3,4,dummy)
 	cv2.createTrackbar('ksizeAT','panel blat',2,4,dummy)
 	cv2.createTrackbar('relevanceThresh','panel',2,3,dummy)
-	cv2.createTrackbar('probThresh','panel',1,256,dummy)
-	cv2.createTrackbar('level','panel',0,9,dummy)
 
 	dirList = [cv2.getTrackbarPos('minArea','panel direction'),
 		cv2.getTrackbarPos('maxArea','panel direction'),
@@ -163,10 +141,8 @@ if __name__ == "__main__":
 	bigImg = doAndPack(img,dirList,
 		cv2.getTrackbarPos('thresh','panel'),
 		cannyList,blatList,
-		cv2.getTrackbarPos('relevanceThresh','panel'),
-		cv2.getTrackbarPos('probThresh','panel'),
-		cv2.getTrackbarPos('level','panel')
-		)
+		cv2.getTrackbarPos('relevanceThresh','panel')
+	)
 
 
 	while True:
@@ -185,9 +161,7 @@ if __name__ == "__main__":
 			bigImg = doAndPack(img,dirList,
 				cv2.getTrackbarPos('thresh','panel'),
 				cannyList,blatList,
-				cv2.getTrackbarPos('relevanceThresh','panel'),
-				cv2.getTrackbarPos('probThresh','panel'),
-				cv2.getTrackbarPos('level','panel')
+				cv2.getTrackbarPos('relevanceThresh','panel')
 			)
 			changeParam = False
 
