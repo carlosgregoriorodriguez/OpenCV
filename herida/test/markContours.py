@@ -155,6 +155,10 @@ if __name__ == "__main__":
 	cv2.createTrackbar('loDiff','ffP',1,255,dummy2)
 	cv2.createTrackbar('upDiff','ffP',1,255,dummy2)
 
+
+
+
+
 	dirList = [cv2.getTrackbarPos('minArea','panel direction'),
 		cv2.getTrackbarPos('maxArea','panel direction'),
 		cv2.getTrackbarPos('direction','panel direction')]
@@ -176,6 +180,12 @@ if __name__ == "__main__":
 		cv2.getTrackbarPos('level','panel')
 		)
 	
+
+
+
+
+
+
 	blueShapeCopy = blueShapeOriginal.copy()
 	cv2.namedWindow('blueShape',cv2.cv.CV_WINDOW_NORMAL)
 	blueShapeDim = (900,750)
@@ -198,7 +208,13 @@ if __name__ == "__main__":
 
 	cv2.setMouseCallback('blueShape', onmouse)
 
+
+
+
+
 	while True:
+		
+
 		if changeParam:
 			dirList = [cv2.getTrackbarPos('minArea','panel direction'),
 				cv2.getTrackbarPos('maxArea','panel direction'),
@@ -221,8 +237,13 @@ if __name__ == "__main__":
 			blueShapeCopy = blueShapeOriginal.copy()
 			changeParam = False
 
+
+
+
 		cv2.imshow('original',bigImg)
 		cv2.imshow('blueShape',cv2.resize(blueShapeCopy,blueShapeDim))
+
+
 
 
 		key = cv2.waitKey(5)

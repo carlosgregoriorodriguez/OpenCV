@@ -4,6 +4,7 @@ import sys
 from glob import glob
 import math
 from time import clock
+import pickle
 from _utils import *
 from _findStaples import *
 from _getContours import *
@@ -108,6 +109,12 @@ if __name__ == "__main__":
 	imgIndex = 0
 	img = cv2.imread(imageNames[imgIndex])	
 	
+	f = open('parameters','r')
+	parametersDict = pickle.load(f)
+	f.close()
+
+	imgParams = parametersDict[imageNames[imgIndex]]
+
 	cv2.namedWindow('panel',cv2.cv.CV_WINDOW_NORMAL)
 	cv2.namedWindow('panel canny',cv2.cv.CV_WINDOW_NORMAL)
 	cv2.namedWindow('panel blat',cv2.cv.CV_WINDOW_NORMAL)
@@ -125,44 +132,62 @@ if __name__ == "__main__":
 	cv2.createTrackbar('relevanceThresh','panel',2,3,dummy)
 	cv2.createTrackbar('probThresh','panel',1,256,dummy)
 
-	dirList = [cv2.getTrackbarPos('minArea','panel direction'),
-		cv2.getTrackbarPos('maxArea','panel direction'),
-		cv2.getTrackbarPos('direction','panel direction')]
+	# dirList = [cv2.getTrackbarPos('minArea','panel direction'),
+	# 	cv2.getTrackbarPos('maxArea','panel direction'),
+	# 	cv2.getTrackbarPos('direction','panel direction')]
 	
-	cannyList = [cv2.getTrackbarPos('canny thresh1','panel canny'),
-		cv2.getTrackbarPos('canny thresh2','panel canny')]
+	# cannyList = [cv2.getTrackbarPos('canny thresh1','panel canny'),
+	# 	cv2.getTrackbarPos('canny thresh2','panel canny')]
 
-	blatList = [cv2.getTrackbarPos('iterations','panel blat'),
-		(cv2.getTrackbarPos('ksizeBlur X','panel blat'),cv2.getTrackbarPos('ksizeBlur Y','panel blat')),
-		cv2.getTrackbarPos('ksizeAT','panel blat')]
+	# blatList = [cv2.getTrackbarPos('iterations','panel blat'),
+	# 	(cv2.getTrackbarPos('ksizeBlur X','panel blat'),cv2.getTrackbarPos('ksizeBlur Y','panel blat')),
+	# 	cv2.getTrackbarPos('ksizeAT','panel blat')]
+
 
 	changeParam = False
 
-	bigImg = doAndPack(img,dirList,
-		cv2.getTrackbarPos('thresh','panel'),
-		cannyList,blatList,
-		cv2.getTrackbarPos('relevanceThresh','panel'),
+	# bigImg = doAndPack(img,dirList,
+	# 	cv2.getTrackbarPos('thresh','panel'),
+	# 	cannyList,blatList,
+	# 	cv2.getTrackbarPos('relevanceThresh','panel'),
+	# 	cv2.getTrackbarPos('probThresh','panel')
+	# )
+
+	bigImg = doAndPack(img,imgParams['direction'],
+		imgParams['thresh'],
+		imgParams['canny'],
+		imgParams['blat'],
+		imgParams['relevanceThresh'],
 		cv2.getTrackbarPos('probThresh','panel')
 	)
 
-
 	while True:
 		if changeParam:
-			dirList = [cv2.getTrackbarPos('minArea','panel direction'),
-				cv2.getTrackbarPos('maxArea','panel direction'),
-				cv2.getTrackbarPos('direction','panel direction')]
+			# dirList = [cv2.getTrackbarPos('minArea','panel direction'),
+			# 	cv2.getTrackbarPos('maxArea','panel direction'),
+			# 	cv2.getTrackbarPos('direction','panel direction')]
 		
-			cannyList = [cv2.getTrackbarPos('canny thresh1','panel canny'),
-				cv2.getTrackbarPos('canny thresh2','panel canny')]
+			# cannyList = [cv2.getTrackbarPos('canny thresh1','panel canny'),
+			# 	cv2.getTrackbarPos('canny thresh2','panel canny')]
 
-			blatList = [cv2.getTrackbarPos('iterations','panel blat'),
-				(cv2.getTrackbarPos('ksizeBlur X','panel blat'),cv2.getTrackbarPos('ksizeBlur Y','panel blat')),
-				cv2.getTrackbarPos('ksizeAT','panel blat')]
+			# blatList = [cv2.getTrackbarPos('iterations','panel blat'),
+			# 	(cv2.getTrackbarPos('ksizeBlur X','panel blat'),cv2.getTrackbarPos('ksizeBlur Y','panel blat')),
+			# 	cv2.getTrackbarPos('ksizeAT','panel blat')]
 
-			bigImg = doAndPack(img,dirList,
-				cv2.getTrackbarPos('thresh','panel'),
-				cannyList,blatList,
-				cv2.getTrackbarPos('relevanceThresh','panel'),
+			# bigImg = doAndPack(img,dirList,
+			# 	cv2.getTrackbarPos('thresh','panel'),
+			# 	cannyList,blatList,
+			# 	cv2.getTrackbarPos('relevanceThresh','panel'),
+			# 	cv2.getTrackbarPos('probThresh','panel')
+			# )
+			
+			imgParams = parametersDict[imageNames[imgIndex]]
+			
+			bigImg = doAndPack(img,imgParams['direction'],
+				imgParams['thresh'],
+				imgParams['canny'],
+				imgParams['blat'],
+				imgParams['relevanceThresh'],
 				cv2.getTrackbarPos('probThresh','panel')
 			)
 			changeParam = False

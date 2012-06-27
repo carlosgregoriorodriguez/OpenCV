@@ -3,6 +3,7 @@ import numpy as np
 import sys
 from glob import glob
 import math
+import pickle
 from time import clock
 from _utils import *
 from _findStaples import *
@@ -109,6 +110,7 @@ if __name__ == "__main__":
 	imgIndex = 0
 	img = cv2.imread(imageNames[imgIndex])	
 	
+	parameterDict = {}
 	cv2.namedWindow('panel',cv2.cv.CV_WINDOW_NORMAL)
 	cv2.namedWindow('panel canny',cv2.cv.CV_WINDOW_NORMAL)
 	cv2.namedWindow('panel blat',cv2.cv.CV_WINDOW_NORMAL)
@@ -176,6 +178,20 @@ if __name__ == "__main__":
 	 		imgIndex = (imgIndex-1,imgIndex)[imgIndex==0]
 	 		img = cv2.imread(imageNames[imgIndex])
 	 		changeParam = True
+	 	elif (key == 115):
+	 		#la s
+	 		parameter = {'direction':dirList , 'blat':blatList ,
+	 		 'canny':cannyList , 'thresh':cv2.getTrackbarPos('thresh','panel') ,
+	 		 'relevanceThresh':cv2.getTrackbarPos('relevanceThresh','panel')}
+	 		parameterDict[imageNames[imgIndex]]=parameter
+	 	
+	 	elif (key == 103):
+	 		#la g
+	 		if len(parameterDict)==len(imageNames):
+	 			f = open('parameters','w')
+	 			pickle.dump(parameterDict,f)
+	 			f.close()
+
 	 	elif (key != -1):
 	 		break
 
