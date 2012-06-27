@@ -4,12 +4,12 @@ import sys
 from glob import glob
 import math
 from time import clock
+import pickle
 from _utils import *
 from _findStaples import *
 from _getContours import *
 from _squareHistogram import *
 from _fleshBackProyection import *
-from _findSpot import *
 
 def dummy(x):
 	global changeParam
@@ -28,7 +28,7 @@ def stapleContBlurAT(img,dirList,blatList):
 	threshChan = blurAndAT(img,blatList)
 	return stapleCont(threshChan,dirList)
 
-def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh,level):
+def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh):
 	print 'NEW IMAGE'
 	print 'current time: '+str(clock())
 
@@ -58,26 +58,14 @@ def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh,l
 	print '====>takes '+str(clock()-myTime)
 	myTime = clock()
 
-	#paint the contours for showing them later
-	print 'paint the contours '+str(clock())
-	cpImg0,cpImg1,cpImg2 = backEqImg.copy(),img.copy(),backEqImg.copy()
-	percent = 0.01
-	line = int(min(img.shape[0]*percent,img.shape[1]*percent))
-	cv2.drawContours(cpImg0, aux[0], -1, (0,0,255),line)
-	cv2.drawContours(cpImg1, aux[1], -1, (0,0,255),line)
-	cv2.drawContours(cpImg2, aux[2], -1, (0,0,255),line)
-	print '====>takes '+str(clock()-myTime)
-	myTime = clock()
-
+	
 	#get the squareHistogram for all the contours, see _squareHistogram.getSigSquare
 	print 'get significant squares '+str(clock())
 	img5,sqHist5 = getSigSquares(aux,img.shape,(10,10),relevanceThresh)
 	print '====>takes '+str(clock()-myTime)
 	myTime = clock()
 
-
 	img5 = cv2.merge([cv2.min(img5,layer) for layer in cv2.split(backEqImg)])
-
 
 	#do backproyection for every non trivial entry in sqHist
 	print 'backproyection '+str(clock())
@@ -88,25 +76,17 @@ def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh,l
 	print 'dilate '+str(clock())
 	kernel = np.ones((3,3),np.uint8)*255
 	bpComponentDilated = cv2.dilate(bpComponent.copy(),kernel,iterations=3,borderType=cv2.BORDER_CONSTANT,borderValue=0)
-	#bpComponentDilated = cv2.erode(bpComponent.copy(),kernel,iterations=1,borderType=cv2.BORDER_CONSTANT,borderValue=0)
 	print '====>takes '+str(clock()-myTime)
-
-	#spotImg = findColorMarks(backEqImg.copy(),cv2.split(bpComponentDilated)[0])
-	spotImg,medianSpotImg = findSpotsInRed(img.copy(),cv2.split(bpComponentDilated)[0],10,level)
-
 
 	print 'build the canvas'
 	background = np.zeros((h*2,w*3,3),np.uint8)
-	background[0:h,0:w,0:3]=cv2.resize(img5,(w,h))
-	#background[0:h,w:2*w,0:3]=cv2.resize(bpComponentDilated,(w,h))
-	#background[0:h,w:2*w,0:3]=cv2.resize(bpComponent,(w,h))
-	#background[0:h,2*w:3*w,0:3]=cv2.resize(bpComponentDilated,(w,h))
-	background[0:h,w:2*w,0:3]=cv2.resize(medianSpotImg,(w,h))
-	background[0:h,2*w:3*w,0:3]=cv2.resize(spotImg,(w,h))
+	background[0:h,0:w,0:3]=cv2.resize(img,(w,h))
+	background[0:h,w:2*w,0:3]=cv2.resize(backEqImg,(w,h))
+	background[0:h,2*w:3*w,0:3]=cv2.resize(img5,(w,h))
 
-	background[h:2*h,0:w,0:3]=cv2.resize(cpImg0,(w,h))
-	background[h:2*h,w:2*w,0:3]=cv2.resize(cpImg1,(w,h))
-	background[h:2*h,2*w:3*w,0:3]=cv2.resize(cpImg2,(w,h))
+	background[h:2*h,0:w,0:3]=cv2.resize(bpComponentDilated,(w,h))
+	background[h:2*h,w:2*w,0:3]=cv2.resize(cv2.min(img,bpComponentDilated),(w,h))
+	#background[h:2*h,2*w:3*w,0:3]=cv2.resize(cpImg2,(w,h))
 	print '====>takes '+str(clock()-myTime)
 	myTime = clock()
 
@@ -129,6 +109,12 @@ if __name__ == "__main__":
 	imgIndex = 0
 	img = cv2.imread(imageNames[imgIndex])	
 	
+	f = open('parameters','r')
+	parametersDict = pickle.load(f)
+	f.close()
+
+	imgParams = parametersDict[imageNames[imgIndex]]
+
 	cv2.namedWindow('panel',cv2.cv.CV_WINDOW_NORMAL)
 	cv2.namedWindow('panel canny',cv2.cv.CV_WINDOW_NORMAL)
 	cv2.namedWindow('panel blat',cv2.cv.CV_WINDOW_NORMAL)
@@ -145,49 +131,64 @@ if __name__ == "__main__":
 	cv2.createTrackbar('ksizeAT','panel blat',2,4,dummy)
 	cv2.createTrackbar('relevanceThresh','panel',2,3,dummy)
 	cv2.createTrackbar('probThresh','panel',1,256,dummy)
-	cv2.createTrackbar('level','panel',0,9,dummy)
 
-	dirList = [cv2.getTrackbarPos('minArea','panel direction'),
-		cv2.getTrackbarPos('maxArea','panel direction'),
-		cv2.getTrackbarPos('direction','panel direction')]
+	# dirList = [cv2.getTrackbarPos('minArea','panel direction'),
+	# 	cv2.getTrackbarPos('maxArea','panel direction'),
+	# 	cv2.getTrackbarPos('direction','panel direction')]
 	
-	cannyList = [cv2.getTrackbarPos('canny thresh1','panel canny'),
-		cv2.getTrackbarPos('canny thresh2','panel canny')]
+	# cannyList = [cv2.getTrackbarPos('canny thresh1','panel canny'),
+	# 	cv2.getTrackbarPos('canny thresh2','panel canny')]
 
-	blatList = [cv2.getTrackbarPos('iterations','panel blat'),
-		(cv2.getTrackbarPos('ksizeBlur X','panel blat'),cv2.getTrackbarPos('ksizeBlur Y','panel blat')),
-		cv2.getTrackbarPos('ksizeAT','panel blat')]
+	# blatList = [cv2.getTrackbarPos('iterations','panel blat'),
+	# 	(cv2.getTrackbarPos('ksizeBlur X','panel blat'),cv2.getTrackbarPos('ksizeBlur Y','panel blat')),
+	# 	cv2.getTrackbarPos('ksizeAT','panel blat')]
+
 
 	changeParam = False
 
-	bigImg = doAndPack(img,dirList,
-		cv2.getTrackbarPos('thresh','panel'),
-		cannyList,blatList,
-		cv2.getTrackbarPos('relevanceThresh','panel'),
-		cv2.getTrackbarPos('probThresh','panel'),
-		cv2.getTrackbarPos('level','panel')
-		)
+	# bigImg = doAndPack(img,dirList,
+	# 	cv2.getTrackbarPos('thresh','panel'),
+	# 	cannyList,blatList,
+	# 	cv2.getTrackbarPos('relevanceThresh','panel'),
+	# 	cv2.getTrackbarPos('probThresh','panel')
+	# )
 
+	bigImg = doAndPack(img,imgParams['direction'],
+		imgParams['thresh'],
+		imgParams['canny'],
+		imgParams['blat'],
+		imgParams['relevanceThresh'],
+		cv2.getTrackbarPos('probThresh','panel')
+	)
 
 	while True:
 		if changeParam:
-			dirList = [cv2.getTrackbarPos('minArea','panel direction'),
-				cv2.getTrackbarPos('maxArea','panel direction'),
-				cv2.getTrackbarPos('direction','panel direction')]
+			# dirList = [cv2.getTrackbarPos('minArea','panel direction'),
+			# 	cv2.getTrackbarPos('maxArea','panel direction'),
+			# 	cv2.getTrackbarPos('direction','panel direction')]
 		
-			cannyList = [cv2.getTrackbarPos('canny thresh1','panel canny'),
-				cv2.getTrackbarPos('canny thresh2','panel canny')]
+			# cannyList = [cv2.getTrackbarPos('canny thresh1','panel canny'),
+			# 	cv2.getTrackbarPos('canny thresh2','panel canny')]
 
-			blatList = [cv2.getTrackbarPos('iterations','panel blat'),
-				(cv2.getTrackbarPos('ksizeBlur X','panel blat'),cv2.getTrackbarPos('ksizeBlur Y','panel blat')),
-				cv2.getTrackbarPos('ksizeAT','panel blat')]
+			# blatList = [cv2.getTrackbarPos('iterations','panel blat'),
+			# 	(cv2.getTrackbarPos('ksizeBlur X','panel blat'),cv2.getTrackbarPos('ksizeBlur Y','panel blat')),
+			# 	cv2.getTrackbarPos('ksizeAT','panel blat')]
 
-			bigImg = doAndPack(img,dirList,
-				cv2.getTrackbarPos('thresh','panel'),
-				cannyList,blatList,
-				cv2.getTrackbarPos('relevanceThresh','panel'),
-				cv2.getTrackbarPos('probThresh','panel'),
-				cv2.getTrackbarPos('level','panel')
+			# bigImg = doAndPack(img,dirList,
+			# 	cv2.getTrackbarPos('thresh','panel'),
+			# 	cannyList,blatList,
+			# 	cv2.getTrackbarPos('relevanceThresh','panel'),
+			# 	cv2.getTrackbarPos('probThresh','panel')
+			# )
+			
+			imgParams = parametersDict[imageNames[imgIndex]]
+			
+			bigImg = doAndPack(img,imgParams['direction'],
+				imgParams['thresh'],
+				imgParams['canny'],
+				imgParams['blat'],
+				imgParams['relevanceThresh'],
+				cv2.getTrackbarPos('probThresh','panel')
 			)
 			changeParam = False
 

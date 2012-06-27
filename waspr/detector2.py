@@ -11,11 +11,11 @@ import numpy as np
 from scipy import spatial
 import math
 from multiprocessing import Process
-
+from SimpleCV.Display import pg
 display = SimpleCV.Display()
 vc = SimpleCV.VirtualCamera("video.mts", "video")
 normaldisplay = True
-scale = 0.3
+scale = 0.5
 hm = None
 
 import math
@@ -56,7 +56,7 @@ class Swarm(object):
 		processed_img = self.processor(img)
 
 		diff = (self.clean-processed_img).binarize(-1).grayscale().invert().erode(1).dilate(2) | mix.dilate(2)
-		diff_blobs = diff.findBlobs(minsize=20)
+		diff_blobs = diff.findBlobs(minsize=40)
 
 		self.diff_blobs = diff_blobs
 		# if diff_blobs:
@@ -66,7 +66,7 @@ class Swarm(object):
 			center = (circle.x,circle.y)
 			#center = circle.centroid()
 			next_blob = diff_blobs.sortDistance(point=center)[0]
-			blob_center = (next_blob.x,next_blob.y)
+			blob_center = next_blob.centroid() #(next_blob.x,next_blob.y)
 			try:
 				vector = (blob_center[0]-center[0],blob_center[1]-center[1])
 				a = angle(vector,(1,0))
@@ -133,34 +133,66 @@ class Wasp(object):
 				np.linspace(last_position[1],position[1],steps))[1:]
 
 clean = SimpleCV.Image('images/clean.png')
-scale= .2
+scale= 1
 sw = Swarm(lambda x:x.convolve([[1,2],[-1,2]]))
 sw.clean = clean.scale(scale)
 
+wasplayer = SimpleCV.DrawingLayer(sw.clean.size())
+wasplayer.setDefaultAlpha(100)
+painting = False
+paused = False
 while not display.isDone():
 	before = time.time()
+	display.checkEvents()
 	if display.mouseRight:
 		normaldisplay = not(normaldisplay)
-	img = vc.getImage().crop(0,0,1920,1080).scale(scale) #.bilateralFilter() #.flipHorizontal()
+	if display.mouseLeft:
+		painting = not painting
+	key =  pg.key.get_pressed()
+	if key[ord('p')]:
+		paused = not paused
+		if paused:
+			img.addDrawingLayer(wasplayer)
 
-	wasps = list(sw.find_wasps(img))
-	sw.relation_wasps(wasps)
-	#img = img.scale(.2)
+	#print dir(display)
+	#print display.leftButtonDown, display.leftButtonDownPosition()
+	if painting and paused:
+		wasplayer.circle((display.mouseRawX, display.mouseRawY), 30, filled=True, color=SimpleCV.Color.GREEN)
+	
+	if not paused:
+		img = vc.getImage().crop(0,0,clean.width,clean.height).scale(scale) #.bilateralFilter() #.flipHorizontal()
 
-	procs = []
-	for color, circle, a in wasps:
-		center = (circle.x, circle.y)
-		if a:
-			external_point = (int(center[0]+ math.cos(a)*100*scale), int(center[1]+scale*100*math.sin(a)))
-			img.drawLine(center,external_point,SimpleCV.Color.YELLOW,2)
-		radius = circle.radius()
-		img.drawCircle(center, radius,color,min(radius,scale*10))
-	sw.advance()
+	if False:
+		wasps = list(sw.find_wasps(img))
+		sw.relation_wasps(wasps)
+		#img = img.scale(.2)
+
+		procs = []
+		for color, circle, a in wasps:
+			center = (circle.x, circle.y)
+			if a:
+				external_point = (int(center[0]+ math.cos(a)*100*scale), int(center[1]+scale*100*math.sin(a)))
+				img.drawLine(center,external_point,SimpleCV.Color.YELLOW,2)
+			radius = circle.radius()
+			img.drawCircle(center, radius,color,min(radius,scale*10))
+		sw.advance()
 	# img.show()
 	fps = 1/(time.time()-before)
 	if normaldisplay:
-		img.drawText('%d fps'%fps,0,0)
-		img.show()
+		if not paused:
+			img.drawText('%d fps'%fps,0,0)
+			img.show()
+		else:
+			mask = SimpleCV.Image(img.size())
+			mask.addDrawingLayer(wasplayer)
+			mask = mask.applyLayers().binarize().invert().dilate(30)
+			a = img.applyBinaryMask(mask)
+			circles = a.findCircle(thresh=200)
+			if circles:
+				print '*******',circles
+				a = circles[0]
+			#img = img.findCircle()[0]
+			a.show()
 	else:
 		# sw.diff_blobs.drawText('%d fps'%fps,0,0)
 		sw.diff_blobs.show(autocolor=True)

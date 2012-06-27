@@ -8,18 +8,12 @@ def getSqHistogram(contours,imgShape,sqNum):
 	lh = imgShape[0]/sqNum[0]
 	lw = imgShape[1]/sqNum[1]
 	
-	#print "lw "+str(lw)+" imgShape[0] "+str(imgShape[1])+" sqNum "+str(sqNum[1])
-	#print "lh "+str(lh)+" imgShape[1] "+str(imgShape[0])+" sqNum "+str(sqNum[0])
-
 	sqHist = np.zeros(sqNum,np.uint8) #create an appropiate histogram (2D)
 	for cont in contours:	#for every contour, we update the histogram
-		#print "new contour"
 		center,r = cv2.minEnclosingCircle(cont) #take the minimal enclosing circle for the contour
 		x,y = int(center[0]),int(center[1])
 		r = int(r)
 		
-		#print "center "+str((x,y))+" radius "+str(r)
-
 		xSq = min(x/lw,sqNum[1]-1)
 		ySq = min(y/lh,sqNum[0]-1)
 
@@ -30,10 +24,6 @@ def getSqHistogram(contours,imgShape,sqNum):
 		
 		westSq = max((x-r)/lw,0)
 		eastSq = min((x+r)/lw,sqNum[1])
-		
-
-		#print "center row at "+str(ySq)+" up to "+str(northSq)+" down to "+str(southSq)
-		#print "center col at "+str(xSq)+" left to "+str(westSq)+" right to "+str(eastSq)
 		
 		if northSq != southSq:
 			for i in range(northSq,min(southSq+1,sqNum[0])):
@@ -111,10 +101,8 @@ def getSigSquares(contList,imgShape,histDim,thresh):
 		sqHist = significantSQS(contours,imgShape,histDim)
 		np.clip(sqHist,0,1,sqHist)
 		sumSq = sumSq+sqHist
-	print sumSq
 	#threshold entries, i.e. consider entries that appear in more than 'thresh' sqHist
 	sumSq = cv2.threshold(sumSq,thresh,200,cv2.cv.CV_THRESH_BINARY)[1]
-	print sumSq
 	#remove not connected single entries, again, noise
 	removeNotConnected(sumSq)
 	#label the connected components in sumSq
@@ -124,66 +112,6 @@ def getSigSquares(contList,imgShape,histDim,thresh):
 	
 	return paintSqHistogram(sumSq,imgShape,False),sumSq
 
-
-# def getComponent(entry,sqHist,neig,diagonalNeig):
-# 	row = entry[0]
-# 	col = entry[1]
-# 	if row>=0 and row<sqHist.shape[0] and col>=0 and col<sqHist.shape[1] and sqHist[row][col]<0 and entry not in neig:
-# 		neig.add(entry)
-# 		neig.update(getComponent((row-1,col),sqHist,neig,diagonalNeig))
-# 		neig.update(getComponent((row+1,col),sqHist,neig,diagonalNeig))
-# 		neig.update(getComponent((row,col-1),sqHist,neig,diagonalNeig))
-# 		neig.update(getComponent((row,col+1),sqHist,neig,diagonalNeig))
-# 	return neig
-
-
-#obsolet!!
-#gets the component containing the center pixel or the nearest component to this pixel
-# def getCenterComponent(sqHist):
-# 	sqHist = labelConnectedComponents(sqHist)
-# 	rows,cols = sqHist.shape[:2]
-# 	centerLabel = sqHist[rows/2][cols/2]
-# 	dist = 0
-# 	if cv2.minMaxLoc(sqHist)[1]!=0:
-# 		while centerLabel == 0:
-# 			dist += 1
-# 			distRect = sqHist[max(0,rows/2-dist):min(rows-1,rows/2+dist),max(0,cols/2-dist):min(cols-1,cols/2+dist)]
-# 			centerLabel = cv2.minMaxLoc(distRect)[1]
-# 			if (distRect.shape[0]==rows and distRect.shape[1]==cols):
-# 				break
-
-# 	aux =np.zeros((sqHist.shape),np.uint8)
-# 	aux[:,:]=sqHist
-# 	sqHist = intervalThreshold(aux,(centerLabel,centerLabel))
-# 	return sqHist
-
-
-#not used yet
-# def getPoints(imgShape,sqHist):
-# 	retPoints = []
-
-# 	rowNum,colNum = sqHist.shape[:2]
-# 	lw = imgShape[1]/colNum
-# 	lh = imgShape[0]/rowNum
-
-# 	for row in range(rowNum):
-# 		for col in range(colNum):
-# 			if sqHist[row][col]!=0:
-# 				x,y = col*lw,row*lh
-# 				aux = []
-# 				for i in range(3):
-# 					for j in range(3):
-# 						aux.append((x+(lw/2)*i,y+(lh/2)*j))
-# 				retPoints.append(aux)
-# 	return retPoints
-
-
-# #tests if a point is in a contour
-# def isContained(pt,contours):
-#  	for cont in contours:
-#  		if cv2.pointPolygonTest(cont, pt, False)>=0:
-#  			return True
-#  	return False
 
 if __name__ == "__main__":
 

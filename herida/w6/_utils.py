@@ -11,6 +11,101 @@ def intervalThreshold(img,interval):
 		img = cv2.threshold(img,interval[1],255,cv2.cv.CV_THRESH_TOZERO_INV)[1]
 	return img
 
+def scaleImgValues(img):
+	maxVal = cv2.minMaxLoc(img)[1]
+
+	if maxVal>0:
+		print 'values '+str(cv2.minMaxLoc(img))
+		print 'coef '+str(256/maxVal)+' highest value '+str(maxVal*(256/maxVal))
+		aux = np.array((255/maxVal)*1.1*img,np.float)
+		img = np.array(np.clip(aux,0,255),np.uint8)
+		print 'max value as numpy array '+str(img.max())
+		print 'new values '+str(cv2.minMaxLoc(img))
+	return img
+
+def scaleImgValuesClip(img,scale):
+	
+	img = np.clip(img,0,scale)
+	maxVal = cv2.minMaxLoc(img)[1]
+
+	if maxVal>0:
+		print 'values '+str(cv2.minMaxLoc(img))
+		print 'coef '+str(255/maxVal)+' highest value '+str(maxVal*(255/maxVal))
+		aux = np.array((255/maxVal)*1.1*img,np.float)
+		img = np.array(np.clip(aux,0,255),np.uint8)
+		print 'max value as numpy array '+str(img.max())
+		print 'new values '+str(cv2.minMaxLoc(img))
+	return img
+
+
+def greyValueSegmentation(img,segNum):
+	aux = cv2.minMaxLoc(img)
+	step = int((aux[1]-aux[0])/segNum)
+	segMask = np.zeros(img.shape,np.uint8)
+	retList = []
+	imageList = []
+	for i in range(segNum):
+		if i==segNum-1:
+			print 'HIGHEST VALUE'
+			valRange = (int(aux[0]+i*step),-1)
+			auxMask = intervalThreshold(img,valRange)
+			auxMask = cv2.threshold(auxMask,1,255,cv2.cv.CV_THRESH_BINARY)[1]
+		else:	
+			valRange = (int(aux[0]+i*step),int(aux[0]+(i+1)*step))
+			auxMask = intervalThreshold(img,valRange)
+			auxMask = cv2.threshold(auxMask,1,valRange[1],cv2.cv.CV_THRESH_BINARY)[1]
+		
+
+
+		rawContours,hierarchy = cv2.findContours(auxMask.copy(),
+		cv2.cv.CV_RETR_LIST,cv2.CHAIN_APPROX_SIMPLE)
+		bigCont = []
+		if len(rawContours)>0:
+			for cnt in zip(hierarchy[0],rawContours):
+				if len(cnt[1])>1:
+					bigCont.append(cv2.approxPolyDP(cnt[1],3,True))
+		retList.append(bigCont)
+		imageList.append(auxMask)
+		segMask = cv2.max(segMask,auxMask)
+	return segMask,retList,imageList
+
+
+def getPointsInContours(contours):
+	retList = []
+	for cont in contours:
+		retList.append(cv2.minEnclosingCircle(cont)[0])
+	return retList
+
+def getPoints(contoursList):
+	retList = []
+	for contours in contoursList:
+		retList = retList + getPointsInContours(contours)
+	return retList
+
+
+
+def makeMarkers(img,segNum):
+	aux = cv2.minMaxLoc(img)
+	step = int((aux[1]-aux[0])/segNum)
+	segMask = np.zeros(img.shape,np.uint8)
+	for i in range(segNum):
+		if i==segNum-1:
+			print 'HIGHEST VALUE'
+			valRange = (int(aux[0]+i*step),-1)
+			auxMask = intervalThreshold(img,valRange)
+			auxMask = cv2.threshold(auxMask,1,i+1,cv2.cv.CV_THRESH_BINARY)[1]
+		else:	
+			valRange = (int(aux[0]+i*step),int(aux[0]+(i+1)*step))
+			auxMask = intervalThreshold(img,valRange)
+			auxMask = cv2.threshold(auxMask,1,i+1,cv2.cv.CV_THRESH_BINARY)[1]
+		
+		segMask = cv2.max(segMask,auxMask)
+	return segMask
+
+
+
+
+
 
 def labelConnectedComponents(img):
 	print '-LCC-'
@@ -23,30 +118,14 @@ def labelConnectedComponents(img):
 	compVal = 1
 	# print 'before while'
 	while (seedVal>upBond):
-		print 'in while'
-		print 'seedVal '+str(seedVal)
-		print 'compVal '+str(compVal)
-		print 'seed '+str(seed)
-		print mask
-		
-
 		cv2.floodFill(mask, auxMask, seed, [compVal,]*3, [0,]*3, [0,]*3, cv2.cv.CV_FLOODFILL_FIXED_RANGE)
-		print 'after floodfill'
-		print mask
-		print auxMask[1:mask.shape[0]+1,1:mask.shape[1]+1]
 		compVal += 1
 		retList = cv2.minMaxLoc(mask)
 		seedVal,seed = int(retList[1]),retList[3]
-		print 'before looping again--------'
-		print 'seedVal '+str(seedVal)
-		print 'compVal '+str(compVal)
-		print 'seed '+str(seed)
-
-
+		
 	aux = np.zeros(mask.shape,np.uint8)
 	aux[:,:]=mask
 	mask = cv2.threshold(aux,upBond-1,0,cv2.cv.CV_THRESH_TOZERO_INV)[1]
-	print 'out of labelConnectedComponents'
 	return mask
 
 

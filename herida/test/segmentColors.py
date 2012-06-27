@@ -92,25 +92,24 @@ def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh,l
 	print '====>takes '+str(clock()-myTime)
 
 	#spotImg = findColorMarks(backEqImg.copy(),cv2.split(bpComponentDilated)[0])
-	spotImg,medianSpotImg = findSpotsInRed(img.copy(),cv2.split(bpComponentDilated)[0],10,level)
+	spotImg = findSpotsInRed(img.copy(),cv2.split(bpComponentDilated)[0],5,level)
 
 
 	print 'build the canvas'
 	background = np.zeros((h*2,w*3,3),np.uint8)
 	background[0:h,0:w,0:3]=cv2.resize(img5,(w,h))
 	#background[0:h,w:2*w,0:3]=cv2.resize(bpComponentDilated,(w,h))
-	#background[0:h,w:2*w,0:3]=cv2.resize(bpComponent,(w,h))
+	background[0:h,w:2*w,0:3]=cv2.resize(bpComponent,(w,h))
 	#background[0:h,2*w:3*w,0:3]=cv2.resize(bpComponentDilated,(w,h))
-	background[0:h,w:2*w,0:3]=cv2.resize(medianSpotImg,(w,h))
 	background[0:h,2*w:3*w,0:3]=cv2.resize(spotImg,(w,h))
 
-	background[h:2*h,0:w,0:3]=cv2.resize(cpImg0,(w,h))
-	background[h:2*h,w:2*w,0:3]=cv2.resize(cpImg1,(w,h))
-	background[h:2*h,2*w:3*w,0:3]=cv2.resize(cpImg2,(w,h))
+	# background[h:2*h,0:w,0:3]=cv2.resize(cpImg0,(w,h))
+	# background[h:2*h,w:2*w,0:3]=cv2.resize(cpImg1,(w,h))
+	# background[h:2*h,2*w:3*w,0:3]=cv2.resize(cpImg2,(w,h))
 	print '====>takes '+str(clock()-myTime)
 	myTime = clock()
 
-	return background
+	return background,cv2.split(img)[0]
 
 
 
@@ -145,7 +144,7 @@ if __name__ == "__main__":
 	cv2.createTrackbar('ksizeAT','panel blat',2,4,dummy)
 	cv2.createTrackbar('relevanceThresh','panel',2,3,dummy)
 	cv2.createTrackbar('probThresh','panel',1,256,dummy)
-	cv2.createTrackbar('level','panel',0,9,dummy)
+	cv2.createTrackbar('level','panel',0,4,dummy)
 
 	dirList = [cv2.getTrackbarPos('minArea','panel direction'),
 		cv2.getTrackbarPos('maxArea','panel direction'),

@@ -16,6 +16,9 @@ def dummy(x):
 	changeParam = True
 	print x
 
+def dummy2(x):
+	print x
+
 def stapleContThresh(img,dirList,thresh):
 	threshChan = thresholdChannels(img,thresh)
 	return stapleCont(threshChan,dirList)
@@ -92,25 +95,24 @@ def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh,l
 	print '====>takes '+str(clock()-myTime)
 
 	#spotImg = findColorMarks(backEqImg.copy(),cv2.split(bpComponentDilated)[0])
-	spotImg,medianSpotImg = findSpotsInRed(img.copy(),cv2.split(bpComponentDilated)[0],10,level)
-
+	#spotImg = findSpotsInRed(img.copy(),cv2.split(bpComponentDilated)[0],5,level)
+	blueShape = getBlueMask(img.copy(),cv2.split(bpComponentDilated)[0])
 
 	print 'build the canvas'
 	background = np.zeros((h*2,w*3,3),np.uint8)
 	background[0:h,0:w,0:3]=cv2.resize(img5,(w,h))
 	#background[0:h,w:2*w,0:3]=cv2.resize(bpComponentDilated,(w,h))
-	#background[0:h,w:2*w,0:3]=cv2.resize(bpComponent,(w,h))
+	background[0:h,w:2*w,0:3]=cv2.resize(bpComponent,(w,h))
 	#background[0:h,2*w:3*w,0:3]=cv2.resize(bpComponentDilated,(w,h))
-	background[0:h,w:2*w,0:3]=cv2.resize(medianSpotImg,(w,h))
-	background[0:h,2*w:3*w,0:3]=cv2.resize(spotImg,(w,h))
+	#background[0:h,2*w:3*w,0:3]=cv2.resize(spotImg,(w,h))
 
-	background[h:2*h,0:w,0:3]=cv2.resize(cpImg0,(w,h))
-	background[h:2*h,w:2*w,0:3]=cv2.resize(cpImg1,(w,h))
-	background[h:2*h,2*w:3*w,0:3]=cv2.resize(cpImg2,(w,h))
+	# background[h:2*h,0:w,0:3]=cv2.resize(cpImg0,(w,h))
+	# background[h:2*h,w:2*w,0:3]=cv2.resize(cpImg1,(w,h))
+	# background[h:2*h,2*w:3*w,0:3]=cv2.resize(cpImg2,(w,h))
 	print '====>takes '+str(clock()-myTime)
 	myTime = clock()
 
-	return background
+	return background,blueShape
 
 
 
@@ -133,6 +135,7 @@ if __name__ == "__main__":
 	cv2.namedWindow('panel canny',cv2.cv.CV_WINDOW_NORMAL)
 	cv2.namedWindow('panel blat',cv2.cv.CV_WINDOW_NORMAL)
 	cv2.namedWindow('panel direction',cv2.cv.CV_WINDOW_NORMAL)
+	cv2.namedWindow('ffP',cv2.cv.CV_WINDOW_NORMAL)
 	cv2.createTrackbar('minArea','panel direction',5,500,dummy)
 	cv2.createTrackbar('maxArea','panel direction',5000,5000,dummy)
 	cv2.createTrackbar('direction','panel direction',5,5,dummy)
@@ -145,7 +148,16 @@ if __name__ == "__main__":
 	cv2.createTrackbar('ksizeAT','panel blat',2,4,dummy)
 	cv2.createTrackbar('relevanceThresh','panel',2,3,dummy)
 	cv2.createTrackbar('probThresh','panel',1,256,dummy)
-	cv2.createTrackbar('level','panel',0,9,dummy)
+	cv2.createTrackbar('level','panel',0,4,dummy)
+	cv2.createTrackbar('R','ffP',0,255,dummy2)
+	cv2.createTrackbar('G','ffP',0,255,dummy2)
+	cv2.createTrackbar('B','ffP',255,255,dummy2)
+	cv2.createTrackbar('loDiff','ffP',1,255,dummy2)
+	cv2.createTrackbar('upDiff','ffP',1,255,dummy2)
+
+
+
+
 
 	dirList = [cv2.getTrackbarPos('minArea','panel direction'),
 		cv2.getTrackbarPos('maxArea','panel direction'),
@@ -160,16 +172,49 @@ if __name__ == "__main__":
 
 	changeParam = False
 
-	bigImg = doAndPack(img,dirList,
+	bigImg,blueShapeOriginal = doAndPack(img,dirList,
 		cv2.getTrackbarPos('thresh','panel'),
 		cannyList,blatList,
 		cv2.getTrackbarPos('relevanceThresh','panel'),
 		cv2.getTrackbarPos('probThresh','panel'),
 		cv2.getTrackbarPos('level','panel')
 		)
+	
+
+
+
+
+
+
+	blueShapeCopy = blueShapeOriginal.copy()
+	cv2.namedWindow('blueShape',cv2.cv.CV_WINDOW_NORMAL)
+	blueShapeDim = (900,750)
+
+	def onmouse(event, x, y, flags, param):
+		global blueShapeCopy
+
+		
+		if flags & cv2.EVENT_FLAG_LBUTTON:
+			
+			realX,realY = transform(x,y,img.shape,blueShapeDim)
+			#cv2.circle(blueShapeCopy, (realX,realY), 5, (255,0,0), -1)
+			mask = np.zeros((blueShapeCopy.shape[0]+2,blueShapeCopy.shape[1]+2),np.uint8)
+			seedPoint = (realX,realY)
+			newVal = (cv2.getTrackbarPos('B','ffP'),cv2.getTrackbarPos('G','ffP'),cv2.getTrackbarPos('R','ffP'))
+			loDiff = [cv2.getTrackbarPos('loDiff','ffP'),]*3
+			upDiff = [cv2.getTrackbarPos('upDiff','ffP'),]*3
+			
+			cv2.floodFill(blueShapeCopy, mask, seedPoint, newVal, loDiff, upDiff)
+
+	cv2.setMouseCallback('blueShape', onmouse)
+
+
+
 
 
 	while True:
+		
+
 		if changeParam:
 			dirList = [cv2.getTrackbarPos('minArea','panel direction'),
 				cv2.getTrackbarPos('maxArea','panel direction'),
@@ -182,16 +227,24 @@ if __name__ == "__main__":
 				(cv2.getTrackbarPos('ksizeBlur X','panel blat'),cv2.getTrackbarPos('ksizeBlur Y','panel blat')),
 				cv2.getTrackbarPos('ksizeAT','panel blat')]
 
-			bigImg = doAndPack(img,dirList,
+			bigImg,blueShapeOriginal = doAndPack(img,dirList,
 				cv2.getTrackbarPos('thresh','panel'),
 				cannyList,blatList,
 				cv2.getTrackbarPos('relevanceThresh','panel'),
 				cv2.getTrackbarPos('probThresh','panel'),
 				cv2.getTrackbarPos('level','panel')
 			)
+			blueShapeCopy = blueShapeOriginal.copy()
 			changeParam = False
 
+
+
+
 		cv2.imshow('original',bigImg)
+		cv2.imshow('blueShape',cv2.resize(blueShapeCopy,blueShapeDim))
+
+
+
 
 		key = cv2.waitKey(5)
 	 	if (key==120):
@@ -202,6 +255,8 @@ if __name__ == "__main__":
 	 		imgIndex = (imgIndex-1,imgIndex)[imgIndex==0]
 	 		img = cv2.imread(imageNames[imgIndex])
 	 		changeParam = True
+	 	elif (key == 114):
+	 		blueShapeCopy = blueShapeOriginal.copy()
 	 	elif (key != -1):
 	 		break
 
