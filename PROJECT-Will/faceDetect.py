@@ -27,6 +27,10 @@ USAGE:
 
             'S' - makes video run slower
 
+            'R' - sets longer spacing between face detections (increases speed)
+
+            'W' - sets smaller spacing between face detections (decreases speed)
+
      QUIT: press either q or ESC
 '''
 
@@ -64,6 +68,7 @@ def main():
 
 	pause = False
 	speed = 20
+	frameWait = 15
 	frameCounter = 0
 	faces = None
 
@@ -93,7 +98,37 @@ def main():
 
 		key = cv2.waitKey(speed)
 
-		if frameCounter > 15:
+		if (key == 112):  # press 'P'
+			pause = not pause
+			if pause:
+				print "PAUSE"
+			else:
+				print "RESUME"
+
+		if (key == 115):  # press 'S'
+			speed += 5
+			print "speed: "+str(speed)
+
+		if (key == 102):  # press 'F'
+			if speed > 5:
+				speed -= 5
+				
+			elif speed > 1:
+				speed -= 1
+
+		if (key == 114):  # press 'R'
+			frameWait += 5
+			print "face-detection each "+str(frameWait)+" frames."
+
+		if (key == 119):  # press 'W'
+			if frameWait > 5:
+				frameWait -= 5
+				
+			elif frameWait > 1:
+				frameWait -= 1
+			print "face-detection each "+str(frameWait)+" frames."
+
+		if frameCounter > frameWait:
 			faces = faceDetect(frame)
 			frameCounter = 0
 

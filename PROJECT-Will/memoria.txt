@@ -235,6 +235,37 @@ Semana 6- Con respecto a la eficiencia he añadido que salga la velocidad de pro
 	  El siguiente paso es empezar con la deteccíon de caras, pero para ello está pendiente
 	que el pequeño script de reconocer caras de Syrus funciones correctamente.
 
+Semana 7- Carlos ya subió el faceDetect.py así que el primer paso fue hacer un programa que,
+	dado de input un video ( faceDetect.py ), llevase a cabo el algoritmo de reconocimiento
+	facial. El algoritmo, por lo general, identifica bastante bien las caras. Los problemas
+	surgen cuando la cara está parcialmente cubierta o si está muy girada (VER FOTO DE JOEY,
+	y PHOEBE). La función cascade.multiDetect (pieza clave en la detección de caras) tiene
+	unas variables de las cuales depende, como son el tamaño mínimo y máximo de las caras
+	y la cantidad de pasos intermedios por los que va a buscar. El tiempo de detección
+	aumenta considerablemente, y de hecho, el análisis del video es bastante lento si en
+	cada fotograma detectamos las caras (FOTO DE FPS). Para intentar aumentar la velocidad
+	me han sugerido varias ideas:
+		
+		-No correr en cada frame el algoritmo, sino fijar un numero de frames minimo
+
+		-Utilizar la informacion de anteriores caras detectadas y solo buscar por
+		zona
+
+		-Utilizar la info de anteriores planos parecidos para buscar por zonas
+
+		-Llevar a cabo un tracking con puntos criticos utilizando los SURF
+
+	  La semana 8, aunque invadida por exámenes, consistirá en intentar aplicar estas ideas
+	y en la integración de la detección de caras con las escenas y planos.
+
+Semana 8- Lo primero fue terminar la estructura de datos ( Character.py ). Que es un objeto
+	que recoge las distintas caras reconocidas del mismo personaje (una lista: 
+	Character.faces ). Además, cuenta con métodos internos para comparar una nueva cara del
+	personaje con las anteriores almacenadas y si considera que es significativamente
+	distinta (un método análogo al de comparar las escenas) la almacena, si no, la deshecha.
+	También tiene un método para unir dos personajes que hasta ahora creíamos distintos en
+	uno solo ( Character.merge(other_character) ).
+
 
 	  
 
