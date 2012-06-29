@@ -70,7 +70,9 @@ if __name__ == "__main__":
         for face_rect in faces:
             print face_rect #x_0,y_0,width,height
             cv2.rectangle(img,(face_rect[0],face_rect[1]),(face_rect[0]+face_rect[2],face_rect[1]+face_rect[3]),(255,0,0))            
-
+            
         cv2.imshow("faces",img)
-
+        print faces
+        if faces != () : #faces without results
+            cv2.imshow("face",img[faces[0][1]:faces[0][1]+faces[0][3],faces[0][0]:faces[0][0]+faces[0][2]])
         InputKey(camera)        
