@@ -16,10 +16,12 @@ def compareF(a,b):
 
 class Character:
 
-	def __init__(self,nm):
+	def __init__(self, nm, face = None):
 
 		self.faces = []	#List in which all the different faces of the character are stored
 		self.name = nm
+		if face:
+			self.add(face)
 
 
 	def add(self, new_data):
