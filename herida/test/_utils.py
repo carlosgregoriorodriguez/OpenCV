@@ -3,7 +3,10 @@ import numpy as np
 from time import clock
 
 
-
+def integralValue(binImg):
+	rawContours,hierarchy = cv2.findContours(binImg.copy(),
+		cv2.cv.CV_RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+	return cv2.contourArea(rawContours[0])
 
 def transform(windowX,windowY,originalShape,windowShape):
 	realX = int(windowX*originalShape[1]/windowShape[0])

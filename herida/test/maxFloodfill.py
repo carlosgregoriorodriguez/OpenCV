@@ -10,23 +10,63 @@ from _findStaples import *
 from _getContours import *
 from _squareHistogram import *
 from _fleshBackProyection import *
+from _findSpot import *
 
 def dummy(x):
 	global changeParam
 	changeParam = True
+	changeSeed = True
 	print x
 
-def stapleContThresh(img,dirList,thresh):
-	threshChan = thresholdChannels(img,thresh)
-	return stapleCont(threshChan,dirList)
+def dummy2(x):
+	global changeSeed
+	changeSeed = True
+	print x
 
-def stapleContCanny(img,dirList,cannyList):
-	threshChan = simpleCanny(img,cannyList)
-	return stapleCont(threshChan,dirList)
 
-def stapleContBlurAT(img,dirList,blatList):
-	threshChan = blurAndAT(img,blatList)
-	return stapleCont(threshChan,dirList)
+def findBreakingPoint(img,seedPoint):
+	upDiff = [0,]*3
+	loDiff = [0,]*3
+	newVal = (255,255,255)
+	median = 0
+	maxIntegral = integralValue(np.ones((img.shape[0]+2,img.shape[1]+2),np.uint8)*255)
+	print 'FINDBREAKINGPOINT'
+	print 'maxIntegral '+str(maxIntegral)
+	for i in range(1,20):
+		loDiff = [i,]*3
+		mask = np.zeros((img.shape[0]+2,img.shape[1]+2),np.uint8)
+		cv2.floodFill(img.copy(), mask, seedPoint, newVal, loDiff, upDiff,cv2.FLOODFILL_FIXED_RANGE)
+		lastMedian = median
+		median = (median*(i-1)+integralValue(mask))/i
+		print loDiff
+		print 'new iteration '+str(i)
+		print 'lastmedian '+str(lastMedian)
+		print 'median '+str(median)
+		if (median>1.5*lastMedian) and (i>1):
+			loDiff =  [i-1,]*3
+			break
+	print 'UPDIFF'
+	median = 0
+	for i in range(1,20):
+		upDiff = [i,]*3
+		mask = np.zeros((img.shape[0]+2,img.shape[1]+2),np.uint8)
+		cv2.floodFill(img.copy(), mask, seedPoint, newVal, loDiff, upDiff,cv2.FLOODFILL_FIXED_RANGE)
+		lastMedian = median
+		median = (median*(i-1)+integralValue(mask))/i
+		print upDiff
+		print 'new iteration '+str(i)
+		print 'lastmedian '+str(lastMedian)
+		print 'median '+str(median)
+		if median>1.5*lastMedian and i>1:
+			upDiff =  [i-1,]*3
+			break
+	print 'calculados loDiff y upDiff'
+	print loDiff
+	print upDiff
+	return loDiff,upDiff
+
+
+
 
 def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh):
 	print 'NEW IMAGE'
@@ -58,14 +98,13 @@ def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh):
 	print '====>takes '+str(clock()-myTime)
 	myTime = clock()
 
-	
+
 	#get the squareHistogram for all the contours, see _squareHistogram.getSigSquare
 	print 'get significant squares '+str(clock())
 	img5,sqHist5 = getSigSquares(aux,img.shape,(10,10),relevanceThresh)
 	print '====>takes '+str(clock()-myTime)
 	myTime = clock()
 
-	img5 = cv2.merge([cv2.min(img5,layer) for layer in cv2.split(backEqImg)])
 
 	#do backproyection for every non trivial entry in sqHist
 	print 'backproyection '+str(clock())
@@ -76,21 +115,16 @@ def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh):
 	print 'dilate '+str(clock())
 	kernel = np.ones((3,3),np.uint8)*255
 	bpComponentDilated = cv2.dilate(bpComponent.copy(),kernel,iterations=3,borderType=cv2.BORDER_CONSTANT,borderValue=0)
+	#bpComponentDilated = cv2.erode(bpComponent.copy(),kernel,iterations=1,borderType=cv2.BORDER_CONSTANT,borderValue=0)
 	print '====>takes '+str(clock()-myTime)
 
-	print 'build the canvas'
-	background = np.zeros((h*2,w*3,3),np.uint8)
-	background[0:h,0:w,0:3]=cv2.resize(img,(w,h))
-	background[0:h,w:2*w,0:3]=cv2.resize(backEqImg,(w,h))
-	background[0:h,2*w:3*w,0:3]=cv2.resize(img5,(w,h))
+	blueShape = getBlueMask(img.copy(),cv2.split(bpComponentDilated)[0])
 
-	background[h:2*h,0:w,0:3]=cv2.resize(bpComponentDilated,(w,h))
-	background[h:2*h,w:2*w,0:3]=cv2.resize(cv2.min(img,bpComponentDilated),(w,h))
-	#background[h:2*h,2*w:3*w,0:3]=cv2.resize(cpImg2,(w,h))
+	
 	print '====>takes '+str(clock()-myTime)
 	myTime = clock()
 
-	return background
+	return blueShape
 
 
 
@@ -109,51 +143,29 @@ if __name__ == "__main__":
 	imgIndex = 0
 	img = cv2.imread(imageNames[imgIndex])	
 	
+
 	f = open('parameters','r')
 	parametersDict = pickle.load(f)
 	f.close()
 
 	imgParams = parametersDict[imageNames[imgIndex]]
 
+
 	cv2.namedWindow('panel',cv2.cv.CV_WINDOW_NORMAL)
-	cv2.namedWindow('panel canny',cv2.cv.CV_WINDOW_NORMAL)
-	cv2.namedWindow('panel blat',cv2.cv.CV_WINDOW_NORMAL)
-	cv2.namedWindow('panel direction',cv2.cv.CV_WINDOW_NORMAL)
-	cv2.createTrackbar('minArea','panel direction',5,500,dummy)
-	cv2.createTrackbar('maxArea','panel direction',5000,5000,dummy)
-	cv2.createTrackbar('direction','panel direction',5,5,dummy)
-	cv2.createTrackbar('canny thresh1','panel canny',500,700,dummy)
-	cv2.createTrackbar('canny thresh2','panel canny',700,700,dummy)
-	cv2.createTrackbar('thresh','panel',180,255,dummy)
-	cv2.createTrackbar('iterations','panel blat',1,10,dummy)
-	cv2.createTrackbar('ksizeBlur X','panel blat',3,4,dummy)
-	cv2.createTrackbar('ksizeBlur Y','panel blat',3,4,dummy)
-	cv2.createTrackbar('ksizeAT','panel blat',2,4,dummy)
-	cv2.createTrackbar('relevanceThresh','panel',2,3,dummy)
+	cv2.namedWindow('ffP',cv2.cv.CV_WINDOW_NORMAL)
+	#cv2.createTrackbar('thresh','panel',180,255,dummy)
 	cv2.createTrackbar('probThresh','panel',1,256,dummy)
+	cv2.createTrackbar('R','ffP',0,255,dummy2)
+	cv2.createTrackbar('G','ffP',0,255,dummy2)
+	cv2.createTrackbar('B','ffP',255,255,dummy2)
+	cv2.createTrackbar('loDiff','ffP',1,255,dummy2)
+	cv2.createTrackbar('upDiff','ffP',1,255,dummy2)
 
-	# dirList = [cv2.getTrackbarPos('minArea','panel direction'),
-	# 	cv2.getTrackbarPos('maxArea','panel direction'),
-	# 	cv2.getTrackbarPos('direction','panel direction')]
-	
-	# cannyList = [cv2.getTrackbarPos('canny thresh1','panel canny'),
-	# 	cv2.getTrackbarPos('canny thresh2','panel canny')]
-
-	# blatList = [cv2.getTrackbarPos('iterations','panel blat'),
-	# 	(cv2.getTrackbarPos('ksizeBlur X','panel blat'),cv2.getTrackbarPos('ksizeBlur Y','panel blat')),
-	# 	cv2.getTrackbarPos('ksizeAT','panel blat')]
 
 
 	changeParam = False
 
-	# bigImg = doAndPack(img,dirList,
-	# 	cv2.getTrackbarPos('thresh','panel'),
-	# 	cannyList,blatList,
-	# 	cv2.getTrackbarPos('relevanceThresh','panel'),
-	# 	cv2.getTrackbarPos('probThresh','panel')
-	# )
-
-	bigImg = doAndPack(img,imgParams['direction'],
+	blueShapeOriginal = doAndPack(img,imgParams['direction'],
 		imgParams['thresh'],
 		imgParams['canny'],
 		imgParams['blat'],
@@ -161,32 +173,82 @@ if __name__ == "__main__":
 		cv2.getTrackbarPos('probThresh','panel')
 	)
 
+
+
+
+
+
+	blueShapeCopy = blueShapeOriginal.copy()
+	cv2.namedWindow('blueShape',cv2.cv.CV_WINDOW_NORMAL)
+	blueShapeDim = (900,750)
+	seedPoint = (0,0)
+	changeSeed = False
+
+	def onmouse(event, x, y, flags, param):
+		global blueShapeCopy
+		global seedPoint
+		global changeSeed
+
+		aux = (transform(x,y,img.shape,blueShapeDim))
+		patch = cv2.pyrUp(cv2.getRectSubPix(blueShapeCopy, (100,100), aux))
+		cv2.circle(patch,(100,100),2,(0,0,255),1)
+		cv2.imshow('zoom',patch)
+
+		if flags & cv2.EVENT_FLAG_LBUTTON:
+			seedPoint = aux
+			changeSeed = True
+
+	cv2.setMouseCallback('blueShape', onmouse)
+
+
+
+
+
 	while True:
+		
+
 		if changeParam:
-			
-			
 			imgParams = parametersDict[imageNames[imgIndex]]
 			
-			bigImg = doAndPack(img,imgParams['direction'],
+			blueShapeOriginal = doAndPack(img,imgParams['direction'],
 				imgParams['thresh'],
 				imgParams['canny'],
 				imgParams['blat'],
 				imgParams['relevanceThresh'],
 				cv2.getTrackbarPos('probThresh','panel')
 			)
+
+			blueShapeCopy = blueShapeOriginal.copy()
 			changeParam = False
 
-		cv2.imshow('original',bigImg)
+
+		if changeSeed:
+			loDiff,upDiff = findBreakingPoint(blueShapeCopy,seedPoint)
+			mask = np.zeros((blueShapeCopy.shape[0]+2,blueShapeCopy.shape[1]+2),np.uint8)
+			newVal = (cv2.getTrackbarPos('B','ffP'),cv2.getTrackbarPos('G','ffP'),cv2.getTrackbarPos('R','ffP'))
+			cv2.floodFill(blueShapeCopy, mask, seedPoint, newVal, loDiff, upDiff)
+			changeSeed = False
+			print 'out of changeseed'
+
+		#cv2.imshow('original',bigImg)
+		cv2.imshow('blueShape',cv2.resize(blueShapeCopy,blueShapeDim))
+
+
+
 
 		key = cv2.waitKey(5)
 	 	if (key==120):
 	 		imgIndex = (imgIndex+1,imgIndex)[imgIndex==(len(imageNames)-1)]
 	 		img = cv2.imread(imageNames[imgIndex])
 	 		changeParam = True
+	 		changeSeed = False
 	 	elif (key==122):
 	 		imgIndex = (imgIndex-1,imgIndex)[imgIndex==0]
 	 		img = cv2.imread(imageNames[imgIndex])
 	 		changeParam = True
+	 		changeSeed = False
+	 	elif (key == 114):
+	 		blueShapeCopy = blueShapeOriginal.copy()
 	 	elif (key != -1):
 	 		break
 

@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-
+from _getContours import *
 
 #Methods for finding up staples in a 3-channel image
 #All methods return a single channel, 8 bit image of the same size as the given image 
@@ -35,7 +35,17 @@ def simpleCanny(img,cannyList):
 	return cv2.Canny(cv2.cvtColor(img,cv2.cv.CV_RGB2GRAY), cannyList[0], cannyList[1])
 
 
+def stapleContThresh(img,dirList,thresh):
+	threshChan = thresholdChannels(img,thresh)
+	return stapleCont(threshChan,dirList)
 
+def stapleContCanny(img,dirList,cannyList):
+	threshChan = simpleCanny(img,cannyList)
+	return stapleCont(threshChan,dirList)
+
+def stapleContBlurAT(img,dirList,blatList):
+	threshChan = blurAndAT(img,blatList)
+	return stapleCont(threshChan,dirList)
 
 if __name__ == "__main__":
 	print 'only methods'

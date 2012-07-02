@@ -190,7 +190,7 @@ if __name__ == "__main__":
 			)
 			changeParam = False
 
-		cv2.imshow('original',bigImg)
+		cv2.imshow('original',bigImg[0])
 
 		key = cv2.waitKey(5)
 	 	if (key==120):
