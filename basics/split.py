@@ -56,7 +56,7 @@ if __name__ == "__main__":
 	while True:		
 		if (video):
 			f,img = cam.read();
-		while (img.shape[1] > 320 or img.shape[0] > 350):
+		while (img.shape[1] > 420 or img.shape[0] > 450):
 			img = cv2.pyrDown(img);
 	
 		imgB, imgG, imgR = labelImages(cv2.split(img), ['blue','green','red'], toggleLabels);

@@ -50,7 +50,7 @@ class Heatmap(object):
     def __init__(self,width,height):
         self.width = width
         self.height = height
-        self.map = np.empty((width,height),np.float)
+        self.map = np.ndarray((width,height),np.float)
         self.load_palette()
 
     @property
@@ -66,8 +66,9 @@ class Heatmap(object):
                 # d = point.dist(Point(x,y))
                 d = math.sqrt((point.x-x)**2 + (point.y-y)**2)
                 if d>radius: continue
-                self.map[x,y] += ((0.5 + math.cos(d * math.pi / radius) * 0.5) * 0.05)
-                if self.map[x,y]>self.max: self.max = self.map[x,y]
+                self.map[x,y] = self.map[x,y]+((0.5 + math.cos(d * math.pi / radius) * 0.5) * 0.05)
+                if self.map[x,y]>1: self.map[x,y]=1
+                if self.map[x,y]>self.max:self.max = self.map[x,y]
 
     def load_palette(self,path=None):
         path = path or os.path.join(os.path.dirname( os.path.realpath( __file__ ) ),'palettes/classic.png')
@@ -80,6 +81,8 @@ class Heatmap(object):
         #print self.palette
 
     def transform(self):
+        return  (255-self.map * 255).round()
+
         l = len(self.palette)-1
         mm = self.max if self.max >1 else 1
         def _formatPixel(m):
@@ -88,12 +91,21 @@ class Heatmap(object):
             # if m>1:m=1.
             return self.palette[int((m**0.8)*l)]
             #return (((((a<<8)+b)<<8)+g)<<8)+r
+
+        print 'a'
         _formatPixel = np.vectorize(_formatPixel)
         #c = np.zeros((100, 100), np.uint32)
         #c[:,:] = 0xff808000
-        data = np.array(_formatPixel(self.map), np.uint32) # np.array([_formatPixel(d) for d in self.map.flat], np.uint32).reshape(self.map.shape) # 
-        data = np.transpose(data)
-        img =  Image.fromarray(data, "RGBA")
+        print 'b'
+        #data = np.array(_formatPixel(self.map), np.uint32) # np.array([_formatPixel(d) for d in self.map.flat], np.uint32).reshape(self.map.shape) # 
+        print 'c'
+        #data = np.transpose(self.map)
+        print 'd'
+        img8 = (255-self.map * 255).round()
+        #np.transpose(img8)
+        return img8
+        img = Image.fromarray(img8)
+        #img =  Image.frombuffer('RGBA', (self.width, self.height), np.transpose(img8), 'raw', 'RGBA', 0, 1)
         # Image.fromstring(mode, (a.shape[1], a.shape[0]), a.tostring())
         return img
 
@@ -106,12 +118,13 @@ def preview(img):
 
 
 if __name__ == '__main__':
-    hm = Heatmap(100,100)
+    hm = Heatmap(1000,1000)
     #hm.load_palette('palettes/classic.png')
     hm.addPoint(Point(50,50),20)
-    img = hm.transform('')
+    hm.addPoint(Point(50,50),20)
+    img = hm.transform()
     preview(img)
-    hm.addPoint(Point(40,50),20)
-    img = hm.transform('')
+    hm.addPoint(Point(10,50),20)
+    img = hm.transform()
     preview(img)
     #f.close()
