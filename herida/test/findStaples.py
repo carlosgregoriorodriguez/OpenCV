@@ -15,17 +15,17 @@ def dummy(x):
 	changeParam = True
 	print x
 
-def stapleContThresh(img,dirList,thresh):
-	threshChan = thresholdChannels(img,thresh)
-	return stapleCont(threshChan,dirList)
+# def stapleContThresh(img,dirList,thresh):
+# 	threshChan = thresholdChannels(img,thresh)
+# 	return stapleCont(threshChan,dirList)
 
-def stapleContCanny(img,dirList,cannyList):
-	threshChan = simpleCanny(img,cannyList)
-	return stapleCont(threshChan,dirList)
+# def stapleContCanny(img,dirList,cannyList):
+# 	threshChan = simpleCanny(img,cannyList)
+# 	return stapleCont(threshChan,dirList)
 
-def stapleContBlurAT(img,dirList,blatList):
-	threshChan = blurAndAT(img,blatList)
-	return stapleCont(threshChan,dirList)
+# def stapleContBlurAT(img,dirList,blatList):
+# 	threshChan = blurAndAT(img,blatList)
+# 	return stapleCont(threshChan,dirList)
 
 def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh):
 	print 'NEW IMAGE'
@@ -193,8 +193,8 @@ def findStaplesMethod(imgIndex,imageNames,parameterDict):
 
 		elif (key == 115):#s to save the selected parameters
 			parameter = {'direction':dirList , 'blat':blatList ,
-	 		 'canny':cannyList , 'thresh':cv2.getTrackbarPos('thresh','panel') ,
-	 		 'relevanceThresh':cv2.getTrackbarPos('relevanceThresh','panel')}
+	 		 'canny':cannyList , 'thresh':cv2.getTrackbarPos('thresh','panel findStaples') ,
+	 		 'relevanceThresh':cv2.getTrackbarPos('relevanceThresh','panel findStaples')}
 	 		parameterDict[imageNames[imgIndex]]=parameter
 			f = open('parameters','w')
 	 		pickle.dump(parameterDict,f)

@@ -4,9 +4,7 @@ from time import clock
 
 
 def integralValue(binImg):
-	rawContours,hierarchy = cv2.findContours(binImg.copy(),
-		cv2.cv.CV_RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
-	return cv2.contourArea(rawContours[0])
+	return cv2.countNonZero(binImg)
 
 def transform(windowX,windowY,originalShape,windowShape):
 	realX = int(windowX*originalShape[1]/windowShape[0])
@@ -22,6 +20,10 @@ def intervalThreshold(img,interval):
 		img = cv2.threshold(img,interval[1],255,cv2.cv.CV_THRESH_TOZERO_INV)[1]
 	return img
 
+def intervalThresholdBinary(img,interval):
+	img = intervalThreshold(img,interval)
+	img = np.clip(img,0,1)*255
+	return img
 
 def greyValueSegmentation(img,segNum):
 	aux = cv2.minMaxLoc(img)

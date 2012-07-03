@@ -6,7 +6,8 @@ from time import clock
 import pickle
 
 from findStaples import findStaplesMethod
-
+from backProyection import backproyectionMethod
+from markContours import markContoursMethod
 def eventCols(x):
 	global cols,selectedImg
 	cols = x
@@ -83,7 +84,6 @@ if __name__ == "__main__":
 	
 	cv2.namedWindow('panel',cv2.cv.CV_WINDOW_NORMAL)
 	cv2.namedWindow('display',cv2.cv.CV_WINDOW_AUTOSIZE)
-	cv2.namedWindow('method window',cv2.cv.CV_WINDOW_NORMAL)
 	cv2.createTrackbar('width','panel',900,2000,eventW)
 	cv2.createTrackbar('height','panel',750,2000,eventH)
 	cv2.createTrackbar('cols','panel',5,10,eventCols)
@@ -107,11 +107,14 @@ if __name__ == "__main__":
 
 		if flags & (event == cv2.EVENT_FLAG_LBUTTON):
 			print 'click at '+str((x,y))
-			if method!='notSelected':
+			if method == 'findStaples':
 				#cv2.destroyWindow('display')
-				imgIndex,imageNames,parameterDict
 				findStaplesMethod(selectedImg,imageNames,parameterDict)
-				display = buildDisplay(selectedImg)
+			elif method == 'backproyection':
+				backproyectionMethod(selectedImg,imageNames,parameterDict)
+			elif method == 'markContours':
+				markContoursMethod(selectedImg,imageNames,parameterDict)
+			display = buildDisplay(selectedImg)	
 
 	cv2.setMouseCallback('display', onmouse)
 
@@ -131,6 +134,11 @@ if __name__ == "__main__":
 	 	elif (key == 49):
 	 		method = 'findStaples'
 	 		print 'select an image to apply findStaples'
+	 	elif (key == 50):
+	 		method = 'backproyection'
+	 		print 'select an image to apply backproyection'
+	 	elif (key == 51):
+	 		method = 'markContours'
 	 	elif (key != -1):
 	 		break
 

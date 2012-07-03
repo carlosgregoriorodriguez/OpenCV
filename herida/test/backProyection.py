@@ -16,17 +16,17 @@ def dummy(x):
 	changeParam = True
 	print x
 
-def stapleContThresh(img,dirList,thresh):
-	threshChan = thresholdChannels(img,thresh)
-	return stapleCont(threshChan,dirList)
+# def stapleContThresh(img,dirList,thresh):
+# 	threshChan = thresholdChannels(img,thresh)
+# 	return stapleCont(threshChan,dirList)
 
-def stapleContCanny(img,dirList,cannyList):
-	threshChan = simpleCanny(img,cannyList)
-	return stapleCont(threshChan,dirList)
+# def stapleContCanny(img,dirList,cannyList):
+# 	threshChan = simpleCanny(img,cannyList)
+# 	return stapleCont(threshChan,dirList)
 
-def stapleContBlurAT(img,dirList,blatList):
-	threshChan = blurAndAT(img,blatList)
-	return stapleCont(threshChan,dirList)
+# def stapleContBlurAT(img,dirList,blatList):
+# 	threshChan = blurAndAT(img,blatList)
+# 	return stapleCont(threshChan,dirList)
 
 def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh):
 	print 'NEW IMAGE'
@@ -92,6 +92,131 @@ def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh):
 
 	return background
 
+
+
+def backproyectionMethod(imgIndex,imageNames,parameterDict):
+	global changeParam
+
+	img = cv2.imread(imageNames[imgIndex])
+	imgParameters = parameterDict[imageNames[imgIndex]]
+	
+	dirList = imgParameters['direction']
+	blatList = imgParameters['blat'] 
+	cannyList =imgParameters['canny']
+	thresh = imgParameters['thresh']
+	relevanceThresh = imgParameters['relevanceThresh']
+	
+	cv2.namedWindow('backproyection',cv2.cv.CV_WINDOW_NORMAL)
+	cv2.createTrackbar('probabilityThresh','backproyection',5,100,dummy)
+	probThresh = cv2.getTrackbarPos('probabilityThresh','backproyection')
+
+	background = doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh)
+	
+	changeParam = False
+	changeImg = False
+	edit = False
+	while True:
+		if changeImg:	
+			imgParameters = parameterDict[imageNames[imgIndex]]
+
+			dirList = imgParameters['direction']
+			blatList = imgParameters['blat'] 
+			cannyList =imgParameters['canny']
+			thresh = imgParameters['thresh']
+			relevanceThresh = imgParameters['relevanceThresh']
+			probThresh = cv2.getTrackbarPos('probabilityThresh','backproyection')
+			background = doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh)
+
+			changeImg=False
+
+		if changeParam and edit:
+			dirList = [cv2.getTrackbarPos('minArea','panel direction'),
+				cv2.getTrackbarPos('maxArea','panel direction'),
+				cv2.getTrackbarPos('direction','panel direction')]
+		
+			cannyList = [cv2.getTrackbarPos('canny thresh1','panel canny'),
+				cv2.getTrackbarPos('canny thresh2','panel canny')]
+
+			blatList = [cv2.getTrackbarPos('iterations','panel blat'),
+				(cv2.getTrackbarPos('ksizeBlur X','panel blat'),cv2.getTrackbarPos('ksizeBlur Y','panel blat')),
+				cv2.getTrackbarPos('ksizeAT','panel blat')]
+
+			thresh = cv2.getTrackbarPos('thresh','panel findStaples')
+			relevanceThresh = cv2.getTrackbarPos('relevanceThresh','panel findStaples')
+			probThresh = cv2.getTrackbarPos('probabilityThresh','backproyection')
+
+			background = doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh)
+			
+			changeParam = False
+		elif changeParam:
+			probThresh = cv2.getTrackbarPos('probabilityThresh','backproyection')
+			background = doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh)
+			changeParam = False
+
+		cv2.imshow('backproyected image',background)
+		
+		key = cv2.waitKey(5)
+		if (key==120):#x to move to the right
+	 		imgIndex = (imgIndex+1,imgIndex)[imgIndex==(len(imageNames)-1)]
+	 		img = cv2.imread(imageNames[imgIndex])
+	 		changeImg = True
+	 	elif (key==122):#z to move to the left
+	 		imgIndex = (imgIndex-1,imgIndex)[imgIndex==0]
+	 		img = cv2.imread(imageNames[imgIndex])
+	 		changeImg = True
+		elif (key==101):#e to enter or exit edit mode
+			if not edit:
+				cv2.namedWindow('panel findStaples',cv2.cv.CV_WINDOW_NORMAL)
+				cv2.namedWindow('panel canny',cv2.cv.CV_WINDOW_NORMAL)
+				cv2.namedWindow('panel blat',cv2.cv.CV_WINDOW_NORMAL)
+				cv2.namedWindow('panel direction',cv2.cv.CV_WINDOW_NORMAL)
+				cv2.createTrackbar('minArea','panel direction',5,500,dummy)
+				cv2.createTrackbar('maxArea','panel direction',5000,5000,dummy)
+				cv2.createTrackbar('direction','panel direction',5,5,dummy)
+				cv2.createTrackbar('canny thresh1','panel canny',500,700,dummy)
+				cv2.createTrackbar('canny thresh2','panel canny',700,700,dummy)
+				cv2.createTrackbar('iterations','panel blat',1,10,dummy)
+				cv2.createTrackbar('ksizeBlur X','panel blat',3,4,dummy)
+				cv2.createTrackbar('ksizeBlur Y','panel blat',3,4,dummy)
+				cv2.createTrackbar('ksizeAT','panel blat',2,4,dummy)
+				cv2.createTrackbar('relevanceThresh','panel findStaples',2,3,dummy)
+				cv2.createTrackbar('thresh','panel findStaples',180,255,dummy)
+				edit = True
+			else:
+				cv2.destroyWindow('panel findStaples')
+				cv2.destroyWindow('panel canny')
+				cv2.destroyWindow('panel blat')
+				cv2.destroyWindow('panel direction')
+
+				imgParameters = parameterDict[imageNames[imgIndex]]
+				dirList = imgParameters['direction']
+				blatList = imgParameters['blat'] 
+				cannyList =imgParameters['canny']
+				thresh = imgParameters['thresh']
+				relevanceThresh = imgParameters['relevanceThresh']
+				
+				edit = False
+				changeParam = False
+				changeImg = True
+
+		elif (key == 115):#s to save the selected parameters
+			parameter = {'direction':dirList , 'blat':blatList ,
+	 		 'canny':cannyList , 'thresh':thresh,
+	 		 'relevanceThresh':relevanceThresh,
+	 		 'probThresh':probThresh}
+	 		parameterDict[imageNames[imgIndex]]=parameter
+			f = open('parameters','w')
+	 		pickle.dump(parameterDict,f)
+	 		f.close()
+
+
+		elif (key==113):#q to exit
+	 		cv2.destroyWindow('panel findStaples')
+			cv2.destroyWindow('panel canny')
+			cv2.destroyWindow('panel blat')
+			cv2.destroyWindow('panel direction')
+	 		cv2.destroyWindow('backproyection')
+	 		break
 
 
 

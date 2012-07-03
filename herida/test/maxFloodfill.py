@@ -29,36 +29,46 @@ def findBreakingPoint(img,seedPoint):
 	loDiff = [0,]*3
 	newVal = (255,255,255)
 	median = 0
+	lastMedian = 0
 	maxIntegral = integralValue(np.ones((img.shape[0]+2,img.shape[1]+2),np.uint8)*255)
 	print 'FINDBREAKINGPOINT'
 	print 'maxIntegral '+str(maxIntegral)
-	for i in range(1,20):
+	for i in range(1,50,2):
 		loDiff = [i,]*3
 		mask = np.zeros((img.shape[0]+2,img.shape[1]+2),np.uint8)
 		cv2.floodFill(img.copy(), mask, seedPoint, newVal, loDiff, upDiff,cv2.FLOODFILL_FIXED_RANGE)
-		lastMedian = median
-		median = (median*(i-1)+integralValue(mask))/i
+		if not lastMedian:
+			lastMedian = median
+			median = (median*(i-1)+integralValue(mask))/i
+		else:
+			median = (median*(i-1)+integralValue(mask))/i
+			lastMedian = median
 		print loDiff
 		print 'new iteration '+str(i)
 		print 'lastmedian '+str(lastMedian)
 		print 'median '+str(median)
-		if (median>1.5*lastMedian) and (i>1):
-			loDiff =  [i-1,]*3
+		if (median>2*lastMedian) and (i>1):
+			loDiff =  [i-2,]*3
 			break
 	print 'UPDIFF'
 	median = 0
-	for i in range(1,20):
+	lastMedian = 0
+	for i in range(1,50,2):
 		upDiff = [i,]*3
 		mask = np.zeros((img.shape[0]+2,img.shape[1]+2),np.uint8)
 		cv2.floodFill(img.copy(), mask, seedPoint, newVal, loDiff, upDiff,cv2.FLOODFILL_FIXED_RANGE)
-		lastMedian = median
-		median = (median*(i-1)+integralValue(mask))/i
+		if i!=1:
+			lastMedian = median
+			median = (median*(i-1)+integralValue(mask))/i
+		if i ==1:
+			median = (median*(i-1)+integralValue(mask))/i
+			lastMedian = median
 		print upDiff
 		print 'new iteration '+str(i)
 		print 'lastmedian '+str(lastMedian)
 		print 'median '+str(median)
-		if median>1.5*lastMedian and i>1:
-			upDiff =  [i-1,]*3
+		if median>1.2*lastMedian and i>1:
+			upDiff =  [i-2,]*3
 			break
 	print 'calculados loDiff y upDiff'
 	print loDiff
@@ -194,7 +204,7 @@ if __name__ == "__main__":
 		cv2.circle(patch,(100,100),2,(0,0,255),1)
 		cv2.imshow('zoom',patch)
 
-		if flags & cv2.EVENT_FLAG_LBUTTON:
+		if flags & (event == cv2.EVENT_FLAG_LBUTTON):
 			seedPoint = aux
 			changeSeed = True
 
