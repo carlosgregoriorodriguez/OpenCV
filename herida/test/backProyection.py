@@ -215,7 +215,7 @@ def backproyectionMethod(imgIndex,imageNames,parameterDict):
 			cv2.destroyWindow('panel canny')
 			cv2.destroyWindow('panel blat')
 			cv2.destroyWindow('panel direction')
-	 		cv2.destroyWindow('backproyection')
+	 		cv2.destroyWindow('backproyected image')
 	 		break
 
 

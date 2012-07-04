@@ -94,6 +94,7 @@ def markContoursMethod(imgIndex,imageNames,parameterDict):
 	cannyList =imgParameters['canny']
 	thresh = imgParameters['thresh']
 	relevanceThresh = imgParameters['relevanceThresh']
+	
 	probThresh = imgParameters['probThresh']
 
 	cv2.namedWindow('floodfillImg',cv2.cv.CV_WINDOW_NORMAL)
@@ -254,6 +255,7 @@ def markContoursMethod(imgIndex,imageNames,parameterDict):
 			cv2.destroyWindow('panel direction')
 	 		cv2.destroyWindow('floodfillImg')
 	 		cv2.destroyWindow('floodfillParams')
+	 		cv2.destroyWindow('zoom')
 	 		break
 
 
