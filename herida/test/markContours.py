@@ -15,7 +15,6 @@ from _findSpot import *
 def dummy(x):
 	global changeParam
 	changeParam = True
-	changeSeed = True
 	print x
 
 def dummy2(x):
@@ -23,12 +22,26 @@ def dummy2(x):
 	changeSeed = True
 	print x
 
-def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh):
+
+def labelImage(img,label,dimension):
+	print 'entra en labelImage'
+	print label
+	print dimension
+	print img.shape
+	img = cv2.resize(img,dimension)
+	print img.shape
+	aux = np.zeros((dimension[1]+20,dimension[0],3),np.uint8)
+	print aux.shape
+	aux[20:aux.shape[0],:,:]=img
+	cv2.putText(aux, label, (0,15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0),2) 
+	return aux
+
+def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh,selectedChannel):
 	print 'NEW IMAGE'
 	print 'current time: '+str(clock())
 
-	h, w = 375,450
 	
+
 	#get different formats of the original image	
 	aux = []
 	for channel in cv2.split(img):
@@ -73,13 +86,17 @@ def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh):
 	#bpComponentDilated = cv2.erode(bpComponent.copy(),kernel,iterations=1,borderType=cv2.BORDER_CONSTANT,borderValue=0)
 	print '====>takes '+str(clock()-myTime)
 
-	blueShape = getBlueMask(img.copy(),cv2.split(bpComponentDilated)[0])
+	if selectedChannel < 3:
+		print 'entra en uno'
+		retImg = cv2.merge([cv2.split(cv2.min(img,bpComponentDilated))[selectedChannel],]*3)
+	else:
+		print 'entra en otro'
+		retImg = cv2.merge([cv2.split(cv2.min(backEqImg,bpComponentDilated))[selectedChannel-3],]*3)
 
-	
 	print '====>takes '+str(clock()-myTime)
 	myTime = clock()
 
-	return blueShape
+	return retImg
 
 
 def markContoursMethod(imgIndex,imageNames,parameterDict):
@@ -94,25 +111,31 @@ def markContoursMethod(imgIndex,imageNames,parameterDict):
 	cannyList =imgParameters['canny']
 	thresh = imgParameters['thresh']
 	relevanceThresh = imgParameters['relevanceThresh']
-	
 	probThresh = imgParameters['probThresh']
 
-	cv2.namedWindow('floodfillImg',cv2.cv.CV_WINDOW_NORMAL)
+	cv2.namedWindow('floodfillImg',cv2.cv.CV_WINDOW_AUTOSIZE)
 	cv2.namedWindow('floodfillParams',cv2.cv.CV_WINDOW_NORMAL)
+	cv2.createTrackbar('channel','floodfillParams',0,5,dummy)
 	cv2.createTrackbar('R','floodfillParams',0,255,dummy2)
 	cv2.createTrackbar('G','floodfillParams',0,255,dummy2)
 	cv2.createTrackbar('B','floodfillParams',255,255,dummy2)
 	cv2.createTrackbar('loDiff','floodfillParams',1,100,dummy2)
 	cv2.createTrackbar('upDiff','floodfillParams',1,100,dummy2)
 
-	floodfillImg = doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh)
+	channel = cv2.getTrackbarPos('channel','floodfillParams')
+	channelName = {0:'blue shape',1:'green shape',2:'red channel',3:'hue channel',4:'saturation channel',5:'value channel'}
+
+	cv2.namedWindow('panel window size',cv2.cv.CV_WINDOW_NORMAL)
+	cv2.createTrackbar('width','panel window size',800,1500,dummy)
+	cv2.createTrackbar('height','panel window size',900,1500,dummy)
+	floodfillImgDim = (cv2.getTrackbarPos('width','panel window size'),cv2.getTrackbarPos('height','panel window size'))
+	floodfillImg = doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh,channel)
 	
 	changeParam = False
 	changeImg = False
 	edit = False
 
 	floodfillImgCopy = floodfillImg.copy()
-	floodfillImgDim = (900,750)
 	seedPoint = (0,0)
 	changeSeed = False
 
@@ -120,17 +143,18 @@ def markContoursMethod(imgIndex,imageNames,parameterDict):
 		global seedPoint
 		global changeSeed
 
-		aux = (transform(x,y,floodfillImg.shape,floodfillImgDim))
-		print 'aux point is '+str(aux)
-		patch = cv2.pyrUp(cv2.getRectSubPix(floodfillImgCopy, (100,100), aux))
-		cv2.circle(patch,(100,100),2,(0,0,255),1)
-		cv2.imshow('zoom',patch)
+		if y>=20:
+			aux = (transform(x,y-20,floodfillImg.shape,floodfillImgDim))
+			print 'aux point is '+str(aux)
+			patch = cv2.pyrUp(cv2.getRectSubPix(floodfillImgCopy, (100,100), aux))
+			cv2.circle(patch,(100,100),2,(0,0,255),1)
+			cv2.imshow('zoom',patch)
 
-		if flags and (event == cv2.EVENT_FLAG_LBUTTON):
-			print 'click!!!'
-			seedPoint = aux
-			print 'seedPoint is '+str(seedPoint)
-			changeSeed = True
+			if flags and (event == cv2.EVENT_FLAG_LBUTTON):
+				print 'click!!!'
+				seedPoint = aux
+				print 'seedPoint is '+str(seedPoint)
+				changeSeed = True
 			
 
 	cv2.setMouseCallback('floodfillImg', onmouse)
@@ -145,9 +169,12 @@ def markContoursMethod(imgIndex,imageNames,parameterDict):
 			cannyList =imgParameters['canny']
 			thresh = imgParameters['thresh']
 			relevanceThresh = imgParameters['relevanceThresh']
-			probThresh = cv2.getTrackbarPos('probabilityThresh','backproyection')
-			floodfillImg = doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh)
+			probThresh = imgParameters['probThresh']
+			channel = cv2.getTrackbarPos('channel','floodfillParams')
+			floodfillImgDim = (cv2.getTrackbarPos('width','panel window size'),cv2.getTrackbarPos('height','panel window size'))
 
+			floodfillImg = doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh,channel)
+	
 			changeImg=False
 
 		if changeParam and edit:
@@ -166,13 +193,21 @@ def markContoursMethod(imgIndex,imageNames,parameterDict):
 			relevanceThresh = cv2.getTrackbarPos('relevanceThresh','panel findStaples')
 			probThresh = cv2.getTrackbarPos('probabilityThresh','backproyection')
 
-			floodfillImg = doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh)
+			channel = cv2.getTrackbarPos('channel','floodfillParams')
+			floodfillImgDim = (cv2.getTrackbarPos('width','panel window size'),cv2.getTrackbarPos('height','panel window size'))
+
+			floodfillImg = doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh,channel)
 			floodfillImgCopy = floodfillImg.copy()
 			changeParam = False
-		
+		elif changeParam:
+			channel = cv2.getTrackbarPos('channel','floodfillParams')
+			floodfillImgDim = (cv2.getTrackbarPos('width','panel window size'),cv2.getTrackbarPos('height','panel window size'))
+
+			floodfillImg = doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh,channel)
+			floodfillImgCopy = floodfillImg.copy()
+			changeParam = False
+
 		if changeSeed:
-			print 'in changeseed!!!'
-			print 'seedPoint is '+str(seedPoint)
 			floodfillImgCopy = floodfillImg.copy()
 			mask = np.zeros((floodfillImgCopy.shape[0]+2,floodfillImgCopy.shape[1]+2),np.uint8)
 			newVal = (cv2.getTrackbarPos('B','floodfillParams'),cv2.getTrackbarPos('G','floodfillParams'),cv2.getTrackbarPos('R','floodfillParams'))
@@ -182,8 +217,8 @@ def markContoursMethod(imgIndex,imageNames,parameterDict):
 			changeSeed = False
 
 		
-		cv2.imshow('floodfillImg',cv2.resize(floodfillImgCopy,floodfillImgDim))
-		
+		cv2.imshow('floodfillImg',labelImage(floodfillImgCopy,channelName[channel],floodfillImgDim))
+
 		key = cv2.waitKey(5)
 		if (key==120):#x to move to the right
 	 		imgIndex = (imgIndex+1,imgIndex)[imgIndex==(len(imageNames)-1)]
@@ -203,6 +238,7 @@ def markContoursMethod(imgIndex,imageNames,parameterDict):
 				cv2.namedWindow('panel canny',cv2.cv.CV_WINDOW_NORMAL)
 				cv2.namedWindow('panel blat',cv2.cv.CV_WINDOW_NORMAL)
 				cv2.namedWindow('panel direction',cv2.cv.CV_WINDOW_NORMAL)
+				cv2.namedWindow('backproyection',cv2.cv.CV_WINDOW_NORMAL)
 				cv2.createTrackbar('minArea','panel direction',5,500,dummy)
 				cv2.createTrackbar('maxArea','panel direction',5000,5000,dummy)
 				cv2.createTrackbar('direction','panel direction',5,5,dummy)
@@ -214,12 +250,14 @@ def markContoursMethod(imgIndex,imageNames,parameterDict):
 				cv2.createTrackbar('ksizeAT','panel blat',2,4,dummy)
 				cv2.createTrackbar('relevanceThresh','panel findStaples',2,3,dummy)
 				cv2.createTrackbar('thresh','panel findStaples',180,255,dummy)
+				cv2.createTrackbar('probabilityThresh','backproyection',0,10,dummy)
 				edit = True
 			else:
 				cv2.destroyWindow('panel findStaples')
 				cv2.destroyWindow('panel canny')
 				cv2.destroyWindow('panel blat')
 				cv2.destroyWindow('panel direction')
+				cv2.destroyWindow('backproyection')
 
 				imgParameters = parameterDict[imageNames[imgIndex]]
 				dirList = imgParameters['direction']
@@ -227,7 +265,7 @@ def markContoursMethod(imgIndex,imageNames,parameterDict):
 				cannyList =imgParameters['canny']
 				thresh = imgParameters['thresh']
 				relevanceThresh = imgParameters['relevanceThresh']
-				
+				probThresh = imgParameters['probThresh']
 				edit = False
 				changeParam = False
 				changeImg = True
@@ -256,6 +294,8 @@ def markContoursMethod(imgIndex,imageNames,parameterDict):
 	 		cv2.destroyWindow('floodfillImg')
 	 		cv2.destroyWindow('floodfillParams')
 	 		cv2.destroyWindow('zoom')
+	 		cv2.destroyWindow('panel window size')
+	 		cv2.destroyWindow('backproyection')
 	 		break
 
 
@@ -273,124 +313,13 @@ if __name__ == "__main__":
 	imgIndex = 0
 	img = cv2.imread(imageNames[imgIndex])	
 	
-
 	f = open('parameters','r')
-	parametersDict = pickle.load(f)
+	parameterDict = pickle.load(f)
 	f.close()
 
-	imgParams = parametersDict[imageNames[imgIndex]]
+	markContoursMethod(imgIndex,imageNames,parameterDict)
 
-
-	cv2.namedWindow('panel',cv2.cv.CV_WINDOW_NORMAL)
-	cv2.namedWindow('ffP',cv2.cv.CV_WINDOW_NORMAL)
-	cv2.createTrackbar('probThresh','panel',1,256,dummy)
-	cv2.createTrackbar('R','ffP',0,255,dummy2)
-	cv2.createTrackbar('G','ffP',0,255,dummy2)
-	cv2.createTrackbar('B','ffP',255,255,dummy2)
-	cv2.createTrackbar('loDiff','ffP',1,100,dummy2)
-	cv2.createTrackbar('upDiff','ffP',1,100,dummy2)
-
-
-
-	changeParam = False
-
-	blueShapeOriginal = doAndPack(img,imgParams['direction'],
-		imgParams['thresh'],
-		imgParams['canny'],
-		imgParams['blat'],
-		imgParams['relevanceThresh'],
-		cv2.getTrackbarPos('probThresh','panel')
-	)
-
-
-
-
-
-
-	blueShapeCopy = blueShapeOriginal.copy()
-	thresholdImage = blueShapeOriginal.copy()
-	cv2.namedWindow('blueShape',cv2.cv.CV_WINDOW_NORMAL)
-	blueShapeDim = (900,750)
-	seedPoint = (0,0)
-	changeSeed = False
-
-	def onmouse(event, x, y, flags, param):
-		global blueShapeOriginal
-		global blueShapeCopy
-		global seedPoint
-		global changeSeed
-
-		#blueShapeOriginal=blueShapeCopy.copy()
-		aux = (transform(x,y,img.shape,blueShapeDim))
-		patch = cv2.pyrUp(cv2.getRectSubPix(blueShapeCopy, (100,100), aux))
-		cv2.circle(patch,(100,100),2,(0,0,255),1)
-		cv2.imshow('zoom',patch)
-
-		if flags & cv2.EVENT_FLAG_LBUTTON:
-			seedPoint = aux
-			changeSeed = True
-			
-
-	cv2.setMouseCallback('blueShape', onmouse)
-
-
-	while True:
-		
-
-		if changeParam:
-			imgParams = parametersDict[imageNames[imgIndex]]
-			
-			blueShapeOriginal = doAndPack(img,imgParams['direction'],
-				imgParams['thresh'],
-				imgParams['canny'],
-				imgParams['blat'],
-				imgParams['relevanceThresh'],
-				cv2.getTrackbarPos('probThresh','panel')
-			)
-
-			blueShapeCopy = blueShapeOriginal.copy()
-			changeParam = False
-
-		if changeSeed:
-			blueShapeCopy = blueShapeOriginal.copy()
-			mask = np.zeros((blueShapeCopy.shape[0]+2,blueShapeCopy.shape[1]+2),np.uint8)
-			newVal = (cv2.getTrackbarPos('B','ffP'),cv2.getTrackbarPos('G','ffP'),cv2.getTrackbarPos('R','ffP'))
-			loDiff = [cv2.getTrackbarPos('loDiff','ffP'),]*3
-			upDiff = [cv2.getTrackbarPos('upDiff','ffP'),]*3
-			cv2.floodFill(blueShapeCopy, mask, seedPoint, newVal, loDiff, upDiff)
-			changeSeed = False
-			print 'out of changeseed'
-			thresholdImage = blueShapeOriginal.copy()
-			print 'VALOR: '+str(thresholdImage[seedPoint[1],seedPoint[0]][0])
-			interval = (thresholdImage[seedPoint[1],seedPoint[0]][0]-loDiff[0],thresholdImage[seedPoint[1],seedPoint[0]][0]+upDiff[0])
-			thresholdImage = intervalThresholdBinary(thresholdImage,interval)
-
-		#cv2.imshow('original',bigImg)
-		cv2.imshow('blueShape',cv2.resize(blueShapeCopy,blueShapeDim))
-		cv2.imshow('threshold',cv2.resize(thresholdImage,blueShapeDim))
-
-
-
-		key = cv2.waitKey(5)
-	 	if (key==120):
-	 		imgIndex = (imgIndex+1,imgIndex)[imgIndex==(len(imageNames)-1)]
-	 		img = cv2.imread(imageNames[imgIndex])
-	 		changeParam = True
-	 		changeSeed = True
-	 		seedPoint = (0,0)
-	 	elif (key==122):
-	 		imgIndex = (imgIndex-1,imgIndex)[imgIndex==0]
-	 		img = cv2.imread(imageNames[imgIndex])
-	 		changeParam = True
-	 		changeSeed = True
-	 		seedPoint = (0,0)
-	 	elif (key == 114):
-	 		blueShapeCopy = blueShapeOriginal.copy()
-	 	elif (key == 115):
-	 		blueShapeOriginal = blueShapeCopy.copy()
-	 	elif (key != -1):
-	 		break
-
+	
 
 
 

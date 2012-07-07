@@ -16,23 +16,14 @@ def dummy(x):
 	changeParam = True
 	print x
 
-# def stapleContThresh(img,dirList,thresh):
-# 	threshChan = thresholdChannels(img,thresh)
-# 	return stapleCont(threshChan,dirList)
 
-# def stapleContCanny(img,dirList,cannyList):
-# 	threshChan = simpleCanny(img,cannyList)
-# 	return stapleCont(threshChan,dirList)
-
-# def stapleContBlurAT(img,dirList,blatList):
-# 	threshChan = blurAndAT(img,blatList)
-# 	return stapleCont(threshChan,dirList)
-
-def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh):
+def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh,winDim):
 	print 'NEW IMAGE'
 	print 'current time: '+str(clock())
 
-	h, w = 375,450
+	h = winDim[1]
+	w = winDim[0]
+	border = 20
 	
 	#get different formats of the original image	
 	aux = []
@@ -79,14 +70,21 @@ def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh):
 	print '====>takes '+str(clock()-myTime)
 
 	print 'build the canvas'
-	background = np.zeros((h*2,w*3,3),np.uint8)
-	background[0:h,0:w,0:3]=cv2.resize(img,(w,h))
-	background[0:h,w:2*w,0:3]=cv2.resize(backEqImg,(w,h))
-	background[0:h,2*w:3*w,0:3]=cv2.resize(img5,(w,h))
+	background = np.zeros((h*2+2*border,w*3,3),np.uint8)
+	background[border:h+border,0:w,0:3]=cv2.resize(img,(w,h))
+	background[border:h+border,w:2*w,0:3]=cv2.resize(backEqImg,(w,h))
+	background[border:h+border,2*w:3*w,0:3]=cv2.resize(img5,(w,h))
 
-	background[h:2*h,0:w,0:3]=cv2.resize(bpComponentDilated,(w,h))
-	background[h:2*h,w:2*w,0:3]=cv2.resize(cv2.min(img,bpComponentDilated),(w,h))
-	#background[h:2*h,2*w:3*w,0:3]=cv2.resize(cpImg2,(w,h))
+	background[h+2*border:2*h+2*border,0:w,0:3]=cv2.resize(bpComponentDilated,(w,h))
+	background[h+2*border:2*h+2*border,w:2*w,0:3]=cv2.resize(cv2.min(img,bpComponentDilated),(w,h))
+	
+	cv2.putText(background, 'original RGB', (0,border-5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255),2)
+	cv2.putText(background, 'HSV + histograma ecualizado', (w,border-5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255),2)
+	cv2.putText(background, 'localizacion de las grapas', (2*w,border-5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255),2)
+	
+	cv2.putText(background, 'mascara de back projection', (0,h+2*border-5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255),2)
+	cv2.putText(background, 'zona de piel recortada', (w,h+2*border-5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255),2)
+	
 	print '====>takes '+str(clock()-myTime)
 	myTime = clock()
 
@@ -107,10 +105,16 @@ def backproyectionMethod(imgIndex,imageNames,parameterDict):
 	relevanceThresh = imgParameters['relevanceThresh']
 	
 	cv2.namedWindow('backproyection',cv2.cv.CV_WINDOW_NORMAL)
-	cv2.createTrackbar('probabilityThresh','backproyection',5,100,dummy)
+	cv2.createTrackbar('probabilityThresh','backproyection',5,20,dummy)
 	probThresh = cv2.getTrackbarPos('probabilityThresh','backproyection')
 
-	background = doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh)
+	cv2.namedWindow('panel window size',cv2.cv.CV_WINDOW_NORMAL)
+	cv2.createTrackbar('width','panel window size',450,1500,dummy)
+	cv2.createTrackbar('height','panel window size',375,1500,dummy)
+	winDim = (cv2.getTrackbarPos('width','panel window size'),cv2.getTrackbarPos('height','panel window size'))
+
+
+	background = doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh,winDim)
 	
 	changeParam = False
 	changeImg = False
@@ -125,7 +129,9 @@ def backproyectionMethod(imgIndex,imageNames,parameterDict):
 			thresh = imgParameters['thresh']
 			relevanceThresh = imgParameters['relevanceThresh']
 			probThresh = cv2.getTrackbarPos('probabilityThresh','backproyection')
-			background = doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh)
+			winDim = (cv2.getTrackbarPos('width','panel window size'),cv2.getTrackbarPos('height','panel window size'))
+
+			background = doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh,winDim)
 
 			changeImg=False
 
@@ -137,20 +143,22 @@ def backproyectionMethod(imgIndex,imageNames,parameterDict):
 			cannyList = [cv2.getTrackbarPos('canny thresh1','panel canny'),
 				cv2.getTrackbarPos('canny thresh2','panel canny')]
 
-			blatList = [cv2.getTrackbarPos('iterations','panel blat'),
-				(cv2.getTrackbarPos('ksizeBlur X','panel blat'),cv2.getTrackbarPos('ksizeBlur Y','panel blat')),
-				cv2.getTrackbarPos('ksizeAT','panel blat')]
+			blatList = [cv2.getTrackbarPos('iterations','panel blur+adapt threshold'),
+				(cv2.getTrackbarPos('ksizeBlur X','panel blur+adapt threshold'),cv2.getTrackbarPos('ksizeBlur Y','panel blur+adapt threshold')),
+				cv2.getTrackbarPos('ksizeAT','panel blur+adapt threshold')]
 
 			thresh = cv2.getTrackbarPos('thresh','panel findStaples')
 			relevanceThresh = cv2.getTrackbarPos('relevanceThresh','panel findStaples')
 			probThresh = cv2.getTrackbarPos('probabilityThresh','backproyection')
 
-			background = doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh)
+			winDim = (cv2.getTrackbarPos('width','panel window size'),cv2.getTrackbarPos('height','panel window size'))
+			background = doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh,winDim)
 			
 			changeParam = False
 		elif changeParam:
 			probThresh = cv2.getTrackbarPos('probabilityThresh','backproyection')
-			background = doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh)
+			winDim = (cv2.getTrackbarPos('width','panel window size'),cv2.getTrackbarPos('height','panel window size'))
+			background = doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,probThresh,winDim)
 			changeParam = False
 
 		cv2.imshow('backproyected image',background)
@@ -168,24 +176,24 @@ def backproyectionMethod(imgIndex,imageNames,parameterDict):
 			if not edit:
 				cv2.namedWindow('panel findStaples',cv2.cv.CV_WINDOW_NORMAL)
 				cv2.namedWindow('panel canny',cv2.cv.CV_WINDOW_NORMAL)
-				cv2.namedWindow('panel blat',cv2.cv.CV_WINDOW_NORMAL)
+				cv2.namedWindow('panel blur+adapt threshold',cv2.cv.CV_WINDOW_NORMAL)
 				cv2.namedWindow('panel direction',cv2.cv.CV_WINDOW_NORMAL)
 				cv2.createTrackbar('minArea','panel direction',5,500,dummy)
 				cv2.createTrackbar('maxArea','panel direction',5000,5000,dummy)
 				cv2.createTrackbar('direction','panel direction',5,5,dummy)
 				cv2.createTrackbar('canny thresh1','panel canny',500,700,dummy)
 				cv2.createTrackbar('canny thresh2','panel canny',700,700,dummy)
-				cv2.createTrackbar('iterations','panel blat',1,10,dummy)
-				cv2.createTrackbar('ksizeBlur X','panel blat',3,4,dummy)
-				cv2.createTrackbar('ksizeBlur Y','panel blat',3,4,dummy)
-				cv2.createTrackbar('ksizeAT','panel blat',2,4,dummy)
+				cv2.createTrackbar('iterations','panel blur+adapt threshold',1,10,dummy)
+				cv2.createTrackbar('ksizeBlur X','panel blur+adapt threshold',3,4,dummy)
+				cv2.createTrackbar('ksizeBlur Y','panel blur+adapt threshold',3,4,dummy)
+				cv2.createTrackbar('ksizeAT','panel blur+adapt threshold',2,4,dummy)
 				cv2.createTrackbar('relevanceThresh','panel findStaples',2,3,dummy)
 				cv2.createTrackbar('thresh','panel findStaples',180,255,dummy)
 				edit = True
 			else:
 				cv2.destroyWindow('panel findStaples')
 				cv2.destroyWindow('panel canny')
-				cv2.destroyWindow('panel blat')
+				cv2.destroyWindow('panel blur+adapt threshold')
 				cv2.destroyWindow('panel direction')
 
 				imgParameters = parameterDict[imageNames[imgIndex]]
@@ -213,9 +221,12 @@ def backproyectionMethod(imgIndex,imageNames,parameterDict):
 		elif (key==113):#q to exit
 	 		cv2.destroyWindow('panel findStaples')
 			cv2.destroyWindow('panel canny')
-			cv2.destroyWindow('panel blat')
+			cv2.destroyWindow('panel blur+adapt threshold')
 			cv2.destroyWindow('panel direction')
+			cv2.destroyWindow('backproyection')
 	 		cv2.destroyWindow('backproyected image')
+	 		cv2.destroyWindow('panel window size')
+
 	 		break
 
 
@@ -235,92 +246,9 @@ if __name__ == "__main__":
 	img = cv2.imread(imageNames[imgIndex])	
 	
 	f = open('parameters','r')
-	parametersDict = pickle.load(f)
+	parameterDict = pickle.load(f)
 	f.close()
 
-	imgParams = parametersDict[imageNames[imgIndex]]
-
-	cv2.namedWindow('panel',cv2.cv.CV_WINDOW_NORMAL)
-	cv2.namedWindow('panel canny',cv2.cv.CV_WINDOW_NORMAL)
-	cv2.namedWindow('panel blat',cv2.cv.CV_WINDOW_NORMAL)
-	cv2.namedWindow('panel direction',cv2.cv.CV_WINDOW_NORMAL)
-	cv2.createTrackbar('minArea','panel direction',5,500,dummy)
-	cv2.createTrackbar('maxArea','panel direction',5000,5000,dummy)
-	cv2.createTrackbar('direction','panel direction',5,5,dummy)
-	cv2.createTrackbar('canny thresh1','panel canny',500,700,dummy)
-	cv2.createTrackbar('canny thresh2','panel canny',700,700,dummy)
-	cv2.createTrackbar('thresh','panel',180,255,dummy)
-	cv2.createTrackbar('iterations','panel blat',1,10,dummy)
-	cv2.createTrackbar('ksizeBlur X','panel blat',3,4,dummy)
-	cv2.createTrackbar('ksizeBlur Y','panel blat',3,4,dummy)
-	cv2.createTrackbar('ksizeAT','panel blat',2,4,dummy)
-	cv2.createTrackbar('relevanceThresh','panel',2,3,dummy)
-	cv2.createTrackbar('probThresh','panel',1,256,dummy)
-
-	# dirList = [cv2.getTrackbarPos('minArea','panel direction'),
-	# 	cv2.getTrackbarPos('maxArea','panel direction'),
-	# 	cv2.getTrackbarPos('direction','panel direction')]
-	
-	# cannyList = [cv2.getTrackbarPos('canny thresh1','panel canny'),
-	# 	cv2.getTrackbarPos('canny thresh2','panel canny')]
-
-	# blatList = [cv2.getTrackbarPos('iterations','panel blat'),
-	# 	(cv2.getTrackbarPos('ksizeBlur X','panel blat'),cv2.getTrackbarPos('ksizeBlur Y','panel blat')),
-	# 	cv2.getTrackbarPos('ksizeAT','panel blat')]
-
-
-	changeParam = False
-
-	# bigImg = doAndPack(img,dirList,
-	# 	cv2.getTrackbarPos('thresh','panel'),
-	# 	cannyList,blatList,
-	# 	cv2.getTrackbarPos('relevanceThresh','panel'),
-	# 	cv2.getTrackbarPos('probThresh','panel')
-	# )
-
-	bigImg = doAndPack(img,imgParams['direction'],
-		imgParams['thresh'],
-		imgParams['canny'],
-		imgParams['blat'],
-		imgParams['relevanceThresh'],
-		cv2.getTrackbarPos('probThresh','panel')
-	)
-
-	while True:
-		if changeParam:
-			
-			
-			imgParams = parametersDict[imageNames[imgIndex]]
-			
-			bigImg = doAndPack(img,imgParams['direction'],
-				imgParams['thresh'],
-				imgParams['canny'],
-				imgParams['blat'],
-				imgParams['relevanceThresh'],
-				cv2.getTrackbarPos('probThresh','panel')
-			)
-			changeParam = False
-
-		cv2.imshow('original',bigImg)
-
-		key = cv2.waitKey(5)
-	 	if (key==120):
-	 		imgIndex = (imgIndex+1,imgIndex)[imgIndex==(len(imageNames)-1)]
-	 		img = cv2.imread(imageNames[imgIndex])
-	 		changeParam = True
-	 	elif (key==122):
-	 		imgIndex = (imgIndex-1,imgIndex)[imgIndex==0]
-	 		img = cv2.imread(imageNames[imgIndex])
-	 		changeParam = True
-	 	elif (key != -1):
-	 		break
-
-
-
-
-
-
-
-
+	backproyectionMethod(imgIndex,imageNames,parameterDict)
 
 	

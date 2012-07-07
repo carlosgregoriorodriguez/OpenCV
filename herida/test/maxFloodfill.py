@@ -23,8 +23,34 @@ def dummy2(x):
 	changeSeed = True
 	print x
 
+def fillHistogram(img,seedPoint,histogram):
+	print 'histogram len '+str(len(histogram))
+	aux = cv2.split(img)[0]
+	newVal = (255,255,255)
+	for i in range(1,11,2):
+		for j in range(1,11,2):
+			loDiff = [i,]*3
+			upDiff = [j,]*3
+			mask = np.zeros((img.shape[0]+2,img.shape[1]+2),np.uint8)
+			#mask[1:img.shape[0]+1,1:img.shape[1]+1]=aux
+			cv2.floodFill(img.copy(), mask, seedPoint, newVal, loDiff, upDiff,cv2.FLOODFILL_FIXED_RANGE)
+			print 'integralValue '+str(integralValue(mask))
+			print histogram[integralValue(mask)]
+			histogram[integralValue(mask)]+=1
+			print histogram[integralValue(mask)]
+	# for i in histogram:
+	# 	if histogram[i]>0:
+	# 		print str(histogram[i])+' elements with area '+str(i)
+	#print histogram
+	return histogram
+
+
 
 def findBreakingPoint(img,seedPoint):
+	#idea, ir de 1 en 1 en los dos parametros a la vez, ahi la pendiente o la relacion de areas
+	#si es significativa => encontramos breakingpoint (a,b) y luego ya solo tenemos que buscar
+	#el maximo en el area de todos los pares (c,d) con c<=a o d<=b sabiendo que el area tiene que
+	#estar mas cerca del area de (a,b) que del area de (a+1,b+1)
 	upDiff = [0,]*3
 	loDiff = [0,]*3
 	newVal = (255,255,255)
@@ -37,6 +63,7 @@ def findBreakingPoint(img,seedPoint):
 		loDiff = [i,]*3
 		mask = np.zeros((img.shape[0]+2,img.shape[1]+2),np.uint8)
 		cv2.floodFill(img.copy(), mask, seedPoint, newVal, loDiff, upDiff,cv2.FLOODFILL_FIXED_RANGE)
+		print 'integralValue '+str(integralValue(mask))
 		if not lastMedian:
 			lastMedian = median
 			median = (median*(i-1)+integralValue(mask))/i
@@ -57,6 +84,7 @@ def findBreakingPoint(img,seedPoint):
 		upDiff = [i,]*3
 		mask = np.zeros((img.shape[0]+2,img.shape[1]+2),np.uint8)
 		cv2.floodFill(img.copy(), mask, seedPoint, newVal, loDiff, upDiff,cv2.FLOODFILL_FIXED_RANGE)
+		print 'integralValue '+str(integralValue(mask))
 		if i!=1:
 			lastMedian = median
 			median = (median*(i-1)+integralValue(mask))/i
@@ -154,6 +182,8 @@ if __name__ == "__main__":
 	img = cv2.imread(imageNames[imgIndex])	
 	
 
+	histogram = [0,]*((img.shape[0]+2)*(img.shape[1]+2))
+
 	f = open('parameters','r')
 	parametersDict = pickle.load(f)
 	f.close()
@@ -171,7 +201,7 @@ if __name__ == "__main__":
 	cv2.createTrackbar('loDiff','ffP',1,255,dummy2)
 	cv2.createTrackbar('upDiff','ffP',1,255,dummy2)
 
-
+	
 
 	changeParam = False
 
@@ -182,7 +212,6 @@ if __name__ == "__main__":
 		imgParams['relevanceThresh'],
 		cv2.getTrackbarPos('probThresh','panel')
 	)
-
 
 
 
@@ -233,11 +262,17 @@ if __name__ == "__main__":
 
 
 		if changeSeed:
+			histogram = [0,]*((img.shape[0]+2)*(img.shape[1]+2))
 			loDiff,upDiff = findBreakingPoint(blueShapeCopy,seedPoint)
 			mask = np.zeros((blueShapeCopy.shape[0]+2,blueShapeCopy.shape[1]+2),np.uint8)
 			newVal = (cv2.getTrackbarPos('B','ffP'),cv2.getTrackbarPos('G','ffP'),cv2.getTrackbarPos('R','ffP'))
 			cv2.floodFill(blueShapeCopy, mask, seedPoint, newVal, loDiff, upDiff)
 			changeSeed = False
+			#fillHistogram(blueShapeCopy.copy(),seedPoint,histogram)
+			#print histogram
+			#for i in histogram:
+			#	if histogram[i]>0:
+			#		print str(histogram[i])+' elements with area '+str(i)
 			print 'out of changeseed'
 
 		#cv2.imshow('original',bigImg)
@@ -252,11 +287,13 @@ if __name__ == "__main__":
 	 		img = cv2.imread(imageNames[imgIndex])
 	 		changeParam = True
 	 		changeSeed = False
+	 		histogram = [0,]*(img.shape[0]*img.shape[1])
 	 	elif (key==122):
 	 		imgIndex = (imgIndex-1,imgIndex)[imgIndex==0]
 	 		img = cv2.imread(imageNames[imgIndex])
 	 		changeParam = True
 	 		changeSeed = False
+	 		histogram = [0,]*((img.shape[0]+2)*(img.shape[1]+2))
 	 	elif (key == 114):
 	 		blueShapeCopy = blueShapeOriginal.copy()
 	 	elif (key != -1):

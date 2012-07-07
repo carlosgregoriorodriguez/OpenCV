@@ -15,24 +15,15 @@ def dummy(x):
 	changeParam = True
 	print x
 
-# def stapleContThresh(img,dirList,thresh):
-# 	threshChan = thresholdChannels(img,thresh)
-# 	return stapleCont(threshChan,dirList)
 
-# def stapleContCanny(img,dirList,cannyList):
-# 	threshChan = simpleCanny(img,cannyList)
-# 	return stapleCont(threshChan,dirList)
-
-# def stapleContBlurAT(img,dirList,blatList):
-# 	threshChan = blurAndAT(img,blatList)
-# 	return stapleCont(threshChan,dirList)
-
-def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh):
+def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,winDim):
 	print 'NEW IMAGE'
 	print 'current time: '+str(clock())
 
-	h, w = 375,450
-	
+	h = winDim[1]
+	w = winDim[0]
+	border = 20
+
 	#get different formats of the original image	
 	aux = []
 	for channel in cv2.split(img):
@@ -78,14 +69,22 @@ def doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh):
 	img5 = cv2.merge([cv2.min(img5,layer) for layer in cv2.split(backEqImg)])
 
 	print 'build the canvas'
-	background = np.zeros((h*2,w*3,3),np.uint8)
-	background[0:h,0:w,0:3]=cv2.resize(img,(w,h))
-	background[0:h,w:2*w,0:3]=cv2.resize(backEqImg,(w,h))
-	background[0:h,2*w:3*w,0:3]=cv2.resize(img5,(w,h))
+	background = np.zeros((h*2+2*border,w*3,3),np.uint8)
+	background[border:h+border,0:w,0:3]=cv2.resize(img,(w,h))
+	background[border:h+border,w:2*w,0:3]=cv2.resize(backEqImg,(w,h))
+	background[border:h+border,2*w:3*w,0:3]=cv2.resize(img5,(w,h))
 
-	background[h:2*h,0:w,0:3]=cv2.resize(cpImg0,(w,h))
-	background[h:2*h,w:2*w,0:3]=cv2.resize(cpImg1,(w,h))
-	background[h:2*h,2*w:3*w,0:3]=cv2.resize(cpImg2,(w,h))
+	background[h+2*border:2*h+2*border,0:w,0:3]=cv2.resize(cpImg0,(w,h))
+	background[h+2*border:2*h+2*border,w:2*w,0:3]=cv2.resize(cpImg1,(w,h))
+	background[h+2*border:2*h+2*border,2*w:3*w,0:3]=cv2.resize(cpImg2,(w,h))
+	
+	cv2.putText(background, 'original RGB', (0,border-5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255),2)
+	cv2.putText(background, 'HSV + histograma ecualizado', (w,border-5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255),2)
+	cv2.putText(background, 'localizacion de las grapas', (2*w,border-5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255),2)
+	
+	cv2.putText(background, 'canny', (0,h+2*border-5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255),2)
+	cv2.putText(background, 'threshold', (w,h+2*border-5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255),2)
+	cv2.putText(background, 'blur + adaptative threshold', (2*w,h+2*border-5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255),2)
 	print '====>takes '+str(clock()-myTime)
 	myTime = clock()
 
@@ -105,8 +104,14 @@ def findStaplesMethod(imgIndex,imageNames,parameterDict):
 	thresh = imgParameters['thresh']
 	relevanceThresh = imgParameters['relevanceThresh']
 	
-	
-	background = doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh)
+
+	cv2.namedWindow('panel window size',cv2.cv.CV_WINDOW_NORMAL)
+	cv2.createTrackbar('width','panel window size',450,1500,dummy)
+	cv2.createTrackbar('height','panel window size',375,1500,dummy)
+
+	winDim = (cv2.getTrackbarPos('width','panel window size'),cv2.getTrackbarPos('height','panel window size'))
+
+	background = doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,winDim)
 	
 	changeParam = False
 	changeImg = False
@@ -121,7 +126,7 @@ def findStaplesMethod(imgIndex,imageNames,parameterDict):
 			thresh = imgParameters['thresh']
 			relevanceThresh = imgParameters['relevanceThresh']
 
-			background = doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh)
+			background = doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,winDim)
 
 			changeImg=False
 
@@ -140,7 +145,10 @@ def findStaplesMethod(imgIndex,imageNames,parameterDict):
 			thresh = cv2.getTrackbarPos('thresh','panel findStaples')
 			relevanceThresh = cv2.getTrackbarPos('relevanceThresh','panel findStaples')
 			
-			background = doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh)
+			winDim = (cv2.getTrackbarPos('width','panel window size'),cv2.getTrackbarPos('height','panel window size'))
+
+
+			background = doAndPack(img,dirList,thresh,cannyList,blatList,relevanceThresh,winDim)
 			
 			changeParam = False
 
@@ -206,6 +214,7 @@ def findStaplesMethod(imgIndex,imageNames,parameterDict):
 			cv2.destroyWindow('panel blat')
 			cv2.destroyWindow('panel direction')
 	 		cv2.destroyWindow('findStaples')
+	 		cv2.destroyWindow('panel window size')
 	 		break
 
 
