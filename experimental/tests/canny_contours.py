@@ -3,8 +3,8 @@ from __init__ import *
 #Solo funciona con GrayScaleProcessor
 visualizer = CamSource(
 	Window(processors=[
-		CannyProcessor(),
-		ContoursProcessor()
+		BlurProcessor(),
+		CannyProcessor()
 	]),
 	DebugWindow()
 )
