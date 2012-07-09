@@ -19,6 +19,7 @@ vc = SimpleCV.VirtualCamera("video.mts", "video")
 next_key = ord('a')
 prev_key = ord('z')
 reset_key = ord('r')
+c_key = ord('c')
 plus_scale = ord('m')
 less_scale = ord('n')
 level = 0
@@ -29,17 +30,17 @@ last_level = None
 wasps_masks = []
 blobs = []
 normalmode = True
+keys= [ord(str(d)) for d in range(5)]
 while not display.isDone():
 	before = time.time()
 	display.checkEvents()
 	key =  SimpleCV.pg.key.get_pressed()
 	init_level = False
-	print key[49]
-	if key[next_key]:
-		level += 1
-	elif key[prev_key]:
-		level -= 1
-	
+	# if key[next_key]:
+	# 	level += 1
+	# elif key[prev_key]:
+	# 	level -= 1
+
 	if key[plus_scale]:
 		scale += .05
 		resize = True
@@ -49,21 +50,28 @@ while not display.isDone():
 	else: resize = False
 
 	reset = bool(key[reset_key])
+	if key[keys[0]]: level=0
+	elif key[keys[1]]: level=1
+	elif key[keys[2]]: level=2
+	elif key[keys[3]]: level=3
 	init_level = last_level!=level or reset
-
+	last_level = level
 	if resize:
 		img = init_img.scale(scale)
 
 	if init_level:
 		print "Going to level %d"%level
-	last_level = level
+	
 	if level == 0:
 		init_img = vc.getImage()
 		img = init_img.scale(scale)
+		img.drawText('Pulse 1 para resaltar las avispas',20,20,fontsize=32,color=SimpleCV.Color.RED)
 		img.show()
 	elif level == 1:
 		if init_level:
 			img.clearLayers()
+			img.drawText('Haga click para empezar a dibujar',20,20,fontsize=32,color=SimpleCV.Color.RED)
+			img.drawText('Pulse 2 para poner etiquetas',20,50,fontsize=32,color=SimpleCV.Color.RED)
 			wasps_masks = []
 			# last_img = img.copy()
 		if display.mouseLeft:
@@ -80,10 +88,12 @@ while not display.isDone():
 		if painting and wasps_masks:
 			index = len(wasps_masks)-1
 			wasps_masks[-1].circle((display.mouseRawX, display.mouseRawY), int(34*scale), filled=True, color=color)
+		
 		img.show()
 	elif level==2:
 		if init_level:
 			img.clearLayers()
+			img.show()
 			base_img = img.copy()
 			blobs = []
 			mask = SimpleCV.Image(img.size())
@@ -131,6 +141,7 @@ while not display.isDone():
 				#level = 1
 		elif blobs:
 			img.clearLayers()
+			img.drawText('Haga click en las etiquetas con el raton derecho',20,20,fontsize=32,color=SimpleCV.Color.RED)
 			overlap = blobs.sortDistance((display.mouseRawX, display.mouseRawY))
 			#.overlaps((display.mouseRawX, display.mouseRawY,10))
 			for blob in blobs: blob.drawOutline()
@@ -151,6 +162,7 @@ while not display.isDone():
 			try:
 				blob._selected_circle.draw(color=SimpleCV.Color.RED,width=3)
 				blob.drawMinRect(color=SimpleCV.Color.YELLOW, width=2)
+				img.drawText('Pulse 3 para hacer el seguimiento',20,50,fontsize=32,color=SimpleCV.Color.RED)
 			except:
 				pass
 			img.show()
@@ -163,20 +175,24 @@ while not display.isDone():
 		if init_level:
 			smoothed = base_img.smooth(aperature=(5,5))
 			blob_i = 0
+			new_blobs = []
 			for blob in blobs: 
 				try:
 					blob._selected_circle.image = smoothed
 					blob._last_position = (int(blob._selected_circle.x/scale), int(blob._selected_circle.y/scale))
 					size = init_img.size()
 					blob._heatmap = Heatmap(size[0],size[1])
+					blob.total_distance = 0
+					new_blobs.append(blob)
 				except:
 					pass
+			blobs = new_blobs
 		else:
 			rc_img = None
 			img = vc.getImage()
 			smoothed_img = img.scale(next_scale).smooth(aperature=(3,3))
 
-			if display.mouseRight:
+			if key[c_key]:
 				normalmode = not normalmode
 			
 			positions = []
@@ -208,7 +224,10 @@ while not display.isDone():
 					if point:
 						p = int(point[0])
 						# print "POINT", p
-						blobs[i]._last_position = new_positions[p]
+						b,c = new_positions[p],blobs[i]._last_position
+						distance = math.sqrt((b[0]-c[0])**2+(b[1]-c[1])**2)
+						blobs[i]._last_position = b
+						blobs[i].total_distance += distance
 			except:
 				pass
 			if normalmode:
@@ -216,14 +235,19 @@ while not display.isDone():
 				for blob in blobs:
 					pos = blob._last_position
 					sm_img.drawCircle((int(pos[0]*scale),int(pos[1]*scale)),18*scale,color=SimpleCV.Color.RED,thickness=2)
-				rc_img.show()
+				sm_img.drawText('Pulse c para ver el mapa de calor',20,20,fontsize=32,color=SimpleCV.Color.RED)
+				sm_img.show()
 				#sm_img
 			else:
 				if display.mouseRight:
 					blob_i += 1
-				image_heat = blobs[blob_i%len(blobs)]._heatmap.transform()
+				bl = blobs[blob_i%len(blobs)]
+				image_heat = bl._heatmap.transform()
 				# surface = SimpleCV.pg.image.fromstring(image_heat.tostring(), image_heat.size, image_heat.mode)
 				heat = SimpleCV.Image(image_heat).scale(scale)
+				heat.drawText('Pulse c para volver a hacer el seguimiento global',20,20,fontsize=32,color=SimpleCV.Color.RED)
+				heat.drawText('Pulse el raton derecho para cambiar de avispa',20,50,fontsize=32,color=SimpleCV.Color.RED)
+				heat.drawText('Distancia recorrida: %d'%bl.total_distance,20,80,fontsize=32,color=SimpleCV.Color.BLUE)
 				heat.show()
 
 					#new_blobs.show()

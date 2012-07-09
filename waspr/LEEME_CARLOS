@@ -1,0 +1,12 @@
+Hola Carlos,
+
+El programa final es final2.py
+He añadido las instrucciones en la ventana para que sea mas facil utilizarlo.
+Las teclas M y N son para subir y bajar tamaño de la imagen respectivamente (cuanto mas pequeño, más rápido):
+	M: mas tamaño
+	N: menos tamaño
+
+La el ángulo de dirección al final no la he añadido en este programa, pero si quieres enseñarlo 
+puedes ejecutar detector.py y hacer click con el ratón derecho.
+
+Un saludo!

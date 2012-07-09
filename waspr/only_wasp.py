@@ -40,7 +40,7 @@ def get_direction(img,center,radius):
 			if last_white: black_white.append((False,last_white,white))
 			black +=1
 			white = 0
-			#processed.dl().circle((x,y),2,SimpleCV.Color.GREEN)
+			processed.dl().circle((x,y),2,SimpleCV.Color.GREEN)
 		else:
 			if last_black: black_white.append((True,last_black,black))
 			black = 0
@@ -62,7 +62,7 @@ def get_direction(img,center,radius):
 			#processed.drawLine(center,external_point,SimpleCV.Color.YELLOW,2)
 	return None
 
-scale = .2
+scale = 1
 r = 50*scale
 
 processed = img.scale(scale).convolve([[1,2],[-1,1]]).dilate(1).stretch(70,200)

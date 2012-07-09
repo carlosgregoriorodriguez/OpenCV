@@ -76,7 +76,7 @@ class HeatMap(object):
         
         # Glut Init
         glutInit(sys.argv)
-        glutInitDisplayMode(GLUT_RGBA | GLUT_ACCUM)
+        glutInitDisplayMode(GLUT_RGBA)
         glutInitWindowSize(cls.width, cls.height)
         glutCreateWindow("HeatMap")
         
@@ -85,18 +85,14 @@ class HeatMap(object):
         glEnable(GL_TEXTURE_1D)
         glEnable(GL_TEXTURE_2D)
         glEnable(GL_VERTEX_PROGRAM_POINT_SIZE)
-    	glEnableClientState(GL_VERTEX_ARRAY)
+        glEnableClientState(GL_VERTEX_ARRAY)
 
-        glClearAccum(0.0, 0.0, 0.0, 0.0)
-        glClear(GL_ACCUM_BUFFER_BIT)
-        
         cls._compile_programs()
         cls._load_palette()
         cls._create_framebuffer()
         
     @classmethod
-    def _load_palette(cls, path=None):
-        path = path or os.path.join(os.path.dirname( os.path.realpath( __file__ ) ),'palettes/classic.png')
+    def _load_palette(cls, path='palettes/classic.png'):
         image = PIL.Image.open(path)
         
         cls.palette = glGenTextures(1)
@@ -196,7 +192,6 @@ class HeatMap(object):
     
     def add_points(self, points, radius):
         # Render all points with the specified radius
-        glAccum(GL_RETURN, 1.0)
         glUseProgram(self.faded_points_program)
         glUniform1f(glGetUniformLocation(self.faded_points_program, 'r'), radius)
         
@@ -213,10 +208,10 @@ class HeatMap(object):
         vertices = [point for (x, y) in points
                           for point in ((x + radius, y + radius), (x - radius, y + radius),
                                         (x - radius, y - radius), (x + radius, y - radius))]
-    	glVertexPointerd(vertices)
-    	glDrawArrays(GL_QUADS, 0, len(vertices))
-    	glFlush()
-    	glAccum(GL_ACCUM, 1.0)
+        glVertexPointerd(vertices)
+        glDrawArrays(GL_QUADS, 0, len(vertices))
+        glFlush()
+        
         glDisableVertexAttribArray(point_attrib_location)
         
     def transform_color(self, alpha):
@@ -232,31 +227,32 @@ class HeatMap(object):
 
         vertices = [(self.left, self.bottom), (self.right, self.bottom),
                     (self.right, self.top), (self.left, self.top)]                    
-    	glVertexPointerd(vertices)
-    	glDrawArrays(GL_QUADS, 0, len(vertices))
+        glVertexPointerd(vertices)
+        glDrawArrays(GL_QUADS, 0, len(vertices))
         glFlush()
    
-    def get_image(self,type="png"):
-        im = self.get_PIL()
+    def get_image(self):
+        # Get the data from the heatmap framebuffer and convert it into a PIL image
+        glActiveTextureARB(GL_TEXTURE1)
+        data = glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE)
+        im = PIL.Image.frombuffer('RGBA', (self.width, self.height), data, 'raw', 'RGBA', 0, (1 if self.invert_y else -1))
+        
+        if self.invert_x:
+            im.transpose(PIL.Image.FLIP_LEFT_RIGHT)
+
+        # Write the image to a buffer as a PNG
         f = cStringIO.StringIO()
-        im.save(f, type)
+        im.save(f, 'png')
         f.seek(0)
         
         return f
 
-    def get_PIL(self):
-        # Get the data from the heatmap framebuffer and convert it into a PIL image
-        glActiveTextureARB(GL_TEXTURE1)
-        data = glGetTexImage(GL_TEXTURE_2D, 0, GL_RGB, GL_UNSIGNED_BYTE)
-        im = PIL.Image.frombuffer('RGB', (self.width, self.height), data, 'raw', 'RGB', 0, (1 if self.invert_y else -1))
-        if self.invert_x:
-            im.transpose(PIL.Image.FLIP_LEFT_RIGHT)
-        return im
+        
 
 def test1():
     import random, time
 
-    hm = HeatMap(0, 256, 0, 256)
+    hm = HeatMap(0, 600, 0, 338)
     
     points = [(random.gauss(.5, .08) * 200, random.gauss(.5, .075) * 100) for i in xrange(100)]
     points += [(random.gauss(.7, .075) * 250, random.gauss(.2, .042) * 150) for i in xrange(100)]
@@ -277,7 +273,7 @@ def test1():
         total = time.time() - start
         print total, total / ntimes 
     
-    #runtimes(500)
+    #runtimes(500) 
     run()
     
     #glutDisplayFunc(lambda:(hm.render_to_screen(), glutSwapBuffers()))
@@ -320,6 +316,3 @@ def test3():
 
 if __name__ == "__main__":
     test1()
-
-
-    
