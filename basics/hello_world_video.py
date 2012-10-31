@@ -3,10 +3,16 @@
 # opencv 2.3.1
 
 import cv2
+import sys
           
 if __name__ == "__main__":
 
-    camera =  cv2.VideoCapture(0)
+    if (len(sys.argv) > 1):
+        target = sys.argv[1]
+    else:
+        target = 0
+    
+    camera =  cv2.VideoCapture(target)
     while True:
         f,img = camera.read()
         cv2.imshow("webcam",img)
