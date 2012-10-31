@@ -23,7 +23,7 @@ if __name__ == "__main__":
     #create a trackbar that controlls the thresh value
 	cv2.createTrackbar("channel","split",0,2,dummy)
 
-	d = {0:"Red Channel",1:"Green Channel",2:"Blue Channel"}
+	d = {0:"Blue Channel",1:"Green Channel",2:"Red Channel"}
 
 	while True:
 
