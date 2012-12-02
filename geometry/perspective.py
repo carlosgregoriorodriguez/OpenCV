@@ -7,20 +7,20 @@ import sys
 import numpy
 
 def onMouse (event, x, y, flags, param):
-    global contp, p
+    global contp, p, imgc
     if flags & cv2.EVENT_FLAG_LBUTTON:
         if contp < 3:
             print (x,y)
             p[contp] = (x,y)
             contp = contp+1
-            cv2.circle(img, (x,y), 3, (0,0,255), -1)
-            cv2.imshow('image',img)
+            cv2.circle(imgc, (x,y), 3, (0,0,255), -1)
+            cv2.imshow('image',imgc)
         elif contp == 3:
             print (x,y)
             p[contp] = (x,y)
             contp = 0
-            cv2.circle(img, (x,y), 3, (0,0,255), -1)
-            cv2.imshow('image',img)
+            cv2.circle(imgc, (x,y), 3, (0,0,255), -1)
+            cv2.imshow('image',imgc)
             
             h = img.shape[0]
             w = img.shape[1]
@@ -41,6 +41,8 @@ def onMouse (event, x, y, flags, param):
             img2 = cv2.warpPerspective(img, M, (w,h))
 
             cv2.imshow("image2",img2)
+            cv2.imshow('image',img)
+            imgc = img.copy()
 
 if __name__ == "__main__":
 
@@ -49,6 +51,7 @@ if __name__ == "__main__":
     contp = 0
     p = [0,0,0,0]
     cv2.setMouseCallback("image",onMouse)
+    imgc = img.copy()
         
 
     cv2.waitKey(0)
