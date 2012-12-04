@@ -19,7 +19,7 @@ if __name__ == '__main__':
 
     for img in images:
 
-        template = cv2.imread('qp.jpg')
+        template = cv2.imread('qp2.jpg')
         imgfound = cv2.matchTemplate(img, template, cv2.TM_SQDIFF_NORMED)
         minVal,maxVal,minLoc,maxLoc = cv2.minMaxLoc(imgfound)
         cv2.rectangle(img,(minLoc[0]-40,minLoc[1]-40),(minLoc[0]+template.shape[1]+40,minLoc[1]+template.shape[0]+40),(0,255,0))
