@@ -84,8 +84,8 @@ if __name__ == "__main__":
             else: i = -1
         # if press a shown the area of the contour i
         elif (k == 97):
-            area,p = cv2.contourArea(contours[i])
-            print '     area: '+str(area)+" "+str(p)
+            area = cv2.contourArea(contours[i])
+            print '     area: '+str(area)
 
 
         # if press z shown the perimeter of the contour i
