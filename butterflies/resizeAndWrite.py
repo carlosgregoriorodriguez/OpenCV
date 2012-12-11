@@ -68,7 +68,7 @@ if __name__ == '__main__':
 
         now = datetime.datetime.now()
         images_resize = images_resize + ['foto'+str(now.day)+str(now.month)+str(now.minute)+str(now.second)+'.jpg']
-        cv2.imwrite('butterflies_resize/foto'+str(now.day)+str(now.month)+str(now.minute)+str(now.second)+'.jpg',imgResize)
+        cv2.imwrite('foto'+str(now.day)+str(now.month)+str(now.minute)+str(now.second)+'.jpg',imgResize)
         cv2.imshow('resize',imgResize)
             
     
