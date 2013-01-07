@@ -66,8 +66,8 @@ if __name__ == "__main__":
 		img = cv2.imread(filename);	
 	original = None;
 	cv2.namedWindow('config', cv2.cv.CV_WINDOW_NORMAL);
-	cv2.createTrackbar("canny tresh1", 'config',600,600, dummy);
-	cv2.createTrackbar("canny tresh2", 'config',300,600, dummy);
+	cv2.createTrackbar("canny tresh1", 'config',250,600, dummy);
+	cv2.createTrackbar("canny tresh2", 'config',30,600, dummy);
 	cv2.createTrackbar('channel', 'config',0,6, channelName);
 	cv2.createTrackbar('draw on original', 'config',0,1, dummy);
 	cv2.createTrackbar('epsilon', 'config',1,10, dummy);
