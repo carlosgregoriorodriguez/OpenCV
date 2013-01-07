@@ -51,7 +51,7 @@ def getFrame(camera, grayscale=False, flip=True):
     else:
         return frame
 
-def InputKey(camera): 
+def InputKey(camera, pause=False):
     global debug
     QUIT = "q" 
     k = cv2.waitKey (10)
@@ -71,15 +71,20 @@ def InputKey(camera):
                 if debug :
                     print "++ brightness ", cb + step
                 camera.set(cv.CV_CAP_PROP_BRIGHTNESS, cb + step)
+            elif (chr(k) == "p"):
+                pause = not pause
+                print "Pause", pause
             elif debug:
                 print "key", chr(k), "value", k
         else:
             if debug :
                 print "key value not valid for chr()", k    
-            
+    return pause        
 if __name__ == "__main__":
     print "Sample code for using utils mini module"
     debug = False
+    pause = False
+              
     camera =  cv2.VideoCapture(0)
         
     func_names = ['erode','dilate','Canny']
@@ -87,8 +92,9 @@ if __name__ == "__main__":
     for name in func_names:
         createTestFrame(name,parameters[name])
     while 1:
-        img = getFrame(camera,grayscale=True)
+        if not pause:
+            img = getFrame(camera,grayscale=True)
         cv2.imshow("original",img)
         for name in func_names:
             test(name,img,eval("cv2."+name),parameters[name])
-        InputKey(camera)        
+        pause = InputKey(camera, pause)        
