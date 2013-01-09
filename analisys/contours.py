@@ -11,13 +11,13 @@ def getChannel(img, channel):
 		return cv2.cvtColor(img,cv2.cv.CV_RGB2GRAY);
 	elif (channel == 1):
 		b,g,r = cv2.split(img);
-		return r;
+		return b;
 	elif (channel == 2):
 		b,g,r = cv2.split(img);
 		return g;
 	elif (channel == 3):
 		b,g,r = cv2.split(img);
-		return b;
+		return r;
 	elif (channel == 4):
 		imgHSV =  cv2.cvtColor(img,cv2.cv.CV_RGB2HSV);
 		h,s,v = cv2.split(imgHSV);
@@ -62,10 +62,10 @@ if __name__ == "__main__":
 			cam.set(4, 480);
 		else:
 			filename = sys.argv[1];
-	if (not video):
-		img = cv2.imread(filename);	
+	
 	original = None;
 	cv2.namedWindow('config', cv2.cv.CV_WINDOW_NORMAL);
+        cv2.createTrackbar("erode iter", 'config',3,7, dummy);
 	cv2.createTrackbar("canny tresh1", 'config',250,600, dummy);
 	cv2.createTrackbar("canny tresh2", 'config',30,600, dummy);
 	cv2.createTrackbar('channel', 'config',0,6, channelName);
@@ -76,29 +76,37 @@ if __name__ == "__main__":
 	while True:		
 		if (video):
 			f,img = cam.read();
-		# Copy of the original image
+                else:
+                   img = cv2.imread(filename);
+		
+                if(cv2.getTrackbarPos("erode iter","config") > 0):
+                   imgErode = img_erode = cv2.erode(img,kernel=None,iterations=cv2.getTrackbarPos("erode iter","config"))   
+		else:
+                   imgErode = img
+                
+                
 		imgToDraw = None;
-		epsilon = cv2.getTrackbarPos("epsilon","config");
-		level = cv2.getTrackbarPos("level","config");
-		drawChannel = cv2.getTrackbarPos("channel","config");
-		
-		
-		imgChannel = getChannel(img, drawChannel);
+                drawChannel = cv2.getTrackbarPos("channel","config");
+                imgChannel = getChannel(imgErode, drawChannel);
 		
 		
 		canny = cv2.Canny(imgChannel, cv2.getTrackbarPos("canny tresh1","config"), cv2.getTrackbarPos("canny tresh2","config"))
 		rawcontours,hierarchy = cv2.findContours(canny.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE);
 		
 		# Aproximamos la curva por una poly que tiene menos vertices
+                epsilon = cv2.getTrackbarPos("epsilon","config");
 		contours = [cv2.approxPolyDP(contour, epsilon, True) for contour in rawcontours];
 		
 		if(cv2.getTrackbarPos("draw on original","config") == 1):
-			imgToShow = img.copy();
+			imgToShow = imgChannel;
 		else:
 			imgToShow = np.zeros(img.shape);
-			
+		
+                level = cv2.getTrackbarPos("level","config"); 
 		cv2.drawContours(imgToShow, contours, -1, (255,255,255), 1, cv2.CV_AA, hierarchy, level);
 			
+                cv2.imshow('original',img) 
+                cv2.imshow('erode',imgErode)
 		cv2.imshow('contours', imgToShow);
 		cv2.imshow('canny', canny);
 		
