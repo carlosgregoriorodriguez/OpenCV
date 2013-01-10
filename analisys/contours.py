@@ -65,22 +65,23 @@ if __name__ == "__main__":
 	
 	original = None;
 	cv2.namedWindow('config', cv2.cv.CV_WINDOW_NORMAL);
-        cv2.createTrackbar("erode iter", 'config',3,7, dummy);
+        cv2.createTrackbar("erode source iter", 'config',0,7, dummy);
 	cv2.createTrackbar("canny tresh1", 'config',250,600, dummy);
 	cv2.createTrackbar("canny tresh2", 'config',30,600, dummy);
 	cv2.createTrackbar('channel', 'config',0,6, channelName);
 	cv2.createTrackbar('draw on original', 'config',0,1, dummy);
 	cv2.createTrackbar('epsilon', 'config',1,10, dummy);
 	cv2.createTrackbar('level', 'config',1,10, dummy);
-	
+	cv2.createTrackbar("dilate contours iter", 'config',0,7, dummy);
+
 	while True:		
 		if (video):
 			f,img = cam.read();
                 else:
                    img = cv2.imread(filename);
 		
-                if(cv2.getTrackbarPos("erode iter","config") > 0):
-                   imgErode = img_erode = cv2.erode(img,kernel=None,iterations=cv2.getTrackbarPos("erode iter","config"))   
+                if(cv2.getTrackbarPos("erode source iter","config") > 0):
+                   imgErode = cv2.erode(img,kernel=None,iterations=cv2.getTrackbarPos("erode source iter","config"))   
 		else:
                    imgErode = img
                 
@@ -98,17 +99,24 @@ if __name__ == "__main__":
 		contours = [cv2.approxPolyDP(contour, epsilon, True) for contour in rawcontours];
 		
 		if(cv2.getTrackbarPos("draw on original","config") == 1):
-			imgToShow = imgChannel;
+                   imgToShow = imgChannel;
 		else:
-			imgToShow = np.zeros(img.shape);
-		
+                   imgToShow = np.zeros(img.shape,dtype=np.uint8);
+
                 level = cv2.getTrackbarPos("level","config"); 
 		cv2.drawContours(imgToShow, contours, -1, (255,255,255), 1, cv2.CV_AA, hierarchy, level);
-			
+
+                
+                if(cv2.getTrackbarPos("dilate contours iter","config") > 0):
+                   imgFinal = cv2.dilate(imgToShow,kernel=None,iterations=cv2.getTrackbarPos("erode contours iter","config"))
+                else:   
+                   imgFinal = imgToShow
+                   
                 cv2.imshow('original',img) 
                 cv2.imshow('erode',imgErode)
 		cv2.imshow('contours', imgToShow);
 		cv2.imshow('canny', canny);
+                cv2.imshow('dilate contours', imgFinal)
 		
 		key = cv2.waitKey(5);
 		if (key != -1):
