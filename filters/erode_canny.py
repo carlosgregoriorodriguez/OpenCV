@@ -41,8 +41,18 @@ if __name__ == "__main__":
             
         img_erode = cv2.erode(img,kernel=None,iterations=cv2.getTrackbarPos("erode iter","config"))    
         
-        imgbn = cv2.cvtColor(img_erode,cv2.cv.CV_BGR2GRAY)
+        imgbn = cv2.cvtColor(img_erode,cv2.cv.CV_BGR2GRAY) 
+
+        print "BN"
+        print imgbn
+        print imgbn.shape, imgbn.dtype
+        
         canny = cv2.Canny(imgbn,cv2.getTrackbarPos("canny tresh1","config"), cv2.getTrackbarPos("canny tresh2","config"))
+        
+        print "Canny"
+        print canny
+        print canny.shape, canny.dtype
+        
         rawcontours,hierarchy = cv2.findContours(canny, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE);
 
         cv2.drawContours(img, rawcontours, -1, (255,0,0), 1, cv2.CV_AA);
