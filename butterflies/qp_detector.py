@@ -19,22 +19,17 @@ if __name__ == '__main__':
 
     for img in images:
 
-        template = cv2.imread('qp2.jpg')
+        template = cv2.imread('qp.jpg')
         imgfound = cv2.matchTemplate(img, template, cv2.TM_SQDIFF_NORMED)
         minVal,maxVal,minLoc,maxLoc = cv2.minMaxLoc(imgfound)
-        cv2.rectangle(img,(minLoc[0]-40,minLoc[1]-40),(minLoc[0]+template.shape[1]+40,minLoc[1]+template.shape[0]+40),(0,255,0))
-        cv2.imshow('img',img)
-       # cv2.imshow('template',imgfound)
+        
+        #cv2.imshow('img',img)
 
         imgt = np.zeros(img.shape,np.uint8)+255
-        imgt[minLoc[1]-40:minLoc[1]+template.shape[0]+40,minLoc[0]-40:minLoc[0]+template.shape[1]+40] = img[minLoc[1]-40:minLoc[1]+template.shape[0]+40,minLoc[0]-40:minLoc[0]+template.shape[1]+40]
-        #cv2.imshow('imgt',imgt)
-        #imgthres = cv2.adaptiveThreshold(cv2.cvtColor(imgt,cv2.cv.CV_RGB2GRAY),255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,599,60)
+        imgt[minLoc[1]-40:img.shape[0],minLoc[0]-40:img.shape[1]] = img[minLoc[1]-40:img.shape[0],minLoc[0]-40:img.shape[1]]
         v, imgthres = cv2.threshold(imgt,86,256,cv2.THRESH_BINARY_INV)
-        #cv2.imshow('imgthres',imgthres)
         imgcanny = imgthres.copy()
         imgcanny = cv2.Canny(cv2.cvtColor(imgcanny,cv2.cv.CV_RGB2GRAY), 147,600)
-        #cv2.imshow('canny',imgcanny)
 
         contours, hierarchy = cv2.findContours(imgcanny.copy(),cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
         contours = [cv2.approxPolyDP(contour, 1, True) for contour in contours];
