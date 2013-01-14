@@ -41,7 +41,7 @@ def update(image,x,y):
            # a = cv2.split(image)[0]
            # b = cv2.split(image)[1]
            # c = cv2.split(image)[2]
-            print k
+            #print k
             k = k+1
            # image[y+j,x+i,0]= 0
            # image[y+j,x+i,1]= 129
@@ -50,12 +50,13 @@ def update(image,x,y):
             m2 = m2 + image[y+j,x+i,1]
             m3 = m3 + image[y+j,x+i,2]
     
-    print '('+"{0:.2f}".format(m1/255)+'%, '+"{0:.2f}".format(m2/255)+'%, '+"{0:.2f}".format(m3/255.0)+'%)'
-    m1 = int(m1/25)
-    m2 = int(m2/25)
-    m3 = int(m3/25)
-    print '('+str(m1)+', '+str(m2)+', '+str(m3)+')'
-    
+    m1 = m1/25.0
+    m2 = m2/25.0
+    m3 = m3/25.0
+    suma = (m1 + m2 + m3)/100
+    print "valor absoluto", '('+str(m1)+', '+str(m2)+', '+str(m3)+')'
+    print "porcentaje absoluto", '('+"{0:.2f}".format(m1/2.55)+'%, '+"{0:.2f}".format(m2/2.55)+'%, '+"{0:.2f}".format(m3/2.55)+'%)'
+    print "porcentaje relativo", '('+"{0:.2f}".format(m1/suma)+'%, '+"{0:.2f}".format(m2/suma)+'%, '+"{0:.2f}".format(m3/suma)+'%)'
     cv2.imshow('img',image)
 
 if __name__ == "__main__":
