@@ -191,9 +191,8 @@ if __name__ == "__main__":
             for i in range(len(H)):
                 if H[i]> H1[i]+eps[i] or H[i]<H1[i]-eps[i]:
                     break
-                
-            if i == len(H)-1:
-                imshow = imshow+[im[1]]
+                elif i == len(H)-1:
+                    imshow = imshow+[im[1]]
 
         j = 1
         for im in imshow:
