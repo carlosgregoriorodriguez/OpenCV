@@ -174,6 +174,6 @@ if __name__ == "__main__":
     #cv2.imshow('m',addimg)
     print compare_images[0][0].shape,compare_images[0][0].dtype, cv2.split(pimg)[0].shape,cv2.split(pimg)[0].dtype
     cv2.waitKey(0)
-    hist = cv2.calcHist(cv2.split(pimg)[0],[0],compare_images[0][0],np.uint8),[256],[0,255])
+    hist = cv2.calcHist(cv2.split(pimg)[0],[0],compare_images[0][0],[256],[0,255])
     #print hist.shape
    
