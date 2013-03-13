@@ -6,23 +6,26 @@ import cv2
 import sys
 import numpy as np
 
-help_message = '''USAGE: floodfillgray.py [<image>,<image>,...]
+help_message = '''USAGE: floodfillgray_new.py [<image>,<image>,...]
 
 Keys:
-  f    - flooded
   m    - flooded next image
   n    - flooded previus image
 '''
-def update(pos):
-        print '',
 
-def flooded(pos = None):
-    global l, name_images
+def flood_eps(pos):
+    img = flooded(cv2.imread(name_images[l]),pos,cv2.getTrackbarPos('hi','image'),cv2.getTrackbarPos('lo','image'))
+    cv2.imshow('image',img)
 
-    img = cv2.imread(name_images[l])
-    lo = cv2.getTrackbarPos('lo','image')
-    hi = cv2.getTrackbarPos('hi','image')
-    epsilon = cv2.getTrackbarPos('epsilon','image')
+def flood_hi(pos):
+    img = flooded(cv2.imread(name_images[l]),cv2.getTrackbarPos('epsilon','image'),pos,cv2.getTrackbarPos('lo','image'))
+    cv2.imshow('image',img)
+
+def flood_lo(pos):
+    img = flooded(cv2.imread(name_images[l]),cv2.getTrackbarPos('epsilon','image'),cv2.getTrackbarPos('hi','image'),pos)
+    cv2.imshow('image',img)
+
+def flooded(img, epsilon, hi, lo):
     img2 = np.array(img,float)
     img2 = img2/3
     img3 = img2[:,:,0]+img2[:,:,1]+img2[:,:,2]
@@ -49,22 +52,6 @@ def flooded(pos = None):
     cmin = (b+g-abs(b-g))/2
     mi = (cmin+r-abs(cmin-r))/2
     a = ma - mi
-    
-
-
-    '''
-    for i in range(w):
-        for j in range(h):
-            b = img[i,j,0]
-            g = img[i,j,1]
-            r = img[i,j,2]
-            aa[i,j] = np.max([b,g,r])-np.min([b,g,r])
-
-    print aa
-    '''
-
-
-
 
     m = np.ma.masked_less(a,epsilon)
     m = 1 - m.mask
@@ -79,35 +66,38 @@ def flooded(pos = None):
     i.set_fill_value(255)
     img = i.filled()
     
-    cv2.imshow('image',img)
+    return img
 
 
 if __name__ == '__main__':
     print help_message
+    global l
 
     name_images = sys.argv[1:]
     l = 0
 
     cv2.namedWindow('image')
-    cv2.createTrackbar('epsilon','image',10,255,flooded)
-    cv2.createTrackbar('hi','image',200,255,flooded)
-    cv2.createTrackbar('lo','image',20,255,flooded)
-    flooded()
-    
+    cv2.createTrackbar('epsilon','image',10,255,flood_eps)
+    cv2.createTrackbar('hi','image',200,255,flood_hi)
+    cv2.createTrackbar('lo','image',20,255,flood_lo)
+
+    img = flooded(cv2.imread(name_images[l]),cv2.getTrackbarPos('epsilon','image'),cv2.getTrackbarPos('hi','image'),cv2.getTrackbarPos('lo','image'))
+    cv2.imshow('image',img)
+
     while True:
         k = cv2.waitKey(5)
-        if k == ord('f'):
-            flooded()
         if k == ord('m'):
             if l < len(name_images)-1:
                 l = l+1
-                flooded()
+                img = flooded(cv2.imread(name_images[l]),cv2.getTrackbarPos('epsilon','image'),cv2.getTrackbarPos('hi','image'),cv2.getTrackbarPos('lo','image'))
+                cv2.imshow('image',img)
             else:
                 break
         if k == ord('n'):
             if l>0:
                 l = l-1
-                flooded()
+                img = flooded(cv2.imread(name_images[l]),cv2.getTrackbarPos('epsilon','image'),cv2.getTrackbarPos('hi','image'),cv2.getTrackbarPos('lo','image'))
+                cv2.imshow('image',img)
         if k == 27:
             break
         
