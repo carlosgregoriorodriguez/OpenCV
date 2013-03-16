@@ -102,11 +102,16 @@ def prepare_image(pos = None):
 
 def on_filter_trackbar(pos=None):
     global new_flood
-    cv2.destroyWindow('median_blur')
-    cv2.destroyWindow('final_img')
-    cv2.destroyWindow('erode')
-    cv2.destroyWindow('img')
-    cv2.destroyWindow('canny')
+    if cv2.getTrackbarPos('show_median_blur','config') == 0:
+        cv2.destroyWindow('median_blur')
+    if cv2.getTrackbarPos('show_final_img','config') == 0:  
+        cv2.destroyWindow('final_img') 
+    if cv2.getTrackbarPos('show_erode','config') == 0:
+        cv2.destroyWindow('erode')
+    if cv2.getTrackbarPos('show_img','config') == 0:
+        cv2.destroyWindow('img')
+    if cv2.getTrackbarPos('show_canny','config') == 0:
+        cv2.destroyWindow('canny')
     new_flood = True
     prepare_image()
 
