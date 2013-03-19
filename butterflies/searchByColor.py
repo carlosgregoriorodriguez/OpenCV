@@ -1,3 +1,4 @@
+
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
 # opencv 2.3.1
@@ -21,7 +22,7 @@ Keys:
 def dummy(pos):
     a = pos
 
-def compare():
+def compare(compare_images, histB, histG, histR, chi):
     global j
         
     imToShow = []
@@ -61,31 +62,32 @@ def compare():
                     cv2.putText(img,str(v),(50,img.shape[0]-25),cv2.FONT_HERSHEY_SIMPLEX,0.5,(100,0,200))
                     imToShow = imToShow+[img]
 
-        j = 1
-        for im in imToShow:
-            cv2.imshow('im_'+str(j),im)
-            j = j+1
-            
-    
+    j = 1
+    for im in imToShow:
+        cv2.imshow('im_'+str(j),im)
+        j = j+1
 
+    return imToShow
 
-if __name__ == "__main__":
-    print help_message
-
-    images_name = sys.argv[1:]
+def compareByColor(images_name): 
+    print help_message 
     compare_images = []
 
-
-#########   STEP 1   ###########################
-
+    ##########   STEP 1   #####################
     for img_name in images_name :
         img = cv2.imread(img_name)
         compare_images = compare_images + [calcBinaryImage2.calcMask(img)]
 
 
-################  STEP2   #######################
+    ##########  STEP2   #######################
 
-    cv2.destroyAllWindows()
+    cv2.destroyWindow('config')
+    cv2.destroyWindow('floodfill')
+    cv2.destroyWindow('median_blur')
+    cv2.destroyWindow('erode')
+    cv2.destroyWindow('final_img')
+    cv2.destroyWindow('img')
+    cv2.destroyWindow('canny')
 
     print '''
 
@@ -94,8 +96,7 @@ if __name__ == "__main__":
   q    -   EXIT
   c    -   change histogram comparison method
 
-'''
-
+'''                      
     chi = True
 
     cv2.namedWindow('config2')
@@ -114,7 +115,7 @@ if __name__ == "__main__":
     histR = cv2.calcHist([cv2.split(pimg)[2]],[0],compare_images[0][0],[256],[0,255])
     cv2.normalize(histR,histR,0,1,cv2.NORM_MINMAX) 
      
-    compare()
+    imToShow = compare(compare_images, histB, histG, histR, chi)
 
     while True:
         cv2.imshow('image',pimg)
@@ -123,7 +124,7 @@ if __name__ == "__main__":
             for k in range(j):
                 cv2.destroyWindow('im_'+str(k))
             cv2.imshow('image',pimg)
-            compare()
+            imToShow = compare(compare_images, histB, histG, histR, chi)
         if key == ord('c'):
             chi = not chi
             if chi:
@@ -131,5 +132,13 @@ if __name__ == "__main__":
             else:
                 print 'correlation'
         if key == ord('q'):
+            return imToShow
             break
-    
+  
+
+
+if __name__ == "__main__":
+
+    images_name = sys.argv[1:]
+
+    compareByColor(images_name)
