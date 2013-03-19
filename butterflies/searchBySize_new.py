@@ -7,7 +7,7 @@ import sys
 import numpy as np
 import calcBinaryImage
 
-help_message = '''USAGE: searchBySize_new.py [<image for compare>,<image>,...]
+help_message = '''USAGE: searchBySize.py [<image for compare>,<image>,...]
 
 Keys:
 
@@ -20,16 +20,15 @@ Keys:
 def dummy(pos):
     a = pos
 
-def compare():
+def compare(H,compare_images):
     global j
-
     eps = [cv2.getTrackbarPos('eps1___*e-3','config2')*10**(-3),cv2.getTrackbarPos('eps2___*e-4','config2')*10**(-4),cv2.getTrackbarPos('eps3___*e-4','config2')*10**(-4),cv2.getTrackbarPos('eps4___*e-5','config2')*10**(-5),cv2.getTrackbarPos('eps5___*e-9','config2')*10**(-9),cv2.getTrackbarPos('eps6___*e-7','config2')*10**(-7),cv2.getTrackbarPos('eps7___*e-8','config2')*10**(-8)]
         
     imshow = []
     for im in compare_images:
         img = im[0]
         moments1 = cv2.moments(img,True)
-        H1 = cv2.HuMoments(moments1) 
+        H1 = cv2.HuMoments(moments1)
         cv2.putText(im[1],str(H1[0:2]),(50,img.shape[0]-100),cv2.FONT_HERSHEY_SIMPLEX,0.5,(100,0,200))
         cv2.putText(im[1],str(H1[2:4]),(50,img.shape[0]-75),cv2.FONT_HERSHEY_SIMPLEX,0.5,(100,0,200))
         cv2.putText(im[1],str(H1[4:6]),(50,img.shape[0]-50),cv2.FONT_HERSHEY_SIMPLEX,0.5,(100,0,200))
@@ -39,32 +38,30 @@ def compare():
                 break  
             elif i == len(H)-1:
                 imshow = imshow+[im[1]]
-        j = 1
-        for im in imshow:
-            cv2.imshow('im_'+str(j),im)
-            j = j+1
+    j = 1
+    for im in imshow:
+        cv2.imshow('im_'+str(j),im)
+        j = j+1
+    return imshow
 
-
-
-if __name__ == "__main__":
+def compareBySize(images_name):
     print help_message
 
-    images_name = sys.argv[1:]
-    template = cv2.imread('qp.jpg')
+    ######### STEP 1 #################
     compare_images = []
-
-
-
-#########   STEP 1   ###########################
-
     for img_name in images_name :
         img = cv2.imread(img_name)
         compare_images = compare_images + [calcBinaryImage.calcMask(img)]
-
-
-################  STEP2   #####################################
-
-    cv2.destroyAllWindows()
+        
+    ######## STEP 2 ##################
+    
+    cv2.destroyWindow('config')
+    cv2.destroyWindow('floodfill')
+    cv2.destroyWindow('median_blur')
+    cv2.destroyWindow('erode')
+    cv2.destroyWindow('final_img')
+    cv2.destroyWindow('img')
+    cv2.destroyWindow('canny')
 
     print '''
 
@@ -73,7 +70,6 @@ if __name__ == "__main__":
   q    -   EXIT
 
 '''
-
 
     cv2.namedWindow('config2')
     cv2.createTrackbar('eps1___*e-3','config2',10,100,dummy)
@@ -92,7 +88,7 @@ if __name__ == "__main__":
     cv2.putText(img,str(H[2:4]),(50,img.shape[0]-75),cv2.FONT_HERSHEY_SIMPLEX,0.5,(100,0,200))
     cv2.putText(img,str(H[4:6]),(50,img.shape[0]-50),cv2.FONT_HERSHEY_SIMPLEX,0.5,(100,0,200))
     cv2.putText(img,str(H[6:8]),(50,img.shape[0]-25),cv2.FONT_HERSHEY_SIMPLEX,0.5,(100,0,200))
-    compare()
+    imToShow = compare(H,compare_images)
 
     while True:
         cv2.imshow('image',img)
@@ -101,9 +97,16 @@ if __name__ == "__main__":
             for k in range(j):
                 cv2.destroyWindow('im_'+str(k))
             cv2.imshow('image',img)
-            compare()
+            imToShow = compare(H,compare_images)
         if key == ord('q'):
+            return imToShow
             break
+
+
+if __name__ == "__main__":
+
+    images_name = sys.argv[1:]
     
-        
+    compareBySize(images_name)
+
         
