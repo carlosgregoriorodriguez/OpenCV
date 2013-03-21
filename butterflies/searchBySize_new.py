@@ -48,6 +48,7 @@ def compareBySize(images_name):
     print help_message
 
     ######### STEP 1 #################
+    #Calcula masks
     compare_images = []
     for img_name in images_name :
         img = cv2.imread(img_name)
@@ -82,12 +83,16 @@ def compareBySize(images_name):
 
     pimg = compare_images[0][0]
     img = compare_images[0][1].copy()
+    #momentos de la candidata
     moments = cv2.moments(pimg,True)
     H = cv2.HuMoments(moments)
+
     cv2.putText(img,str(H[0:2]),(50,img.shape[0]-100),cv2.FONT_HERSHEY_SIMPLEX,0.5,(100,0,200))
     cv2.putText(img,str(H[2:4]),(50,img.shape[0]-75),cv2.FONT_HERSHEY_SIMPLEX,0.5,(100,0,200))
     cv2.putText(img,str(H[4:6]),(50,img.shape[0]-50),cv2.FONT_HERSHEY_SIMPLEX,0.5,(100,0,200))
     cv2.putText(img,str(H[6:8]),(50,img.shape[0]-25),cv2.FONT_HERSHEY_SIMPLEX,0.5,(100,0,200))
+   
+    #Compara con los momentos de todas las demás.
     imToShow = compare(H,compare_images)
 
     while True:

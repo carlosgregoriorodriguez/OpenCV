@@ -59,12 +59,12 @@ def resizeAndWrite(img):
             imgResize = resize(img,final_rect)
             cv2.imshow('image resize',imgResize)
             now = datetime.datetime.now()
-            #cv2.imwrite('butterflies_resize/foto'+str(now.day)+str(now.month)+str(now.minute)+str(now.second)+'.jpg',imgResize)
+            cv2.imwrite('butterflies_resize/foto'+str(now.day)+str(now.month)+str(now.minute)+str(now.second)+'.jpg',imgResize)
             return imgResize
         else:
             cv2.imshow('special images', img)
             return img
-           # cv2.imwrite('butterflies_special/foto'+str(now.day)+str(now.month)+str(now.minute)+str(now.second)+'.jpg',img)
+        #cv2.imwrite('butterflies_special/foto'+str(now.day)+str(now.month)+str(now.minute)+str(now.second)+'.jpg',img)
 
 
 

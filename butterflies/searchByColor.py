@@ -1,4 +1,3 @@
-
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
 # opencv 2.3.1
@@ -23,6 +22,7 @@ def dummy(pos):
     a = pos
 
 def compare(compare_images, histB, histG, histR, chi):
+    #compara histograma de la candidata con las existentes
     global j
         
     imToShow = []
@@ -74,6 +74,7 @@ def compareByColor(images_name):
     compare_images = []
 
     ##########   STEP 1   #####################
+    #Calculo mask
     for img_name in images_name :
         img = cv2.imread(img_name)
         compare_images = compare_images + [calcBinaryImage2.calcMask(img)]
@@ -107,6 +108,7 @@ def compareByColor(images_name):
     cv2.createTrackbar('CHI---epsG','config2',100,200,dummy)
     cv2.createTrackbar('CHI---epsR','config2',100,200,dummy)
    
+    #Histograma del candidato
     pimg = compare_images[0][1]
     histB = cv2.calcHist([cv2.split(pimg)[0]],[0],compare_images[0][0],[256],[0,255])
     cv2.normalize(histB,histB,0,1,cv2.NORM_MINMAX)
@@ -115,6 +117,7 @@ def compareByColor(images_name):
     histR = cv2.calcHist([cv2.split(pimg)[2]],[0],compare_images[0][0],[256],[0,255])
     cv2.normalize(histR,histR,0,1,cv2.NORM_MINMAX) 
      
+    #Comparación con el resto de los histogramas
     imToShow = compare(compare_images, histB, histG, histR, chi)
 
     while True:
