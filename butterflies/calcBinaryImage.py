@@ -90,11 +90,16 @@ def thresh(img):
 
 def prepare_image(pos = None):
     global reduced_img, img_contours
+    # blur y erode
     img_filter = filtering(img_butt)
+    # contornos
     img_contours = calcContours(img_filter)
+    # modificar la imagen total con los cambios hechos en la recortada
     reduced_img[0:point[1]-5, point[0]+10:point[0]+point[1]+int(2*point[1]/3)] = img_contours
+    # floodfill
     img_flood = flooding(reduced_img)#modifica reduced_img
     cv2.imshow('floodfill',img_flood)
+    # threshold
     img_thres = thresh(img_flood)    
     return img_thres
 
@@ -128,6 +133,7 @@ def on_flooding_trackbar(pos=None):
 
 
 def calcMask(img):
+    # Recortar la parte de la mariposa, 
     global compare_images, new_flood, img_contours, seed_pt, reduced_img, img_butt, mask, point, connectivity, fixed_range, final_mask
 
     template = cv2.imread('qp.jpg')
@@ -148,6 +154,8 @@ def calcMask(img):
     
     img_butt = img[0:point[1]-5, point[0]+10:point[0]+point[1]+int(2*point[1]/3)]
 
+    #Uso recortada pero también la original con una máscara para "tapar" las reglas...
+
     cv2.namedWindow('config')
     cv2.namedWindow('floodfill')
     cv2.createTrackbar('debug','config',0,5,on_filter_trackbar)
@@ -159,6 +167,8 @@ def calcMask(img):
     cv2.setMouseCallback('floodfill',onMouse)
           
     new_flood = True
+    
+    # calculo del imagen binaria
     final_mask = prepare_image()
 
     while True:
