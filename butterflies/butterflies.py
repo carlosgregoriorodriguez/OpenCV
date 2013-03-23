@@ -4,7 +4,7 @@
 import cv2
 import sys
 import numpy as np
-import searchBySize_new
+import searchBySize
 import resizeAndWrite
 import searchByColor
 
@@ -19,7 +19,7 @@ def dummy(pos):
         cv2.destroyWindow('special images')
 
     if cv2.getTrackbarPos('search by size','What do you do?')==1:
-        searchBySize_new.compareBySize(name_images)
+        searchBySize.compareBySize(name_images)
         cv2.destroyAllWindows()
         cv2.namedWindow('What do you do?')
         cv2.createTrackbar('resize and write','What do you do?',0,1,dummy)
