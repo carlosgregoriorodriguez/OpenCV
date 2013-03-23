@@ -5,8 +5,9 @@
 import cv2
 import sys
 import numpy as np
+import calcBinaryImage
 
-help_message = '''USAGE: floodfillgray.py [<image for compare>,<image>,...]
+help_message = '''USAGE: searchBySize.py [<image for compare>,<image>,...]
 
 Keys:
 
@@ -15,144 +16,103 @@ Keys:
   k    -   reset the values chosen for the image
   ESC  -   moves to the next image for analyzing
 
-'''
+'''  
 
+def onShowImages(pos=None):
+    # destroy old windows
+    for k in range(j):
+        cv2.destroyWindow('im_mask_'+str(k))
+    for k in range(len(compare_images)+1):
+        cv2.destroyWindow('image'+str(k))
+    # compare with new data
+    compare(H, compare_images, cv2.getTrackbarPos('show all input images', 'config2'), cv2.getTrackbarPos('show all selected masks','config2'))
+
+def onMaskImages(pos):
+    # shows all mask of compare_images
+    if pos != 0:
+        i = 1
+        for img in compare_images:
+            h = int(img[0].shape[0]*0.75)
+            w = int(img[0].shape[1]*0.75)
+            if pos == 2:# resize the image
+                copy_img = cv2.resize(img[0], (w,h))
+            else:
+                copy_img = img[0]
+            cv2.imshow('mask_image_'+str(i),copy_img)
+            i = i+1
+    # remove all previous shown masks
+    if pos == 0:
+        for i in range(len(compare_images)+1):
+            cv2.destroyWindow('mask_image_'+str(i))
+                
 def dummy(pos):
     a = pos
 
-def onMouse(event, x, y, flag, param):
-    global seed_pt
-    if flag & cv2.EVENT_FLAG_LBUTTON:
-        seed_pt = x, y
-        update()
-
-def update():
-    global img, img_but, reduced_img, seed_pt, connectivity, flood, reduced_img2,point, img_thres
-    img2 = img.copy()
-    img_but2 = img_but.copy()
-    if flood:
-        red = reduced_img
-        seed_pt = None
-    else:
-        red = reduced_img2
+def compare(H,compare_images, showAllImages=0, showSelectMask=0):
+    global j
+    # takes epsilon values of trackbar 
+    eps = [cv2.getTrackbarPos('eps1___*e-3','config2')*10**(-3),cv2.getTrackbarPos('eps2___*e-4','config2')*10**(-4),cv2.getTrackbarPos('eps3___*e-4','config2')*10**(-4),cv2.getTrackbarPos('eps4___*e-5','config2')*10**(-5),cv2.getTrackbarPos('eps5___*e-9','config2')*10**(-9),cv2.getTrackbarPos('eps6___*e-7','config2')*10**(-7),cv2.getTrackbarPos('eps7___*e-8','config2')*10**(-8)]
     
-    
-    mb = cv2.getTrackbarPos('medianBlur','config')
-    if (mb%2 != 0):
-        img_but2 = cv2.medianBlur(img_but2,mb)
-    else:
-        img_but2 = cv2.medianBlur(img_but2,mb-1)
-    #cv2.imshow('median_blur',img_but2)
+    # for each img in compare_images calculates its Hu moments and compare it with the moments of original image
+    imshow = []
+    j = 1
+    for im in compare_images:
+        img = im[0]
+        moments1 = cv2.moments(img,True)
+        H1 = cv2.HuMoments(moments1)
+        cv2.putText(im[1],str(H1[0:2]),(50,img.shape[0]-100),cv2.FONT_HERSHEY_SIMPLEX,0.5,(100,0,200))
+        cv2.putText(im[1],str(H1[2:4]),(50,img.shape[0]-75),cv2.FONT_HERSHEY_SIMPLEX,0.5,(100,0,200))
+        cv2.putText(im[1],str(H1[4:6]),(50,img.shape[0]-50),cv2.FONT_HERSHEY_SIMPLEX,0.5,(100,0,200))
+        cv2.putText(im[1],str(H1[6:8]),(50,img.shape[0]-25),cv2.FONT_HERSHEY_SIMPLEX,0.5,(100,0,200))
         
-    it = cv2.getTrackbarPos('erode_it','config')
-    img_erode = cv2.erode(img_but2, kernel=None, iterations = 3)
-    #cv2.imshow('erode',img_erode)
-    
-    imgbn = cv2.cvtColor(img_erode,cv2.cv.CV_BGR2GRAY)
-    canny = cv2.Canny(imgbn,cv2.getTrackbarPos('canny_hi(1)','config'),cv2.getTrackbarPos('canny_lo(1)','config'))
-    #cv2.imshow('canny(1)',canny)
-    rawcontours,hierarchy = cv2.findContours(canny, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE);
-    cv2.drawContours(img_but2, rawcontours, -1, (255,0,0), 1, cv2.CV_AA)
-    if flood:
-        red[0:point[1]-5, point[0]+10:point[0]+point[1]+int(2*point[1]/3)] = img_but2
+        # if showAllImages!=0 then want show all compare_images
+        if showAllImages==2:# shows resize image
+            copy_img = cv2.resize(im[1], (int(img.shape[1]*0.75), int(img.shape[0]*0.75)))
+            cv2.imshow('image'+str(j),copy_img)
+            j = j+1
+        if showAllImages==1:# shows real image
+            cv2.imshow('image'+str(j),im[1])
+            j = j+1
+       
 
-        flood = False
+        # if a value of H1 is not equals to its corresponding in H (more or less epsilon) not keep looking
+        for i in range(len(H)):
+            if H[i]> H1[i]+eps[i] or H[i]<H1[i]-eps[i]:
+                break 
+            elif i == len(H)-1:
+                imshow = imshow+[im]
 
-    mask = np.zeros((img.shape[0]+2, img.shape[1]+2), np.uint8)
-    mask[0:point[1]-5, point[0]+10:point[0]+point[1]+int(2*point[1]/3)] = canny
-        
-    if seed_pt !=  None:
-        flags = connectivity
-        if fixed_range:
-            flags |= cv2.FLOODFILL_FIXED_RANGE
-        cv2.floodFill(red, mask, seed_pt, (255, 255, 255), (cv2.getTrackbarPos('floodfill_lo','config'),)*3, (cv2.getTrackbarPos('floodfill_hi','config'),)*3, flags)
+    # shows all selected images
+    j = 1
+    for im in imshow:
+        cv2.imshow('im_'+str(j),im[1])
+        if showSelectMask == 1:# show selected image mask
+            cv2.imshow('im_mask_'+str(j),im[0])
+        j = j+1
+    return imshow
 
-    cv2.floodFill(red, mask, (point[0]+128,point[1]-6), (255, 255, 255), (3,)*3, (60,)*3, flags=4)
-    cv2.floodFill(red, mask, (point[0]+11,point[1]-6), (255, 255, 255), (2,)*3, (100,)*3)
-    cv2.floodFill(red, mask, (point[0]+point[1]+int(2*point[1]/3)-20,10), (255, 255, 255), (2,)*3, (60,)*3, flags=4)
-    cv2.floodFill(red, mask, (point[0]+15,point[1]-38), (255, 255, 255), (2,)*3, (60,)*3, flags=4)
-        
-    reduced_img2 = red
-    cv2.imshow('floodfill',red)    
-    imgbn = cv2.cvtColor(red,cv2.cv.CV_BGR2GRAY)
-
-    retVal,img_thres = cv2.threshold(imgbn,cv2.getTrackbarPos('threshold','config'),255,cv2.THRESH_BINARY_INV)
-    cv2.imshow('thres',img_thres)
-    
-    
-
-
-if __name__ == "__main__":
+def compareBySize(images_name):
+    global H,compare_images
     print help_message
 
-    images_name = sys.argv[1:]
-    template = cv2.imread('qp.jpg')
+    ######### STEP 1 #################
+
+    # for each image calculates its mask
     compare_images = []
-
-
-
-
-#########   STEP 1   ###########################
-
-
-    cv2.namedWindow('config')
-    cv2.namedWindow('floodfill')
-    cv2.createTrackbar('floodfill_hi','config',60,255,dummy)
-    cv2.createTrackbar('floodfill_lo','config',10,255,dummy)
-    cv2.createTrackbar('canny_hi(1)','config',144,600,dummy)
-    cv2.createTrackbar('canny_lo(1)','config',67,600,dummy)
-    cv2.createTrackbar('canny_hi(2)','config',48,600,dummy)
-    cv2.createTrackbar('canny_lo(2)','config',22,600,dummy)
-    cv2.createTrackbar('medianBlur','config',2,15,dummy)
-    cv2.createTrackbar('threshold','config',254,255,dummy)
-
-    cv2.setMouseCallback('floodfill',onMouse)
-
-
     for img_name in images_name :
-       
-        connectivity = 4
-        fixed_range = True
-        flood = True
-
-        img = cv2.imread(img_name)#butterflies_resize
-
-        img_thres = img
-        imgfound = cv2.matchTemplate(img,template, cv2.TM_SQDIFF_NORMED)
-        minV,maxV,minL,maxL = cv2.minMaxLoc(imgfound)
-        point = (minL[0], minL[1]-35)
-        seed_pt = None
+        img = cv2.imread(img_name)
+        compare_images = compare_images + [calcBinaryImage.calcMask(img)]
         
-        reduced_img = np.zeros(img.shape,np.uint8)+255
-        reduced_img[0:point[1]-5, point[0]+10:point[0]+point[1]+int(2*point[1]/3)] = img[0:point[1]-5, point[0]+10:point[0]+point[1]+int(2*point[1]/3)]
-        
-        img_but = img[0:point[1]-5, point[0]+10:point[0]+point[1]+int(2*point[1]/3)]
-        reduced_img2 = reduced_img.copy()
-        update()
-        
-
-        while True:
-            img3 = img.copy()
-            cv2.imshow('img',img3)
-            key = cv2.waitKey(5)
-            if key == ord('g'):#guarda la imagen en bn para la comparacion
-                compare_images = compare_images + [[img_thres,img]]
-                break
-            if key == ord('f'):
-                fixed_range = not fixed_range
-            if key == ord('c'):
-                connectivity = 12-connectivity
-            if key == ord('k'):#reestablece todos los valores a los nuevos que hayamos elegido
-                flood = True
-            if key == 27:
-                break
-            update()
-
-
-
-################  STEP2   #####################################
-
-    cv2.destroyAllWindows()
+    ######## STEP 2 ##################
+    
+    # destroy old windows
+    cv2.destroyWindow('config')
+    cv2.destroyWindow('floodfill')
+    cv2.destroyWindow('median_blur')
+    cv2.destroyWindow('erode')
+    cv2.destroyWindow('final_img')
+    cv2.destroyWindow('img')
+    cv2.destroyWindow('canny')
 
     print '''
 
@@ -162,55 +122,55 @@ if __name__ == "__main__":
 
 '''
 
-
+    # creates config window with its trackbars
     cv2.namedWindow('config2')
-    cv2.createTrackbar('eps1___*e-1','config2',10,100,dummy)
-    cv2.createTrackbar('eps2___*e-2','config2',80,100,dummy)
-    cv2.createTrackbar('eps3___*e-3','config2',80,100,dummy)
-    cv2.createTrackbar('eps4___*e-4','config2',80,100,dummy)
-    cv2.createTrackbar('eps5___*e-8','config2',1000,1000,dummy)
-    cv2.createTrackbar('eps6___*e-6','config2',1000,1000,dummy)
-    cv2.createTrackbar('eps7___*e-7','config2',10,100,dummy)
+    cv2.createTrackbar('eps1___*e-3','config2',10,100,dummy)
+    cv2.createTrackbar('eps2___*e-4','config2',50,100,dummy)
+    cv2.createTrackbar('eps3___*e-4','config2',80,100,dummy)
+    cv2.createTrackbar('eps4___*e-5','config2',80,100,dummy)
+    cv2.createTrackbar('eps5___*e-9','config2',1000,1000,dummy)
+    cv2.createTrackbar('eps6___*e-7','config2',1000,1000,dummy)
+    cv2.createTrackbar('eps7___*e-8','config2',10,100,dummy)
+    cv2.createTrackbar('show all input images', 'config2',0,2,onShowImages)
+    cv2.createTrackbar('show all masks','config2', 0,2,onMaskImages)
+    cv2.createTrackbar('show all selected masks','config2', 0,1,onShowImages)
 
+    # selects main image for comparison and calculates its moments
     pimg = compare_images[0][0]
+    img = compare_images[0][1].copy()
     moments = cv2.moments(pimg,True)
     H = cv2.HuMoments(moments)
 
-    def update2():
-        global j
+    cv2.putText(img,str(H[0:2]),(50,img.shape[0]-100),cv2.FONT_HERSHEY_SIMPLEX,0.5,(100,0,200))
+    cv2.putText(img,str(H[2:4]),(50,img.shape[0]-75),cv2.FONT_HERSHEY_SIMPLEX,0.5,(100,0,200))
+    cv2.putText(img,str(H[4:6]),(50,img.shape[0]-50),cv2.FONT_HERSHEY_SIMPLEX,0.5,(100,0,200))
+    cv2.putText(img,str(H[6:8]),(50,img.shape[0]-25),cv2.FONT_HERSHEY_SIMPLEX,0.5,(100,0,200))
+   
+    # compares pimg moments with all other images moments
+    imToShow = compare(H,compare_images,0,0)
 
-        eps = [cv2.getTrackbarPos('eps1___*e-1','config2')*10**(-2),cv2.getTrackbarPos('eps2___*e-2','config2')*10**(-3),cv2.getTrackbarPos('eps3___*e-3','config2')*10**(-4),cv2.getTrackbarPos('eps4___*e-4','config2')*10**(-5),cv2.getTrackbarPos('eps5___*e-8','config2')*10**(-9),cv2.getTrackbarPos('eps6___*e-6','config2')*10**(-7),cv2.getTrackbarPos('eps7___*e-7','config2')*10**(-8)]
-        
-        imshow = []
-        for im in compare_images:
-            img = im[0]
-            moments1 = cv2.moments(img,True)
-            H1 = cv2.HuMoments(moments1)
-            
-            
-            for i in range(len(H)):
-                if H[i]> H1[i]+eps[i] or H[i]<H1[i]-eps[i]:
-                    break
-                elif i == len(H)-1:
-                    imshow = imshow+[im[1]]
-
-        j = 1
-        for im in imshow:
-            cv2.imshow('im_'+str(j),im)
-            j = j+1
-            
-
-    update2()
     while True:
         cv2.imshow('image',img)
         key = cv2.waitKey(5)
+        # removes old windows and calculates the most similar images with the new values
         if key == ord('s'):
             for k in range(j):
                 cv2.destroyWindow('im_'+str(k))
+                cv2.destroyWindow('im_mask_'+str(k))
+            for k in range(len(compare_images)+1):
+                cv2.destroyWindow('image'+str(k))
             cv2.imshow('image',img)
-            update2()
+            imToShow = compare(H,compare_images,cv2.getTrackbarPos('show all input images','config2'), cv2.getTrackbarPos('sohw all selected masks','config2'))
+        # EXIT
         if key == ord('q'):
-            break
+            return imToShow 
+
+
+
+if __name__ == "__main__":
+
+    images_name = sys.argv[1:]
     
-        
+    compareBySize(images_name)
+
         
