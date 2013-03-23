@@ -5,7 +5,7 @@ import cv2
 import sys
 import numpy as np
 import datetime
-import floodfillgray_new
+import floodfillgray
 
 def find_rectangle(contours):
     final_rect = [0,0,0,0]
@@ -42,7 +42,7 @@ def resizeAndWrite(img):
         #reduces the image to the area most probably
         reduced_img = np.zeros(img.shape,np.uint8)+255
         reduced_img[minLoc[1]-40:img.shape[0],minLoc[0]-40:img.shape[1]] = img[minLoc[1]-40:img.shape[0],minLoc[0]-40:img.shape[1]]
-        imgthres = floodfillgray_new.flooded(reduced_img,27,255,51)
+        imgthres = floodfillgray.flooded(reduced_img,27,255,51)
 
         #computes the contours
         imgcanny = imgthres.copy()
@@ -59,7 +59,7 @@ def resizeAndWrite(img):
             imgResize = resize(img,final_rect)
             cv2.imshow('image resize',imgResize)
             now = datetime.datetime.now()
-            cv2.imwrite('butterflies_resize/foto'+str(now.day)+str(now.month)+str(now.minute)+str(now.second)+'.jpg',imgResize)
+            #cv2.imwrite('../../butterflies_resize/foto'+str(now.day)+str(now.month)+str(now.minute)+str(now.second)+'.jpg',imgResize)
             return imgResize
         else:
             cv2.imshow('special images', img)
