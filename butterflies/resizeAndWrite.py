@@ -33,7 +33,7 @@ def resize(img,final_rect):
         
         return imgResize
 
-def resizeAndWrite(img):
+def resizeAndWrite(img,name):
         #search the area where it's more probably to find the qp
         template = cv2.imread('qp.jpg')
         imgfound = cv2.matchTemplate(img, template, cv2.TM_SQDIFF_NORMED)
@@ -59,7 +59,7 @@ def resizeAndWrite(img):
             imgResize = resize(img,final_rect)
             cv2.imshow('image resize',imgResize)
             now = datetime.datetime.now()
-            #cv2.imwrite('../../butterflies_resize/foto'+str(now.day)+str(now.month)+str(now.minute)+str(now.second)+'.jpg',imgResize)
+            cv2.imwrite('butterflies_resize/resized'+name,imgResize)
             return imgResize
         else:
             cv2.imshow('special images', img)
@@ -76,7 +76,7 @@ if __name__ == '__main__':
 
         img = cv2.imread(name)
         cv2.imshow('image',img)
-        resizeAndWrite(img)
+        resizeAndWrite(img,name)
         k = cv2.waitKey(0)
 
 

@@ -91,7 +91,7 @@ def compare(compare_images, histB, histG, histR, chi = True, showHist = True, sh
                     imToShow = imToShow+[[im[0],image]]
                     
         else :
-            eps = [(cv2.getTrackbarPos('CHI---epsB','config2')/10.0),(cv2.getTrackbarPos('CHI---epsG','config2')/10.0),(cv2.getTrackbarPos('CHI---epsR','config2')/10.0)]
+            eps = [(cv2.getTrackbarPos('CHI---epsB','config2')),(cv2.getTrackbarPos('CHI---epsG','config2')),(cv2.getTrackbarPos('CHI---epsR','config2'))]
             v1 = cv2.compareHist(histB, histB1, cv2.cv.CV_COMP_CHISQR)
             v2 = cv2.compareHist(histG, histG1, cv2.cv.CV_COMP_CHISQR)
             v3 = cv2.compareHist(histR, histR1, cv2.cv.CV_COMP_CHISQR) 
@@ -192,12 +192,12 @@ def compareByColor(images_name):
 
     # creates config window with its trackbars
     cv2.namedWindow('config2')
-    cv2.createTrackbar('CORR---epsB','config2',10,20,dummy)
-    cv2.createTrackbar('CORR---epsG','config2',10,20,dummy)
-    cv2.createTrackbar('CORR---epsR','config2',10,20,dummy)
-    cv2.createTrackbar('CHI---epsB','config2',100,200,dummy)
-    cv2.createTrackbar('CHI---epsG','config2',100,200,dummy)
-    cv2.createTrackbar('CHI---epsR','config2',100,200,dummy)
+    cv2.createTrackbar('CORR---epsB','config2',17,20,dummy)#.7
+    cv2.createTrackbar('CORR---epsG','config2',17,20,dummy)
+    cv2.createTrackbar('CORR---epsR','config2',17,20,dummy)
+    cv2.createTrackbar('CHI---epsB','config2',4,40,dummy)
+    cv2.createTrackbar('CHI---epsG','config2',4,40,dummy)
+    cv2.createTrackbar('CHI---epsR','config2',4,40,dummy)
     cv2.createTrackbar('show all input images', 'config2',0,2,onShowImages)
     cv2.createTrackbar('show all masks','config2', 0,2,onMaskImages)
     cv2.createTrackbar('show all selected masks','config2', 0,1,onShowImages)
