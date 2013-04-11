@@ -144,9 +144,9 @@ def compare(compare_images, histB, histG, histR, chi = True, showHist = True, sh
             imhist[:,im[1].shape[1]:] = hist
         
             # shows imhist
-            cv2.imshow(str(im[2]),imhist)
+            cv2.imshow('selected_'+str(im[2]),imhist)
         else:
-            cv2.imshow(str(im[2]),im[1])
+            cv2.imshow('selected_'+str(im[2]),im[1])
         if showSelectMask == 1:# show selected image mask
             cv2.imshow('im_mask_'+str(im[2]),im[0])
         j = j+1
@@ -225,6 +225,7 @@ def compareByColor(images_name):
                 cv2.destroyWindow('im_'+str(im[2]))
                 cv2.destroyWindow('im_mask_'+str(im[2]))
                 cv2.destroyWindow(str(im[2]))
+                cv2.destroyWindow('selected_'+str(im[2]))
             cv2.imshow('image',pimg)
             imToShow = compare(compare_images, histB, histG, histR, chi, show_hist)
         if key == ord('c'):
@@ -239,6 +240,7 @@ def compareByColor(images_name):
                 cv2.destroyWindow('im_'+str(im[2]))
                 cv2.destroyWindow('im_mask_'+str(im[2]))
                 cv2.destroyWindow(str(im[2]))
+                cv2.destroyWindow('selected_'+str(im[2]))
             cv2.imshow('image',pimg)
             compare(compare_images, histB, histG, histR, chi, show_hist)
             
