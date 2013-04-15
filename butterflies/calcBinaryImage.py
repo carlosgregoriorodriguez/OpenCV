@@ -100,6 +100,8 @@ def thresh(img):
     imgbn = cv2.cvtColor(img,cv2.cv.CV_BGR2GRAY)
     # threshold imgbn for obtain final binary image
     retVal,img_thres = cv2.threshold(imgbn,254,255,cv2.THRESH_BINARY_INV)
+    # erode img_thres
+    img_thres = cv2.erode(img_thres, kernel=None, iterations = cv2.getTrackbarPos('erode_mask','config'))
     # copy img_tresh in a black image with the same shape that principal image and on the correct place
     final_mask = np.zeros((shape_image[0],shape_image[1]),np.uint8)
     final_mask[0:point[1]-5,point[0]+10:] = img_thres
@@ -197,6 +199,7 @@ def calcMask(img):
     cv2.createTrackbar('canny_lo','config',67,600,on_contour_trackbar)
     cv2.createTrackbar('medianBlur','config',2,15,on_filter_trackbar)
     cv2.createTrackbar('erode','config',3,10,on_filter_trackbar)
+    cv2.createTrackbar('erode_mask','config',1,10,on_filter_trackbar)
     cv2.setMouseCallback('floodfill',onMouse)
 
     # calculates the final binary image
