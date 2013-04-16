@@ -161,7 +161,7 @@ def on_flooding_trackbar(pos=None):
 
 
 
-def calcMask(img): 
+def calcMask(img, img_name): 
     global compare_images, new_flood, img_contours, seed_pt, copy_isolated_butt, isolated_butt, mask, point, connectivity, fixed_range, final_mask, shape_image
     
     # initializes some data
@@ -219,7 +219,7 @@ def calcMask(img):
             cv2.destroyWindow('erode')
             cv2.destroyWindow('img')
             cv2.destroyWindow('canny')
-            return [final_mask,img]
+            return [final_mask,img,img_name]
         if key == ord('f'):
             fixed_range = not fixed_range
         if key == ord('c'):
@@ -254,7 +254,7 @@ if __name__ == "__main__":
 
         img = cv2.imread(img_name)
         print 'name ', img_name
-        binary_images = binary_images + [calcMask(img)]
+        binary_images = binary_images + [calcMask(img,img_name)]
         
         
 

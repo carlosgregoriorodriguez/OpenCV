@@ -6,13 +6,13 @@ import cv2
 import sys
 import numpy as np
 
-help_message = '''USAGE: calcBinaryImage2.py [<image>,<image>,...]
+help_message = '''USAGE: calcBinaryImage.py [<image>,<image>,...]
 
 Keys:
 
   g    -   save the binary image 
   k    -   reset the values chosen for the image
-  ESC  -   moves to the next image for analyzing
+  ESC  -   moves to the next image for analyzing without save the binary image
 
 '''
 
@@ -32,7 +32,7 @@ def flooding(img):
         img = img_contours.copy()
         new_flood = False
         # floodFill on the img underside
-        cv2.floodFill(img, mask, (128,copy_isolated_butt.shape[0]-6), (255, 255, 255), (3,)*3, (60,)*3, flags=4)
+        cv2.floodFill(img, mask, (128,copy_isolated_butt.shape[0]-5), (255, 255, 255), (3,)*3, (60,)*3, flags = 4)
         cv2.floodFill(img, mask, (11,copy_isolated_butt.shape[0]-6), (255, 255, 255), (2,)*3, (100,)*3) 
         cv2.floodFill(img, mask, (copy_isolated_butt.shape[1]-1,copy_isolated_butt.shape[0]-1), (255, 255, 255), (2,)*3, (70,)*3)
         # floodFill on the left side of img
@@ -41,7 +41,7 @@ def flooding(img):
         #cv2.floodFill(img, mask, (15,copy_isolated_butt.shape[0]-38), (255, 255, 255), (2,)*3, (60,)*3, flags=4)
         # floodFill on uper right corner of img
         cv2.floodFill(img, mask, (copy_isolated_butt.shape[1]-3,3), (255,255,255), (2,)*3, (60,)*3)
-       
+              
     flags = connectivity
     if fixed_range:
         flags |= cv2.FLOODFILL_FIXED_RANGE
@@ -100,10 +100,12 @@ def thresh(img):
     imgbn = cv2.cvtColor(img,cv2.cv.CV_BGR2GRAY)
     # threshold imgbn for obtain final binary image
     retVal,img_thres = cv2.threshold(imgbn,254,255,cv2.THRESH_BINARY_INV)
-    # copy img_tresh in a black image with the same shape that principal image and on the correct place)
+    # erode img_thres
+    img_thres = cv2.erode(img_thres, kernel=None, iterations = cv2.getTrackbarPos('erode_mask','config'))
+    # copy img_tresh in a black image with the same shape that principal image and on the correct place
     final_mask = np.zeros((shape_image[0],shape_image[1]),np.uint8)
     final_mask[0:point[1]-5,point[0]+10:] = img_thres
-    if cv2.getTrackbarPos('show_final_img','config') >= 1:
+    if cv2.getTrackbarPos('debug','config') >= 1:
         cv2.imshow('final_img', final_mask)
     return final_mask
 
@@ -119,7 +121,7 @@ def prepare_image(pos = None):
     img_flood = flooding(img_contours)# modifies copy_isolated_butt
     cv2.imshow('floodfill',img_flood)
     # threshold
-    img_thres = thresh(img_flood)# modifies final_mask   
+    img_thres = thresh(img_flood)# modifies final_mask    
     return img_thres
 
 
@@ -127,18 +129,13 @@ def prepare_image(pos = None):
 def on_filter_trackbar(pos=None):
     global new_flood
     # destroy old windows
-    if cv2.getTrackbarPos('show_median_blur','config') == 0:
-        cv2.destroyWindow('median_blur')
-    if cv2.getTrackbarPos('show_final_img','config') == 0:  
-        cv2.destroyWindow('final_img') 
-    if cv2.getTrackbarPos('show_erode','config') == 0:
-        cv2.destroyWindow('erode')
-    if cv2.getTrackbarPos('show_img','config') == 0:
-        cv2.destroyWindow('img')
-    if cv2.getTrackbarPos('show_canny','config') == 0:
-        cv2.destroyWindow('canny')
+    cv2.destroyWindow('median_blur')
+    cv2.destroyWindow('final_img')
+    cv2.destroyWindow('erode')
+    cv2.destroyWindow('img')
+    cv2.destroyWindow('canny')
     new_flood = True
-    # calculates all again
+    # calculate all again
     prepare_image()
 
 
@@ -160,12 +157,13 @@ def on_flooding_trackbar(pos=None):
     img_flood = flooding(copy_isolated_butt)# modifies copy_isolated_butt
     # threshold
     thresh(copy_isolated_butt)# modifies final_mask
+    
 
 
 
-def calcMask(img,name=None):
+def calcMask(img, img_name): 
     global compare_images, new_flood, img_contours, seed_pt, copy_isolated_butt, isolated_butt, mask, point, connectivity, fixed_range, final_mask, shape_image
-
+    
     # initializes some data
     connectivity = 4
     seed_pt = None
@@ -173,7 +171,7 @@ def calcMask(img,name=None):
     mask = []
     shape_image = img.shape
     new_flood = True
-
+    
     # finds the most probable point where is qp
     template = cv2.imread('qp.jpg')
     imgfound = cv2.matchTemplate(img,template, cv2.TM_SQDIFF_NORMED)
@@ -191,8 +189,9 @@ def calcMask(img,name=None):
     mask = np.zeros((isolated_butt.shape[0]+2, isolated_butt.shape[1]+2), np.uint8)
     
     # creates config window and its trackbars
+    cv2.destroyWindow('config')
     cv2.namedWindow('config')
-    cv2.namedWindow('floodfill')
+    cv2.namedWindow('floodfill') 
     cv2.createTrackbar('show_img','config',0,1,on_filter_trackbar)
     cv2.createTrackbar('show_final_img','config',0,1,on_filter_trackbar)
     cv2.createTrackbar('show_median_blur','config',0,1,on_filter_trackbar)
@@ -204,10 +203,12 @@ def calcMask(img,name=None):
     cv2.createTrackbar('canny_lo','config',67,600,on_contour_trackbar)
     cv2.createTrackbar('medianBlur','config',2,15,on_filter_trackbar)
     cv2.createTrackbar('erode','config',3,10,on_filter_trackbar)
+    cv2.createTrackbar('erode_mask','config',1,10,on_filter_trackbar)
     cv2.setMouseCallback('floodfill',onMouse)
-          
+
     # calculates the final binary image
     final_mask = prepare_image()
+
 
     while True:
         if cv2.getTrackbarPos('show_img','config') >= 1:
@@ -217,7 +218,12 @@ def calcMask(img,name=None):
         key = cv2.waitKey(15)
         # save final mask and destroy old windows
         if key == ord('g'):
-            return [final_mask,img,name]
+            cv2.destroyWindow('median_blur')
+            cv2.destroyWindow('final_img')
+            cv2.destroyWindow('erode')
+            cv2.destroyWindow('img')
+            cv2.destroyWindow('canny')
+            return [final_mask,img,img_name]
         if key == ord('f'):
             fixed_range = not fixed_range
         if key == ord('c'):
@@ -251,7 +257,8 @@ if __name__ == "__main__":
     for img_name in images_name :
 
         img = cv2.imread(img_name)
-        binary_images = binary_images + [calcMask(img,img_name)]
+        print 'name ', img_name
+        binary_images = binary_images + [calcMask(img, img_name)]
         
         
 
