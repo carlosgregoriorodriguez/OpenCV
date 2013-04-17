@@ -45,9 +45,10 @@ if __name__ == "__main__":
             i = i+1
             if(len(contours)>i):
                 print 'l'+str(i)
-                cv2.drawContours(imgToShow,contours[i], -1, (0,0,255),2, cv2.CV_AA)
-                cv2.imshow('contour',imgToShow)
-            else: i = -1
+            else:
+                i = 0
+                print 'l'+str(i)
+            
         # if press a shown the area of the contour
         elif (k == 97):
             area = cv2.contourArea(contours[i])
