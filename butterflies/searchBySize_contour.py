@@ -87,15 +87,22 @@ def compareBySize(images_name):
 
     # selects main image for comparison and calculates its moments
     mask_img = compare_images[0][0]
-    #mask_img = cv2.imread('mask_BMC-1968_D.jpg',0)
+    print type(mask_img), mask_img.dtype
+    #mask_img = cv2.imread('mask_BMC-1968_D.jpg',-1)
+    #print type(mask_img), mask_img.dtype
+    
     real_img = compare_images[0][1]
     moments = cv2.moments(mask_img, True)
     area = moments['m00']
-    img_canny = cv2.Canny(mask_img, 482, 80)
-    contours, hier = cv2.findContours(img_canny.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+
+    img_erode = cv2.erode(mask_img, kernel=None, iterations=3)
+    img_canny = cv2.Canny(img_erode, 45, 134)
+    cv2.imshow("canny", img_canny)
+
+    contours, hier = cv2.findContours(img_canny, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
     contours = [cv2.approxPolyDP(contour, 1, True) for contour in contours]
     print len(contours)
-   # cv2.drawContours(real_img,contours,-1,(255,0,0),2, cv2.CV_AA)
+    cv2.drawContours(real_img,contours,-1,(255,0,0),1, cv2.CV_AA)
     for i in range(len(contours)):
         #print contours[i]
         img_copy = real_img.copy()
@@ -107,6 +114,12 @@ def compareBySize(images_name):
         
         if cont_area > area-cv2.getTrackbarPos('eps_cont_area','config2'):
             butt_contour = contours[i]
+    print "comparando contornos 2 y 3", cv2.matchShapes(contours[2], contours[3], cv2.cv.CV_CONTOURS_MATCH_I1,0)
+    print "comparando contornos 2 y 3", cv2.matchShapes(contours[2], contours[3], cv2.cv.CV_CONTOURS_MATCH_I2,0)
+    print "comparando contornos 2 y 3", cv2.matchShapes(contours[2], contours[3], cv2.cv.CV_CONTOURS_MATCH_I3,0)
+    print "comparando contornos 1 y 3", cv2.matchShapes(contours[1], contours[3], cv2.cv.CV_CONTOURS_MATCH_I1,0)
+    print "comparando contornos 1 y 3", cv2.matchShapes(contours[1], contours[3], cv2.cv.CV_CONTOURS_MATCH_I2,0)
+    print "comparando contornos", cv2.matchShapes(contours[1], contours[3], cv2.cv.CV_CONTOURS_MATCH_I3,0)
         
    
     while True:
