@@ -201,9 +201,9 @@ def calcMask(img, img_name):
     cv2.createTrackbar('floodfill_lo','config',10,255,on_flooding_trackbar)
     cv2.createTrackbar('canny_hi','config',144,600,on_contour_trackbar)
     cv2.createTrackbar('canny_lo','config',67,600,on_contour_trackbar)
-    cv2.createTrackbar('medianBlur','config',2,15,on_filter_trackbar)
+    cv2.createTrackbar('medianBlur','config',6,15,on_filter_trackbar)
     cv2.createTrackbar('erode','config',3,10,on_filter_trackbar)
-    cv2.createTrackbar('erode_mask','config',1,10,on_filter_trackbar)
+    cv2.createTrackbar('erode_mask','config',4,10,on_filter_trackbar)
     cv2.setMouseCallback('floodfill',onMouse)
 
     # calculates the final binary image
