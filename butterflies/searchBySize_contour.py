@@ -70,7 +70,7 @@ def findButtContour(mask_img,real_img):
         
         # if cont_area is similar to area then save this contour and stop looking
         if cont_area > area-area/2:
-            butt_contour = [contours[i],i]
+            butt_contour = [contours[i],i,area]
             print 'real_area: ',area,'  cont_area: ',cont_area
             break
         else:
@@ -83,7 +83,7 @@ def findButtContour(mask_img,real_img):
             print 'area_circle: ',area_circle,'  area_rect: ', area_rect,'  real_area: ', area, '  cont_area: ',cont_area
             # if area_comp is similar to area then save this contour and stop looking
             if area_comp<area+area and area_comp>area-area/2:
-                butt_contour = [contours[i],i]
+                butt_contour = [contours[i],i,area]
                 break
     print 'contour... ',butt_contour[1]
     if butt_contour[1] != None:
@@ -102,19 +102,34 @@ def compare(buttContours, compare_images, showAllImages=0, showSelectMask=0):
         if showAllImages==1:# shows real image
             cv2.imshow(str(compare_images[i][2]),compare_images[i][1])
 
-        # compare contours
+        # compare contours with matchShapes
         if buttContours[i][1]==None:
-            print '¡¡¡¡¡¡¡¡¡¡¡¡¡¡ not found this contour !!!!!!!!!!!'
+            print '¡¡¡¡¡¡¡¡¡¡ not found this contour !!!!!!!!!!!'
         else:
             comp1 = cv2.matchShapes(principalContour, buttContours[i][0], cv2.cv.CV_CONTOURS_MATCH_I1,0)
             comp2 = cv2.matchShapes(principalContour, buttContours[i][0], cv2.cv.CV_CONTOURS_MATCH_I2,0)
             comp3 = cv2.matchShapes(principalContour, buttContours[i][0], cv2.cv.CV_CONTOURS_MATCH_I3,0)
 
-        #print cv2.getTrackbarPos('eps-I1','config2')/100.0, cv2.getTrackbarPos('eps-I2','config2')/100.0, cv2.getTrackbarPos('eps-I3','config2')/100.0
+
+        # compare contours with alternative moments
+        if buttContours[i][1] != None:
+            contour = buttContours[i][0]
+            area = buttContours[i][2]
+            x,y,w,h = cv2.boundingRect(contour)
+            aspect_ratio = float(w)/h
+            equi_diameter = np.sqrt(4*area/np.pi)
+            hull = cv2.convexHull(contour)
+            hull_area = cv2.contourArea(hull)
+            hull_defects = np.abs(hull_area-area)
+            c,r = cv2.minEnclosingCircle(contour)
+            circle_area = r*r*np.pi
+            circle_defects = np.abs(circle_area-area)
+
+        copy = compare_images[i][1].copy()
+        cv2.putText(copy,'['+str(comp1)+', '+str(comp2)+', '+str(comp3)+']',(50,copy.shape[0]-25),cv2.FONT_HERSHEY_SIMPLEX,0.5,(0,0,0))
+        cv2.putText(copy, '['+str(aspect_ratio)+', '+str(equi_diameter)+', '+str(hull_defects)+', '+str(circle_defects)+']',(50,copy.shape[0]-50),cv2.FONT_HERSHEY_SIMPLEX,0.5,(0,0,0))
 
         if comp1<cv2.getTrackbarPos('eps-I1','config2')/100.0 and comp2<cv2.getTrackbarPos('eps-I2','config2')/100.0 and comp3<cv2.getTrackbarPos('eps-I3','config2')/100.0:
-            copy = compare_images[i][1].copy()
-            cv2.putText(copy,'['+str(comp1)+', '+str(comp2)+', '+str(comp3)+']',(50,copy.shape[0]-25),cv2.FONT_HERSHEY_SIMPLEX,0.5,(0,0,0))
             imSelect = imSelect + [[compare_images[i][0],copy,compare_images[i][2]]]
 
     # shows selected images
@@ -196,7 +211,6 @@ def compareBySize(images_name):
         key = cv2.waitKey(5)
         # removes old windows and calculates the most similar images with the new values
         if key == ord('s'):
-            print 's'
             for im in compare_images:
                 cv2.destroyWindow('selected_'+str(im[2]))
                 cv2.destroyWindow('im_mask_'+str(im[2]))
