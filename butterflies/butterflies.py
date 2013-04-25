@@ -4,7 +4,7 @@
 import cv2
 import sys
 import numpy as np
-import searchBySize
+import searchBySize_contour
 import resizeAndWrite
 import searchByColor
 
@@ -12,14 +12,14 @@ import searchByColor
 def dummy(pos):
     if cv2.getTrackbarPos('resize and write','What do you do?')==1:
         for img in name_images:
-            resizeAndWrite.resizeAndWrite(cv2.imread(img))
+            resizeAndWrite.resizeAndWrite(cv2.imread(img),img)
             cv2.waitKey(0)
         cv2.setTrackbarPos('resize and write','What do you do?',0)
         cv2.destroyWindow('image resize')
         cv2.destroyWindow('special images')
 
     if cv2.getTrackbarPos('search by size','What do you do?')==1:
-        searchBySize.compareBySize(name_images)
+        searchBySize_contour.compare(name_images)
         cv2.destroyAllWindows()
         cv2.namedWindow('What do you do?')
         cv2.createTrackbar('resize and write','What do you do?',0,1,dummy)
@@ -27,7 +27,7 @@ def dummy(pos):
         cv2.createTrackbar('search by color','What do you do?',0,1,dummy)
 
     if cv2.getTrackbarPos('search by color','What do you do?')==1:
-        searchByColor.compareByColor(name_images)
+        searchByColor.compare(name_images)
         cv2.destroyAllWindows()
         cv2.namedWindow('What do you do?')
         cv2.createTrackbar('resize and write','What do you do?',0,1,dummy)
