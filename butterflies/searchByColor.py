@@ -27,7 +27,7 @@ def onShowImages(pos=None):
         cv2.destroyWindow('im_mask_'+str(img[2]))
         cv2.destroyWindow(str(img[2]))
     # compare with new data
-    compare(compare_images, histB, histG, histR, chi, show_hist, cv2.getTrackbarPos('show all input images', 'config2'), cv2.getTrackbarPos('show all selected masks','config2'))
+    compareHist(compare_images, histB, histG, histR, chi, show_hist, cv2.getTrackbarPos('show all input images', 'config2'), cv2.getTrackbarPos('show all selected masks','config2'))
 
 def onMaskImages(pos):
     # shows all mask of compare_images
@@ -48,11 +48,12 @@ def onMaskImages(pos):
             cv2.destroyWindow('mask_image_'+str(img[2]))
 
 
-def compare(compare_images, histB, histG, histR, chi = True, showHist = True, showAllImages=0, showSelectMask=0):
+def compareHist(compare_images, histB, histG, histR, chi = True, showHist = True, showAllImages=0, showSelectMask=0):
     global j
     
     # for each im in compare_images calculates its histograms and compare ir with the histograms of original image
     imToShow = []
+    returnImg = []
     j = 1
     for im in compare_images:
         img = im[1]
@@ -88,6 +89,7 @@ def compare(compare_images, histB, histG, histR, chi = True, showHist = True, sh
                     break
                 elif i == len(v)-1:  
                     imToShow = imToShow+[[im[0],image,im[2]]]
+                    returnImg = returnImg + [im]
                     
         else :
             eps = [(cv2.getTrackbarPos('CHI---epsB','config2')),(cv2.getTrackbarPos('CHI---epsG','config2')),(cv2.getTrackbarPos('CHI---epsR','config2'))]
@@ -114,6 +116,7 @@ def compare(compare_images, histB, histG, histR, chi = True, showHist = True, sh
                     break
                 elif i == len(v)-1:
                     imToShow = imToShow+[[im[0],image,im[2]]]
+                    returnImg = returnImg + [im]
 
     # shows all selected images
     j = 1
@@ -151,23 +154,22 @@ def compare(compare_images, histB, histG, histR, chi = True, showHist = True, sh
             cv2.imshow('im_mask_'+str(im[2]),im[0])
         j = j+1
 
-    return imToShow
+    return returnImg
 
-def compareByColor(images_name): 
-    global compare_images, chi, histB,histG, histR, show_hist
+def findMask(images_name):
+    # for each image calculates its mask
     print help_message 
     compare_images = []
-
-    ##########   STEP 1   #####################
- 
-    # for each image calculates its mask
     for img_name in images_name :
         img = cv2.imread(img_name)
         compare_images = compare_images + [calcBinaryImage2.calcMask(img,img_name)]
+    return compare_images
 
+def compareByColor(compareImages): 
+    global compare_images, chi, histB,histG, histR, show_hist
+    compare_images = []
 
-    ##########  STEP2   #######################
-
+    compare_images = compareImages
     # destroy old windows
     cv2.destroyWindow('config')
     cv2.destroyWindow('floodfill')
@@ -214,7 +216,7 @@ def compareByColor(images_name):
      
   
     # compares pimg histograms with all other images histograms
-    imToShow = compare(compare_images, histB, histG, histR, chi, show_hist)
+    returnImg = compareHist(compare_images, histB, histG, histR, chi, show_hist)
 
     while True:
         cv2.imshow('image',pimg)
@@ -227,7 +229,7 @@ def compareByColor(images_name):
                 cv2.destroyWindow(str(im[2]))
                 cv2.destroyWindow('selected_'+str(im[2]))
             cv2.imshow('image',pimg)
-            imToShow = compare(compare_images, histB, histG, histR, chi, show_hist)
+            returnImg = compareHist(compare_images, histB, histG, histR, chi, show_hist)
         if key == ord('c'):
             chi = not chi
             if chi:
@@ -242,16 +244,26 @@ def compareByColor(images_name):
                 cv2.destroyWindow(str(im[2]))
                 cv2.destroyWindow('selected_'+str(im[2]))
             cv2.imshow('image',pimg)
-            compare(compare_images, histB, histG, histR, chi, show_hist)
+            returnImg = compareHist(compare_images, histB, histG, histR, chi, show_hist)
             
         # EXIT
         if key == ord('q'):
-            return imToShow
+            cv2.destroyWindow('image')
+            cv2.destroyWindow('config2')
+            for im in compare_images:
+                cv2.destroyWindow('im_'+str(im[2]))
+                cv2.destroyWindow('im_mask_'+str(im[2]))
+                cv2.destroyWindow(str(im[2]))
+                cv2.destroyWindow('selected_'+str(im[2]))
+            return returnImg
   
-
+def compare(images_name):
+    compare_images = findMask(images_name)
+    selectedImages = compareByColor(compare_images)
+    return selectedImages
 
 if __name__ == "__main__":
 
     images_name = sys.argv[1:]
 
-    compareByColor(images_name)
+    compare(images_name)

@@ -24,7 +24,7 @@ def onShowImages(pos=None):
         cv2.destroyWindow('im_mask_'+str(im[2]))
         cv2.destroyWindow(str(im[2]))
     # compare with new data
-    compare(buttContours, compare_images,cv2.getTrackbarPos('show all input images', 'config2'), cv2.getTrackbarPos('show all selected masks','config2') )
+    compareContours(buttContours, compare_images,cv2.getTrackbarPos('show all input images', 'config2'), cv2.getTrackbarPos('show all selected masks','config2') )
 
 def onMaskImages(pos):
     # shows all mask of compare_images
@@ -62,11 +62,11 @@ def findButtContour(mask_img,real_img):
     contours = [cv2.approxPolyDP(contour, 1, True) for contour in contours]
 
     # for each contour, checks if is the butterfly's contour
+    butt_contour = [np.array(0),None,0]
     for i in range(len(contours)):
-        butt_contour = [np.array(0),None]
-        img_copy = real_img.copy()
+        #img_copy = real_img.copy()
         cont_area = cv2.contourArea(contours[i])
-        cv2.drawContours(img_copy,contours,i, (0,255,255),1,cv2.CV_AA)
+       # cv2.drawContours(img_copy,contours,i, (0,255,255),1,cv2.CV_AA)
         
         # if cont_area is similar to area then save this contour and stop looking
         if cont_area > area-area/2:
@@ -84,17 +84,19 @@ def findButtContour(mask_img,real_img):
             # if area_comp is similar to area then save this contour and stop looking
             if area_comp<area+area and area_comp>area-area/2:
                 butt_contour = [contours[i],i,area]
-                break
-    print 'contour... ',butt_contour[1]
+                
+    print 'contour... ',butt_contour[1], butt_contour[2]
+    img_copy = real_img.copy()
     if butt_contour[1] != None:
-        cv2.drawContours(real_img,contours,butt_contour[1], (255,0,255),1,cv2.CV_AA)
-    cv2.imshow('final',real_img)
+        cv2.drawContours(img_copy,contours,butt_contour[1], (255,0,255),1,cv2.CV_AA)
+    cv2.imshow('final',img_copy)
     cv2.waitKey(0)
     cv2.destroyWindow('final')
     return butt_contour
 
-def compare(buttContours, compare_images, showAllImages=0, showSelectMask=0):
+def compareContours(buttContours, compare_images, showAllImages=0, showSelectMask=0):
     imSelect = []
+    returnImg = []
     principalContour = buttContours[0][0]
     for i in range(len(buttContours)):
 
@@ -104,7 +106,7 @@ def compare(buttContours, compare_images, showAllImages=0, showSelectMask=0):
 
         # compare contours with matchShapes
         if buttContours[i][1]==None:
-            print '¡¡¡¡¡¡¡¡¡¡ not found this contour !!!!!!!!!!!'
+            print '¡¡¡¡¡¡¡¡¡¡ not found this contour ('+str(compare_images[i][2])+') !!!!!!!!!!!'
         else:
             comp1 = cv2.matchShapes(principalContour, buttContours[i][0], cv2.cv.CV_CONTOURS_MATCH_I1,0)
             comp2 = cv2.matchShapes(principalContour, buttContours[i][0], cv2.cv.CV_CONTOURS_MATCH_I2,0)
@@ -131,28 +133,28 @@ def compare(buttContours, compare_images, showAllImages=0, showSelectMask=0):
 
         if comp1<cv2.getTrackbarPos('eps-I1','config2')/100.0 and comp2<cv2.getTrackbarPos('eps-I2','config2')/100.0 and comp3<cv2.getTrackbarPos('eps-I3','config2')/100.0:
             imSelect = imSelect + [[compare_images[i][0],copy,compare_images[i][2]]]
+            returnImg = returnImg + [compare_images[i]]
 
     # shows selected images
     for img in imSelect:
         cv2.imshow('selected_'+str(img[2]),img[1])
         if showSelectMask == 1:# show selected image mask
             cv2.imshow('im_mask_'+str(img[2]),img[0])
+    return returnImg
 
-
-def compareBySize(images_name):
-    global buttContours,compare_images
+def findMask(images_name):
+     # for each image calculates its mask
     print help_message
-
-    ######### STEP 1 #################
-
-    # for each image calculates its mask
     compare_images = []
     for img_name in images_name :
         img = cv2.imread(img_name)
         compare_images = compare_images + [calcBinaryImage2.calcMask(img,img_name)]
-        
-    ######## STEP 2 ##################
+    return compare_images
+
+def compareBySize(compareImages):
+    global buttContours,compare_images
     
+    compare_images = compareImages
     # destroy old windows
     cv2.destroyWindow('config')
     cv2.destroyWindow('floodfill')
@@ -195,7 +197,7 @@ def compareBySize(images_name):
         real_img = img[1]
         buttContours = buttContours + [np.array(findButtContour(mask_img,real_img))]
         
-    compare(buttContours, compare_images)
+    selectedImages = compareContours(buttContours, compare_images)
         
     '''
     print "comparando contornos 2 y 3", cv2.matchShapes(contours[2], contours[3], cv2.cv.CV_CONTOURS_MATCH_I1,0)
@@ -216,17 +218,27 @@ def compareBySize(images_name):
                 cv2.destroyWindow('im_mask_'+str(im[2]))
                 cv2.destroyWindow(str(im[2]))
             cv2.imshow(str(compare_images[0][2]),compare_images[0][1])
-            compare(buttContours, compare_images,cv2.getTrackbarPos('show all input images', 'config2'), cv2.getTrackbarPos('show all selected masks','config2'))
+            selectedImages = compareContours(buttContours, compare_images,cv2.getTrackbarPos('show all input images', 'config2'), cv2.getTrackbarPos('show all selected masks','config2'))
         # EXIT
         if key == ord('q'):
-            return
+            cv2.destroyWindow('config2')
+            for im in compare_images:
+                cv2.destroyWindow('selected_'+str(im[2]))
+                cv2.destroyWindow('im_mask_'+str(im[2]))
+                cv2.destroyWindow(str(im[2]))
+            return selectedImages
 
+def compare(images_name):
+    compare_images = findMask(images_name)
+    selectedImages = compareBySize(compare_images)
+    return selectedImages
+    
 
 
 if __name__ == "__main__":
 
     images_name = sys.argv[1:]
     
-    compareBySize(images_name)
+    compare(images_name)
 
         

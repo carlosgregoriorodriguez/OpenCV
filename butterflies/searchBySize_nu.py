@@ -5,7 +5,7 @@
 import cv2
 import sys
 import numpy as np
-import calcBinaryImage
+import calcBinaryImage2
 
 help_message = '''USAGE: searchBySize.py [<image for compare>,<image>,...]
 
@@ -25,7 +25,7 @@ def onShowImages(pos=None):
     for k in range(len(compare_images)+1):
         cv2.destroyWindow('image'+str(k))
     # compare with new data
-    compare(nu, compare_images, cv2.getTrackbarPos('show all input images', 'config2'), cv2.getTrackbarPos('show all selected masks','config2'))
+    compareMoments(nu, compare_images, cv2.getTrackbarPos('show all input images', 'config2'), cv2.getTrackbarPos('show all selected masks','config2'))
 
 def onMaskImages(pos):
     # shows all mask of compare_images
@@ -48,32 +48,34 @@ def onMaskImages(pos):
 def dummy(pos):
     a = pos
 
-def compare(H,compare_images, showAllImages=0, showSelectMask=0):
+def compareMoments(H,compare_images, showAllImages=0, showSelectMask=0):
     global j
     # takes epsilon values of trackbar 
     eps = [cv2.getTrackbarPos('eps1','config2')*10**(-3),cv2.getTrackbarPos('eps2','config2')*10**(-3),cv2.getTrackbarPos('eps3','config2')*10**(-3),cv2.getTrackbarPos('eps4','config2')*10**(-3),cv2.getTrackbarPos('eps5','config2')*10**(-3),cv2.getTrackbarPos('eps6','config2')*10**(-3), cv2.getTrackbarPos('eps7(area)','config2')]
     print eps
     # for each img in compare_images calculates its Hu moments and compare it with the moments of original image
     imshow = []
+    returnImg = []
     j = 1
     for im in compare_images:
-        img = im[0]
-        moments1 = cv2.moments(img,True)
+        mask = im[0]
+        img = im[1]
+        moments1 = cv2.moments(mask,True)
         nu1 = [moments1['nu02']] + [moments1['nu11']] + [moments1['nu12']] + [moments1['nu20']] + [moments1['nu21']] + [moments1['nu30']] + [moments1['m00']]
         #print nu1
         H1 = cv2.HuMoments(moments1)
-        cv2.putText(im[1],str(nu1[0:2]),(50,img.shape[0]-100),cv2.FONT_HERSHEY_SIMPLEX,0.5,(100,0,200))
-        cv2.putText(im[1],str(nu1[2:4]),(50,img.shape[0]-75),cv2.FONT_HERSHEY_SIMPLEX,0.5,(100,0,200))
-        cv2.putText(im[1],str(nu1[4:6]),(50,img.shape[0]-50),cv2.FONT_HERSHEY_SIMPLEX,0.5,(100,0,200))
-        cv2.putText(im[1],str(nu1[6:]),(50,img.shape[0]-25),cv2.FONT_HERSHEY_SIMPLEX,0.5,(100,0,200))
+        cv2.putText(img,str(nu1[0:2]),(50,mask.shape[0]-100),cv2.FONT_HERSHEY_SIMPLEX,0.5,(0,0,0))
+        cv2.putText(img,str(nu1[2:4]),(50,mask.shape[0]-75),cv2.FONT_HERSHEY_SIMPLEX,0.5,(0,0,0))
+        cv2.putText(img,str(nu1[4:6]),(50,mask.shape[0]-50),cv2.FONT_HERSHEY_SIMPLEX,0.5,(0,0,0))
+        cv2.putText(img,str(nu1[6:]),(50,mask.shape[0]-25),cv2.FONT_HERSHEY_SIMPLEX,0.5,(0,0,0))
         
         # if showAllImages!=0 then want show all compare_images
         if showAllImages==2:# shows resize image
-            copy_img = cv2.resize(im[1], (int(img.shape[1]*0.75), int(img.shape[0]*0.75)))
+            copy_img = cv2.resize(img, (int(mask.shape[1]*0.75), int(mask.shape[0]*0.75)))
             cv2.imshow('image'+str(j),copy_img)
             j = j+1
         if showAllImages==1:# shows real image
-            cv2.imshow('image'+str(j),im[1])
+            cv2.imshow('image'+str(j),img)
             j = j+1
        
 
@@ -82,7 +84,8 @@ def compare(H,compare_images, showAllImages=0, showSelectMask=0):
             if H[i]> nu1[i]+eps[i] or H[i]<nu1[i]-eps[i]:
                 break 
             elif i == len(H)-1:
-                imshow = imshow+[im]
+                imshow = imshow+[[mask,img,im[2]]]
+                returnImg = returnImg + [im]
 
     # shows all selected images
     j = 1
@@ -91,22 +94,21 @@ def compare(H,compare_images, showAllImages=0, showSelectMask=0):
         if showSelectMask == 1:# show selected image mask
             cv2.imshow('im_mask_'+str(j),im[0])
         j = j+1
-    return imshow
+    return returnImg
 
-def compareBySize(images_name):
-    global H,compare_images,nu
-    print help_message
-
-    ######### STEP 1 #################
-
-    # for each image calculates its mask
+def findMask(images_name):
+     # for each image calculates its mask
     compare_images = []
     for img_name in images_name :
         img = cv2.imread(img_name)
-        compare_images = compare_images + [calcBinaryImage.calcMask(img)]
-        
-    ######## STEP 2 ##################
+        compare_images = compare_images + [calcBinaryImage2.calcMask(img,img_name)]
+    return compare_images
+
+def compareBySize(compareImages):
+    global H,compare_images,nu
+    print help_message
     
+    compare_images = compareImages
     # destroy old windows
     cv2.destroyWindow('config')
     cv2.destroyWindow('floodfill')
@@ -146,13 +148,13 @@ def compareBySize(images_name):
     #print nu
     H = cv2.HuMoments(moments)
 
-    cv2.putText(img,str(nu[0:2]),(50,img.shape[0]-100),cv2.FONT_HERSHEY_SIMPLEX,0.5,(100,0,200))
-    cv2.putText(img,str(nu[2:4]),(50,img.shape[0]-75),cv2.FONT_HERSHEY_SIMPLEX,0.5,(100,0,200))
-    cv2.putText(img,str(nu[4:6]),(50,img.shape[0]-50),cv2.FONT_HERSHEY_SIMPLEX,0.5,(100,0,200))
-    cv2.putText(img,str(H[6:]),(50,img.shape[0]-25),cv2.FONT_HERSHEY_SIMPLEX,0.5,(100,0,200))
+    cv2.putText(img,str(nu[0:2]),(50,img.shape[0]-100),cv2.FONT_HERSHEY_SIMPLEX,0.5,(0,0,0))
+    cv2.putText(img,str(nu[2:4]),(50,img.shape[0]-75),cv2.FONT_HERSHEY_SIMPLEX,0.5,(0,0,0))
+    cv2.putText(img,str(nu[4:6]),(50,img.shape[0]-50),cv2.FONT_HERSHEY_SIMPLEX,0.5,(0,0,0))
+    cv2.putText(img,str(H[6:]),(50,img.shape[0]-25),cv2.FONT_HERSHEY_SIMPLEX,0.5,(0,0,0))
    
     # compares pimg moments with all other images moments
-    imToShow = compare(nu,compare_images,0,0)
+    returnImg = compareMoments(nu,compare_images,0,0)
 
     while True:
         cv2.imshow('image',img)
@@ -165,17 +167,21 @@ def compareBySize(images_name):
             for k in range(len(compare_images)+1):
                 cv2.destroyWindow('image'+str(k))
             cv2.imshow('image',img)
-            imToShow = compare(nu,compare_images,cv2.getTrackbarPos('show all input images','config2'), cv2.getTrackbarPos('sohw all selected masks','config2'))
+            returnImg = compareMoments(nu,compare_images,cv2.getTrackbarPos('show all input images','config2'), cv2.getTrackbarPos('sohw all selected masks','config2'))
         # EXIT
         if key == ord('q'):
-            return imToShow 
+            return returnImg 
 
+def compare(images_name):
+    compare_images = findMask(images_name)
+    selectedImages = compareBySize(compare_images)
+    return selectedImages
 
 
 if __name__ == "__main__":
 
     images_name = sys.argv[1:]
     
-    compareBySize(images_name)
+    compare(images_name)
 
         
