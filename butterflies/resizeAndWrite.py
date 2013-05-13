@@ -25,15 +25,15 @@ def find_rectangle(contours):
     return final_rect
 
 
-def resize(img,final_rect):
+def resize(img,final_rect,average):
         #102 y 349 es el valor medio de w y h, respectivamente, de todas las imagenes en las que detecta qp
-        w =  img.shape[0]*(102)/final_rect[3]
-        h = img.shape[1]*(349)/final_rect[2]
+        w =  img.shape[0]*(average[0])/final_rect[3]
+        h = img.shape[1]*(average[1])/final_rect[2]
         imgResize = cv2.resize(img,(h,w), None, 1, 1, cv2.INTER_CUBIC)
         
         return imgResize
 
-def resizeAndWrite(img,name):
+def findRect(img):
         #search the area where it's more probably to find the qp
         template = cv2.imread('qp.jpg')
         imgfound = cv2.matchTemplate(img, template, cv2.TM_SQDIFF_NORMED)
@@ -51,32 +51,56 @@ def resizeAndWrite(img,name):
         contours = [cv2.approxPolyDP(contour, 1, True) for contour in contours];
 
         #computes the rectangle most similar with the qp card
-        final_rect = find_rectangle(contours)      
-        cv2.rectangle(img,(final_rect[0],final_rect[1]),(final_rect[2]+final_rect[0],final_rect[3]+final_rect[1]),(0,0,255))
+        final_rect = find_rectangle(contours)
+        return final_rect
 
-        #resize and write the image
-        if final_rect != [0,0,0,0]:
-            imgResize = resize(img,final_rect)
-            cv2.imshow('image resize',imgResize)
-            now = datetime.datetime.now()
-            cv2.imwrite('butterflies_resize/resized'+name,imgResize)
-            return imgResize
-        else:
-            cv2.imshow('special images', img)
-            return img
-        #cv2.imwrite('butterflies_special/foto'+str(now.day)+str(now.month)+str(now.minute)+str(now.second)+'.jpg',img)
-
+       
+def resizeAndWrite(img,name,fileName,write, average = [102,349]):
+    final_rect = findRect(img)      
+    cv2.rectangle(img,(final_rect[0],final_rect[1]),(final_rect[2]+final_rect[0],final_rect[3]+final_rect[1]),(0,0,255))
+    #resize and write the image
+    if final_rect != [0,0,0,0]:
+        imgResize = resize(img,final_rect,average)
+        cv2.imshow('image resize',imgResize)
+        if write:
+            print str(fileName)+'/resized'+name
+            cv2.imwrite(str(fileName)+'/resized'+name,imgResize)
+        return imgResize
+    else:
+        print 'not found color check'
+        cv2.imshow('special images', img)
+        return img
 
 
 if __name__ == '__main__':
+    print ''' resizeAndWrite.py <average=[102,349]> <True/False> <image> <image>....
 
-    name_images = sys.argv[1:]
-    
+  average -------> calculates width and high of color-check and resize with this data
+  True/False-----> if True then write image after resize else not write
+
+'''
+
+    if sys.argv[1]=='average':
+        name_images = sys.argv[3:]
+        write = sys.argv[2]
+        wAver, hAver, num = 0,0,0
+        for name in name_images:
+            num = num+1
+            img = cv2.imread(name)
+            rect = findRect(img)
+            wAver = wAver+rect[3]
+            hAver = hAver+rect[2]
+        average = [wAver/num, hAver/num]
+        print average
+    else:
+        name_images = sys.argv[2:]
+        write = sys.argv[1]
+        average = [102, 349]
+
     for name in name_images:
-
         img = cv2.imread(name)
         cv2.imshow('image',img)
-        resizeAndWrite(img,name)
+        resizeAndWrite(img,name,'butterflies_resized',write,average)
         k = cv2.waitKey(0)
 
 
