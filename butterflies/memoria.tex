@@ -29,13 +29,13 @@
 \includegraphics[width=15cm,height=10cm]{portada/portada4.jpg}
 \end{center}
 \end{figure}
-\Large{UNIVERSIDAD COMPLUTENSE DE MADRID}\\
-\vspace*{0.1in}
-\normalsize{FACULTAD DE CC.MATEMATICAS}\\
-\vspace*{0.15in}
-\begin{Large}
+\large{UNIVERSIDAD COMPLUTENSE DE MADRID}\\
+\vspace*{0.07in}
+\normalsize{FACULTAD DE CC.MATEMÁTICAS}\\
+\vspace*{0.3in}
+\begin{LARGE}
 \textbf{VISIÓN COMPUTARIZADA APLICADA A LA BIOLOGÍA} \\
-\end{Large}
+\end{LARGE}
 \vspace*{0.3in}
 \rule{80mm}{0.1mm}\\
 \vspace*{0.1in}
@@ -73,7 +73,7 @@ Dada una base de datos con imágenes de mariposas deseamos encontrar un método qu
  
 El objetivo del trabajo es crear un programa que, utlizando la imagen de la nueva mariposa, vaya comparando esta con cada una de las que tenemos ya guardadas en nuestra base de datos y que decida, según diferentes criterios basados en el color y la forma, si son suficientemente parecidas y es seleccionada o no lo son y es descartada, obteniendo como resultado el conjunto de todas las seleccionadas, es decir, las más semejantes a la que deseamos añadir.
 
-Las imágenes que vamos a utilizar en el trabajo estan sacadas de la página web de Proyecto Mariposa \mbox{(proyectomariposa.net)}, que es un proyecto cuyo objetivo es crear una base de datos de la biodiversidad de las mariposas diurnas de Colombia y testar la utilidad del código de barras genético. De todas las imágenes que estan disponibles vamos a trabajar sólo con las con las que tienen debajo un \textit{color-check} (véase \textit{Figura \ref{qpcard}}).
+Las imágenes que vamos a utilizar en el trabajo estan sacadas de la página web de Proyecto Mariposa \mbox{(proyectomariposa.net)}, que es un proyecto cuyo objetivo es crear una base de datos de la biodiversidad de las mariposas diurnas de Colombia y testar la utilidad del código de barras genético. De todas las imágenes que estan disponibles vamos a trabajar sólo con las que tienen debajo un \textit{color-check} (véase \textit{Figura \ref{qpcard}}).
 
 \begin{figure}[ht]
 \begin{center}
@@ -87,7 +87,7 @@ Los principales pasos que hay que llevar a cabo son:
 \begin{itemize}
 \item Hacer un preprocesamiento de las imágenes, haciendo que todas esten a la misma escala, para que los resultados de los análisis posteriores sean más reales.
 \item Encontrar la silueta de la mariposa para poder aislarla del fondo, llegando a obtener una 'máscara' (imagen binaria), en la que los los puntos del cuerpo de la mariposa son blancos y el resto negros. Esta máscara se utilizará luego para las comparaciones.
-\item Hacer las comparaciones por color y por forma utilizando, histogramas para el color y distintas propiedades de de la silueta de la mariposa (como por ejemplo el área) para la forma. Para que los datos que analizamos sean sólo de la mariposa utilizaremos la máscara.
+\item Hacer las comparaciones por color y por forma utilizando, histogramas para el color y distintas propiedades de la silueta de la mariposa (como por ejemplo el área) para la forma. Para que los datos que analizamos sean sólo de la mariposa utilizaremos la máscara.
 \end{itemize}  
 
 \chapter{Preprocesando las imágenes}
@@ -106,7 +106,7 @@ Para hacer este reescalado primero voy a tratar de encontrar el rectángulo de co
 \section{Encontrando el \textit{color-check}}
 Voy a intentar encontrar la posición del \textit{color-check} encontrando su contorno y para que esto sea más sencillo, hay que intentar hacer que destaque sobre el fondo. 
 
-Empiezo probando con diferentes \textit{thresholds} aplicados sobre toda la imagen. Utilizando los programas test\_threshold.py y adapThres.py con varias imágenes distintas compruebo que el \textit{threshold} adaptativo es el que mejor podría funcionar, pero al empezar a probar, rápidamente me doy cuenta de que no va ha ser así ya que, independientemente de los parámetros que tomemos, algunos de los colores se quedan en blanco y en varias imágenes llegan a hacer que el rectángulo quede dividido en dos partes (véase \textit{Figura \ref{adapThresh}}).
+Empiezo probando con diferentes \textit{thresholds} aplicados sobre toda la imagen. Utilizando los programas test\_threshold.py y adapThres.py con varias imágenes distintas compruebo que el \textit{threshold} adaptativo es el que mejor podría funcionar, pero al empezar a probar, rápidamente me doy cuenta de que no va a ser así ya que, independientemente de los parámetros que tomemos, algunos de los colores se quedan en blanco y en varias imágenes llegan a hacer que el rectángulo quede dividido en dos partes (véase \textit{Figura \ref{adapThresh}}).
 
 \begin{figure}[h]
 \begin{center}
@@ -116,11 +116,11 @@ Empiezo probando con diferentes \textit{thresholds} aplicados sobre toda la imag
 \label{adapThresh}
 \end{figure} 
 
-Como aplicar el \textit{threshold} directamente parece que no funciona bien, decido guardar una imagen del \textit{color-check} aislado (qp.jpg) y probar con \textit{matchTemplate}. Lo que hace este método es, dado un patrón de tamaño $h\times w$, va desplazándolo sobre la imagen de tamaño $H\times W$ y comparándolos según hayamos elegido, de forma que, si por ejemplo, utilizaramos el método del cuadrado de las diferencias normalizado, lo que obtendríamos sería una nueva imagen de tamaño $(W-w+1)\times (H-h+1)$ donde cada punto representa lo parecido que es el patrón a la porción de la imagen con que lo estamos comparando, siendo 0 si son perfectamente iguales y mayor cuanto más distintas. El punto donde se encuentra el mínimo en esta nueva imagen es el valor de la esquina superior izquierda de la porción de imagen donde es más probable que se encuentre el patrón.
+Como aplicar el \textit{threshold} directamente parece que no funciona bien, decido guardar una imagen del \textit{color-check} aislado (qp.jpg) y probar con \textit{matchTemplate}. Lo que hace este método es, dado un patrón de tamaño $h\times w$, va desplazándolo sobre la imagen de tamaño $H\times W$ y comparándolos según hayamos elegido. Si por ejemplo, utilizáramos el método del cuadrado de las diferencias normalizado, lo que obtendríamos sería una nueva imagen de tamaño $(W-w+1)\times (H-h+1)$ donde cada punto representa lo parecido que es el patrón a la porción de la imagen con que lo estamos comparando, siendo 0 si son perfectamente iguales y mayor cuanto más distintas. El punto donde se encuentra el mínimo en esta nueva imagen es el valor de la esquina superior izquierda de la porción de imagen donde es más probable que se encuentre el patrón.
 
 Aplicándolo sobre nuestras imágenes tomando como patrón la tarjeta de color, observo que funciona muy bien, pero como los tamaños de la \textit{color-check} varían de unas imágenes a otras, no me da el punto exacto donde se encuentra en la mayoría de ellas. Decido utilizar este punto para reducir el área de la imagen donde buscar, quedándome con la porción situada desde el punto hacia la derecha y hacia abajo, añádiendo un trozo por arriba y hacia la izquierda lo suficientemente grande para asegurarnos que el \textit{color-check} se encuentra en esta zona.
 
-Como los filtros que estaba probando no funcionaban muy bien creo floodfillgray.py que actúa sobre los puntos con un valor de r, g y b parecido (grises), evitando los blancos y negros, para separar así el fondo, ya que este tiene un color gris neutro (véase \textit{Figura \ref{floodfillgray}}). Éste filtro sí que funcina como deseaba, acentuando el rectángulo de color sobre el fondo, y además sirve para todas las imágenes, así que es el que decido utilizar.
+Como los filtros que estaba probando no funcionaban muy bien creo floodfillgray.py que actúa sobre los puntos con un valor de r, g y b parecido (grises), evitando los blancos y negros. Lo utilizo para acentuar las diferencias entre fondo y \textit{color-check}, ya que el fondo tiene un color gris neutro (véase \textit{Figura \ref{floodfillgray}}). Éste filtro sí que funcina como deseaba, acentuando el rectángulo de color sobre el fondo, y además sirve para todas las imágenes, así que es el que decido utilizar.
 
 \begin{figure}[ht]
 \begin{center}
@@ -133,10 +133,10 @@ Como los filtros que estaba probando no funcionaban muy bien creo floodfillgray.
 Una vez que hemos conseguido separar la tarjeta de color del fondo, el siguiente paso es encontrar el contorno. Para ello utilizamos \textit{cv2.Canny} seguido de \textit{cv2.findContours}. Como el \textit{color-check} es un rectángulo, lo que hacemos para estar seguros de que el contorno seleccionado es el correcto es calcular el rectángulo de área mínima que contiene a cada uno y quedarnos con el que tenga el área y la proporción alto/ancho más parecido al del \textit{color-check} aislado que habíamos guardado.
 
 \section{Reescalando la imagen}
-Una vez que hemos encontrado el rectangulo de colores en cada imagen tenemos que reescalarlas.\\
- Vamos a hacer que todos los \textit{color-check} tengan el mismo tamaño con una simple regla de tres. El nuevo valor de alto y ancho que vamos a elegir es la media de los altos y anchos de cada imagen para intentar perder la menor información posible sobre las imágenes, principalmente del color.
+Una vez que hemos encontrado el rectángulo de colores en cada imagen tenemos que reescalarlas.\\
+ Vamos a hacer que todos los \textit{color-check} tengan el mismo tamaño con una simple regla de tres. Para intentar perder la menor información posible sobre las imágenes, principalmente del color, el nuevo valor de alto y ancho que vamos a elegir es la media de los altos y anchos de cada imagen.
 
-Uniendo todo, obtenemos el programa resizeAndWrite.py que hace lo que deseábamos, encontrar en cada imagen el \textit{color-check} y utilzando este, hacer que todas las imágenes queden a la misma escala.  
+Uniendo todo, obtenemos el programa resizeAndWrite.py que hace lo que deseábamos: encontrar en cada imagen el \textit{color-check} y utilizando éste, hacer que todas las imágenes queden a la misma escala.  
 
 \chapter{Aislando la mariposa}
 Ya que he conseguido tener todas las imágenes guardadas a la misma escala tengo que encontrar una máscara o contorno de la mariposa para tenerla aislada, sin que influyan los valores del fondo ni de ningún otro elemento sobre los datos que obtengamos.  
@@ -245,7 +245,7 @@ Hasta ahora teníamos un programa que calculaba una imagen binaria de la mariposa
 Lo primero que voy a hacer es aplicar \textit{cv2.canny} y \textit{cv2.findContours} a la máscara. Una vez hecho esto observo que no todos los cotornos que salen están unidos, es decir, lo que necesito es tener el contorno de la mariposa en un único trazado continuo y cerrado, pero en muchos casos no se cierra o incluso no ``bordea'' toda la mariposa.\\
 Esto es un problema porque la idea principal era utilizar el área de los contornos para compararlos con el área de la mariposa (este área no es conocido pero podemos aproximarlo al momento m00 que es el número de píxeles blancos de la imagen binaria) y de esta forma poder seleccionar el que necesitaba, pero al no tener contornos cerrados no puedo utilizar \textit{cv2.contArea} ya que no proporciona datos fiables. 
 
-Necesito otra forma de poder seleccionar el contorno de la mariposa. Decido probar utilizando el área del rectángulo y la circunferencia de mínimo área que contienen a cada contorno. Me voy a quedar con el mínimo de estos y lo voy a llamar ``A''. A siempre va a ser mayor que el area de la mariposa, que voy a llamar ``a'', así que, al compararlos hay que tenerlo en cuenta, de tal forma que, nos vamos a quedar con ese contorno si ¿¿¿¿¿¿$A<2a$???????(creo que esta condición se puede quitar ya que no va puede haber ninngún contorno que tenga el valor de A mayor que el del A que contiene al contorno de la mariposa) y $A>a-a/2$, con la primera condición descartamos los que son muy grandes y con la segunda los que son pequeños.
+Necesito otra forma de poder seleccionar el contorno de la mariposa. Decido probar utilizando el área del rectángulo y la circunferencia de mínimo área que contienen a cada contorno. Me voy a quedar con el mínimo de estos y lo voy a llamar ``A''. A siempre va a ser mayor que el area de la mariposa, que voy a llamar ``a'', así que, al compararlos hay que tenerlo en cuenta, de tal forma que, nos vamos a quedar con ese contorno si ¿¿¿¿¿¿$A<2a$???????(creo que esta condición se puede quitar ya que no va puede haber ningún contorno que tenga el valor de A mayor que el del A que contiene al contorno de la mariposa) y $A>a-a/2$, con la primera condición descartamos los que son muy grandes y con la segunda los que son pequeños.
 
 Si utilizara solo este método podría darse el caso de que nos quedáramos con un contorno que no está cerrado y existiera uno que si lo estuviera, y como si hay uno cerrado lo voy a preferir siempre ante uno abierto (ya que cerrado nos proporciona más información), voy a utilizar conjuntamente el método del área del contorno y el del área del rectángulo y la circunferencia para seleccionar el contorno de la mariposa.\\
 De cada contorno se calcula su área, si éste se parece al de la mariposa (es decir, es igual al de la mariposa +/- una cte que elige el usuario) nos quedamos con éste y no miramos más, si no, lo comparamos por el método del rectángulo y la circunferencia. Si por éste método es seleccionado, lo guardamos y pasamos al siguiente. Si al final no se ha encontrado ninguno cerrado nos quedamos con el del método del rectángulo y la circunferencia.
@@ -258,7 +258,7 @@ Una vez que tenemos los contornos de cada mariposa hay que empezar a compararlos
 
 \subsubsection{Otros momentos}
 Utilizando para la comparación nuestros propios momentos
-\chapter{Juntandolo todo}
+\chapter{Juntándolo todo}
 \chapter{Conclusiones}
 
 
