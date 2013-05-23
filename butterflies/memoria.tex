@@ -254,11 +254,34 @@ Esta forma de encontrar cual es el contorno de la mariposa funciona bastante bie
 
 Una vez que tenemos los contornos de cada mariposa hay que empezar a compararlos, en este caso, lo voy a hacer de dos formas diferentes.
 
-\subsubsection{matchShape}
+\subsubsection{matchShapes}
+El primer método que voy a utilizar es basándome en \textit{matchShapes}. Lo que hace esta función es comparar dos contornos, es decir, dados dos contornos y la norma que queremos que utilice, devuelve un valor que representa cómo de parecidos son. Cuanto más proximo a 0 sea el valor más parecidos son los contornos.
+
+En el programa de comparación por la forma lo que hago es calcular este valor con tres normas diferentes obteniendo así $v_1$, $v_2$, $v_3$ y compararlo con tres constantes $c_1$,$c_2$ y $c_3$ dadas por el usuario. Considero que los contornos son suficientemente parecidos y selecciono la imagen cuando $v_i<c_i \forall i\in\{1,2,3\}$.
 
 \subsubsection{Otros momentos}
-Utilizando para la comparación nuestros propios momentos
+El otro método que voy a probar se basa en las distintas propiedades de los contornos y de la máscara de las mariposas. Se trata de crear una lista con nuestros ``propios'' momentos y utilizar esta lista para hacer la comparación igual que usábamos los tres valores de \textit{cv2.matchShapes}.
+
+Las propiedades que voy a utilizar son: 
+\begin{enumerate}
+\item El número de píxeles en blanco o momento m00.
+\item El área y el perímetro del contorno.
+\item La proporción entre el ancho y el alto del rectángulo de mínimo área que contiene al contorno.
+\item La proporción entre el área del contorno y el área del rectángulo de mínimo área que lo contiene.
+\item La proporción entre el área del contorno y el área de la figura convexa de míninimo área que lo contiene.
+\item El diámetro del círculo cuyo área es el mismo que el del contorno. Éste diámetro es $\sqrt{4*A/\pi}$ siendo A el área del contorno.
+\end{enumerate}
+Estos valores son muy fáciles de obtener usando las funciones \textit{cv2.contourArea}, \textit{cv2.arcLength}, \textit{cv2.boundingRect} y \textit{cv2.convexHull} que calculan el área y perímetro del contorno y el rectácgulo de mínimo área y figura convexa de mínimo área que lo contienen respectivamente.
+
+Éstos momentos serían muy fáciles de utilizar si tuviéramos un contorno cerrado y continuo para todas las imágenes.Como no hemos conseguido obtener el contorno de dicha manera resulta muy difícil o casi imposible calcular algunos de ellos, ya que, por ejemplo, \textit{cv2.contourArea} no nos daría el área real del contorno por no estar cerrado.
+
+.....REVISAR ESTA PARTE....\\
+Para poder utilizar este método tengo que seguir investigando la forma de obtener un contorno continuo y cerrado para todas las imágenes.
+
+ Como de momento no lo he conseguido decido crear searchBySize\_contour.py que compara las imágenes por forma utilizando \textit{cv2.matchShapes} y los momentos 1, 3 y 6 (en 3 en vez de tomar el área del contorno que devuelve la función \textit{cv2.contourArea} utilizo el momento m00).
+
 \chapter{Juntándolo todo}
+Una vez que ya tenemos 
 \chapter{Conclusiones}
 
 
