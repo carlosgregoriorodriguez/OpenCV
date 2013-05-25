@@ -50,16 +50,40 @@ Supervisado por: Carlos Gregorio Rodríguez \\
 \newpage
 \tableofcontents
 
-
-% Empezamos secciones
 \newpage
 \part{Conociendo la librería OpenCV}
-Para desarrollar el proyecto he utilizado python 2.7 y la librería OpenCV 3.6. 
-\\OpenCV es una librería de .....
+OpenCV (Open source Computer Vision library) es una librería de Visión Computarizada, destinada al tratamiento de imágenes y, principalmente, a la visión por computador en tiempo real.
+
+Detrás de la mayoría de las funciones de la librería que voy a utilizar se encuentran gran cantidad de cálculos, fórmulas y, en definitiva, métodos matemáticos. Por ello, en esta primera parte, voy a explicar las principales funciones de OpenCV que van a ser necesarias en la segunda parte para desarrollar el proyecto, centrándome, principalmente, en entender su funcionamiento y tratar de explicar algo sobre las ``matemáticas'' que hay detrás.
+
+Antes de empezar, es conveniente explicar que un ordenador ``ve'' una imagen como una matriz, donde, en cada posición, hay tres números, el valor del color rojo, verde y azul (cada elemento de la matriz representa un píxel). Otra forma de verlo es como si la imagen se separara en tres matrices o ``capas'', una la de los valores del color rojo, otra verde y otra azul.\\
+En imágenes en escala de grises solo habría una matriz donde cada número representa el valor del gris en ese píxel.
+
+ **** IMAGEN *****
+
+El trabajo lo he desarrollado utilizando python 2.7 y OpenCV 2.3.1.
+
 \chapter{Filtrado de imágenes}
-Explicar un poco los filtros smooth, erode/dilate, thresh
+****Explicar lo de la complejidad y la transformada de Laplace??*********\\
+
+Tenemos una imagen y queremos aplicar sobre ella un filtro. Los filtros que vamos a usar lo que hacen es, dada la imagen y un núcleo, se desplaza píxel por píxel sobre la imagen comparando los valores de la posición $(i,j)$ con todos los del núcleo y obteniendo uno nuevo. El valor que tenía el píxel $(i,j)$ se cambia por el nuevo. Dependiendo del método que utilicemos el núcleo tendrá tamaños diferentes pudiendo ser de tamaño $1x1$ y el método de comparación también será distinto.
+
+\section {Smoothing}
+Estos filtros se utilizan frecuentemente y se usan, principalmente, para eliminar ruido de las imágenes o reducir la resolución. Hay muchos tipos pero ahora voy a centrarme solo en uno, ya que es el que más voy a utilizar a lo largo del documento, \textit{median blur}.
+
+En el programa smoothing.py se pueden ver ejemplos con varios métodos diferentes.
+
+\subsection {Median blur}
+En este caso, no hay que dar un núcleo concreto, solo hay que dar el tamaño deseado, supongamos, $n$ con $n\ge 1$ impar. El núcleo será igual a la porción de imagen de tamaño $nxn$ coincidiendo el centro con el píxel $(i,j)$. Lo que hace es ir recorriendo toda la imagen de forma que en la posición $(i,j)$, $a_{i,j}$ ahora será igual a la media de todos los valores del núcleo.(pensar la fórmula)!!!!!!!
+
+*****  EJEMPLO  ***********
+
+\section {Erode y dilate}
+
+\section {Threshold}
+
 \chapter{Floodfill}
-\chapter{Transformaciones}
+\chapter{Transformaciones??}
 Programa para cambiar la perspectiva y resize
 \chapter{Análisis de imágenes}
 Explicar histogramas y espacios de color
@@ -281,9 +305,12 @@ Para poder utilizar este método tengo que seguir investigando la forma de obtene
  Como de momento no lo he conseguido decido crear searchBySize\_contour.py que compara las imágenes por forma utilizando \textit{cv2.matchShapes} y los momentos 1, 3 y 6 (en 3 en vez de tomar el área del contorno que devuelve la función \textit{cv2.contourArea} utilizo el momento m00).
 
 \chapter{Juntándolo todo}
-Una vez que ya tenemos 
-\chapter{Conclusiones}
+Ya tenemos creados los programas que seleccionan, dentro de una colección de imágenes de mariposas, las más parecidas a otra dada fjándonos en el color y la forma. Ahora hay que juntar los dos métodos para que la criba sea lo más precisa posible.
 
+Al tener ya creados searchByColor.py y searchBySize.py hacer esto es muy sencillo. Creo search.py que lo que hace es filtrar primero una colección de imágenes por forma y las que son seleccionadas las filtra, posteriormente, por color o viceversa (según el orden que elija el usuario). Obteniendo de esta manera, al final del proceso, el conjunto de imágenes deseado.
+   
+\chapter{Conclusiones}
+%hablar de lo del fondo y las sombras. De lo de los contornos discontinuos. De la dificultad hasta encontrar la máscara.
 
 % Termina el documento
 \end{document}
