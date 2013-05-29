@@ -1,8 +1,10 @@
 \documentclass[12pt,a4paper,spanish]{report}
 \usepackage{titlesec}
 \usepackage{amssymb, latexsym}
-\usepackage{babel}
+\usepackage[spanish]{babel}
+%\selectlanguage{spanish}  
 \usepackage[latin1]{inputenc}
+\usepackage{url}
 % Utilizamos el paquete para gestionar imagenes jpg
 \usepackage{graphicx}
 % Definimos la zona de la pagina ocupada por el texto
@@ -51,6 +53,16 @@ Supervisado por: Carlos Gregorio Rodríguez \\
 \tableofcontents
 
 \newpage
+\chapter{Introducción/Presentación}
+\begin{itemize}
+\item computer vision
+\item licenciatura
+\item relación con matemáticas
+\item ...
+\item ...
+\item objetivos
+\end{itemize}
+
 \part{Conociendo la librería OpenCV}
 OpenCV (Open source Computer Vision library) es una librería de Visión Computarizada, destinada al tratamiento de imágenes y, principalmente, a la visión por computador en tiempo real.
 
@@ -92,12 +104,12 @@ Explicar canny y findContours
 \chapter{mathTemplate??}
 
 \part{Proyecto}
-\chapter{Introducción y objetivos}
+\chapter{Presentación y objetivos (del proyecto)}
 Dada una base de datos con imágenes de mariposas deseamos encontrar un método que nos facilite la tarea de ver si una nueva mariposa la tenemos ya clasificada o, por el contrario, todavía no se encuentra dentro de la colección. Para ello, necesitamos discrimar las imágenes de diferentes formas y así seleccionar las más parecidas a la nueva, para que de esta manera, sea más fácil tomar la decisión de si está clasificada o no, ya que tendremos que fijarnos en un número muy reducido de ejemplares en vez de tener que mirar todas una por una.
  
 El objetivo del trabajo es crear un programa que, utilizando la imagen de la nueva mariposa, vaya comparando ésta con cada una de las que tenemos ya guardadas en nuestra base de datos y que decida, según diferentes criterios basados en el color y la forma, si son suficientemente parecidas y es seleccionada, o no lo son y es descartada, obteniendo como resultado el conjunto de todas las seleccionadas, es decir, las más semejantes a la que deseamos añadir.
 
-Las imágenes que vamos a utilizar en el trabajo están sacadas de la página web de Proyecto Mariposa \mbox{(proyectomariposa.net)}, que es un proyecto cuyo objetivo es crear una base de datos de la biodiversidad de las mariposas diurnas de Colombia y testar la utilidad del código de barras genético. De todas las imágenes que están disponibles vamos a trabajar sólo con las que tienen debajo un \textit{color-check} (véase \textit{Figura \ref{qpcard}}).
+Las imágenes que vamos a utilizar en el trabajo están sacadas de la página web de Proyecto Mariposa \url{www.proyectomariposa.net}, que es un proyecto cuyo objetivo es crear una base de datos de la biodiversidad de las mariposas diurnas de Colombia y testar la utilidad del código de barras genético. De todas las imágenes que están disponibles vamos a trabajar sólo con las que tienen debajo un \textit{color-check} (véase \textit{Figura \ref{qpcard}}).
 
 \begin{figure}[ht]
 \begin{center}
@@ -114,7 +126,7 @@ Los principales pasos que hay que llevar a cabo son:
 \item Hacer las comparaciones por color y por forma utilizando histogramas para el color y distintas propiedades de la silueta de la mariposa (como por ejemplo el área) para la forma. Para que los datos que analizamos sean sólo de la mariposa utilizaremos la máscara.
 \end{itemize}  
 
-\chapter{Preprocesando las imágenes}
+\chapter{Preprocesando las muestras}
 Las imágenes que he obtenido de la base de datos de Proyecto Mariposa están a distinta escala, por tanto, es necesario llevar a cabo un proceso previo de reescalado para hacer que todas queden igual y no obtener datos falsos en las posteriores comparaciones.\\
 Para hacer este reescalado primero voy a tratar de encontrar el rectángulo de colores en cada imagen y después hacer que éste tenga el mismo tamaño en cada una de ellas (véase \textit{Figura \ref{igual-qp}}), así, 1cm de los que marcan las reglas de las imágenes va a equivaler al mismo número de píxeles en cada una de ellas.
 
@@ -163,12 +175,29 @@ Una vez que hemos encontrado el rectángulo de colores en cada imagen tenemos que
 Uniendo todo, obtenemos el programa resizeAndWrite.py que hace lo que deseábamos: encontrar en cada imagen el \textit{color-check} y utilizando éste, hacer que todas las imágenes queden a la misma escala.  
 
 \chapter{Aislando la mariposa}
+
+intro... es el núcleo del trabajo.
+
+\section{Problemas de las muestras}
+separar el fondo de la mariposa pues hay sombras
+
+como las mariposas pueden tener muchos colores, blanco, negro... no es fácil.
+
+\section{Solución obtenida}
+
+
 Ya que he conseguido tener todas las imágenes guardadas a la misma escala tengo que encontrar una máscara o contorno de la mariposa para tenerla aislada, sin que influyan los valores del fondo ni de ningún otro elemento sobre los datos que obtengamos.  
 
 A simple vista parece que las sombras que aparecen en la parte de abajo de las mariposas pueden dar problemas a la hora de aislarla, por ello decido investigar los distintos espacios de color para ver si hay alguno en el que la diferencia de luz no afecte sobre el color.\\
 .......CONTAR ALGO SOBRE COLOR..........
 
 Como no encuentro nada que me ayude decido seguir buscando otro tipo de soluciones.
+
+\subsection{Acentuar contorno}
+
+Una primera idea es usar floodfill (ver parte II) para separar el fondo....
+pero hacía falta acentuar el contorno...
+
 
 Antes de seguir y para que tarde menos en hacer los cálculos reduzco el tamaño de la imagen con la que voy a trabajar. Lo que hago es utilizar \textit{cv2.matchTemplate} para encontrar la esquina superior izquierda del \textit{color-check}, a este punto le resto una constante ``a'' de forma que se ajuste lo máximo posible a la mariposa (véase \textit{Figura \ref{ajusteCte}}) (esta constante ``a'' es conocida ya que es el valor correspondiente a la parte que todavia quedaría visible de la regla, y esto es posible debido a que sabemos a que escala está la imagen).
 
@@ -204,6 +233,9 @@ Gracias al uso conjunto del \textit{floodfill} y los contornos logramos que en l
 \label{blur-erode}
 \end{figure}
 
+\subsection{Buscar una máscara}
+
+\subsection{Separar el fondo}
 Los puntos sobre los que utilizo el método anterior son, en principio, la esquina superior derecha de la imagen, para así asegurarnos de que el píxel elegido no está dentro de la mariposa y, como con un único punto no va a ser suficiente para cubrir todo el fondo, ya que por la zona de las reglas el color es más oscuro por las sombras, tomo varios puntos por el borde izquierdo y el inferior de la imagen que son donde surge el problema.\\
 Esto funciona bastante bien, pero como la finalidad es que funcione de forma automática tengo que encontrar unos valores que sirvan para todas las imágenes.\\
 Tras realizar muchas pruebas, llego a la conclusión de que eso va a ser muy difícil ya que unos valores que funcionan muy bien con imágenes oscuras siguen tapando parte de las imágenes con colores claros (como pasaba al aplicar \textit{cv2.floodfill} directamente). Otro problema es que las sombras siguen sin taparse bien.\\
@@ -218,6 +250,9 @@ Juntando todo obtengo el programa calcBinaryImage.py que se divide en cuatro par
 \item Varios \textit{floodfill} para tapar el fondo.
 \item Un filtro posterior para eliminar pequeños fallos del \textit{floodfill} y suavizar los bordes de la máscara.
 \end{itemize}
+
+\section{Algunos caminos no fructíferos}
+
 
 \chapter{Comparando las imágenes}
 Recordemos que el objetivo es que dada una nueva imagen el programa nos muestre las más parecidas a ésta, centrándonos principalmente en el estudio del color y la forma. Por tanto, una vez que ya tengo todas las imágenes a la misma escala y he encontrado la máscara de cada una de ellas puedo empezar a realizar las comparaciones.
@@ -304,7 +339,10 @@ Para poder utilizar este método tengo que seguir investigando la forma de obtene
 
  Como de momento no lo he conseguido decido crear searchBySize\_contour.py que compara las imágenes por forma utilizando \textit{cv2.matchShapes} y los momentos 1, 3 y 6 (en 3 en vez de tomar el área del contorno que devuelve la función \textit{cv2.contourArea} utilizo el momento m00).
 
-\chapter{Juntándolo todo}
+\chapter{Aplicación final}
+
+***Hablar algo del interfaz****
+
 Ya tenemos creados los programas que seleccionan, dentro de una colección de imágenes de mariposas, las más parecidas a otra dada fjándonos en el color y la forma. Ahora hay que juntar los dos métodos para que la criba sea lo más precisa posible.
 
 Al tener ya creados searchByColor.py y searchBySize.py hacer esto es muy sencillo. Creo search.py que lo que hace es filtrar primero una colección de imágenes por forma y las que son seleccionadas las filtra, posteriormente, por color o viceversa (según el orden que elija el usuario). Obteniendo de esta manera, al final del proceso, el conjunto de imágenes deseado.
