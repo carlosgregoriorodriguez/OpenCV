@@ -365,20 +365,34 @@ El trabajo lo he desarrollado utilizando python 2.7 y OpenCV 2.3.1.
 \section{Filtrado de imágenes}
 ****Explicar lo de la complejidad y la transformada de Fourier*********\\
 
-Tenemos una imagen y queremos aplicar sobre ella un filtro. Los filtros que vamos a usar lo que hacen es, dada la imagen y un núcleo, se desplaza píxel por píxel sobre la imagen comparando los valores de la posición $(i,j)$ con todos los del núcleo y obteniendo uno nuevo. El valor que tenía el píxel $(i,j)$ se cambia por el nuevo. Dependiendo del método que utilicemos el núcleo tendrá tamaños diferentes pudiendo legar a ser de tamaño $1x1$ y el método de comparación también será distinto.
+Tenemos una imagen y queremos aplicar sobre ella un filtro. Los filtros que vamos a usar lo que hacen es, dada la imagen y un núcleo, se desplaza píxel por píxel sobre la imagen comparando los valores de la posición $(i,j)$ con todos los del núcleo y obteniendo uno nuevo. El valor que tenía el píxel $(i,j)$ se cambia por el nuevo. Dependiendo del método que utilicemos el núcleo tendrá tamaños diferentes pudiendo llegar a ser de tamaño $1\times1$ y el método de comparación también será distinto.
 
 \subsection {Smoothing}
-Estos filtros se utilizan frecuentemente y se usan principalmente para eliminar ruido de las imágenes o reducir la resolución. Hay muchos tipos pero ahora voy a centrarme sólo en uno, ya que es el que más voy a utilizar a lo largo del documento, \textit{median blur}.
+Estos filtros se utilizan frecuentemente y se usan principalmente para eliminar ruido de las imágenes o reducir la resolución. Hay muchos tipos pero ahora vamos a centrarnos sólo en uno, ya que es el que más utilizamos a lo largo del documento, median blur.
 
 En el programa smoothing.py se pueden ver ejemplos con varios métodos diferentes.
 
 \subsubsection {Median blur}
-En este caso, no hay que dar un núcleo concreto, sólo hay que dar el tamaño deseado, supongamos $n$ con $n\ge 1$ impar. El núcleo será igual a la porción de imagen de tamaño $nxn$ coincidiendo el centro con el píxel $(i,j)$. Lo que hace es ir recorriendo toda la imagen de forma que en la posición $(i,j)$, $a_{i,j}$ ahora será igual a la media de todos los valores del núcleo.(pensar la fórmula)!!!!!!!
+En este caso, no hay que dar un núcleo concreto, sólo hay que dar el tamaño deseado, supongamos $k$ con $k\ge 1$ impar. El núcleo será igual a la porción de imagen de tamaño $k\times k$ coincidiendo el centro con el píxel $(i,j)$. Lo que hace es ir recorriendo toda la imagen de forma que en la posición $(i,j)$, $a_{i,j}$ ahora será igual a la media de todos los valores del núcleo, es decir, $ a_{i,j} = \displaystyle\sum_{n = i-\frac{k-1}{2}}^{i+\frac{k-1}{2}}\displaystyle\sum_{m = j-\frac{k-1}{2}}^{j+\frac{k-1}{2}} \frac{b_{n,m}}{k^2}$.
 
-*****  EJEMPLO  ***********
+*********  EJEMPLO  ***********
 
 \subsection {Erode y dilate}
+Los filtros erode y dilate se utilizan para eliminar ruido, aislar y juntar elementos, etc. También pueden utilizarse para encontrar contornos en una imagen.
 
+Dado el tamaño del núcleo y el punto de éste donde queremos centrar cada píxel (por defecto es el centro del núcleo), se recorre toda la imagen calculando para cada posición un nuevo valor que varía dependiendo de si es erode o dilate:
+\begin{itemize}
+\item{\bfseries{Erode:}}
+\\$a_{i,j} = Min_{n,m}\{a_{n,m}\}$ con $n\in [i-\frac{k-1}{2},i+\frac{k-1}{2}]$ y $m\in [j-\frac{k-1}{2},j+\frac{k-1}{2}]$
+
+Al tomar el valor mínimo lo que se logra es oscurecer la imagen o agrandar las zonas oscuras. 
+\item{\bfseries{Dilate:}}
+\\$a_{i,j} = Max_{n,m}\{a_{n,m}\}$ con $n\in [i-\frac{k-1}{2},i+\frac{k-1}{2}]$ y $m\in [j-\frac{k-1}{2},j+\frac{k-1}{2}]$
+
+Al tomar el valor máximo lo que se logra es aclarar la imagen o agrandar las zonas claras.
+
+\end{itemize}
+ 
 \subsection {Threshold}
 
 \subsection{Floodfill}
