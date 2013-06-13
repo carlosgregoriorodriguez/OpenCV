@@ -9,6 +9,9 @@
 \usepackage{graphicx}
 \usepackage{setspace}
 \usepackage{tocloft}
+\usepackage{color}
+
+\newcommand{\notaCarlos}[1]{{\color{red}#1}}
 
 %\setlength\cftparskip{-2pt}
 %\setlength\cftbeforechapskip{0pt}
@@ -58,7 +61,7 @@ Supervisado por: Carlos Gregorio Rodríguez \\
 \tableofcontents
 
 \newpage
-\chapter{Introducción/Presentación}
+\chapter{Introducción}
 \begin{itemize}
 \item computer vision
 \item licenciatura
@@ -68,14 +71,39 @@ Supervisado por: Carlos Gregorio Rodríguez \\
 \item objetivos
 \end{itemize}
 
+\notaCarlos{Algunas observaciones globales:
+  \begin{itemize}
+  \item Tiempo verbal. Ha veces usas el pasado, a veces el presente, a veces el presente continuo... Procura unificar el estilo, lo más fácil es que sea siempre en pasado.
+  \item Persona. Aquí ya lo hablamos, lo normal es usar el plural, pero siempre que 
+se pueda utiliza el impersonal. Ejemplo:
+``Para hacer este reescalado primero voy a tratar de encontrar...'' se puede poner
+``Hacer el reescalado consiste en encontrar el rectángulo...''
+\item Unifica los términos y la notación. Ejemplo: a veces usas color-check, a veces rectángulo de colores... ; A veces utilizas floodfill a veces cv2.floodfill...
+\item Más notación:
+``y lo vamos a llamar `A'. A siempre va a ser mayor que el area de la mariposa, que vamos a llamar `a'... '' Para nombrar así se utiliza el modo matemático ``y lo vamos a llamar $A$. $A$ siempre va a ser mayor que el area de la mariposa, que vamos a llamar $a$ ''
+
+\item Trata de explicar todos los conceptos nuevos cuando aparezcan, por ejemplo hablas de histogramas como si todo el mundo supiese lo que és. Como tienes apéndices en las que de una u otra forma aparece toda esta información técnica, haz referencias a ellos.
+\item Usa el corrector ortográfico
+\item En las secciones en las que explicas un procedimiento que tiene varios pasos y vas explicando a medida que avanzas, termina con un resumen de todas las funciones que has utilizado. Ejemplo: al final de la sección 3.1 ``Encontrando el color-check'', poner algo así como ``En resumen, los pasos a seguir son
+  \begin{itemize}
+  \item Utilizamos \texttt{cv2.matchTemplate} con parámetros tal y cual ..
+  \item Luego nuestro filtro \texttt{floodfillgray.py}....
+  \item Y finalmente, para encontrar los contornos....
+  \end{itemize}
+En alguna sección (creo que 4.2) he visto que ya has hecho algo parecido.
+\end{itemize}
+}
 
 %\part{Proyecto}
-\chapter{Presentación y objetivos (del proyecto)}
+\chapter{Presentación y objetivos del proyecto}
 
+\subsection*{Problema}
 Dada una base de datos con imágenes de mariposas deseamos encontrar un método que nos facilite la tarea de ver si una nueva mariposa la tenemos ya clasificada o, por el contrario, todavía no se encuentra dentro de la colección. Para ello, necesitamos discrimar las imágenes de diferentes formas y así seleccionar las más parecidas a la nueva, para que de esta manera, sea más fácil tomar la decisión de si está clasificada o no, ya que tendremos que fijarnos en un número muy reducido de ejemplares en vez de tener que mirar todas una por una.
  
+\subsection*{Objetivos}
 El objetivo del trabajo es crear un programa que, utilizando la imagen de la nueva mariposa, vaya comparando ésta con cada una de las que tenemos ya guardadas en nuestra base de datos y que decida, según diferentes criterios basados en el color y la forma, si son suficientemente parecidas y es seleccionada, o no lo son y es descartada, obteniendo como resultado el conjunto de todas las seleccionadas, es decir, las más semejantes a la que deseamos añadir.
 
+\subsection*{Muestras}
 Las imágenes que vamos a utilizar en el trabajo están sacadas de la página web de Proyecto Mariposa \url{proyectomariposa.net}, que es un proyecto cuyo objetivo es crear una base de datos de la biodiversidad de las mariposas diurnas de Colombia y testar la utilidad del código de barras genético. De todas las imágenes que están disponibles vamos a trabajar sólo con las que tienen debajo un \textit{color-check} (véase \textit{Figura \ref{qpcard}}). Por tanto, las muestras tienen un ejemplar de mariposa en la parte superior que está encuadrado por dos reglas, una a la izquierda y otra debajo, que nos van a indicar el tamaño y debajo de la regla inferior un \textit{color-check}(véase \textit{Figura \ref{ejemplar}}).
 
 \begin{figure}[ht]
@@ -94,6 +122,9 @@ Las imágenes que vamos a utilizar en el trabajo están sacadas de la página web d
 \end{figure}
 
 
+\subsection*{Solución}
+
+\notaCarlos{Mucho detalle técnico, piensa en que el lector debería entenderlo aunque no quisieras meterte en los detalles} 
 
 Los principales pasos que hay que llevar a cabo son:
 \begin{itemize}
@@ -101,6 +132,28 @@ Los principales pasos que hay que llevar a cabo son:
 \item Encontrar la silueta de la mariposa para poder aislarla del fondo, llegando a obtener una 'máscara' (imagen binaria), en la que los puntos del cuerpo de la mariposa son blancos y el resto negros. Esta máscara se utilizará luego para las comparaciones.
 \item Hacer las comparaciones por color y por forma utilizando histogramas para el color y distintas propiedades de la silueta de la mariposa (como por ejemplo el área) para la forma. Para que los datos que analizamos sean sólo de la mariposa utilizaremos la máscara.
 \end{itemize}  
+
+\subsection*{Estructura}
+
+\notaCarlos{Explicación de lo que se puede encontrar en el documento
+  \begin{itemize}
+  \item Capítulo 3...
+  \item Capítulo 4...
+  \item ...
+  \item Apéndices
+  \item ...
+  \end{itemize}
+}
+ \subsection*{Nomenclatura y notación}
+
+\notaCarlos{
+Hasta aquí se supone que todo debe ser expresado en lenguaje general, sin tecnicismos.
+A partir de aquí van a comenzar los tecnicismos y tenemos que aclarar la nomenclatura que vamos a utilizar 
+\begin{itemize}
+\item Vamos a nombrar muchas funciones de la librería OpenCV, estas funciones ya están implementadas y algunas de ellas explicadas con detalle en apéndice A... En el texto las nombraremos \texttt{cv2.Canny} (o \textit{cv2.Canny} como veo que has puesto, o como tu quieras, es nomenclatura, pero se suele utilizar más la tipografía \texttt{typewriter}).
+\item También nombraremos funciones propias que se han ido implementando a medida que se desarrollaba el proyecto, la nombraremos \texttt{flodfillgray.py} (o como quieras, igual que antes) pues están implementadas en python utilizando la librería opencv. (De estas funciones, las que salgan, quizás se podrían poner en el apéndice de código) 
+\end{itemize}
+}
 
 \chapter{Preprocesando las muestras}
 Las imágenes que he obtenido de la base de datos de Proyecto Mariposa están a distinta escala, por tanto, es necesario llevar a cabo un proceso previo de reescalado para hacer que todas queden igual y no obtener datos falsos en las posteriores comparaciones.\\
