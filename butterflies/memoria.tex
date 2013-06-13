@@ -154,7 +154,7 @@ Esta parte del trabajo aparentemente era muy sencilla ya que a simple vista pare
 \section{Problemas de las muestras}
 Al empezar a trabajar sobre las muestras nos surgen dos grandes problemas: las sombras en la zona inferior de las mariposas y la gran diversidad de colores.
 
-Las sombras son un problema debido a que, al aplicar algunos métodos como \textit{canny} para encontrar el borde, detecta las sombras como contorno y al aplicar otros como \textit{floodfill}, hacen de ``barrera'' impidiendo que esa zona del fondo sea cubierta o que si aumentas los límites para cubrirla se tape parte de la mariposa. Aquí también entra en juego el problema de los colores, ya que si no hubiera muestras con colores claros, las sombras realmente no serían tan problemáticas, porque con disminuir el valor del límite inferior en el \textit{floodfill} conseguiríamos taparlas sin entrar en el ``cuerpo'' (esto es así debido a la gran diferencia entre los valores del color del fondo y los de la mariposa). Pero como los ejemplares tienen colores muy variados en vez de evitar un problema nos encontramos con dos.
+Las sombras son un problema debido a que, al aplicar algunos métodos como canny para encontrar el borde, detecta las sombras como contorno y al aplicar otros como floodfill, hacen de ``barrera'' impidiendo que esa zona del fondo sea cubierta o que si aumentas los límites para cubrirla se tape parte de la mariposa. Aquí también entra en juego el problema de los colores, ya que si no hubiera muestras con colores claros, las sombras realmente no serían tan problemáticas, porque con disminuir el valor del límite inferior en el floodfill conseguiríamos taparlas sin entrar en el ``cuerpo'' (esto es así debido a la gran diferencia entre los valores del color del fondo y los de la mariposa). Pero como los ejemplares tienen colores muy variados en vez de evitar un problema nos encontramos con dos.
 
 El que los ejemplares de las muestras tengan colores muy variados, aparte de no ayudar a la hora de quitar las sombras también es un problema porque metódos que funcionan bien con unos tonos no funcionan tan bien con otros (un ejemplo de ésto puede ser el ya mencionado \textit{floodfill}).
 
@@ -206,7 +206,9 @@ Como aplicar directamente el floodfill no es suficiente decidimos probar acentua
 \label{blur-erode}
 \end{figure}
 
-Después de ésto, aplicamos otra vez \textit{cv2.canny} para encontrar los contornos, pero viendo las imágenes que genera el canny, observamos que acentuar sólo los bordes no es suficiente para encontrar bien el contorno !!!! METER IMAGEN DEL CANNY  !!!(imagen de canny no es suf para cont pero se puede usar como mask con el flood), pero sí que podemos aprovechar los contornos obtenidos como máscara con \textit{cv2.floodfill}. 
+Después de ésto, aplicamos otra vez \textit{cv2.canny} para encontrar los contornos, pero viendo las imágenes que genera el canny, observamos que acentuar sólo los bordes no es suficiente para encontrar bien el contorno,
+ %!!!! METER IMAGEN DEL CANNY  !!!(imagen de canny no es suf para cont pero se puede usar como mask con el flood)
+pero sí que podemos aprovechar los contornos obtenidos como máscara con \textit{cv2.floodfill}. 
 
 Gracias al uso conjunto del floodfill y canny logramos que en las imágenes con colores claros, cuando aplicamos el floodfill, sea más difícil tapar parte de la mariposa ya que no puede atravesar los contornos que hemos utilizado como máscara.
 
