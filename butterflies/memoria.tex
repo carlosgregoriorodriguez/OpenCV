@@ -513,11 +513,18 @@ La $a$ varía entre -128 y 127, valores negativos indican verde y positivos rojo.
 la $b$ varía entre -128 y 127, valores negativos indican azul y positivos amarillo.
 
 \item{\bfseries{RGB}}
-\\
+\\En el espacio de color RGB la R (\textit{red}) representa la cantidad de color rojo, la G (\textit{green}) la cantidad de color verde y la B (\textit{blue}) la cantidad de color azul. Los tres valores se mueven entre 0 y 255, siendo (0,0,0) negro y (255,255,255) blanco.
 
+\section{Contornos}
+Muchos de los algoritmos que se utilizan para la detección de bordes están basados en el cálculo del gradiente, es decir, la dirección de máxima variación. Algunos de estos métodos son \texttt{cv2.Sobel}, \texttt{cv2.Laplacian} o \texttt{cv2.Canny}.
 
-\section{Encontrar bordes}
+En esta sección se explica con más detalle el algoritmo Canny ya que es el más utilizado a lo largo del proyecto.
+
+Una vez que se tienen calculados los contornos se pueden utilizar para muchas aplicaciones, combinándolos con otros métodos, como máscaras o por sí solos. Utilizando por ejemplo las funciones \texttt{cv2.contourArea} o \texttt{cv2.arcLength} es muy fácil calcular el área y el perímetro respenctivamente de los contornos. Aquí nos vamos a centrar en explicar como comparar dos contornos.
+
 \subsection{Canny}
+
+\subsection{Comparar contornos}
 
 \chapter{Code}
 hola
