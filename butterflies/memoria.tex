@@ -169,9 +169,9 @@ Para hacer este reescalado primero voy a tratar de encontrar el rectángulo de co
 
 
 \section{Encontrando el \textit{color-check}}
-Vamos a intentar encontrar la posición del \textit{color-check} encontrando su contorno y para que esto sea más sencillo, hay que intentar hacer que destaque sobre el fondo. 
+Vamos a intentar encontrar la posición del color-check encontrando su contorno y para que esto sea más sencillo, hay que intentar hacer que destaque sobre el fondo. 
 
-Empezamos probando con diferentes \textit{thresholds} aplicados sobre toda la imagen. Utilizando los programas test\_threshold.py y adapThres.py con varias imágenes distintas comprobamos que el \textit{threshold} adaptativo es el que mejor podría funcionar, pero al empezar a probar, rápidamente nos damos cuenta de que no va a ser así ya que, independientemente de los parámetros que tomemos, algunos de los colores se quedan en blanco y en varias imágenes llegan a hacer que el rectángulo quede dividido en dos partes (véase \textit{Figura \ref{adapThresh}}).
+Empezamos probando con diferentes thresholds aplicados sobre toda la imagen. Utilizando los programas \texttt{test\_threshold.py} y \texttt{adapThres.py} con varias imágenes distintas comprobamos que el threshold adaptativo es el que mejor podría funcionar, pero al empezar a probar, rápidamente nos damos cuenta de que no va a ser así ya que, independientemente de los parámetros que tomemos, algunos de los colores se quedan en blanco y en varias imágenes llegan a hacer que el rectángulo quede dividido en dos partes (véase \textit{Figura \ref{adapThresh}}).
 
 \begin{figure}[h]
 \begin{center}
@@ -181,11 +181,11 @@ Empezamos probando con diferentes \textit{thresholds} aplicados sobre toda la im
 \label{adapThresh}
 \end{figure} 
 
-Como aplicar el \textit{threshold} directamente parece que no funciona bien, guardamos una imagen del \textit{color-check} aislado (qp.jpg) y probamos con \textit{matchTemplate}. Lo que hace este método es, dado un patrón de tamaño $h\times w$, va desplazándolo sobre la imagen de tamaño $H\times W$ y comparándolos según hayamos elegido. Si por ejemplo, utilizáramos el método del cuadrado de las diferencias normalizado, lo que obtendríamos sería una nueva imagen de tamaño $(W-w+1)\times (H-h+1)$ donde cada punto representa lo parecido que es el patrón a la porción de la imagen con que lo estamos comparando, siendo 0 si son perfectamente iguales y mayor cuanto más distintas. El punto donde se encuentra el mínimo en esta nueva imagen es el valor de la esquina superior izquierda de la porción de imagen donde es más probable que se encuentre el patrón.
+Como aplicar el \textit{threshold} directamente parece que no funciona bien, guardamos una imagen del color-check aislado (qp.jpg) y probamos con matchTemplate. Lo que hace este método es, dado un patrón de tamaño $h\times w$, va desplazándolo sobre la imagen de tamaño $H\times W$ y comparándolos según hayamos elegido. Si por ejemplo, utilizáramos el método del cuadrado de las diferencias normalizado, lo que obtendríamos sería una nueva imagen de tamaño $(W-w+1)\times (H-h+1)$ donde cada punto representa lo parecido que es el patrón a la porción de la imagen con que lo estamos comparando, siendo 0 si son perfectamente iguales y mayor cuanto más distintas. El punto donde se encuentra el mínimo en esta nueva imagen es el valor de la esquina superior izquierda de la porción de imagen donde es más probable que se encuentre el patrón.
 
-Aplicándolo sobre nuestras imágenes tomando como patrón la tarjeta de color, observamos que funciona muy bien, pero como los tamaños de la \textit{color-check} varían de unas imágenes a otras, no obtenemos el punto exacto donde se encuentra en la mayoría de ellas. Finalmente decidimos aprovechar este punto para reducir el área de la imagen donde buscar, quedándonos con la porción situada desde el punto hacia la derecha y hacia abajo, añádiendo un trozo por arriba y hacia la izquierda lo suficientemente grande para asegurarnos que el \textit{color-check} se encuentra en esta zona.
+Aplicándolo sobre nuestras imágenes tomando como patrón la tarjeta de color, observamos que funciona muy bien, pero como los tamaños de la color-check varían de unas imágenes a otras, no obtenemos el punto exacto donde se encuentra en la mayoría de ellas. Finalmente decidimos aprovechar este punto para reducir el área de la imagen donde buscar, quedándonos con la porción situada desde el punto hacia la derecha y hacia abajo, añádiendo un trozo por arriba y hacia la izquierda lo suficientemente grande para asegurarnos que el color-check se encuentra en esta zona.
 
-Como los filtros que estábamos probando no funcionaban muy bien, creamos floodfillgray.py que actúa sobre los puntos con un valor de r, g y b parecido (grises), evitando los blancos y negros. Lo utilizamos para acentuar las diferencias entre fondo y \textit{color-check}, ya que el fondo tiene un color gris neutro (véase \textit{Figura \ref{floodfillgray}}). Este filtro sí que funcina como deseábamos, acentuando el rectángulo de color sobre el fondo, y además sirve para todas las imágenes, así que es el que decido utilizar.
+Como los filtros que estábamos probando no funcionaban muy bien, creamos \texttt{floodfillgray.py} que actúa sobre los puntos con un valor de r, g y b parecido (grises), evitando los blancos y negros. Lo utilizamos para acentuar las diferencias entre fondo y color-check, ya que el fondo tiene un color gris neutro (véase \textit{Figura \ref{floodfillgray}}). Este filtro sí que funcina como deseábamos, acentuando el rectángulo de color sobre el fondo, y además sirve para todas las imágenes, así que es el que decido utilizar.
 
 \begin{figure}[ht]
 \begin{center}
@@ -195,18 +195,18 @@ Como los filtros que estábamos probando no funcionaban muy bien, creamos floodfi
 \label{floodfillgray}
 \end{figure} 
 
-Una vez que hemos conseguido separar la tarjeta de color del fondo, el siguiente paso es encontrar el contorno. Para ello utilizamos \textit{cv2.Canny} seguido de \textit{cv2.findContours}. Como el \textit{color-check} es un rectángulo, lo que hacemos para estar seguros de que el contorno seleccionado es el correcto es calcular el rectángulo de área mínima que contiene a cada uno y quedarnos con el que tenga el área y la proporción alto/ancho más parecido al del \textit{color-check} aislado que habíamos guardado.
+Una vez que hemos conseguido separar la tarjeta de color del fondo, el siguiente paso es encontrar el contorno. Para ello utilizamos \texttt{cv2.Canny} seguido de \texttt{cv2.findContours}. Como el color-check es un rectángulo, lo que hacemos para estar seguros de que el contorno seleccionado es el correcto es calcular el rectángulo de área mínima que contiene a cada uno y quedarnos con el que tenga el área y la proporción alto/ancho más parecido al del color-check aislado que habíamos guardado.
 
 \section{Reescalando la imagen}
 Una vez que hemos encontrado el rectángulo de colores en cada imagen tenemos que reescalarlas.\\
- Vamos a hacer que todos los \textit{color-check} tengan el mismo tamaño con una simple regla de tres. Para intentar perder la menor información posible sobre las imágenes, principalmente del color, el nuevo valor de alto y ancho que vamos a elegir es la media de los altos y anchos de cada imagen.
+ Vamos a hacer que todos los color-check tengan el mismo tamaño con una simple regla de tres. Para intentar perder la menor información posible sobre las imágenes, principalmente del color, el nuevo valor de alto y ancho que vamos a elegir es la media de los altos y anchos de cada imagen.
 
-Uniendo todo, obtenemos el programa resizeAndWrite.py que hace lo que deseábamos: encontrar en cada imagen el \textit{color-check} y utilizando éste, hacer que todas las imágenes queden a la misma escala.  
+Uniendo todo, obtenemos el programa \texttt{resizeAndWrite.py} que hace lo que deseábamos: encontrar en cada imagen el color-check y utilizando éste, hacer que todas las imágenes queden a la misma escala.  
 
 \chapter{Aislando la mariposa}
 Ya que he conseguido tener todas las imágenes guardadas a la misma escala hay que encontrar una máscara o contorno de la mariposa para tenerla aislada, sin que influyan los valores del fondo ni de ningún otro elemento sobre los datos que obtengamos.
 
-Esta parte del trabajo aparentemente era muy sencilla ya que a simple vista parecía que aplicando un simple \textit{threshold} o \textit{floodfill} sería suficiente para lograr lo que deseábamos, pero cuando nos pusimos a trabajar en ello nos dimos cuenta de que no es así. Al contrario de lo que creíamos, debido a problemas con las muestras y a la gran variedad de ejemplares (algunos muy diferentes), aislar la mariposa se convirtió en un gran problema y, por tanto, en el núcleo del trabajo.  
+Esta parte del trabajo aparentemente era muy sencilla ya que a simple vista parecía que aplicando un simple threshold o floodfill sería suficiente para lograr lo que deseábamos, pero cuando nos pusimos a trabajar en ello nos dimos cuenta de que no es así. Al contrario de lo que creíamos, debido a problemas con las muestras y a la gran variedad de ejemplares (algunos muy diferentes), aislar la mariposa se convirtió en un gran problema y, por tanto, en el núcleo del trabajo.  
 
 \section{Problemas de las muestras}
 Al empezar a trabajar sobre las muestras nos surgen dos grandes problemas: las sombras en la zona inferior de las mariposas y la gran diversidad de colores.
@@ -276,16 +276,16 @@ Los puntos sobre los que utilizamos este  método son, en principio, la esquina s
 Además de sobre estos puntos el usuario puede aplicar el método tantas veces como desee para lograr que la máscara se adapte al cuerpo de la mariposa lo máximo posible.
 
 Después de aplicar los floodfill, tenemos una imagen en BGR con el fondo en blanco y el resto en los colores correspondientes, así que, aplicamos un theshold que convierta esta imagen en una binaria.\\ 
-El threshold que utilizo es \textit{THRESH\_BINARY\_INV} que nos deja el fondo negro y la mariposa en blanco, como deseábamos.
+El threshold que utilizo es \texttt{THRESH\_BINARY\_INV} que nos deja el fondo negro y la mariposa en blanco, como deseábamos.
 
- Como una vez hecho esto el contorno es muy desigual, aplicamos \textit{cv2.erode} otra vez sobre la imagen para que el borde se suavice y de esta forma se eliminen posibles zonas blancas aisladas que haya en el fondo.
+ Como una vez hecho esto el contorno es muy desigual, aplicamos \texttt{cv2.erode} otra vez sobre la imagen para que el borde se suavice y de esta forma se eliminen posibles zonas blancas aisladas que haya en el fondo.
 
-Juntando todo obtengo el programa calcBinaryImage.py que se divide en cuatro partes fundamentales:
+Juntando todo obtengo el programa \texttt{calcBinaryImage.py} que se divide en cuatro partes fundamentales:
 \begin{itemize}
 \item Un primer filtrado para acentuar los bordes de las mariposas.
-\item Encontrar los contornos para utilizarlos porteriormente junto con \textit{cv2.floodfill}.
+\item Encontrar los contornos para utilizarlos porteriormente junto con \texttt{cv2.floodfill}.
 \item Varios floodfill para tapar el fondo.
-\item Un filtro posterior para eliminar pequeños fallos del \textit{floodfill} y suavizar los bordes de la máscara.
+\item Un filtro posterior para eliminar pequeños fallos del \texttt{floodfill} y suavizar los bordes de la máscara.
 \end{itemize}
 
 
@@ -294,16 +294,16 @@ ESTO NO SE DONDE PONERLO??
 El primer objetivo del trabajo era encontrar un programa que funcionara de forma automática y, aunque no es un camino no fructífero si que es un objetivo que no hemos logrado. Debido a los diversos problemas de las muestras, encontramos muchas dificultades a la hora de encontrar unos datos que funcionasen correctamente con todas las imágenes y que a su vez, taparan las sombras. Por ello, en vez de lograr una solución que hiciera todo el trabajo de forma automática hemos logrado que lo haga de forma semiautomática, así al aplicar los floodfill el usuario puede elegir puntos extra para adaptar mejor la máscara y eliminar las sombras que no se hayan tapado y también puede variar las constantes elegidas para cada método.\\
 El valor de las constantes que dejamos por defecto funciona bien con casi todas las imágenes, pero si en alguna el usuario no obtiene lo que deseába o cree que se puede mejorar, puede cambiar estos valores para obtener soluciones más precisas.
 
-Otros de los caminos que investigamos y de los que no obtuvimos ninguna solución fueron, los espacios de color y el programa floodfillgray.py.
+Otros de los caminos que investigamos y de los que no obtuvimos ninguna solución fueron, los espacios de color y el programa \texttt{floodfillgray.py}.
 
 \subsection{Espacios de color}
 Lo que pretendíamos al investigar los distintos espacios de color era encontrar uno en el que pudiéramos obtener el valor de los colores independientemente de su luminosidad, para que de esta forma, la sombra no supusiera un problema a la hora de aislar la mariposa.
 
 Investigamos distintos espacios como el YCrCb o el CIELab, donde una de sus componentes es la luminosidad. En concreto, en YCrCb son luminosidad, cantidad de color azul y cantidad de color rojo, y en CIELab son luminosidad, posición entre rojo y verde y posición entre amarillo y azul.
 
-Creamos inkwell.py y hicimos muchas pruebas, pero no encontramos ninguna ventaja si utilizábamos alguno de estos espacios en vez de RGB. Así que finalmete decidimos quedarnos en RGB.
+Creamos \texttt{inkwell.py} y hicimos muchas pruebas, pero no encontramos ninguna ventaja si utilizábamos alguno de estos espacios en vez de RGB. Así que finalmete decidimos quedarnos en RGB.
 
-\subsection{floodfillgray.py}
+\subsection{\texttt{floodfillgray.py}}
 La idea de este programa es separar el fondo utilizando el hecho de que es de color gris. Lo que hace es ir píxel a píxel comparando los valores de R, G y B. Por tanto, $\forall i,j$ (píxel) tenemos $R_{i,j}$, $G_{i,j}$ y $B_{i,j}$. Pintamos aquellos píxeles que cumplan $Max\{R_{i,j}, G_{i,j}, B_{i,j}\} - Min\{R_{i,j}, G_{i,j}, B_{i,j}\}<\varepsilon$ (son de color gris), $linf<\frac{R_{i,j}+G_{i,j}+B_{i,j}}{3}<lsup$ (descartamos los blancos y negros).
 
 Este programa fallaba en muchas muestras, en todas aquellas que tuvieran colores grises, por eso hubo que descartarle.
@@ -315,17 +315,17 @@ A pesar de que para aislar la mariposa no servía, el programa funcionaba muy bie
 Recordemos que el objetivo es que dada una nueva imagen el programa nos muestre las más parecidas a ésta, centrándonos principalmente en el estudio del color y la forma. Por tanto, una vez que ya tengo todas las imágenes a la misma escala y he encontrado la máscara de cada una de ellas puedo empezar a realizar las comparaciones.
 
 \section{Por color}
-Las comparaciones por color las vamos a hacer utilizando histogramas. Lo que hacemos es utilizar la máscara para restringir la zona de la imagen sobre la cual se calcula el histograma. Después se normaliza. Al haberlo normalizado se van a seleccionar mariposas con los mismos colores independientemente de si son más grandes o más pequeñas, ya que ahora sólo nos importa el color (cuando apliquemos porteriormente el análisis de la forma ya descartaremos las que tengan un tamaño distinto).
+Las comparaciones por color las vamos a hacer utilizando histogramas. Lo que hacemos es utilizar la máscara para restringir la zona de la imagen sobre la cual se calcula el histograma. Después se normaliza (haccer que todos los valores varíen entre 0 y 1). Al haberlo normalizado se van a seleccionar mariposas con los mismos colores independientemente de si son más grandes o más pequeñas, ya que ahora sólo nos importa el color (cuando apliquemos porteriormente el análisis de la forma ya descartaremos las que tengan un tamaño distinto).
 
-Una vez que tenemos calculados todos los histogramas empiezamos a compararlos uno por uno con el de la imagen que deseamos introducir. Esto lo vamos a llevar a cabo utilizando \textit{cv2.compareHist}.\\
+Una vez que tenemos calculados todos los histogramas empiezamos a compararlos uno por uno con el de la imagen que deseamos introducir. Esto lo vamos a llevar a cabo utilizando \texttt{cv2.compareHist}.\\
 Dividimos la imágen en tres capas (azul, verde, roja) y comparamos los histogramas capa por capa. De cada comparación obtenemos un valor que nos va a indicar cómo de parecidas son las imágenes en esa capa, de forma que, si son lo suficientemente parecidas en las tres capas la imagen es seleccionada y si hay una capa en la que no se parece se descarta. Esto tiene que ser así porque si no diríamos que una imagen amarilla (con el máximo de rojo y de verde) es parecida a una blanca, ya que también tiene el máximo de rojo y verde y sólo se diferenciaría en la capa azul.
 
-Para las comparaciones que se realizan con \textit{cv2.compareHist} podemos elegir varios métodos. En nuestro caso, hemos elegido el de comparación por correlación y chi cuadrado (CV\_COMP\_CORREL y CV\_COMP\_CHISQR), el primero funciona un poco peor pero más rápido y el segundo al revés, más lento pero un poco mejor. 
+Para las comparaciones que se realizan con \texttt{cv2.compareHist} podemos elegir varios métodos. En nuestro caso, hemos elegido el de comparación por correlación y chi cuadrado (CV\_COMP\_CORREL y CV\_COMP\_CHISQR), el primero funciona un poco peor pero más rápido y el segundo al revés, más lento pero un poco mejor. 
 \\Con el método de comparación por correlación, cuanto más próximo es el valor a 1 más parecidas son las imágenes y en el método de la chi-cuadrado, es mejor cuanto más próximo a 0.
 
-El programa que realiza todo esto es searchByColor.py y tiene dos pasos principales:
+El programa que realiza todo esto es \texttt{searchByColor.py} y tiene dos pasos principales:
 \begin{itemize}
-\item Encontrar las máscaras de cada imagen utilizando calcBinaryImg.py.
+\item Encontrar las máscaras de cada imagen utilizando \texttt{calcBinaryImg.py}.
 \item Comparar una por una cada imagen con la que deseamos introducir utilizando los histogramas de cada una de ellas.
 \end{itemize}
 
@@ -334,9 +334,9 @@ Las comparaciones por forma las vamos a hacer de varias maneras diferentes para 
 \subsection{Con imagen binaria}
 El primer método que vamos a emplear se basa en los momentos de una imagen.\\
 Estos momentos se sacan a partir de un contorno o de una imagen binaria y nos proporcionan unos valores que representan distintas propiedades de la imagen. Los que vamos a utilizar son los momentos de Hu y los momentos centrales normalizados que son invariantes a traslación, escalado y rotación, y a traslación y escalado respectivamente.\\
-Las funciones que calculan estos momentos son \textit{cv2.HuMoments} y \textit{cv2.moments}.
+Las funciones que calculan estos momentos son \texttt{cv2.HuMoments} y \texttt{cv2.moments}.
 \subsubsection{Momentos de Hu}
-Como ya he dicho, estos momentos son invariantes a traslación, escalado y rotación y los vamos a calcular a partir de la imagen binaria obtenida tras aplicar calcBinaryImg.py a las imágenes de la base de datos.
+Como ya he dicho, estos momentos son invariantes a traslación, escalado y rotación y los vamos a calcular a partir de la imagen binaria obtenida tras aplicar \texttt{calcBinaryImg.py} a las imágenes de la base de datos.
 
 Primero se calculan todos los momentos con \textit{cv2.moments} y después a partir de éstos, se calculan los momentos de Hu con \textit{cv2.HuMomets}. De aquí se obtienen seis valores que van a ser los que utilicemos para la comparación.\\
 Lo primero que vamos a hacer es calcular estos seis valores $V_1,...,V_6$ de la imagen del nuevo ejemplar, y una vez que tenemos éstos, vamos calculando uno por uno los $v_1,...,v_6$ del resto.\\
@@ -356,10 +356,10 @@ El funcionamiento de este método es análogo al de los momentos de Hu.
 \subsection{Con contornos}
 Para el resto de métodos vamos a usar principalmente los contornos de la mariposa.
 
-Hasta ahora teníamos un programa que calculaba una imagen binaria de la mariposa (calcBinaryImg.py) y como ahora no nos sirve con esto, vamos a utilizar esta imagen para calcular los contornos que necesitamos.
+Hasta ahora teníamos un programa que calculaba una imagen binaria de la mariposa (\texttt{calcBinaryImg.py}) y como ahora no nos sirve con esto, vamos a utilizar esta imagen para calcular los contornos que necesitamos.
 
-Lo primero que vamos a hacer es aplicar \textit{cv2.canny} y \textit{cv2.findContours} a la máscara. Una vez hecho esto observamos que no todos los cotornos que salen están unidos, es decir, lo que necesitamos es tener el contorno de la mariposa en un único trazado continuo y cerrado, pero en muchos casos no se cierra o incluso no ``bordea'' toda la mariposa.\\
-Esto es un problema porque la idea principal era utilizar el área de los contornos para compararlos con el área de la mariposa (este área no es conocido pero podemos aproximarlo al momento m00 que es el número de píxeles blancos de la imagen binaria) y de esta forma poder seleccionar el que necesitaba, pero al no tener contornos cerrados no puedemos utilizar \textit{cv2.contArea} ya que no proporciona datos fiables. 
+Lo primero que vamos a hacer es aplicar \texttt{cv2.canny} y \texttt{cv2.findContours} a la máscara. Una vez hecho esto observamos que no todos los cotornos que salen están unidos, es decir, lo que necesitamos es tener el contorno de la mariposa en un único trazado continuo y cerrado, pero en muchos casos no se cierra o incluso no ``bordea'' toda la mariposa.\\
+Esto es un problema porque la idea principal era utilizar el área de los contornos para compararlos con el área de la mariposa (este área no es conocido pero podemos aproximarlo al momento m00 que es el número de píxeles blancos de la imagen binaria) y de esta forma poder seleccionar el que necesitaba, pero al no tener contornos cerrados no puedemos utilizar \texttt{cv2.contArea} ya que no proporciona datos fiables. 
 
 Necesitamos otra forma de poder seleccionar el contorno de la mariposa. Decidimos probar utilizando el área del rectángulo y la circunferencia de mínimo área que contienen a cada contorno. Nos vamos a quedar con el mínimo de estos y lo vamos a llamar ``A''. A siempre va a ser mayor que el area de la mariposa, que vamos a llamar ``a'', así que, al compararlos hay que tenerlo en cuenta, de tal forma que, nos vamos a quedar con ese contorno si ¿¿¿¿¿¿$A<2a$???????(creo que esta condición se puede quitar ya que no va puede haber ningún contorno que tenga el valor de A mayor que el del A que contiene al contorno de la mariposa) y $A>a-a/2$, con la primera condición descartamos los que son muy grandes y con la segunda los que son pequeños.
 
@@ -387,14 +387,14 @@ Las propiedades que voy a utilizar son:
 \item La proporción entre el área del contorno y el área de la figura convexa de míninimo área que lo contiene.
 \item El diámetro del círculo cuyo área es el mismo que el del contorno. Éste diámetro es $\sqrt{4*A/\pi}$ siendo A el área del contorno.
 \end{enumerate}
-Estos valores son muy fáciles de obtener usando las funciones \textit{cv2.contourArea}, \textit{cv2.arcLength}, \textit{cv2.boundingRect} y \textit{cv2.convexHull} que calculan el área y perímetro del contorno y el rectácgulo de mínimo área y figura convexa de mínimo área que lo contienen respectivamente.
+Estos valores son muy fáciles de obtener usando las funciones \texttt{cv2.contourArea}, \texttt{cv2.arcLength}, \texttt{cv2.boundingRect} y \texttt{cv2.convexHull} que calculan el área y perímetro del contorno y el rectácgulo de mínimo área y figura convexa de mínimo área que lo contienen respectivamente.
 
-Éstos momentos serían muy fáciles de utilizar si tuviéramos un contorno cerrado y continuo para todas las imágenes.Como no hemos conseguido obtener el contorno de dicha manera resulta muy difícil o casi imposible calcular algunos de ellos, ya que, por ejemplo, \textit{cv2.contourArea} no nos daría el área real del contorno por no estar cerrado.
+Éstos momentos serían muy fáciles de utilizar si tuviéramos un contorno cerrado y continuo para todas las imágenes.Como no hemos conseguido obtener el contorno de dicha manera resulta muy difícil o casi imposible calcular algunos de ellos, ya que, por ejemplo, \texttt{cv2.contourArea} no nos daría el área real del contorno por no estar cerrado.
 
 .....REVISAR ESTA PARTE....\\
 Para poder utilizar este método tenemos que seguir investigando la forma de obtener un contorno continuo y cerrado para todas las imágenes.
 
- Como de momento no lo hemos conseguido decidimos crear searchBySize\_contour.py que compara las imágenes por forma utilizando \textit{cv2.matchShapes} y los momentos 1, 3 y 6 (en 3 en vez de tomar el área del contorno que devuelve la función \textit{cv2.contourArea} utilizo el momento m00).
+ Como de momento no lo hemos conseguido decidimos crear \texttt{searchBySize\_contour.py} que compara las imágenes por forma utilizando \texttt{cv2.matchShapes} y los momentos 1, 3 y 6 (en 3 en vez de tomar el área del contorno que devuelve la función \texttt{cv2.contourArea} utilizo el momento m00).
 
 \chapter{Aplicación final}
 
@@ -402,7 +402,7 @@ Para poder utilizar este método tenemos que seguir investigando la forma de obte
 
 Ya tenemos creados los programas que seleccionan, dentro de una colección de imágenes de mariposas, las más parecidas a otra dada fjándonos en el color y la forma. Ahora hay que juntar los dos métodos para que la criba sea lo más precisa posible.
 
-Al tener ya creados searchByColor.py y searchBySize.py hacer esto es muy sencillo. Creamos search.py que lo que hace es filtrar primero una colección de imágenes por forma y las que son seleccionadas las filtra, posteriormente, por color o viceversa (según el orden que elija el usuario). Obteniendo de esta manera, al final del proceso, el conjunto de imágenes deseado.
+Al tener ya creados \texttt{searchByColor.py} y \texttt{searchBySize.py} hacer esto es muy sencillo. Creamos \texttt{search.py} que lo que hace es filtrar primero una colección de imágenes por forma y las que son seleccionadas las filtra, posteriormente, por color o viceversa (según el orden que elija el usuario). Obteniendo de esta manera, al final del proceso, el conjunto de imágenes deseado.
    
 \chapter{Conclusiones}
 %hablar de lo del fondo y las sombras. De lo de los contornos discontinuos. De la dificultad hasta encontrar la máscara.De seguir investigando hasta encontrar un contorno continuo.
@@ -422,14 +422,12 @@ En imágenes en escala de grises sólo habría una matriz donde cada número represe
 El trabajo lo he desarrollado utilizando python 2.7 y OpenCV 2.3.1.
 
 \section{Filtrado de imágenes}
-****Explicar lo de la complejidad y la transformada de Fourier*********\\
-
 Tenemos una imagen y queremos aplicar sobre ella un filtro. Los filtros que vamos a usar lo que hacen es, dada la imagen y un núcleo, se desplaza píxel por píxel sobre la imagen comparando los valores de la posición $(i,j)$ con todos los del núcleo y obteniendo uno nuevo. El valor que tenía el píxel $(i,j)$ se cambia por el nuevo. Dependiendo del método que utilicemos el núcleo tendrá tamaños diferentes pudiendo llegar a ser de tamaño $1\times1$ y el método de comparación también será distinto.
 
 \subsection {Smoothing}
 Estos filtros se utilizan frecuentemente y se usan principalmente para eliminar ruido de las imágenes o reducir la resolución. Hay muchos tipos pero ahora vamos a centrarnos sólo en uno, ya que es el que más utilizamos a lo largo del documento, median blur.
 
-En el programa smoothing.py se pueden ver ejemplos con varios métodos diferentes.
+En el programa \texttt{smoothing.py} se pueden ver ejemplos con varios métodos diferentes.
 
 \subsubsection {Median blur}
 En este caso, no hay que dar un núcleo concreto, sólo hay que dar el tamaño deseado, supongamos $k$ con $k\ge 1$ impar. El núcleo será igual a la porción de imagen de tamaño $k\times k$ coincidiendo el centro con el píxel $(i,j)$. Lo que hace es ir recorriendo toda la imagen de forma que en la posición $(i,j)$, $a_{i,j}$ ahora será igual a la media de todos los valores del núcleo, es decir, $ a_{i,j} = \displaystyle\sum_{n = i-\frac{k-1}{2}}^{i+\frac{k-1}{2}}\displaystyle\sum_{m = j-\frac{k-1}{2}}^{j+\frac{k-1}{2}} \frac{b_{n,m}}{k^2}$.
@@ -453,13 +451,73 @@ Al tomar el valor máximo lo que se logra es aclarar la imagen o agrandar las zon
 \end{itemize}
  
 \subsection {Threshold}
+Estos filtros tienen muchas aplicaciones en el procesamiento de imágenes y además su funcionamiento es muy sencillo.\\
+Dada una imagen y un límite $L$ se recorre toda la imagen comparando cada píxel con $L$ y tomando una decisión sobre ese píxel dependiendo del tipo de threshold que hayamos elegido. 
+
+Hay muchos tipos diferentes de thresholds: \texttt{THRESH\_BINARY}, \texttt{THRESH\_TRUNC}, \texttt{THRESH\_TOZERO}, etc. y algunos un poco más complejos como \texttt{cv2.adaptiveThreshold} que funciona muy bien cuando hay mucha luz o cambios de iluminación dentro de la misma imagen. En este último lo que cambia principalmente es que en vez de fijarnos únicamente en un pixel para hacer la comparación se utilizan otros métodos, como por ejemplo la media. 
+
+******  METER IMAGEN DE LOS THRESHOLDS *******
+
 
 \subsection{Floodfill}
+El método Flood Fill es muy útil y se utiliza sobre todo para aislar o resaltar partes de una imágen para un análisis posterior. Sirve para encontrar máscaras o reducir el procesamiento a una zona en concreto haciendo que sea más rápido.
+
+Lo que hace esta función es dada una imágen, un punto, un límite inferior, uno superior y un nuevo valor $(r,g,b)$, cambia al nuevo $(r,g,b)$ los píxeles cuyos valores estén entre el límite inferior y el superior y que además estén conectados a otro que cumpla lo mismo. Es decir, encontramos una componente conexa de la imagen a partir del punto, que cumple que todos sus píxel están entre dos valores dados.
+
+El método se puede utilizar con o sin máscara. Si lo utilizamos con máscara lo que logramos es que no atraviese aquellos píxeles que tienen un valor distinto de cero en la máscara.
+
+Se puede ver el funcionamiento del método y ejemplos en los programas\\ \texttt{analisys/imgfloodfill.py} y \texttt{analisys/floodfill\_img\_mask.py}.
+ 
 \section{Análisis de imágenes}
+Hay muchas y muy variadas funciones y métodos que se utilizan para el análisis de imágenes, pero aquí nos vamos a centrar en los relacionados con el color y en concreto en los histogramas y espacios de color.
+
+\subsection{Histogramas} 
+Los histogramas son una herramienta muy utilizada en Computer Vision debido a su gran variedad de aplicaciones como por ejemplo, detectar cambios de escena, puntos de interés o el reconocimiento de objetos.
+
+Como ya hemos dicho un histograma puede tener muchos usos pero aquí vamos a utilizarlo para contabilizar la cantidad de píxeles de cada color que tiene una imagen.\\
+Dada la imagen y el tamaño del histograma (en este caso 256) se va a crear un array en el cual la posición 0 va a representar la cantidad de píxeles con valor 0 que hay en la imagen, la 1, la cantidad de píxeles con valor 1, y así sucesivamente hasta el 255. Estos datos se pueden representar en forma de gráfico (véase *******).
+
+También se puede utilizar una máscara para calcular el histograma únicamente sobre los píxeles de la máscara con valores distintos de cero.
+\subsubsection{Comparar histogramas}
+Una vez que tenemos calculados los histogramas una de las operaciones que podemos hacer con ellos es compararlos.
+
+Para hacer esta comparación se pueden utilizar varios métodos distintos dependiendo de la métrica que utilicemos (correlación, chi-cuadrado, intersección, Bhattacharyya).\\
+En este documento las métricas que hemos utilizado son la de correlación y la chi-cuadrado.
+\begin{itemize}
+\item {\bfseries{Correlación:}}
+$d(H_1,H_2) = \frac{\displaystyle\sum_{i} H'_1(i)H'_2(i)}{\sqrt{\displaystyle\sum_{i} H'^2_1(i)H'^2_2(i)}}$ con $H'_k(i) = H_k(i)-(1/N)(\displaystyle\sum_{j} H_k(j))$ siendo $N$ el tamaño del histograma.\\
+Un ajuste perfecto daría como resultado 1 y cuanto peor sea más cercano de -1.
+\item{\bfseries{Chi-cuadrado:}}
+$d(H_1,H_2) = \displaystyle\sum_{i} \frac{(H_1(i)-H_2(i))^2}{H_1(i)+H_2(i)}$\\
+Un ajuste perfecto daría como resultado 0 y cuanto peor sea el ajuste más grande será el resultado (este valor no está acotado).
+\end{itemize}
+
 \subsection{Espacios de color}
-\subsection{Histogramas}
+Los espacios de color son modelos matemáticos abstractos que describen formas de representar los colores mediante números (generalmente 3). Hay muchos modelos diferentes, entre ellos: LUV, YCrCb, CieXYZ, HSV, CieLab y el más conocido, RGB.
+
+En este caso vamos a estudiar más a fondo los tres últimos.
+
+\begin{itemize}
+\item{\bfseries{HSV}}
+\\En este espacio cada color viene dado por tres números, el primero representa la H (\textit{hue}, tono o matiz), el segundo la S (\textit{saturation}, saturación) y el tercero la V (\textit{value}, valor).
+
+El tono se da en grados y varía entre $0^o$ y $360^o$.\\
+La saturación indica la distancia al eje de brillo blanco-negro y varía entre $0^o$ y $100^o$.\\
+El valor indica la altura en el eje blanco-negro y varía entre $0^o$ y $100^o$, siendo 0 negro.
+
+\item{\bfseries{CieLab}}
+\\En este espacio el primer valor representa la L (luminosidad), el segundo la $a$ (posición entre rojo y verde) y el tercero la $b$ (posición entre amarillo y azul).
+
+La luminosidad varía entre 0 y 100 siendo 0 negro y 100 blanco.\\
+La $a$ varía entre -128 y 127, valores negativos indican verde y positivos rojo.\\
+la $b$ varía entre -128 y 127, valores negativos indican azul y positivos amarillo.
+
+\item{\bfseries{RGB}}
+\\
+
+
 \section{Encontrar bordes}
-\subsection{canny}
+\subsection{Canny}
 
 \chapter{Code}
 hola
