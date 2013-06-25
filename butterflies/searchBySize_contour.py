@@ -88,7 +88,7 @@ def findButtContour(mask_img,real_img):
     print 'contour... ',butt_contour[1], butt_contour[2]
     img_copy = real_img.copy()
     if butt_contour[1] != None:
-        cv2.drawContours(img_copy,contours,butt_contour[1], (255,0,255),1,cv2.CV_AA)
+        cv2.drawContours(img_copy,contours,butt_contour[1], (0,255,255),1,cv2.CV_AA)
     cv2.imshow('final',img_copy)
     cv2.waitKey(0)
     cv2.destroyWindow('final')
