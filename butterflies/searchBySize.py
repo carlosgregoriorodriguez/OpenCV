@@ -61,10 +61,10 @@ def compare(H,compare_images, showAllImages=0, showSelectMask=0):
         nu1 = [moments1['nu02']] + [moments1['nu11']] + [moments1['nu12']] + [moments1['nu20']] + [moments1['nu21']] + [moments1['nu30']] + [moments1['m00']]
         #print nu1
         H1 = cv2.HuMoments(moments1)
-        cv2.putText(im[1],str(nu1[0:2]),(50,img.shape[0]-100),cv2.FONT_HERSHEY_SIMPLEX,0.5,(100,0,200))
-        cv2.putText(im[1],str(nu1[2:4]),(50,img.shape[0]-75),cv2.FONT_HERSHEY_SIMPLEX,0.5,(100,0,200))
-        cv2.putText(im[1],str(nu1[4:6]),(50,img.shape[0]-50),cv2.FONT_HERSHEY_SIMPLEX,0.5,(100,0,200))
-        cv2.putText(im[1],str(nu1[6:]),(50,img.shape[0]-25),cv2.FONT_HERSHEY_SIMPLEX,0.5,(100,0,200))
+        cv2.putText(im[1],str(nu1[0:2]),(50,img.shape[0]-100),cv2.FONT_HERSHEY_SIMPLEX,0.5,(0,150,0))
+        cv2.putText(im[1],str(nu1[2:4]),(50,img.shape[0]-75),cv2.FONT_HERSHEY_SIMPLEX,0.5,(0,150,0))
+        cv2.putText(im[1],str(nu1[4:6]),(50,img.shape[0]-50),cv2.FONT_HERSHEY_SIMPLEX,0.5,(0,150,0))
+        cv2.putText(im[1],str(nu1[6:]),(50,img.shape[0]-25),cv2.FONT_HERSHEY_SIMPLEX,0.5,(0,150,0))
         
         # if showAllImages!=0 then want show all compare_images
         if showAllImages==2:# shows resize image
