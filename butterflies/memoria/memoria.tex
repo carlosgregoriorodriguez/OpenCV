@@ -213,7 +213,7 @@ En resumen, los pasos a seguir son:
 \section{Reescalando la imagen}
 Una vez encontrados los color-check en cada imagen hay que llevar a cabo el reescalado. Esto consiste en hacer que todos ellos tengan el mismo tamaño utilizando una simple regla de tres. Para intentar perder la menor información posible sobre las imágenes, principalmente del color, el nuevo valor de alto y ancho  elegido es la media de los altos y anchos de cada imagen.
 
-Uniendo todo, se obtiene el programa \texttt{resizeAndWrite.py} (ver \ref{prog resizeAndWrite}) que hace lo que deseábamos: 
+Uniendo todo, se obtiene el programa \texttt{resize\_and\_write.py} (ver \ref{prog resizeAndWrite}) que hace lo que deseábamos: 
 \begin{itemize}
 \item Encontrar en cada imagen el color-check.
 \item Utilizando éste, hacer que todas las imágenes queden a la misma escala.
@@ -331,7 +331,7 @@ El threshold que utilizamos fue \texttt{THRESH\_BINARY\_INV} que deja el fondo n
 \label{sinconerode}
 \end{figure}
 
-Juntando todo obtenemos el programa \texttt{calcBinaryImage.py} (ver \ref{prog calcBinaryImage}) que se divide en cuatro partes fundamentales:
+Juntando todo obtenemos el programa \texttt{calc\_binary\_image.py} (ver \ref{prog calcBinaryImage}) que se divide en cuatro partes fundamentales:
 \begin{itemize}
 \item Un primer filtrado para acentuar los bordes de las mariposas.
 \item Encontrar los contornos para utilizarlos porteriormente junto con \texttt{cv2.floodFill}.
@@ -392,9 +392,9 @@ Para ello lo que hicimos fue dividir la imágen en tres capas (azul, verde, roja)
 Para las comparaciones que se realizan con \texttt{cv2.compareHist} podemos elegir varios métodos (ver \ref{section comparar hist}). En nuestro caso, elegimos el de comparación por correlación y chi cuadrado (CV\_COMP\_CORREL y CV\_COMP\_CHISQR), el primero funciona un poco peor pero más rápido y el segundo al revés, más lento pero un poco mejor. 
 \\Con el método de comparación por correlación, cuanto más próximo es el valor a 1 más parecidas son las imágenes y en el método de la chi-cuadrado, es mejor cuanto más próximo a 0.
 
-El programa que realiza todo esto es \texttt{searchByColor.py} (ver \ref{prog searchByColor}) y tiene dos pasos principales:
+El programa que realiza todo esto es \texttt{search\_by\_color.py} (ver \ref{prog searchByColor}) y tiene dos pasos principales:
 \begin{itemize}
-\item Encontrar las máscaras de cada imagen utilizando \texttt{calcBinaryImg.py}.
+\item Encontrar las máscaras de cada imagen utilizando \texttt{calc\_binary\_image.py}.
 \item Comparar una por una cada imagen con la que deseamos introducir utilizando los histogramas de cada una de ellas.
 \end{itemize}
 
@@ -407,7 +407,7 @@ Estos momentos se sacan a partir de un contorno o de una imagen binaria y nos pr
 Las funciones que calculan estos momentos son \texttt{cv2.HuMoments} y \texttt{cv2.moments}.
 
 \subsubsection{Momentos de Hu}
-Como ya hemos dicho, estos momentos son invariantes a traslación, escalado y rotación y los calculamos a partir de la imagen binaria obtenida tras aplicar \texttt{calcBinaryImg.py} a las imágenes de la base de datos.
+Como ya hemos dicho, estos momentos son invariantes a traslación, escalado y rotación y los calculamos a partir de la imagen binaria obtenida tras aplicar \texttt{calc\_binary\_image.py} a las imágenes de la base de datos.
 
 Primero se calculan todos los momentos con \textit{cv2.moments} (véase \textit{Figura \ref{momentoshu}}) y después a partir de éstos, se calculan los momentos de Hu con \textit{cv2.HuMomets}. De aquí se obtienen seis valores que son los que se utilizan en la comparación.
 
@@ -443,7 +443,7 @@ El funcionamiento de este método es análogo al de los momentos de Hu.
 \label{section contornos}
 Para el resto de métodos usamos principalmente los contornos de la mariposa.
 
-Hasta aquí teníamos un programa que calculaba una imagen binaria de la mariposa (\texttt{calcBinaryImg.py}) y como no nos sirvía con esto, utilizamos esta imagen para calcular los contornos que necesitábamos.
+Hasta aquí teníamos un programa que calculaba una imagen binaria de la mariposa (\texttt{calc\_binary\_image.py}) y como no nos sirvía con esto, utilizamos esta imagen para calcular los contornos que necesitábamos.
 
 Lo primero que hicimos fue aplicar \texttt{cv2.canny} y \texttt{cv2.findContours} a la máscara (ver \ref{section contornos}). Una vez hecho esto observamos que no todos los cotornos que salían estaban unidos, es decir, lo que necesitábamos era tener el contorno de la mariposa en un único trazado continuo y cerrado, pero en muchos casos no se cierra o incluso no ``bordea'' toda la mariposa (véase \textit{Figura \ref{contornocont}} y \textit{Figura \ref{contornodisc}}).
 
@@ -473,7 +473,7 @@ De cada contorno se calcula su área, si éste se parece al de la mariposa (es dec
 
 En resumen, los pasos que seguimos para calcular el contorno fueron:
 \begin{itemize}
-\item Calcular una máscara utilizando el programa \texttt{calcBinaryImg.py}
+\item Calcular una máscara utilizando el programa \texttt{calc\_binary\_image.py}
 \item Encontrar los contornos utilizando \texttt{cv2.Canny} y \texttt{cv2.findContours}
 \item Aplicar el método del rectángulo y circunferencia de mínimo área a cada contorno y probar con \texttt{cv2.contArea}. Si el segundo da un resultado correcto nos quedamos con éste, si no nos quedamos con el otro.
 \end{itemize}
@@ -506,12 +506,12 @@ Estos valores son muy fáciles de obtener usando las funciones \texttt{cv2.contou
 .....REVISAR ESTA PARTE....\\
 Para poder utilizar este método de forma más fiable tenemos que seguir investigando la forma de obtener un contorno continuo y cerrado para todas las imágenes.
 
- Como de momento no lo hemos conseguido decidimos crear \texttt{searchBySize\_contour.py} que comparaba las imágenes por forma utilizando \texttt{cv2.matchShapes} y los momentos 1, 3 y 6 (en 3 en vez de tomar el área del contorno que devuelve la función \texttt{cv2.contourArea} se utiliza el momento m00).
+ Como de momento no lo hemos conseguido decidimos crear \texttt{search\_by\_size\_contour.py} que comparaba las imágenes por forma utilizando \texttt{cv2.matchShapes} y los momentos 1, 3 y 6 (en 3 en vez de tomar el área del contorno que devuelve la función \texttt{cv2.contourArea} se utiliza el momento m00).
 
 \chapter{Aplicación final}
 Al llegar aquí ya teníamos creados los programas que seleccionan, dentro de una colección de imágenes de mariposas, las más parecidas a otra dada fjándonos en el color y la forma. Ahora había que juntar los dos métodos para que la criba fuera lo más precisa posible.
 
-Al tener ya creados \texttt{searchByColor.py} y \texttt{searchBySize.py} hacer esto fue muy sencillo. Creamos \texttt{search.py} (ver \ref{prog search}) que lo que hacía es filtrar primero una colección de imágenes por forma y las que son seleccionadas las filtra, posteriormente, por color o viceversa (según el orden que elija el usuario). Obteniendo de esta manera, al final del proceso, el conjunto de imágenes deseado.
+Al tener ya creados \texttt{search\_by\_color.py} y \texttt{search\_by\_size.py} hacer esto fue muy sencillo. Creamos \texttt{search.py} (ver \ref{prog search}) que lo que hacía es filtrar primero una colección de imágenes por forma y las que son seleccionadas las filtra, posteriormente, por color o viceversa (según el orden que elija el usuario). Obteniendo de esta manera, al final del proceso, el conjunto de imágenes deseado.
 
 \section*{Interfaz}
 El interfaz en la aplicación final tiene varias partes. Al principio, cuando se busca la máscara, hay una pantalla de configuración donde se pueden modificar valores como los límites de \texttt{cv2.Canny} o \texttt{cv2.floodFill}, aplicar nuevos flood-fill sobre la imagen para adaptarla mejor o cambiar el número de iteraciones de \texttt{cv2.medianBlur} y \texttt{cv2.erode}. También se puede elegir las ventanas que se desean tener visibles. Esta parte es común a los dos métodos de búsqueda (véase \textit{Figura \ref{config}}).
@@ -759,25 +759,25 @@ Esta función lo que hace es dados dos contornos y una métrica calcula un valor (
 Además de comparar dos contornos con la función \texttt{cv2.matchShapes} se pueden utilizar otras propiedades de los contornos muy sencillas de calcular como por ejemplo, el área, el perímetro, la proporción entre base y altura del rectángulo de mínimo área que lo contiene, etc. (\url{http://www.cis.hut.fi/research/IA/paper/publications/bmvc97/bmvc97.html})
  
 \chapter{Código}
-\section{resizeAndWrite.py}
-\label{prog resizeAndWrite}
+\section{resize\_and\_write.py}
+\label{prog resizeAdWrite}
 {\tiny
-\lstinputlisting{../resizeAndWrite.py}
+\lstinputlisting{../resize\_and\_write.py}
 }
 \section{floodfillgray.py}
 \label{prog floodfillgray}
 {\tiny
 \lstinputlisting{../floodfillgray.py}
 }
-\section{CalcBinaryImage.py}
-\label{prog calcBinaryImage}
+\section{Calc\_binary\_image.py}
+\label{prog calcBnaryImage}
 {\tiny
-\lstinputlisting{../calcBinaryImage.py}
+\lstinputlisting{../calc\_binary\_image.py}
 }
-\section{searchByColor.py}
+\section{search\_by\_color.py}
 \label{prog searchByColor}
 {\tiny
-\lstinputlisting{../searchByColor.py}
+\lstinputlisting{../search\_by\_color.py}
 }
 \section{search.py}
 \label{prog search}
@@ -791,8 +791,8 @@ Para realizar las pruebas que se indican en el documento no se han usado todas l
 Además de las que aparecen plasmadas en este documento se han realizado más pruebas utilizando todas las imágenes de la base de datos y con cada uno de los métodos que han sido implemtados. Algunas pruebas daban buenos resultados y otras un poco peores y las que aquí se encuentran pretenden enseñar una pequeña muestra de cada tipo.
 
 En general, tras realizar las pruebas, se observa que el método de comparación por color funciona bastante bien y el de forma es menos fiable, ya que proporciona peores  soluciones.
-\section{Pruebas de \texttt{searchByColor.py}}
-Para la prueba del programa \texttt{searchByColor.py} se han tomado las imáganes que se muestran en la figura \ref{todascolor} de la base de datos y éstas se comparan con el ejemplar de la figura \ref{principal1}.
+\section{Pruebas de \texttt{search\_by\_color.py}}
+Para la prueba del programa \texttt{search\_by\_color.py} se han tomado las imáganes que se muestran en la figura \ref{todascolor} de la base de datos y éstas se comparan con el ejemplar de la figura \ref{principal1}.
 
 \begin{figure}[!ht]
 \begin{center}
@@ -830,11 +830,11 @@ Se observa que cuando empezamos a disminuir los valores de epsilon (a permitir q
 \label{nueva1}
 \end{figure}
 
-\section{Pruebas de \texttt{searchBySize.py}}
+\section{Pruebas de \texttt{search\_by\_size.py}}
 Como las comparaciones por forma las hicimos de varias maneras diferentes vamos a hacer puebras con dos de esos métodos.
 
 \subsection*{Prueba con momentos centrales normalizados}
-Para esta prueba se utiliza el programa \texttt{searchBySize\_nu.py} con las constantes 100, 50, 20, 150, 150, 150, 250. Las imágenes que utilizamos de la base de datos son las de la figura \ref{todasforma1} y la imagen que se desearía introducir y con la que se van a comparar todas las demás es la de la figura \ref{principal2}.
+Para esta prueba se utiliza el programa \texttt{search\_by\_size\_nu.py} con las constantes 100, 50, 20, 150, 150, 150, 250. Las imágenes que utilizamos de la base de datos son las de la figura \ref{todasforma1} y la imagen que se desearía introducir y con la que se van a comparar todas las demás es la de la figura \ref{principal2}.
 
 \begin{figure}[!ht]
 \begin{center}
@@ -871,7 +871,7 @@ Se observa que permitiendo una diferencia de área de como máximo 250 píxeles, se
 \end{figure}
 
 \subsection*{Prueba con contornos}
-Para esta prueba se utiliza el programa \texttt{searchBySize\_contour.py} con las constantes predeterminadas. Las muestras que tomamos de la base de datos son las de la figura \ref{todasforma2} y la que se desea introducir en \ref{principal3}.
+Para esta prueba se utiliza el programa \texttt{search\_by\_size\_contour.py} con las constantes predeterminadas. Las muestras que tomamos de la base de datos son las de la figura \ref{todasforma2} y la que se desea introducir en \ref{principal3}.
 
 \begin{figure}[!ht]
 \begin{center}
@@ -935,7 +935,7 @@ Para ver si realmente las muestras que parece que faltan son un falso negativo o
 Las imágenes que parece que faltan a simple vista son la resizedBMC-1933\_D.jpg y resizedBMC-1936\_D.jpg y la que se desea introducir es resizedBMC-1905\_D.jpg. Fijándonos en las máscaras de estas muestras y comparándolas con la principal se observa que sí que son parecidas y que, aunque cambiando los valores de las constantes, deberían llegar a aparecer.
 
 \section{Pruebas de \texttt{search.py}}
-Para la prueba por color se ha utilizado en la comparación por forma el programa \texttt{searchBySize\_contour.py}. En este caso se ha hecho primero selección por color utilizando correlación con valores 14, 14, 14 y posteriormente, comparación por forma con los valores predeterminados sobre las muestras que ya habían sido seleccionadas.
+Para la prueba por color se ha utilizado en la comparación por forma el programa \texttt{search\_by\_size\_contour.py}. En este caso se ha hecho primero selección por color utilizando correlación con valores 14, 14, 14 y posteriormente, comparación por forma con los valores predeterminados sobre las muestras que ya habían sido seleccionadas.
 
 Las muestras que se han utilizado son las de la figura \ref{todas} y la imagen principal es la de la figura \ref{principal4}.
 
