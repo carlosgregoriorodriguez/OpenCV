@@ -11,6 +11,9 @@
 \usepackage{tocloft}
 \usepackage{color}
 
+\lstset{breaklines=true, breakatwhitespace=false}
+\lstset{numbers=left, numberstyle=\scriptsize}
+
 \newcommand{\notaCarlos}[1]{{\color{red}#1}}
 
 %\setlength\cftparskip{-2pt}
@@ -62,14 +65,20 @@ Supervisado por: Carlos Gregorio Rodríguez \\
 
 \newpage
 \chapter{Introducción}
-\begin{itemize}
-\item computer vision
-\item licenciatura
-\item relación con matemáticas
-\item ...
-\item ...
-\item objetivos
-\end{itemize}
+Esta memoria muestra el camino que hemos seguido para realizar un Trabajo Académicamente Dirigido (TAD). En un principio el trabajo iba a ser sobre visión computarizada con aplicaciones en la medicina e iba a constar de dos partes, una primera parte de estudio de la bibliografía para adquirir unos conocimientos básicos sobre las técnicas de computer vision y una segunda parte para desarrollar un problema con aplicaciones en medicina. Al finalizar la primera parte y debido a que el material que necesitábamos para empezar con la investigación del problema no estaba disponible, nos vimos en la obligación de cambiar a un problema con aplicaciones en biología, mas en concreto, sobre mariposas.  
+
+La visión computarizada o también conocida como visión artificial es un nuevo campo de investigación cuyo objetivo principal es que el ordenador entienda lo que ve y que está muy relacionada con todas las ramas de la matemática, la estadística, el análisis, el álgebra,... A lo largo del documento se pueden observar los conceptos matemáticos que se encuentran tras algunos de los métodos y que van desde cosas tan sencillas como el cálculo de un gradiente o una función a cosas más complejas tras las que acaba apareciendo el teorema de Green o la transformada de Fourier.\\
+Esta nueva disciplina tiene muchos posibles campos de aplicación como biología, medicina, video-juegos, robótica, etc. y por tanto muchos nuevos desafíos y problemas por resolver.
+
+Para mí era un campo totalmente desconocido que de primeras me causó mucho respeto y me parecía algo casi inalcanzable pero que a su vez me llamaba mucho la atención y que a medida que me adentraba en el tema me apetecía seguir aprendiendo más. Finalmente me ha resultado una disciplina muy atractiva e interesante, tanto que próximamente, continuaré estudiando sobre el tema realizando un máster sobre visión artificial.
+
+Debido a que esta carrera, matemáticas, es muy teórica, había algunos momentos en que se me olvida que relación tenía lo que estaba estudiando con la realidad, llegando en algunos momentos a pensar: \textit{¿que hago yo aquí?}. Por eso yo, una persona que no tenía un perfil definido, encontré en la computación una salida, donde veía, rápidamente el fruto y las aplicaciones de lo que estudiaba y donde encontraba un sentido a lo que aprendía en muchas asignaturas.\\
+Desde mi punto de vista, durante los primeros cursos deberían estar más presentes los motivos por los cuales se estudia cada asignatura y relacionarse más los contenidos de estas con los de otras asignaturas y, en definitiva, con la vida real. Esto es algo que yo he echado en falta en algunos momentos a lo largo de mi camino (aunque no se si será así siempre o a sido sólo mi caso). Me parece que se podía animar más a la gente de los primeros cursos poniendo a su disposición por ejemplo, los trabajos realizados en TAD's para que no se desanime y vean las cosas que se pueden llegar a hacer gracias a los conocimientos que se adquieren.\\
+Creo que este sería el momento de recordar a aquellos buenos profesores que, de vez en cuando, aparecían y te animaban y daban motivos para seguir adelante y no abandonar.
+
+Por último falta hablar de los objetivos. El objetivo principal era conocer el campo de la visión artificial, más concretamente, trabajar con técnicas y procedimientos básicos sobre procesamiento de imágenes para poder plantear y resolver problemas sobre visión computarizada y manejar las herramientas que nos proporcionan algunas librerías como OpenCV. A su vez, también formaba parte de los objetivos el ser capaz de plasmar todas las investigaciones y el trabajo realizado en el presente documento.\\
+El objetivo final del trabajo era, partiendo de cero llegar a adquirir los conocimientos y soltura necesarios para encontrar una solución eficaz al problema concreto que se plantea en el siguiente capítulo.
+
 
 \chapter{Presentación y objetivos del proyecto}
 
@@ -77,10 +86,13 @@ Supervisado por: Carlos Gregorio Rodríguez \\
 Dada una base de datos con imágenes de mariposas deseamos encontrar un método que nos facilite la tarea de ver si una nueva mariposa la tenemos ya clasificada o, por el contrario, todavía no se encuentra dentro de la colección. Para ello, necesitamos discrimar las imágenes de diferentes formas y así seleccionar las más parecidas a la nueva, para que de esta manera, sea más fácil tomar la decisión de si está clasificada o no, ya que tendremos que fijarnos en un número muy reducido de ejemplares en vez de tener que mirar todas una por una.
  
 \subsection*{Objetivos}
-El objetivo del trabajo es crear un programa que, utilizando la imagen de la nueva mariposa, vaya comparando ésta con cada una de las que tenemos ya guardadas en nuestra base de datos y que decida, según diferentes criterios basados en el color y la forma, si son suficientemente parecidas y es seleccionada, o no lo son y es descartada, obteniendo como resultado el conjunto de todas las seleccionadas, es decir, las más semejantes a la que deseamos añadir.
+El objetivo del trabajo es crear un programa que, utilizando la imagen de la nueva mariposa, vaya comparando ésta con cada una de las que tenemos ya guardadas en nuestra base de datos y que decida, según diferentes criterios, si son suficientemente parecidas y es seleccionada, o no lo son y es descartada, obteniendo como resultado el conjunto de todas las seleccionadas, es decir, las más semejantes a la que deseamos añadir.
+
+Posteriormente, tras realizar un estudio de las muestras se decide que, realizar las comparaciones utilizando la información sobre el color de los ejemplares y algunas características sobre la forma, sería lo más adecuado.
 
 \subsection*{Muestras}
-Las imágenes que vamos a utilizar en el trabajo están sacadas de la página web de Proyecto Mariposa \url{proyectomariposa.net}, que es un proyecto cuyo objetivo es crear una base de datos de la biodiversidad de las mariposas diurnas de Colombia y testar la utilidad del código de barras genético. De todas las imágenes que están disponibles vamos a trabajar sólo con las que tienen debajo un \textit{color-check} (véase \textit{Figura \ref{qpcard}}). Por tanto, las muestras tienen un ejemplar de mariposa en la parte superior que está encuadrado por dos reglas, una a la izquierda y otra debajo, que nos van a indicar el tamaño y debajo de la regla inferior un \textit{color-check}(véase \textit{Figura \ref{ejemplar}}).
+Las imágenes que vamos a utilizar en el trabajo están sacadas de la página web de Proyecto Mariposa \url{proyectomariposa.net}, que es un proyecto cuyo objetivo es crear una base de datos de la biodiversidad de las mariposas diurnas de Colombia y testar la utilidad del código de barras genético. Estas muestras ya estaban tomadas antes de comenzar nuestro estudio y están pensadas para el tratamiento humano y no automático, por ello, para facilitar este cambio, de todas las imágenes que están disponibles vamos a trabajar sólo con las que tienen debajo un \textit{color-check} (véase \textit{Figura \ref{qpcard}}).\\
+Las muestras tienen, por tanto, un ejemplar de mariposa en la parte superior que está encuadrado por dos reglas, una a la izquierda y otra debajo, que nos van a indicar el tamaño y debajo de la regla inferior un \textit{color-check}(véase \textit{Figura \ref{ejemplar}}).
 
 \begin{figure}[ht]
 \begin{center}
@@ -104,7 +116,7 @@ Los principales pasos que hay que llevar a cabo son:
 \begin{itemize}
 \item Hacer un preprocesamiento de las imágenes, haciendo que todas estén a la misma escala, para que los resultados de los análisis posteriores sean más reales.
 \item Encontrar la silueta de la mariposa para poder aislarla del fondo, llegando a obtener una 'máscara', en la que los puntos del cuerpo de la mariposa son blancos y el resto negros. 
-\item Hacer las comparaciones por color y por forma. Para que los datos que analizamos sean sólo de la mariposa utilizaremos la máscara.
+\item Hacer las comparaciones utilizando información sobre el color y algunas propiedades características de la forma. Para que los datos que analizamos sean sólo de la mariposa utilizaremos la máscara.
 \end{itemize}  
 
 \subsection*{Estructura}
@@ -112,23 +124,25 @@ En el documento se pueden encontrar una parte principal donde se explica el desa
 
 La parte principal consta de varios capítulos:
  \begin{itemize}
-  \item Capítulo 3: Primera toma de contacto con las muestras y preprocesamiento previo.
-  \item Capítulo 4: Se trata de aislar la mariposa. Es el núcleo del trabajo. Se comentan los problemas con las muestas, algunos caminos no fructíferos y la solución final.
-  \item Capítulo 5: Se llevan a cabo las distintas comparaciones por color y por forma.
-  \item Capítulo 6: Aplicación final. Se comenta también el interfaz.
-  \item Capítulo 7: Conclusiones.  
+  \item Capítulo 3: Primera toma de contacto con las muestras y preprocesamiento previo. Se explican los pasos seguidos para encontrar el color-check y como se hace el reescalado utilizando una regla de tres.
+  \item Capítulo 4: Se trata de aislar la mariposa para obtener una máscara y realizar las posteriores comparaciones fijándonos, únicamente en propiedades del ejemplar. Es el núcleo principal del trabajo. Se comentan algunos problemas encontrados al empezar a trabajar con las muestras, como las sombras o la diversidad de colores. Algunos caminos que fueron investigados y luego no dieron fruto. Por último, los pasos seguidos hasta llegar a la solución final: eliminar ruido, acentuar los bordes, separar el fondo, etc.
+  \item Capítulo 5: Se llevan a cabo las comparaciones basándonos en distintas propiedades del color y la forma. Para decidir la similitud entre muestras utilizando la información sobre el color se utilizarán histogramas. Para comparar los ejemplares fijándonos en la forma se van a utilizar distintas propiedades extraídas de la máscara o los contornos. De la máscara utilizaremos unos valores (momentos) que son invariantes a escalado, traslación,... Con los contornos se aplicarán algunas funciones propias de la librería. Por último, también se utilizarán como valores para la comparación algunas propiedades como el área o el perímetro del contorno, la proporción entre alto y ancho del rectángulo de mínimo área que contiene al contorno, etc. 
+  \item Capítulo 6: Aplicación final e interfaz. Se comenta como juntando los distintos programas que teníamos se consigue la aplicación final y se explican las distintas opciones disponibles en el interfaz.
+  \item Capítulo 7: Se comentan algunas posibles mejoras en la toma de muestras y las conclusiones.  
  \end{itemize}
 
 También hay tres apéndices.
 \begin{itemize}
-  \item Apéndice A: Se explican los principales conceptos sobre el tratamiento de imágenes que son necesarios para entender el documento. Se divide principalmente en tres partes: 
+  \item Apéndice A: Se explican los principales conceptos sobre el tratamiento de imágenes que son necesarios para entender y poder seguir el documento. A lo largo del texto se hacen múltiples referencias a este apéndice para que se pueda entender el funcionamiento de los métodos que se utilizan.\\
+ Se divide principalmente en tres partes: 
     \begin{enumerate}
       \item Filtrado de imágenes.
       \item Análisis de imágenes.
       \item Contornos.
     \end {enumerate}
-  \item Apéndice B: Aquí se puede encontrar parte del código utilizado. 
-  \item Apéndice C: Pruebas del funcionamiento del programa final. 
+  \item Apéndice B: El resultado final del trabajo es una aplicación escrita en el lenguaje de programación Python y por ese motivo en este apéndice se puede encontrar parte del código desarrollado. 
+  \item Apéndice C: Se muestran varias pruebas del funcionamiento del programa final. Debido a la gran cantidad de imágenes, en estos ejemplos no se utilizan todos los ejemplares disponibles, sino una pequeña muestra.\\
+Se pueden ver varios ejemplos de ejecución de los distintos programas de búsqueda por separado y uno de la aplicación final. En cada prueba se hace un pequeño comentario sobre los resultados obtenidos. 
  \end{itemize}
 
 
@@ -136,8 +150,11 @@ También hay tres apéndices.
 Antes de continuar vamos a explicar la notación que va a ser utilizada.
 
 \begin{itemize}
-\item Vamos a nombrar muchas funciones de la librería OpenCV, estas funciones ya están implementadas y algunas de ellas explicadas con detalle en el apéndice A. En el texto las nombraremos como \texttt{cv2.Canny} y también indicaremos en que parte del apéndice se pueden encontrar.
-\item También nombraremos funciones propias que se han ido implementando a medida que se desarrollaba el proyecto, la nombraremos \texttt{flodfillgray.py} pues están implementadas en python utilizando la librería OpenCV. De algunas de ellas se puede encontrar el código en el apéndice B.\\
+\item Vamos a nombrar muchas funciones de la librería OpenCV. Esta es una librería de visión computarizada destinada al tratamiento de imágenes y visión por ordenador en tiempo real (ver \ref{opencv}).\\
+ Estas funciones ya están implementadas. Para nombrarlas utilizaremos la letra  \texttt{typewriter}, por ejemplo, \texttt{cv2.Canny}.\\
+ Algunas de ellas son muy importantes y se utilizan muchas veces a lo largo del proyecto por ello es importante entender bien su funcionamiento. De éstas se pueden encontrar explicaciones más detalladas y algunos ejemplos de utilización en el apéndice A. Tras nombrarlas indicaremos en que parte del apéndice se pueden encontrar.
+\item También nombraremos funciones propias que se han ido implementando a medida que se desarrollaba el proyecto, las nombraremos también con letra \texttt{typewriter}, por ejemplo, \texttt{flodfillgray.py}, ya que están implementadas en python (utilizando la librería OpenCV).\\
+ Como muchas de ellas se utilizan posteriormente en otros programas y en algunas se han seguido muchos pasos hasta la obtención de la solución final, para poder entender mejor su funcionamiento se puede encontrar el código en el apéndice B.\\
 \item Por último decir que en algunos puntos hay referencias a páginas web donde se puede ampliar la información. 
 \end{itemize}
 
@@ -157,7 +174,7 @@ Hacer este reescalado consiste en encontrar el color-check en cada imagen y hace
 \section{Encontrando el \textit{color-check}}
 Vamos a intentar encontrar la posición del color-check encontrando su contorno y para que esto sea más sencillo, hay que lograr que destaque sobre el fondo. 
 
-Empezamos probando con diferentes thresholds aplicados sobre toda la imagen (ver \ref{section threshold}). Utilizando los programas \texttt{test\_threshold.py} y \texttt{adapThres.py} con varias imágenes distintas se comprueba que el threshold adaptativo podría funcionar bien, pero al empezar a probar, rápidamente se observa que no va a ser así ya que, independientemente de los parámetros que se tomen, algunos de los colores se quedan en blanco y en varias imágenes llegan a hacer que el rectángulo quede dividido en dos partes (véase \textit{Figura \ref{adapThresh}}).
+Empezamos probando con diferentes thresholds aplicados sobre toda la imagen (ver \ref{section theshold}). Utilizando los programas \texttt{test\_threshold.py} y \texttt{adapThres.py} con varias imágenes distintas se comprueba que el threshold adaptativo podría funcionar bien, pero al empezar a probar, rápidamente se observa que no va a ser así ya que, independientemente de los parámetros que se tomen, algunos de los colores se quedan en blanco y en varias imágenes llegan a hacer que el rectángulo quede dividido en dos partes (véase \textit{Figura \ref{adapThresh}}).
 
 \begin{figure}[h]
 \begin{center}
@@ -249,13 +266,13 @@ Una vez que teníamos reducida la imagen empezamos a aplicar distintos filtros, c
 
 
 \subsection{Acentuar contorno}
-Una primera idea fue usar \textit{cv2.floodFill} (ver \ref{section floodfill}). Esto funcionaba muy bien sobre mariposas con colores oscuros, pero las que tenían colores claros nos daban problemas, ya que si tomábamos valores bajos en el límite inferior no tapaba bien todo el fondo y si aumentábamos estos valores tapaba también parte de la mariposa (véase \textit{Figura \ref{claro-oscuro}}). 
+Una primera idea fue usar \textit{cv2.floodFill} (ver \ref{section floodfill}). Esto funcionaba muy bien sobre mariposas con colores oscuros, pero las que tenían colores claros nos daban problemas, ya que si tomábamos valores bajos en el límite inferior no inundaba bien todo el fondo y si aumentábamos estos valores se inundaba también parte de la mariposa (véase \textit{Figura \ref{claro-oscuro}}). 
 
 \begin{figure}[ht]
 \begin{center}
 \includegraphics[width=15cm]{imagenes/Imagen5.png}
 \end{center}
-\caption{La mariposa de colores oscuros se aisla muy facilmente, sin embargo, la de colores claros se empieza a tapar rápidamente.}
+\caption{La mariposa de colores oscuros se aisla muy facilmente, sin embargo, la de colores claros se inunda rápidamente.}
 \label{claro-oscuro}
 \end{figure}
 
@@ -356,10 +373,10 @@ A pesar de que para aislar la mariposa no servía, el programa funcionaba muy bie
 
 
 \chapter{Comparando las imágenes}
-Recordemos que el objetivo era que dada una nueva imagen el programa nos muestre las más parecidas a ésta, centrándonos principalmente en el estudio del color y la forma. Por tanto, una vez que ya tenemos todas las imágenes a la misma escala y hemos encontrado la máscara de cada una de ellas puedemos empezar a realizar las comparaciones.
+Recordemos que el objetivo era que dada una nueva imagen el programa nos muestre las más parecidas a ésta utilizando criterios basados en el color y la forma de los ejemplares de las muestras. Por tanto, una vez que ya tenemos todas las imágenes a la misma escala y hemos encontrado la máscara de cada una de ellas puedemos empezar a realizar dichas comparaciones.
 
 \section{Por color}
-Las comparaciones por color las hemos hecho utilizando histogramas (ver \ref{section histogramas}) (véase \textit{Figura \ref{muestraconhistograma}}). Lo que hicimos fue utilizar la máscara para restringir la zona de la imagen sobre la cual se calcula el histograma. Después normalizarla (hacer que todos los valores varíen entre 0 y 1). Al haberlo normalizado se seleccionan mariposas con los mismos colores independientemente de si son más grandes o más pequeñas, ya que de momento sólo importaba el color (cuando se aplique posteriormente el análisis de la forma ya se descartarán las que tengan un tamaño distinto).
+Las comparaciones por color las hemos hecho utilizando histogramas (ver \ref{section histogramas}) (véase \textit{Figura \ref{muestraconhistograma}}). Lo que hicimos fue utilizar la máscara para restringir la zona de la imagen sobre la cual se calcula el histograma. Después normalizarla (hacer que todos los valores varíen entre 0 y 1). Al haberlo normalizado se seleccionan mariposas con los mismos colores independientemente de si son más grandes o más pequeñas, ya que de momento sólo importaba el color (dos mariposas blancas serían seleccionadas como similares independientemente de la forma o tamaño. En el estudio de la forma ocurre lo contrario, por este motivo es conveniente juntar los dos tipos de análisis).
 
 \begin{figure}[ht]
 \begin{center}
@@ -423,6 +440,7 @@ A la vista de estos resultados decidimos probar con otros momentos: los momentos
 El funcionamiento de este método es análogo al de los momentos de Hu.
 
 \subsection{Con contornos}
+\label{section contornos}
 Para el resto de métodos usamos principalmente los contornos de la mariposa.
 
 Hasta aquí teníamos un programa que calculaba una imagen binaria de la mariposa (\texttt{calcBinaryImg.py}) y como no nos sirvía con esto, utilizamos esta imagen para calcular los contornos que necesitábamos.
@@ -515,14 +533,25 @@ Si la comparación es por forma las opciones exactas que aparecen depende del mét
 En las dos comparaciones también se puede elegir ver todas las imágenes y máscaras o sólo las seleccionadas y volver a hacer la búsqueda con nuevos criterios.
    
 \chapter{Conclusiones}
+
 %hablar de lo del fondo y las sombras. De lo de los contornos discontinuos. De la dificultad hasta encontrar la máscara.De seguir investigando hasta encontrar un contorno continuo.
+Unas de las conclusiones de aspecto más técnico que se sacan del trabajo tienen que ver con las muestras. Debido a los problemas que han dado las sombras en las imágenes podemos decir que sin ellas hubiera sido más sencillo encontrar una solución adecuada y que, posiblemente, los resultados serían más precisos. Para evitar la aparición de sombras se podrían tomar las imágenes con el flash en posición totalmente perpendicular al ejemplar. Como esto resulta muy complicado otra posible solución podría ser poner un fondo de un tono muy llamativo (en vez de gris o blanco) y que sea poco probable que aparezca en el ejemplar (podría ser un tono fucsia o verde (0,255,0)).
+
+También hay que hablar de la dificultad para encontrar una máscara. Era algo aparentemente muy sencillo pero que una vez que nos pusimos a trabajar en ello nos causó muchos problemas. Posiblemente, con cambiar el tono de fondo de la imagen para evitar las sombras y conociendo el valor de este color hubiera sido una tarea bastante sencilla.
+
+Otra de las tareas que causó bastantes problemas fue la de encontrar un contorno continuo. Esta es una de las líneas de investigación que quedan abiertas. Algunas de las posibles soluciones podrían ser crear un contorno uniendo las partes que se obtienen o unir el comienzo de una nueva línea con el final de la anterior para que así sea continuo.\\
+ Pensamos que si hubiéramos logrado esto, el programa de búsqueda que clasifica los ejemplares fijándose en algunas características de la forma (sobre todo el que utiliza \texttt{cv2.matchShapes} y el de otros momentos, ver \ref{section contornos}) sería más eficaz y proporcionaría mejores resultados.
+
+En general hay que decir que el trabajo no siempre a sido fácil y a lo largo del documento se muestra un poco de todo. Hemos encontrado dificultades, algunos caminos que dieron muchos quebraderos de cabeza y que al final no solucionaban nada, otros caminos que también los dieron pero acabaron dando fruto y momentos que parecía que no iban a llegar nunca, en los que por fin, se encuentran algunas soluciones. Además hay que decir que como en todo viaje no todo ha sido difícil, también ha habido situaciones en que parecía que las cosas salían solas y eran momentos muy reconfortantes que te animaban a continuar.
+
 
 
 \appendix
 \chapter{Conceptos generales del tratamiento de imágenes}
-OpenCV (Open source Computer Vision library) es una librería de Visión Computarizada, destinada al tratamiento de imágenes y, principalmente, a la visión por computador en tiempo real.
+\label{opencv}
+OpenCV (Open source Computer Vision library) es una librería de Visión Computarizada, destinada al tratamiento de imágenes y, principalmente, a la visión por computador en tiempo real. Contiene gran cantidad de funciones que abarcan una gran gama de áreas en el proceso de visión, como reconocimiento de objetos, calibración de cámaras o visión robótica. Se puede utilizar con varios lenguajes de programación C, C++ o, como en nuestro caso, Python.
 
-Detrás de la mayoría de las funciones de la librería que voy a utilizar se encuentran gran cantidad de cálculos, fórmulas y, en definitiva, métodos matemáticos. Por ello, en esta primera parte, voy a explicar las principales funciones de OpenCV que van a ser necesarias en la segunda parte para desarrollar el proyecto, centrándome principalmente en entender su funcionamiento y tratar de explicar algo sobre las matemáticas que hay detrás.
+Detrás de la mayoría de las funciones de la librería que vamos a utilizar se encuentran gran cantidad de cálculos, fórmulas y, en definitiva, métodos matemáticos. Por ello, en este apéndice, se explican conceptos generales del tratamiento de imágenes utilizando las principales funciones de OpenCV que van a ser necesarias para desarrollar el proyecto, centrándonos principalmente en entender su funcionamiento y tratar de explicar algo sobre las matemáticas que hay detrás.
 
 Antes de empezar, es conveniente explicar que un ordenador ``ve'' una imagen como una matriz, donde en cada posición hay tres números, el valor del color rojo, verde y azul (cada elemento de la matriz representa un píxel). Otra forma de verlo es como si la imagen se separara en tres matrices o ``capas'', una la de los valores del color rojo, otra verde y otra azul.\\
 En imágenes en escala de grises sólo habría una matriz donde cada número representa el valor del gris en ese píxel (véase \textit{Figura \ref{matriz}}).
@@ -535,7 +564,7 @@ En imágenes en escala de grises sólo habría una matriz donde cada número represe
 \label{matriz}
 \end{figure}
 
-El trabajo lo he desarrollado utilizando python 2.7 y OpenCV 2.3.1.
+El trabajo lo he desarrollado utilizando Python 2.7 y OpenCV 2.3.1.
 
 \section{Filtrado de imágenes}
 Tenemos una imagen y queremos aplicar sobre ella un filtro. Los filtros que vamos a usar lo que hacen es, dada la imagen y un núcleo, se desplaza píxel por píxel sobre la imagen comparando los valores de la posición $(i,j)$ con todos los del núcleo y obteniendo uno nuevo. El valor que tenía el píxel $(i,j)$ se cambia por el nuevo. Dependiendo del método que utilicemos el núcleo tendrá tamaños diferentes pudiendo llegar a ser de tamaño $1\times1$ y el método de comparación también será distinto.
@@ -729,41 +758,41 @@ Esta función lo que hace es dados dos contornos y una métrica calcula un valor (
 
 Además de comparar dos contornos con la función \texttt{cv2.matchShapes} se pueden utilizar otras propiedades de los contornos muy sencillas de calcular como por ejemplo, el área, el perímetro, la proporción entre base y altura del rectángulo de mínimo área que lo contiene, etc. (\url{http://www.cis.hut.fi/research/IA/paper/publications/bmvc97/bmvc97.html})
  
-\chapter{Code}
+\chapter{Código}
 \section{resizeAndWrite.py}
 \label{prog resizeAndWrite}
 {\tiny
-%\lstinputlisting{../resizeAndWrite.py}
+\lstinputlisting{../resizeAndWrite.py}
 }
 \section{floodfillgray.py}
 \label{prog floodfillgray}
 {\tiny
-%\lstinputlisting{../floodfillgray.py}
+\lstinputlisting{../floodfillgray.py}
 }
 \section{CalcBinaryImage.py}
 \label{prog calcBinaryImage}
 {\tiny
-%\lstinputlisting{../calcBinaryImage.py}
+\lstinputlisting{../calcBinaryImage.py}
 }
 \section{searchByColor.py}
 \label{prog searchByColor}
 {\tiny
-%\lstinputlisting{../searchByColor.py}
+\lstinputlisting{../searchByColor.py}
 }
 \section{search.py}
 \label{prog search}
 {\tiny
-%\lstinputlisting{../search.py}
+\lstinputlisting{../search.py}
 }
 
 \chapter{Pruebas}
-Para realizar las pruebas que se indican en el documento no se han usado todas las imágenes de la base de datos, solo una pequña colección y se comparan con una imagen principal que está incluida dentro de esta colección.
+Para realizar las pruebas que se indican en el documento no se han usado todas las imágenes de la base de datos, solo una pequña colección. La imagen se desea introducir y con la que se comparan es la imagen principal, que está incluida dentro de esta colección.
 
-Además de las que aparecen plasmadas en este documento se han realizado más pruebas utilizando todas las imágenes de la base de datos y cada uno de los métodos diferentes que han sido implemtados. Algunas pruebas daban buenos resultados y otras un poco peores y las que aquí se encuentran pretender mostrar, más o menos, conclusiones de todos los tipos.
+Además de las que aparecen plasmadas en este documento se han realizado más pruebas utilizando todas las imágenes de la base de datos y con cada uno de los métodos que han sido implemtados. Algunas pruebas daban buenos resultados y otras un poco peores y las que aquí se encuentran pretenden enseñar una pequeña muestra de cada tipo.
 
-En general, tras todas las pruebas, se observa que el método de comparación por color funciona bastante bien y el de forma es menos fiable, ya que proporciona peores  soluciones.
+En general, tras realizar las pruebas, se observa que el método de comparación por color funciona bastante bien y el de forma es menos fiable, ya que proporciona peores  soluciones.
 \section{Pruebas de \texttt{searchByColor.py}}
-Para la prueba que se muestra del programa \texttt{searchByColor.py} se han tomado las imáganes que se muestran en la figura \ref{todascolor} de la base de datos y éstas se van a comparar con el ejemplar de la figura \ref{principal1}.
+Para la prueba del programa \texttt{searchByColor.py} se han tomado las imáganes que se muestran en la figura \ref{todascolor} de la base de datos y éstas se comparan con el ejemplar de la figura \ref{principal1}.
 
 \begin{figure}[!ht]
 \begin{center}
