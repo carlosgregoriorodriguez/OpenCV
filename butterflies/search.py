@@ -4,23 +4,23 @@
 import cv2
 import sys
 import numpy as np
-import searchByColor
-import searchBySize_contour
+import search_by_color
+import search_by_size_contour
 
 def dummy(pos):
     returnImg = []
     if cv2.getTrackbarPos('color and size','select...') == 1:
         print 'hay '+str(len(name_images))+' imagenes'
-        images = searchByColor.compare(name_images)
+        images = search_by_color.compare(name_images)
         print 'han sido seleccionadas por el color ',len(images)
-        returnImg = searchBySize_contour.compareBySize(images)
+        returnImg = search_by_size_contour.compareBySize(images)
         print 'finalmente quedan ',len(returnImg)
         cv2.setTrackbarPos('color and size','select...',0)
     if cv2.getTrackbarPos('size and color','select...') == 1:
         print 'hay '+str(len(name_images))+' imagenes'
-        images = searchBySize_contour.compare(name_images)
+        images = search_by_size_contour.compare(name_images)
         print 'han sido seleccionadas por la forma ',len(images)
-        returnImg = searchByColor.compareByColor(images)
+        returnImg = search_by_color.compareByColor(images)
         cv2.setTrackbarPos('size and color','select...',0)
         print 'finalmente quedan ',len(returnImg)
     return returnImg
