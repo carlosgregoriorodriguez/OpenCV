@@ -65,9 +65,9 @@ Supervisado por: Carlos Gregorio Rodríguez \\
 
 \newpage
 \chapter{Introducción}
-Esta memoria muestra el camino que hemos seguido para realizar un Trabajo Académicamente Dirigido (TAD). En un principio el trabajo iba a ser sobre visión computarizada con aplicaciones en la medicina e iba a constar de dos partes, una primera parte de estudio de la bibliografía para adquirir unos conocimientos básicos sobre las técnicas de computer vision y una segunda parte para desarrollar un problema con aplicaciones en medicina. Al finalizar la primera parte y debido a que el material que necesitábamos para empezar con la investigación del problema no estaba disponible, nos vimos en la obligación de cambiar a un problema con aplicaciones en biología, mas en concreto, sobre mariposas.  
+Esta memoria muestra el camino que hemos seguido para realizar un Trabajo Académicamente Dirigido (TAD). En un principio el trabajo iba a ser sobre visión computarizada con aplicaciones en la medicina e iba a constar de dos partes, una primera parte de estudio de la bibliografía para adquirir unos conocimientos básicos sobre las técnicas de visión computarizada y una segunda parte para desarrollar un problema con aplicaciones en medicina. Al finalizar la primera parte y debido a que el material que necesitábamos para empezar con la investigación del problema no estaba disponible, nos vimos en la obligación de cambiar a un problema con aplicaciones en biología, más en concreto, sobre mariposas.  
 
-La visión computarizada o también conocida como visión artificial es un nuevo campo de investigación cuyo objetivo principal es que el ordenador entienda lo que ve y que está muy relacionada con todas las ramas de la matemática, la estadística, el análisis, el álgebra,... A lo largo del documento se pueden observar los conceptos matemáticos que se encuentran tras algunos de los métodos y que van desde cosas tan sencillas como el cálculo de un gradiente o una función a cosas más complejas tras las que acaba apareciendo el teorema de Green o la transformada de Fourier.\\
+La visión computarizada o también conocida como visión artificial es un nuevo campo de investigación cuyo objetivo principal es que el ordenador entienda lo que ve y que está muy relacionada con todas las ramas de la matemática, la estadística, el análisis, el álgebra, etc. A lo largo del documento se pueden observar los conceptos matemáticos que se encuentran tras algunos de los métodos y que van desde cosas tan sencillas como el cálculo de un gradiente o una función a cosas más complejas tras las que acaba apareciendo el teorema de Green o la transformada de Fourier.\\
 Esta nueva disciplina tiene muchos posibles campos de aplicación como biología, medicina, video-juegos, robótica, etc. y por tanto muchos nuevos desafíos y problemas por resolver.
 
 Para mí era un campo totalmente desconocido que de primeras me causó mucho respeto y me parecía algo casi inalcanzable pero que a su vez me llamaba mucho la atención y que a medida que me adentraba en el tema me apetecía seguir aprendiendo más. Finalmente me ha resultado una disciplina muy atractiva e interesante, tanto que próximamente, continuaré estudiando sobre el tema realizando un máster sobre visión artificial.
@@ -153,9 +153,9 @@ Antes de continuar vamos a explicar la notación que va a ser utilizada.
 \item Vamos a nombrar muchas funciones de la librería OpenCV. Esta es una librería de visión computarizada destinada al tratamiento de imágenes y visión por ordenador en tiempo real (ver \ref{opencv}).\\
  Estas funciones ya están implementadas. Para nombrarlas utilizaremos la letra  \texttt{typewriter}, por ejemplo, \texttt{cv2.Canny}.\\
  Algunas de ellas son muy importantes y se utilizan muchas veces a lo largo del proyecto por ello es importante entender bien su funcionamiento. De éstas se pueden encontrar explicaciones más detalladas y algunos ejemplos de utilización en el apéndice A. Tras nombrarlas indicaremos en que parte del apéndice se pueden encontrar.
-\item También nombraremos funciones propias que se han ido implementando a medida que se desarrollaba el proyecto, las nombraremos también con letra \texttt{typewriter}, por ejemplo, \texttt{flodfillgray.py}, ya que están implementadas en python (utilizando la librería OpenCV).\\
+\item Nombraremos funciones propias que se han ido implementando a medida que se desarrollaba el proyecto, las nombraremos también con letra \texttt{typewriter}, por ejemplo, \texttt{flodfillgray.py}, ya que están implementadas en python (utilizando la librería OpenCV).\\
  Como muchas de ellas se utilizan posteriormente en otros programas y en algunas se han seguido muchos pasos hasta la obtención de la solución final, para poder entender mejor su funcionamiento se puede encontrar el código en el apéndice B.\\
-\item Por último decir que en algunos puntos hay referencias a páginas web donde se puede ampliar la información. 
+\item Por último decir que en algunos puntos hay referencias a páginas web donde se puede ampliar la información que se está tratando. 
 \end{itemize}
 
 \chapter{Preprocesando las muestras}
@@ -342,7 +342,6 @@ Juntando todo obtenemos el programa \texttt{calc\_binary\_image.py} (ver \ref{pr
 
 \section{Algunos caminos no fructíferos}
 \label{caminos no fructiferos}
-ESTO NO SE DONDE PONERLO??
 El primer objetivo del trabajo era encontrar un programa que funcionara de forma automática y, aunque no es un camino no fructífero si que es un objetivo que no hemos logrado. Debido a los diversos problemas de las muestras, encontramos muchas dificultades a la hora de encontrar unos datos que funcionasen correctamente con todas las imágenes y que a su vez, taparan las sombras. Por ello, en vez de lograr una solución que hiciera todo el trabajo de forma automática hemos logrado que lo haga de forma semiautomática, así al aplicar los flood-fill el usuario puede elegir puntos extra para adaptar mejor la máscara y eliminar las sombras que no se hayan tapado y también puede variar las constantes elegidas para cada método.\\
 El valor de las constantes que dejamos por defecto funciona bien con casi todas las imágenes, pero si en alguna el usuario no obtiene lo que deseába o cree que se puede mejorar, puede cambiar estos valores para obtener soluciones más precisas.
 
@@ -503,7 +502,6 @@ Estos valores son muy fáciles de obtener usando las funciones \texttt{cv2.contou
 
 Éstos momentos eran muy fáciles de utilizar si tuviéramos un contorno cerrado y continuo para todas las imágenes. Como no hemos conseguido obtener el contorno de dicha manera resultaba muy difícil o casi imposible calcular algunos de ellos, ya que, por ejemplo, \texttt{cv2.contourArea} no nos daba el área real del contorno por no estar cerrado.
 
-.....REVISAR ESTA PARTE....\\
 Para poder utilizar este método de forma más fiable tenemos que seguir investigando la forma de obtener un contorno continuo y cerrado para todas las imágenes.
 
  Como de momento no lo hemos conseguido decidimos crear \texttt{search\_by\_size\_contour.py} que comparaba las imágenes por forma utilizando \texttt{cv2.matchShapes} y los momentos 1, 3 y 6 (en 3 en vez de tomar el área del contorno que devuelve la función \texttt{cv2.contourArea} se utiliza el momento m00).
@@ -534,7 +532,6 @@ En las dos comparaciones también se puede elegir ver todas las imágenes y máscar
    
 \chapter{Conclusiones}
 
-%hablar de lo del fondo y las sombras. De lo de los contornos discontinuos. De la dificultad hasta encontrar la máscara.De seguir investigando hasta encontrar un contorno continuo.
 Unas de las conclusiones de aspecto más técnico que se sacan del trabajo tienen que ver con las muestras. Debido a los problemas que han dado las sombras en las imágenes podemos decir que sin ellas hubiera sido más sencillo encontrar una solución adecuada y que, posiblemente, los resultados serían más precisos. Para evitar la aparición de sombras se podrían tomar las imágenes con el flash en posición totalmente perpendicular al ejemplar. Como esto resulta muy complicado otra posible solución podría ser poner un fondo de un tono muy llamativo (en vez de gris o blanco) y que sea poco probable que aparezca en el ejemplar (podría ser un tono fucsia o verde (0,255,0)).
 
 También hay que hablar de la dificultad para encontrar una máscara. Era algo aparentemente muy sencillo pero que una vez que nos pusimos a trabajar en ello nos causó muchos problemas. Posiblemente, con cambiar el tono de fondo de la imagen para evitar las sombras y conociendo el valor de este color hubiera sido una tarea bastante sencilla.
@@ -542,7 +539,7 @@ También hay que hablar de la dificultad para encontrar una máscara. Era algo apa
 Otra de las tareas que causó bastantes problemas fue la de encontrar un contorno continuo. Esta es una de las líneas de investigación que quedan abiertas. Algunas de las posibles soluciones podrían ser crear un contorno uniendo las partes que se obtienen o unir el comienzo de una nueva línea con el final de la anterior para que así sea continuo.\\
  Pensamos que si hubiéramos logrado esto, el programa de búsqueda que clasifica los ejemplares fijándose en algunas características de la forma (sobre todo el que utiliza \texttt{cv2.matchShapes} y el de otros momentos, ver \ref{section contornos}) sería más eficaz y proporcionaría mejores resultados.
 
-En general hay que decir que el trabajo no siempre a sido fácil y a lo largo del documento se muestra un poco de todo. Hemos encontrado dificultades, algunos caminos que dieron muchos quebraderos de cabeza y que al final no solucionaban nada, otros caminos que también los dieron pero acabaron dando fruto y momentos que parecía que no iban a llegar nunca, en los que por fin, se encuentran algunas soluciones. Además hay que decir que como en todo viaje no todo ha sido difícil, también ha habido situaciones en que parecía que las cosas salían solas y eran momentos muy reconfortantes que te animaban a continuar.
+En general hay que decir que el trabajo no siempre ha sido fácil y a lo largo del documento se muestra un poco de todo. Hemos encontrado dificultades, algunos caminos que dieron muchos quebraderos de cabeza y que al final no solucionaban nada, otros caminos que también los dieron pero acabaron dando fruto y momentos que parecía que no iban a llegar nunca, en los que por fin, se encuentran algunas soluciones. Además hay que decir que como en todo viaje no todo ha sido difícil, también ha habido situaciones en que parecía que las cosas salían solas y eran momentos muy reconfortantes que te animaban a continuar.
 
 
 
