@@ -1,4 +1,4 @@
-#include "stdafx.h"
+//#include "stdafx.h"
 #include <opencv2/core/core.hpp>
 #include "opencv2/imgproc/imgproc.hpp"
 #include <opencv2/highgui/highgui.hpp>
@@ -13,7 +13,7 @@ void dummy(int, void *);
 int main( int argc, char** argv )
 {
 	string filename = "multimedia/video/futurama.mkv";
-    VideoCapture capture(filename);
+    VideoCapture capture(0);
     Mat frame;
 	const int alpha_slider_max = 100;
 	int alpha_slider = 1;
