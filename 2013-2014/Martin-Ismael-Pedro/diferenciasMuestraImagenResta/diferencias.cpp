@@ -18,7 +18,15 @@ int main( int argc, char** argv )
 	//Read both images
 	image1 = imread("image1.jpg", CV_LOAD_IMAGE_COLOR);
 	image2 = imread("image2.jpg", CV_LOAD_IMAGE_COLOR);
-
+    
+    //show images
+    namedWindow("IMAGEN1", CV_WINDOW_AUTOSIZE );//name of window
+    namedWindow("IMAGEN2", CV_WINDOW_AUTOSIZE );
+    imshow("IMAGEN1", image1);//show the window
+    cvMoveWindow( "IMAGEN1",  100,100  );
+    imshow("IMAGEN2", image2);
+    cvMoveWindow( "IMAGEN2", 700, 100 );
+    
 	// Check for invalid input
 	if(!image1.data || !image2.data )
 	{
@@ -36,5 +44,8 @@ int main( int argc, char** argv )
 	imshow("Display window", c);
 
 	//Wait
-	waitKey(0); 
+	waitKey(0);
+    
+    //destroy
+    cvDestroyAllWindows();
 }
