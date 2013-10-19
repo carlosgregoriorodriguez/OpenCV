@@ -33,35 +33,42 @@ cv::Mat cargaImagen(String path) {
 }
 
 void calculaDiferencias(String path1, String path2, int i) {
-    Mat img1 = cargaImagen(path1);
-    Mat img2 = cargaImagen(path2);
+    Mat img1, img1_gray;
+    Mat img2, img2_gray;
+
+    img1 = cargaImagen(path1);
+    img2 = cargaImagen(path2);
+    cvtColor(img1, img1_gray, CV_BGR2GRAY);
+    cvtColor(img2, img2_gray, CV_BGR2GRAY);
     Mat result;
-    result = diferencia(img1, img2, i);
+    result = diferencia(img1_gray, img2_gray, i);
     double input;
     double alpha, beta;
-    Mat bordes = cv::Mat::zeros(img1.rows, img1.cols,CV_32FC1);
+    //    Mat bordes = cv::Mat::zeros(img1.rows, img1.cols,CV_32FC1);
     //    
-//    /// Ask the user enter alpha
-//    std::cout << " Simple Linear Blender " << std::endl;
-//    std::cout << "-----------------------" << std::endl;
-//    std::cout << "* Enter alpha [0-1]: ";
-//    std::cin >> input;
-//
-//    /// We use the alpha provided by the user if it is between 0 and 1
-//    if (input >= 0.0 && input <= 1.0) {
-//        alpha = input;
-//    }
+    //    /// Ask the user enter alpha
+    std::cout << " Simple Linear Blender " << std::endl;
+    std::cout << "-----------------------" << std::endl;
+    std::cout << "* Enter alpha [0-1]: ";
+    std::cin >> input;
+    //
+    //    /// We use the alpha provided by the user if it is between 0 and 1
+    if (input >= 0.0 && input <= 1.0) {
+        alpha = input;
+    }
 
     beta = (1.0 - alpha);
-    
-    cvtColor(result, result, CV_BGR2GRAY);
+    //    
+    //    cvtColor(result, result, CV_BGR2GRAY);
     Canny(result, result, 80, 100);
-    //bordes = bordes + result;
-    addWeighted(img1, alpha, bordes, beta, 0.0, result);
-    addWeighted(img2, alpha, bordes, beta, 0.0, result);
-    /// Wait until user exit program by pressing a key
+    //    //bordes = bordes + result;
+    addWeighted(img2_gray, alpha, result, beta, 0.0, result);
+    //    addWeighted(img2, alpha, bordes, beta, 0.0, result);
+    //    /// Wait until user exit program by pressing a key
+
+    imshow("Original1", img1);
+    imshow("Original2", img2);
     imshow("Differs1", result);
-    imshow("Differs2", result);
     waitKey(0);
     //String file_path;
     //cout << "Output file path: ";
