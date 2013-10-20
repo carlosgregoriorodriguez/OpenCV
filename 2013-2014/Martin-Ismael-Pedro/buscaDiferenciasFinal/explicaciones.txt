@@ -1,0 +1,11 @@
+Opción 3:
+
+Para conseguir diferencias en imágenes:
+- las convertimos a gray
+-las restamos
+-blur al resultado para conseguir uniformidad
+-aplicamos threshold (blanco y negro)
+- aplicamos centro de masas para conseguir un único píxel por cada diferencia individual descubierta
+- recorremos la imagen inicial y le añadimos los círculos
+
+NOTA: Dependiendo de la intensidad del blur o del límite aplicado al threshold se obtienen más puntos de interés(diferencias) o menos.
