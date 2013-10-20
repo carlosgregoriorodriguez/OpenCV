@@ -14,9 +14,8 @@
 using namespace std;
 using namespace cv;
 
-cv::Mat diferencias(Mat img1, Mat img2);
 cv::Mat cargaImagen(String path);
-void calculaDiferencias(String path1, String path2, int i);
+void calculaDiferencias(String path1, String path2);
 void dummy(int, void *);
 
 #endif	/* RESTA_H */

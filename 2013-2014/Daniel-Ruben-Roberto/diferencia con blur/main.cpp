@@ -19,10 +19,8 @@ int main(int argc, char** argv) {
 	String path3 = "images/beach1.jpg";
 	String path4 = "images/beach2.jpg";
 
-    int i;
-    cout << "i (para el suavizado):";
-    cin >> i;
-    calculaDiferencias(path3, path4, i);
+
+    calculaDiferencias(path3, path4);
     return 0;
 }
 
