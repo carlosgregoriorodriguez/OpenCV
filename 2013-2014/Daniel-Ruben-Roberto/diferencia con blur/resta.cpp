@@ -41,16 +41,9 @@ void calculaDiferencias(String path1, String path2) {
 	//    Mat bordes = cv::Mat::zeros(img1.rows, img1.cols,CV_32FC1);
 	//    
 	//    /// Ask the user enter alpha
-	std::cout << " Simple Linear Blender " << std::endl;
-	std::cout << "-----------------------" << std::endl;
-	std::cout << "* Enter alpha [0-1]: ";
-	std::cin >> input;
+        alpha = 0.5;
 	//
 	//    /// We use the alpha provided by the user if it is between 0 and 1
-	if (input >= 0.0 && input <= 1.0) {
-		alpha = input;
-	}
-
 	beta = (1.0 - alpha);
 	//    
 	//    cvtColor(result, result, CV_BGR2GRAY);
@@ -107,8 +100,8 @@ void calculaDiferencias(String path1, String path2) {
 
 			//mezclar la imagen obtenida del canny con una de las originales
 			addWeighted(img2_gray, alpha, resultBlur, beta, 0.0, resultBlur);
-
 			imshow("imagen resultado", resultBlur);
+                        
 		}
 
 	}
