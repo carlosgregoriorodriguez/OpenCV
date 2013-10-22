@@ -34,11 +34,13 @@ if __name__ == "__main__":
     cv2.imshow("threshold",diff)
 
     #Contours 
-    contours, hierarchy = cv2.findContours(diff, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)    
+    contours, hierarchy = cv2.findContours(diff, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE) #differences with cv2.CHAIN_APPROX_SIMPLE
+
     #Nicer visualisation
     for c in contours:
-        cv2.ellipse(img1, cv2.fitEllipse(c), color=(0,0,255))
-        cv2.ellipse(img2, cv2.fitEllipse(c), color=(0,255,0))
+        if len(c) > 5: #fitEllipse requierement
+            cv2.ellipse(img1, cv2.fitEllipse(c), color=(0,0,255))
+            cv2.ellipse(img2, cv2.fitEllipse(c), color=(0,255,0))
         
     cv2.imshow("img1",img1)
     cv2.imshow("img2",img2)
