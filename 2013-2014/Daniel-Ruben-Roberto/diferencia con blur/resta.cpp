@@ -93,20 +93,19 @@ void calculaDiferencias(String path1, String path2) {
 		cv::blur(result, resultBlur, Size(tbPos, tbPos), Point(-1, -1), BORDER_DEFAULT);
 
 		if (tbPosAux != tbPos){ //si hemos cambiado el valor del blur
+                        cv::blur(result, resultBlur, Size(tbPos, tbPos), Point(-1, -1), BORDER_DEFAULT);
 			tbPosAux = tbPos;
-			
 			//sacar bordes
 			Canny(resultBlur, resultBlur, 80, 100);
-
 			//mezclar la imagen obtenida del canny con una de las originales
 			addWeighted(img2_gray, alpha, resultBlur, beta, 0.0, resultBlur);
 			imshow("imagen resultado", resultBlur);
                         
 		}
-
+                if( waitKey (100) >= 0) break;
 	}
 
-	waitKey(0);
+	
 	
 }
 
