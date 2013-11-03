@@ -5,10 +5,17 @@ import cv2
 import numpy as np
 
 #Inicializamos variables
-def whitening(img):
-    #img = cv2.imread"../../img/img2.jpg", cv2.CV_LOAD_IMAGE_GRAYSCALE)
-    cv2.imshow("original", img)
+#def whitening(img):
+img = cv2.imread("../../img/beach1.jpg", cv2.CV_LOAD_IMAGE_COLOR)
+cv2.imshow("original", img)
 
+b, g, r = cv2.split(img)
+todos = b, g, r
+
+media = 0
+var = 0
+dummy = 0
+for img in todos:
     I, J = img.shape
     media = 0
     var = 0
@@ -32,6 +39,8 @@ def whitening(img):
         for j in range(J):
             dst[i, j] = (img[i, j] - media)/(var**0.5)
     assert isinstance(dst, object)
-    cv2.imshow("resultado", dst)
-    cv2.waitKey(0)
-    return dst
+    text = "resultado", "b", "g", "r"
+    cv2.imshow(text[0] + text[dummy], dst)
+    dummy += 1
+cv2.waitKey(0)
+#return dst
