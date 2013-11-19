@@ -6,9 +6,8 @@ import numpy as np
 
 #Inicializamos variables
 #def whitening(img):
-img = cv2.imread("../../img/beach1.jpg", cv2.CV_LOAD_IMAGE_COLOR)
+img = cv2.imread("../../img/img2.jpg", cv2.CV_LOAD_IMAGE_COLOR)
 cv2.imshow("original", img)
-
 b, g, r = cv2.split(img)
 todos = b, g, r
 
