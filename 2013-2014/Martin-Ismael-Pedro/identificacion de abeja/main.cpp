@@ -41,14 +41,11 @@ const int MAX_OBJECT_AREA = FRAME_HEIGHT*FRAME_WIDTH/1.5;
 
 
 void on_trackbar(int valor,void*){
- 
-   
     threshold(bgr_planes[0], bgr_planes[0], min_th,max_th , 0);
    
-     threshold(bgr_planes[1], bgr_planes[1], min_ts,max_ts , 0);
+    threshold(bgr_planes[1], bgr_planes[1], min_ts,max_ts , 0);
     
-     threshold(bgr_planes[2], bgr_planes[2], min_tv,max_tv , 0);
-    
+    threshold(bgr_planes[2], bgr_planes[2], min_tv,max_tv , 0);
 }
 
 void morphOps(Mat &thresh){
@@ -67,9 +64,6 @@ void morphOps(Mat &thresh){
     
 	dilate(thresh,thresh,dilateElement);
 	dilate(thresh,thresh,dilateElement);
-	
-    
-    
 }
 void drawObject(int x, int y,Mat &frame){
     
