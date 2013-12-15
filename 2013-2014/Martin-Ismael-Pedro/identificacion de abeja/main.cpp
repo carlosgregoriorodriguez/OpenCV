@@ -1,197 +1,294 @@
-
-
 #include <opencv2/core/core.hpp>
 #include "opencv2/imgproc/imgproc.hpp"
 #include <opencv2/highgui/highgui.hpp>
 #include <iostream>
 #include <string>
-#include "buscaobjetos.h"
-#include "opencv2/features2d/features2d.hpp"
-#include "opencv2/nonfree/features2d.hpp"
 #include <stdio.h>
+#include "opencv2/core/core.hpp"
+#include "opencv2/features2d/features2d.hpp"
+#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/nonfree/nonfree.hpp"
 
 using namespace cv;
 using namespace std;
 
-Mat edges;
+cv::VideoCapture cap;
+int tbPos;
+const int alpha_slider_max = 100;
+int alpha_slider = 1;
+double alpha;
+double beta;
 Mat frame;
-Mat frame1;
-Mat treshold;
-vector<Mat> bgr_planes;
+Mat previousFrame;
+Mat blurred;
+string tb = "tb1";
 
-int min_th=0;
-int max_th=256;
+void dummy(int, void *);
+void readme();
+Point followInterestPoint(Mat image, Mat tpl, Point interestPoint, int squareSize);
+Point detectInterestPointFromTemplate (Mat tpl);
+void on_trackbar(int valor,void*);
+void initialize();
+int openVideo(int argc, string videoPath);
+void changeColorRepresentation();
+void moveDetection();
 
+int main( int argc, char** argv )
+{
+	int select;
+	string numWasp = "";
+	int idSize = 25;
 
-int min_ts=0;
-int max_ts=256;
+	cout << "Insert numeric code for wasp detection method: " << endl;
+	cout << "1: Change color representation of images (BGR to HSV)." << endl;
+	cout << "2: Movement detection among video frames" << endl;
+	cout << "3: Follow wasp." << endl;
+	cin >> select;
+	switch(select) {
+		case 1: {
+			changeColorRepresentation();
+		}	
+		break;
+		case 2: {
+			moveDetection();
+		}
+		case 3: {
+			cout << "Introduce the number of the wasp to be followed: " << endl;
+			cin >> numWasp;
+			
+			Mat tpl;
+			
+			Point followedPoint = Point(-1, -1);
 
+			int squareSize = 100;
+			
+			int error;
+	
+			initialize();
+			/*
+			if (openVideo(argc, string(argv[1])) == 0) {
+				cerr << "Error: could not load a camera or video.\n";
+			}
+			*/
+			cap.open("multimedia/video/video.mts");
+			namedWindow("video", 1);
+			
+			createTrackbar(tb, "video", &alpha_slider, alpha_slider_max, on_trackbar);
+			cout << "first";
+			for(;;)
+			{
+				waitKey(20);
+				if (frame.data) {
+					previousFrame = frame.clone();
+				}
+				cap >> frame;
+				resize(frame, frame, Size(700, 550), 0, 0, INTER_CUBIC);
+				if(!frame.data)
+				{
+					printf("Error: no frame data.\n");
+					break;
+				}
+				
+				tbPos = getTrackbarPos(tb, "video");
 
-int min_tv=0;
-int max_tv=256;
+				if (tbPos <= 0)
+					tbPos = 1;
 
+				tpl = imread("multimedia/images/" + numWasp + ".jpg", CV_32FC1);
+				// scene1 is the captured image from the video.
+				if (followedPoint.x < 0 || followedPoint.y < 0) {
+					followedPoint = detectInterestPointFromTemplate(tpl);
+				}
+				else {
+					followedPoint = followInterestPoint(frame, tpl, followedPoint, squareSize);
+				}
+				if (followedPoint.x >= 0 && followedPoint.y >= 0) {
+					circle(frame, followedPoint, idSize, Scalar(0,255,0), 2, 8, 0);
+				}
+				imshow("video", frame);
+			}
+		}
+		break;
+		default:
+		break;
+	}
+	
+    return 0;
+	
+}
 
-const int FRAME_WIDTH = 640;
-const int FRAME_HEIGHT = 480;
+Point followInterestPoint(Mat image, Mat tpl, Point interestPoint, int squareSize) {
+	Mat scores;
+	Point minLoc; 
+	Point maxLoc;
+	Point foundPoint;
+	double minVal; 
+	double maxVal; 
+	int initX, initY, squareX, squareY;
+	cout << interestPoint.x << " " << interestPoint.y << endl;
+	if (interestPoint.y - squareSize/2 < 0)
+		initX = 0;
+	else {
+		initX = interestPoint.y - squareSize/2;
+	}
+	if (interestPoint.x - squareSize/2 < 0)
+		initY = 0;
+	else {
+		initY = interestPoint.x - squareSize/2;
+	}
+	if (initX + squareSize/2 >= image.rows)
+		squareX = image.rows - 1;
+	else {
+		squareX = squareSize;
+	}
+	if (initY + squareSize >= image.cols)
+		squareY = image.cols - 1;
+	else {
+		squareY = squareSize;
+	}
+	cout << image.rows << " " << image.cols << endl;
+	cout << initX << " " << initY << " " << squareX << " " << squareY;
+	cout << "hola1 " << endl;
+	Mat subImg = image(Rect(initY, initX, squareX, squareY));
+	cout << "hola2 " << endl;
+	scores.create(tpl.rows, tpl.cols, CV_32FC1);
+	cout << "hola3 " << endl;
+	matchTemplate(subImg, tpl, scores, TM_CCORR_NORMED);
+	//normalize( scores, scores, 0, 1, NORM_MINMAX, -1, Mat() );
+	 /// Localizing the best match with minMaxLoc
+	 cout << "hola4 " << endl;
+	minMaxLoc( scores, &minVal, &maxVal, &minLoc, &maxLoc, Mat() );
+	cout << "hola5 " << endl;
+	foundPoint = Point(maxLoc.x + interestPoint.x - squareSize/2, 
+		maxLoc.y + interestPoint.y - squareSize/2);
+	cout << "hello " <<foundPoint.x << " " << foundPoint.y << endl;
+	
+	return foundPoint;
+}
 
-const int MAX_NUM_OBJECTS=50;
-
-const int MIN_OBJECT_AREA = 20*20;
-const int MAX_OBJECT_AREA = FRAME_HEIGHT*FRAME_WIDTH/1.5;
-
+Point detectInterestPointFromTemplate (Mat tpl) {
+	Mat scores;
+	Point minLoc; 
+	Point maxLoc;
+	double minVal; 
+	double maxVal; 
+	
+	scores.create(tpl.rows, tpl.cols, CV_32FC1);
+	
+	matchTemplate(frame, tpl, scores, TM_CCORR_NORMED);
+	//normalize( scores, scores, 0, 1, NORM_MINMAX, -1, Mat() );
+	 /// Localizing the best match with minMaxLoc
+	minMaxLoc( scores, &minVal, &maxVal, &minLoc, &maxLoc, Mat() );
+		
+	return maxLoc;
+}
+ 
 
 void on_trackbar(int valor,void*){
-    threshold(bgr_planes[0], bgr_planes[0], min_th,max_th , 0);
-   
-    threshold(bgr_planes[1], bgr_planes[1], min_ts,max_ts , 0);
-    
-    threshold(bgr_planes[2], bgr_planes[2], min_tv,max_tv , 0);
+	//TODO
+	
 }
 
-void morphOps(Mat &thresh){
-    /*función mas que nada para hacer más grande y claro una vez que aplicamos el trheshold y  que sea mas facil identificarlo, */
-	//configuracion del KERNEL
-    //MORPH_RECT estrutura rectangular
-    /*getStructuringElement devuelve una estructura con el tamaño y la morfología que queremos mas o menos que se hagan las operaciones dilate y erode.*/
-	Mat erodeElement = getStructuringElement( MORPH_RECT,Size(3,3));
-    
-   
-	Mat dilateElement = getStructuringElement( MORPH_RECT,Size(11,11));
-    
-	erode(thresh,thresh,erodeElement);
-	erode(thresh,thresh,erodeElement);
-    
-    
-	dilate(thresh,thresh,dilateElement);
-	dilate(thresh,thresh,dilateElement);
+void initialize() {
+	alpha_slider = 1;
+	frame = Mat();
+	blurred = Mat();
+	tb = "tb1";
 }
-void drawObject(int x, int y,Mat &frame){
-    
 
-    
-	circle(frame,Point(x,y),20,Scalar(0,255,0),2);
-    if(y-25>0)
-        line(frame,Point(x,y),Point(x,y-25),Scalar(0,255,0),2);
-    else line(frame,Point(x,y),Point(x,0),Scalar(0,255,0),2);
-    if(y+25<FRAME_HEIGHT)
-        line(frame,Point(x,y),Point(x,y+25),Scalar(0,255,0),2);
-    else line(frame,Point(x,y),Point(x,FRAME_HEIGHT),Scalar(0,255,0),2);
-    if(x-25>0)
-        line(frame,Point(x,y),Point(x-25,y),Scalar(0,255,0),2);
-    else line(frame,Point(x,y),Point(0,y),Scalar(0,255,0),2);
-    if(x+25<FRAME_WIDTH)
-        line(frame,Point(x,y),Point(x+25,y),Scalar(0,255,0),2);
-    else line(frame,Point(x,y),Point(FRAME_WIDTH,y),Scalar(0,255,0),2);
-    
+int openVideo(int argc, string videoPath) {
+	int error;
+
+	if(argc > 1)
+	{
+		cap.open(videoPath);
+	}
+	else
+	{
+		cap.open(CV_CAP_ANY);
+	}
+	if(!cap.isOpened())
+	{
+		printf("Error: could not load a camera or video.\n");
+		error = 0;
+	}
+	else
+		error = 1;
 	
-    
+	return error;
 }
-void trackFilteredObject(int &x, int &y, Mat threshold, Mat &cameraFeed){
-    
-	Mat temp;
-	threshold.copyTo(temp);
+
+void changeColorRepresentation() {
+	cv::Mat initialImage = cv::imread("multimedia/images/wasps.jpg");
+
+    cv::cvtColor(initialImage, initialImage, CV_BGR2HSV);
+	cv::Mat image= cv::imread("multimedia/images/wasps.jpg");
+    if (!image.data) {
+        std::cout << "Image file not found\n";
+    }
+
+    //Prepare the image for findContours
+    cv::cvtColor(image, image, CV_BGR2GRAY);
+    cv::threshold(image, image, 230, 255, CV_THRESH_BINARY);
+
+    //Find the contours. Use the contourOutput Mat so the original image doesn't get overwritten
+    std::vector<std::vector<cv::Point> > contours;
+    cv::Mat contourOutput = image.clone();
+    cv::findContours( contourOutput, contours, CV_RETR_TREE, CV_CHAIN_APPROX_NONE );
+
+    //Draw the contours
+    cv::Mat contourImage(image.size(), CV_8UC3, cv::Scalar(0,0,0));
+    cv::Scalar colors[3];
+    colors[0] = cv::Scalar(255, 0, 0);
+    colors[1] = cv::Scalar(0, 255, 0);
+    colors[2] = cv::Scalar(0, 0, 255);
+    for (size_t idx = 0; idx < contours.size(); idx++) {
+        cv::drawContours(contourImage, contours, idx, colors[idx % 3]);
+    }
+	cv::imshow("initial", initialImage);
+    cvMoveWindow("initial", 400, 0);
+    cv::imshow("Input Image", image);
+    cvMoveWindow("Input Image", 0, 0);
+    cv::imshow("Contours", contourImage);
+    cvMoveWindow("Contours", 200, 0);
+    cv::waitKey(0);
+}
+
+
+void moveDetection() {
 	
-    //venctor de los puntos del contorno
-   
-	vector< vector<Point> > contours;
-    
-     //vector con la jerarquía
-    
-	vector<Vec4i> hierarchy;
+	int error;
 	
-   
-    //CV_RETR_CCOMP disttribuye los contornos en dos niveles
-    //CV_chain_aprrox_simple para que me de los menos puntos posibles.
-	findContours(temp,contours,hierarchy,CV_RETR_CCOMP,CV_CHAIN_APPROX_SIMPLE );
-	//use moments method to find our filtered object
-	double refArea = 0;
-	bool objectFound = false;
-	if (hierarchy.size() > 0) {
-		int numObjects = hierarchy.size();
-        //si el numero de objetos es mayor que MAX_NUM_OBJECTS tenemos ruido
-       
-        if(numObjects<MAX_NUM_OBJECTS){
-            //recorre los contornos
-            //la condicion es >=0 por que si el hierarchy[index][0] da negativo es que no hay siguiente contorno
-			for (int index = 0; index >= 0; index = hierarchy[index][0]) {
-                
-				Moments moment = moments((cv::Mat)contours[index]);
-				double area = moment.m00;
-                //si el area es menor q 20 por 20 pixeles lo considero ruido
-                //si el are es el mismo a 3/2 de la foto , es demasiado grande y no lo contamos
-				//nosotros solo queremos el area mas grande. Asique vamos comparando
-				
-                if(area>MIN_OBJECT_AREA && area<MAX_OBJECT_AREA && area>refArea){
-					x = moment.m10/area;
-					y = moment.m01/area;
-					objectFound = true;
-					refArea = area;
-				}else objectFound = false;
-                
-                
-			}
-                if(objectFound ==true){
-				putText(cameraFeed,"ENCONTRADO",Point(0,50),2,1,Scalar(0,255,0),2);
-				
-				drawObject(x,y,cameraFeed);}
-            
-		}else putText(cameraFeed,"MUCHO RUIDO",Point(0,50),1,2,Scalar(0,0,255),2);
+    initialize();
+	/*
+    if (openVideo(argc, string(argv[1])) == 0) {
+		cerr << "Error: could not load a camera or video.\n";
+    }
+	*/
+	cap.open("multimedia/video/video.mts");
+	
+	namedWindow("video", 1);
+	
+	createTrackbar(tb, "video", &alpha_slider, alpha_slider_max, on_trackbar);
+	
+	for(;;)
+	{
+		waitKey(20);
+		if (frame.data) {
+			previousFrame = frame.clone();
+		}
+		cap >> frame;
+		if(!frame.data)
+		{
+			printf("Error: no frame data.\n");
+			break;
+		}
+		
+		tbPos = getTrackbarPos(tb, "video");
+
+		if (tbPos <= 0)
+			tbPos = 1;
+
+		imshow("video", abs(frame-previousFrame));
 	}
 }
-
-
-
-int main (int argc, char *argv[])
-{
-    int x=0;
-    int y=0;
-    VideoCapture cap ("/Users/pedrete_142/Documents/proyectoprimeroopencv/multimedia/images/fragmento_84.avi");  // Open the file
-    
-    if (!cap.isOpened ())               // Check if opening was successful
-                    cerr << "I have failed!" << endl;
-    
-    else{
-        
-        namedWindow("edges",WINDOW_AUTOSIZE);
-        
-        namedWindow("frame",WINDOW_AUTOSIZE);
-        createTrackbar("threshold min h", "edges",&min_th, max_th,on_trackbar);
-        createTrackbar("threshold max h", "edges",&max_th, max_th,on_trackbar);
-        
-        createTrackbar("threshold min s", "edges",&min_ts, max_ts,on_trackbar);
-        createTrackbar("threshold max s", "edges",&max_ts, max_ts,on_trackbar);
-        
-        createTrackbar("threshold min v", "edges",&min_tv, max_tv,on_trackbar);
-        createTrackbar("threshold max v", "edges",&max_tv, max_tv,on_trackbar);
-        
-
-        while (cap.read (frame)){
-            
-
-            blur(frame, frame, Size(1,1));
-            cvtColor(frame, frame1, CV_BGR2HSV);
-            inRange(frame1,Scalar(min_th,min_ts,min_tv),Scalar(max_th,max_ts,max_tv),treshold);
-            
-            split( frame1, bgr_planes );
-            on_trackbar(min_th, 0 );
-            on_trackbar( max_th, 0 );
-            
-            on_trackbar(min_ts, 0 );
-            on_trackbar( max_ts, 0 );
-            
-            on_trackbar(min_tv, 0 );
-            on_trackbar( max_tv, 0 );
-            merge(bgr_planes,  frame1);
-            morphOps(treshold);
-            trackFilteredObject(x,y,treshold,frame);
-            imshow("edges", treshold);
-            imshow("frame", frame);
-            if(waitKey(30) >= 0) break;
-        }
-    }
-    return 0;
-}
-
-
-
-
