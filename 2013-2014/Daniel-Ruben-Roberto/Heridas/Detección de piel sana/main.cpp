@@ -69,10 +69,17 @@ int main(int argc, char** argv) {
     final.convertTo(final, 16, 255.);
     
     //FIN DEL ALGORITMO
+    //imshow("final1", final);
+    //waitKey();
+    //cout << final.at<int>(5,5);
+    threshold(final, dst, 0, 255, THRESH_BINARY);
     
-    imshow("final1", final);
+    
+    //Invertir la imagen para sacar las cosas malas
+    
+    
+    imshow("threshold", dst);
     waitKey();
-    
     //GaussianBlur(final, blur, Size(0,0), 4);
     //imshow("GaussianBlur", blur);
     
