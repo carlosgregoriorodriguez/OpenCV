@@ -200,18 +200,22 @@ void detectIds() {
 for( int i = 1; i < contours.size(); i++)
 {
 	RotatedRect el = fitEllipse(contours[i]);
-	cout << "Contorno " << i << ":" << endl;
-	cout << " Ancho: " << el.size.width << endl;
-	cout << " Alto: " << el.size.height << endl << endl;
+	cout << "**Contorno " << i << ":" << endl;
+	cout << "   Ancho: " << el.size.width << endl;
+	cout << "   Alto: " << el.size.height << endl;
 }
-/* Recorrerlo sacando el area del contorno
-	for( int i = 0; i < contours.size(); i++)
+
+
+//Con contourArea
+cout << "++++ contourArea ++++" << endl;
+for( int i = 1; i < contours.size(); i++)
 {
 	double asd = contourArea(contours[i]);
+
 	cout << asd << endl;
 }
-*/
-    
+    namedWindow("contornos",CV_WINDOW_NORMAL);
+    cv:imshow("contornos", canny);
     cv::imshow("hola", ids);
     cv::imshow("adios", initialImage);
     cv::waitKey(0);
