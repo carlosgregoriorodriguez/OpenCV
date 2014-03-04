@@ -44,7 +44,7 @@ void on_trackbar( int, void*)
    //             means.at(j,k)+=centers.at(j,k);
    // }
     //Mat final = img_dst;
-    final = img_dst.reshape(img_hist_eq.depth(), img_hist_eq.rows);
+    final = img_dst.reshape(img.depth(), img.rows);
     //canny(final, final, threshold1, threshold2);
 
         //We proceed to invert the "final" image.
