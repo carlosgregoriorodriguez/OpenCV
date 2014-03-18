@@ -17,7 +17,7 @@ void dummy(int, void *);
 int main( int argc, char** argv )
 {
 	//Read images
-	color = imread("multimedia/images/negro.jpg", CV_32FC1);
+	color = imread("multimedia/images/color_punta_ala_avispa.jpg", CV_32FC1);
 	color3 = imread("multimedia/images/color3.jpg", CV_32FC1);
 	img = imread("multimedia/images/pantallazo.jpg", CV_32FC1);
 

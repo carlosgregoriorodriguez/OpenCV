@@ -8,6 +8,7 @@
 #include "opencv2/features2d/features2d.hpp"
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/nonfree/nonfree.hpp"
+#include <cmath>
 //#include "headers.h"
 
 using namespace cv;
@@ -201,23 +202,39 @@ void detectIds() {
 //cvtColor(canny, canny, CV_BGR2GRAY);
   findContours( canny, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
 
-for( int i = 1; i < contours.size(); i++)
-{
-	RotatedRect el = fitEllipse(contours[i]);
-	cout << "**Contorno " << i << ":" << endl;
-	cout << "   Ancho: " << el.size.width << endl;
-	cout << "   Alto: " << el.size.height << endl;
-}
+	for( int i = 1; i < contours.size(); i++)
+	{
+		RotatedRect el = fitEllipse(contours[i]);
+		cout << "**Contorno " << i << ":" << endl;
+		cout << "   Ancho: " << el.size.width << endl;
+		cout << "   Alto: " << el.size.height << endl;
+	}
 
 
-//Con contourArea
-cout << "++++ contourArea ++++" << endl;
-for( int i = 1; i < contours.size(); i++)
-{
-	double asd = contourArea(contours[i]);
+	//Con contourArea
+	cout << "++++ contourArea ++++" << endl;
+	double best = 0;
+	for( int i = 1; i < contours.size(); i++)
+	{
+		double asd = contourArea(contours[i]);
+		if(asd > best)
+			best = asd;
+		cout << asd << endl;
+	}
 
-	cout << asd << endl;
-}
+	//Sacamos el diametro del mejor contorno
+	double diameter = sqrt(best / 3.1416) * 2;
+
+	//Sacamos la proporcion entre la etiqueta y la pantalla
+	double imageSize = (initialImage.rows + initialImage.cols) / 2;
+	double prop = imageSize / diameter;
+
+	cout << "////////////////////////" << endl;
+	cout << "Mejor area: " << best << endl;	
+	cout << "Dimension de imagen: " << imageSize << endl;
+	cout << "Diagonal mejor area: " << diameter << endl;
+	cout << "Proporcion: " << prop << endl;
+
     namedWindow("contornos",CV_WINDOW_NORMAL);
     cv:imshow("contornos", canny);
     cv::imshow("hola", ids);

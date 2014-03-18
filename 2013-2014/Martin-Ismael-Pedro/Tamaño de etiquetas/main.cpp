@@ -66,7 +66,7 @@ void detectIds() {
 	namedWindow("hola",CV_WINDOW_NORMAL);
 	int erosionSize = 1;
 	int erosionType = 2;
-	int thresh = 50;
+	int thresh = 50; 
 	int max_thresh = 100;
 	RNG rng(12345);
 	vector<vector<Point> > contours;
