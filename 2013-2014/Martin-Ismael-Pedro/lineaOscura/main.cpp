@@ -27,6 +27,8 @@ int main( int argc, char** argv ) {
 	float distSmall = 20;
 	Mat bimg, gimg, rimg;
 	
+	Point central(img.size().width / 2, img.size().height / 2);
+	
 	//Bucle de grados en los que inclinar la linea
 	for(float gr = 0; gr < 360; gr += 1) {
 		float rad = gr * 0.0174532925;
@@ -39,6 +41,12 @@ int main( int argc, char** argv ) {
 		Mat a = Mat::zeros(img.size(), 16);
 		//a.setTo(Scalar(15,15,30));
 		line(a, p, ps, Scalar(255,255,255), 10, 8, 0);
+		
+		//creamos la linea para la cabeza
+		Point p2( central.x - (p.x - central.x) / 5, central.y - (p.y - central.y) / 5);
+		Point ps2( central.x - (ps.x - central.x), central.y - (ps.y - central.y));
+		line(a, p2, ps2, Scalar(255,255,255), 12, 8, 0);
+		
 		Mat aux = img & a;		
 		
 		//inRange
