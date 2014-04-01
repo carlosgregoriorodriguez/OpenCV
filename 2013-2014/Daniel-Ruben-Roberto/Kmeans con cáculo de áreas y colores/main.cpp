@@ -18,7 +18,7 @@ using namespace cv;
  * 
  */
 int main(int argc, char** argv) {
-    //preparaImagen("img/img1.jpg");
+    preparaImagen("img/img4.jpg");
     aplicaKmeans("img/crop.jpg");
 }
 

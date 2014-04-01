@@ -131,7 +131,7 @@ Mat aplicaKmeans(string file) {
 }
 void preparaImagen(string file){
     Mat tmp = imread(file);
-    //resize(tmp, tmp, (Size(1024,768)));
+    resize(tmp, tmp, (Size(750,500)));
     imshow("Original", tmp);
     vector<Mat> channelsEq;
     //Mat img_hist_eq;
