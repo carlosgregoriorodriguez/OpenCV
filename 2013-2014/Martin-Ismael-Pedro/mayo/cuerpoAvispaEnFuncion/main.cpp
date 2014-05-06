@@ -13,18 +13,35 @@
 using namespace cv;
 using namespace std;
 
+//Returns in radians
+float getBodyOrientation(Mat img, Point p);
+
 int main( int argc, char** argv ) {
 	Mat img = imread("multimedia/images/prueba1.jpg");
-	namedWindow("t",1);
-	namedWindow("t2",1);
 	
 	//get the point of the center
 	Point center(img.size().width / 2, img.size().height / 2);
 	
+	float angle = getBodyOrientation(img, center);
+	
+	cerr << angle << endl;
+	
+	namedWindow("the image",1);
+	
+	resize(img, img, Size(), 3, 3, INTER_CUBIC);
+	imshow("the image",img);
+	
+	waitKey(0);
+
+
+};
+
+float getBodyOrientation(Mat img, Point p) {
+	
 	float score = 2550;
 	Point best;
 	float bestAngle;
-	float bestRadian;
+	float bestRadian = -1;
 	float distSmall = 20;
 	Mat bimg, gimg, rimg;
 	
@@ -59,31 +76,16 @@ int main( int argc, char** argv ) {
 		//Sacamos la media y dista menos del marron que la actual nos quedamos con ella
 		Scalar media = mean(aux);
 		double ladist = abs(media[0] - 24) + abs(media[1] - 16) + abs(media[2] - 29);
-		cerr << gr << ": " << media << " --- " << ladist << endl;
 		if( ladist < score) {
-			bestAngle = gr;
 			bestRadian = rad;
+			bestAngle = gr;
 			best = p;
 			score = ladist;
 			bimg = aux;
 		}
-		
-		circle(img, p, 1, Scalar(0,255,0), 1, 8, 0);
-		circle(img, ps, 1, Scalar(0,0,255), 1, 8, 0);
 	}
-
-	cerr << bestAngle << endl;
-	cerr << bestRadian << endl;
-	line(img, best, center, Scalar(255,0,0), 10, 8, 0);
-
-	//img.copyTo(img, a);
-	resize(bimg, bimg, Size(), 3, 3, INTER_CUBIC);
-	resize(img, img, Size(), 3, 3, INTER_CUBIC);
-	//resize(hsv, hsv, Size(), 3, 3, INTER_CUBIC);
-	imshow("t",bimg);
-	imshow("t2",img);
-
-	waitKey(0);
+	
+	return bestRadian;
 
 
 };

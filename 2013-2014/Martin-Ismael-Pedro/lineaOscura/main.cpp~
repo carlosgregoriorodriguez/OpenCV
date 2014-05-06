@@ -45,7 +45,7 @@ int main( int argc, char** argv ) {
 		//creamos la linea para la cabeza
 		Point p2( central.x - (p.x - central.x) / 5, central.y - (p.y - central.y) / 5);
 		Point ps2( central.x - (ps.x - central.x), central.y - (ps.y - central.y));
-		line(a, p2, ps2, Scalar(255,255,255), 15, 8, 0);
+		line(a, p2, ps2, Scalar(255,255,255), 12, 8, 0);
 		
 		Mat aux = img & a;		
 		
