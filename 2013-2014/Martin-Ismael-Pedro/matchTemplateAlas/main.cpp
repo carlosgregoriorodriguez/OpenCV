@@ -16,7 +16,7 @@ using namespace std;
 int main( int argc, char** argv ) {
 	//Mat img = imread("wasps.jpg");
 	Mat img = imread("wasps.jpg");
-	Mat alas = imread("colorAlas.png");
+	Mat alas = imread("naranja.jpg");
 	Mat result1,result3,resultThreshold1,resultThreshold3;
 	
 	
