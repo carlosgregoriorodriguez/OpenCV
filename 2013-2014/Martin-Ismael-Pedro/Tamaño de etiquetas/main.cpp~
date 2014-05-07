@@ -203,7 +203,6 @@ for( int i = 1; i < contours.size(); i++)
 	cout << "**Contorno " << i << ":" << endl;
 	cout << "   Ancho: " << el.size.width << endl;
 	cout << "   Alto: " << el.size.height << endl;
-	ellipse
 }
 
 
