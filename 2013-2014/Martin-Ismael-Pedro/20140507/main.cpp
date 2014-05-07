@@ -41,6 +41,7 @@ int openVideo(int argc, string videoPath);
 void detectIds();
 void moveDetection();
 
+bool isWhite(Mat img[], int i, int j);
 bool isGreen(Mat img[], int i, int j);
 bool isRed(Mat img[], int i, int j);
 bool isBlue(Mat img[], int i, int j);
@@ -56,6 +57,7 @@ void setPurple(Mat img[], int i, int j);
 void setBlack(Mat img[], int i, int j);
 
 void findAndSetColor(Mat image, char col, Mat &retImage);
+void findWhite(Mat channel[]);
 void findGreen(Mat channel[]);
 void findRed(Mat channel[]);
 void findBlue(Mat channel[]);
@@ -96,6 +98,9 @@ public:
 		else if (isPurple(imgChannels, _y, _x)) {
 			_idColor = 'p';
 		}
+		/*else if (isWhite(imgChannels, _y, _x)) {
+			_idColor = 'w';
+		}*/
 		else if (isGreen(imgChannels, _y, _x)) {
 			_idColor = 'g';
 		}
@@ -110,7 +115,10 @@ public:
 	Scalar getIdColor() {
 		Scalar color;
 		
-		if (_idColor == 'y') {
+		if (_idColor == 'w') {
+			color = cv::Scalar(255, 255, 255);
+		}
+		else if (_idColor == 'y') {
 			color = cv::Scalar(30, 240, 240);
 		}
 		else if (_idColor == 'c') {
@@ -127,6 +135,9 @@ public:
 		}
 		else if (_idColor == 'r') {
 			color = cv::Scalar(90, 90, 200);
+		}
+		else {
+			color = cv::Scalar(0, 0, 0);
 		}
 		
 		return color;
@@ -265,7 +276,7 @@ void detectIds() {
 
 	initialize();
 	
-	cap.open("multimedia/video/video.mts");
+	cap.open("multimedia/video/17/00092.MTS");
 	vid._fps = cap.get(CV_CAP_PROP_FPS);
 	vid._duration = cap.get(CV_CAP_PROP_FRAME_COUNT);
 	vid._percentVideoPerFrame = 1.0 / vid._duration;
@@ -287,6 +298,11 @@ void detectIds() {
 		performGlobalMatching(initialImage);
 	}
 	cv::waitKey(0);
+}
+
+bool isWhite(Mat img[], int i, int j) {
+	return img[0].at<uchar>(Point(j, i)) > 239 && img[1].at<uchar>(Point(j, i)) > 239 &&
+		img[2].at<uchar>(Point(j, i)) > 239;
 }
 
 bool isGreen(Mat img[], int i, int j) {
@@ -407,16 +423,34 @@ void findAndSetColor(Mat image, char col, Mat &retImage) {
 
 }
 
+void findWhite(Mat channel[]) {
+	Mat color;
+	Mat color1;
+	Mat color2;
+	cv::compare(cv::Mat(channel[0].rows, channel[0].cols, CV_8UC1, 255) - channel[0], cv::Mat(channel[0].rows, channel[0].cols, CV_8UC1, 15), color, CMP_LT);
+	cv::compare(cv::Mat(channel[1].rows, channel[1].cols, CV_8UC1, 255) - channel[1], cv::Mat(channel[1].rows, channel[1].cols, CV_8UC1, 15), color1, CMP_LT);
+	cv::compare(cv::Mat(channel[0].rows, channel[0].cols, CV_8UC1, 255) - channel[2], cv::Mat(channel[0].rows, channel[0].cols, CV_8UC1, 15), color2, CMP_LT);
+	
+	// Getting binary image for color and its negative.
+	cv::bitwise_and(color, color1, color);
+	cv::bitwise_and(color, color2, color);
+	cv::bitwise_not(color, color1);
+	
+	setColor(channel, color, color1, 255, 255, 255);
+}
+
 void findGreen(Mat channel[]) {
 	Mat color;
 	Mat color1;
+	Mat color2;
 	color = channel[0] + channel[2];
 	color1 = cv::Mat(channel[0].rows, channel[0].cols, CV_8UC1, 140);
 	cv::compare(channel[1], color1, color1, CMP_GT);
-	cv::compare(color, channel[1] + 50, color, CMP_LT);
-
+	cv::compare(channel[0], channel[1] - 25, color, CMP_LT);
+	cv::compare(channel[2], channel[1] - 25, color2, CMP_LT);
 	// Getting binary image for color and its negative.
 	cv::bitwise_and(color, color1, color);
+	cv::bitwise_and(color, color2, color);
 	cv::bitwise_not(color, color1);
 
 	setColor(channel, color, color1, 90, 200, 90);
@@ -425,12 +459,18 @@ void findGreen(Mat channel[]) {
 void findRed(Mat channel[]) {
 	Mat color;
 	Mat color1;
+	Mat color2;
+	Mat color3;
 	color = channel[0] + channel[1];
 	color1 = cv::Mat(channel[2].rows, channel[2].cols, CV_8UC1, 140);
 	cv::compare(channel[2], color1, color1, CMP_GT);
-	cv::compare(color, channel[2] + 30, color, CMP_LT);
+	cv::compare(channel[0], channel[2] - 50, color, CMP_LT);
+	cv::compare(channel[1], channel[2] - 50, color2, CMP_LT);
+	cv::compare(abs(channel[0] - channel[1]), cv::Mat(channel[2].rows, channel[2].cols, CV_8UC1, 30), color3, CMP_LT);
 	// Getting binary image for color and its negative.
 	cv::bitwise_and(color, color1, color);
+	cv::bitwise_and(color, color2, color);
+	cv::bitwise_and(color, color3, color);
 	cv::bitwise_not(color, color1);
 
 	setColor(channel, color, color1, 90, 90, 200);
@@ -439,12 +479,20 @@ void findRed(Mat channel[]) {
 void findBlue(Mat channel[]) {
 	Mat color;
 	Mat color1;
+	Mat color2;
+	Mat color3;
 	color = channel[1] + channel[2];
 	color1 = cv::Mat(channel[0].rows, channel[2].cols, CV_8UC1, 140);
 	cv::compare(channel[0], color1, color1, CMP_GT);
-	cv::compare(color, channel[0] + 50, color, CMP_LT);
+	cv::compare(channel[1], channel[0] - 40, color, CMP_LT);
+	cv::compare(channel[2], channel[0] - 40, color2, CMP_LT);
+	//cv::compare(abs(channel[1] - channel[2]), cv::Mat(channel[2].rows, channel[2].cols, CV_8UC1, 30), color3, CMP_LT);
+	
+	
 	// Getting binary image for color and its negative.
 	cv::bitwise_and(color, color1, color);
+	cv::bitwise_and(color, color2, color);
+	//cv::bitwise_and(color, color3, color);
 	cv::bitwise_not(color, color1);
 
 	setColor(channel, color, color1, 200, 90, 90);
@@ -454,15 +502,17 @@ void findYellow(Mat channel[]) {
 	Mat color;
 	Mat color1;
 	Mat color2;
+	Mat color3;
 	cv::absdiff(channel[1], channel[2], color);
 	cv::compare(color, Mat(channel[0].rows, channel[0].cols, CV_8UC1, 20), color, CMP_LT);
-	color1 = cv::Mat(channel[2].rows, channel[2].cols, CV_8UC1, 140);
-	cv::compare(channel[2], color1, color1, CMP_GT);
-	cv::compare(channel[0], channel[2]/2, color2, CMP_LT);
+	cv::compare(channel[2], cv::Mat(channel[2].rows, channel[2].cols, CV_8UC1, 140), color1, CMP_GT);
+	cv::compare(channel[1], cv::Mat(channel[2].rows, channel[2].cols, CV_8UC1, 140), color3, CMP_GT);
+	cv::compare(channel[0], 2*channel[2]/3, color2, CMP_LT);
 
 	// Getting binary image for color and its negative.
 	cv::bitwise_and(color, color1, color);
 	cv::bitwise_and(color, color2, color);
+	cv::bitwise_and(color, color3, color);
 	cv::bitwise_not(color, color1);
 
 	setColor(channel, color, color1, 30, 240, 240);
@@ -513,12 +563,12 @@ void findPurple(Mat channel[]) {
 }
 
 void setColor(Mat channel[], Mat color, Mat negativeColor, int B, int G, int R) {
-	channel[0].setTo(B, color);
 	channel[0].setTo(0, negativeColor);
-	channel[1].setTo(G ,color);
+	channel[0].setTo(B, color);
 	channel[1].setTo(0 , negativeColor);
-	channel[2].setTo(R ,color);
+	channel[1].setTo(G ,color);
 	channel[2].setTo(0 , negativeColor);
+	channel[2].setTo(R ,color);
 }
 
 double diametroMayorEtiqueta(Mat img) {
@@ -641,6 +691,8 @@ void previousIdsDetection(Mat initialImage) {
 	vector<Vec4i> hierarchy;
 	cv::Mat image, splitedImages, previous, ids, drawing, channel[3];
 	
+	//findAndSetColor(initialImage, 'w', splitedImages);
+	//ids = splitedImages;
 	findAndSetColor(initialImage, 'g', splitedImages);
 	ids = splitedImages;
 	findAndSetColor(initialImage, 'b', splitedImages);
@@ -669,9 +721,10 @@ void previousIdsDetection(Mat initialImage) {
 	// We save the original image with the previous results before applying philters.
 	previous = ids.clone();
 	namedWindow("test", 1);
-	imshow("test", ids);
-	
+	/* We blur the result image so that the nearby results (usually belonging to the same wasp)
+	get merged.*/
 	blur( ids, ids, Size( erosionSize*5, erosionSize*5 ), Point(-1,-1) );
+	imshow("test", ids);
 	Mat canny;
 	/// Detect edges using canny
 	Canny( ids, canny, thresh, thresh*2, 3 );
@@ -699,9 +752,11 @@ void previousIdsDetection(Mat initialImage) {
 	int wasp = 0;
 	drawing = initialImage;
 	split(ids, channel);
-	waspsListTest = WaspList();
+ 	waspsListTest = WaspList();
+	cout << "contours " << contours.size() << endl;
 	for( int i = 0; i < contours.size(); i++ )
 	{
+		cout << "hola";
 		if (mc[i].x > 0 && mc[i].y > 0) {
 			waspsListTest.addWasp(new Wasp(mc[i].x, mc[i].y, ids));
 			//waspsTest[wasp] = new Wasp(mc[i].x, mc[i].y, ids);
@@ -711,10 +766,14 @@ void previousIdsDetection(Mat initialImage) {
 			//drawContours( drawing, contours, i, color, 2, 8, hierarchy, 0, Point() );
 			//circle( drawing, Point(waspsTest[wasp]->_x, waspsTest[wasp]->_y), 4, waspsTest[wasp]->getIdColor(), -1, 8, 0 );
 			circle( drawing, Point(waspsListTest.getWaspFromPos(wasp)->_x, waspsListTest.getWaspFromPos(wasp)->_y), 4, waspsListTest.getWaspFromPos(wasp)->getIdColor(), -1, 8, 0 );
+			
+			
+			//waspsListTest.getWaspFromPos(wasp)->incrementHeatMap(Point(waspsListTest.getWaspFromPos(wasp)->_x,waspsListTest.getWaspFromPos(wasp)->_y));
 			wasp++;
 		}
 	}
-	waspsListTest.getWaspFromPos(wasp)->incrementHeatMap(Point(300,300));
+	cout << wasp;
+	
 	imshow("video", drawing);
 	cv::waitKey(0);
 }
