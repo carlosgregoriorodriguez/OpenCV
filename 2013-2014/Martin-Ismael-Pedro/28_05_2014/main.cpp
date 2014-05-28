@@ -789,10 +789,10 @@ void performGlobalMatching() {
 	/* Now we check the potential results by finding orientation of the suggested wasps.
 	If no result is given for a certain wasp, it is deleted from the list.*/
 	
-	//COMcheckWaspsOrientation();
+	checkWaspsOrientation(initialImage);
 	
 	//Post Procesado
-	//COMpostProcesado();
+	postProcesado();
 	
 	//Seria aqui la llamada a la funcion de deteccion de los cuerpos?
 	
@@ -807,11 +807,21 @@ void performGlobalMatching() {
 void performLocalMatching() {
 	drawing = initialImage.clone();
 	int listSize = waspsList.getSize();
-
+	int lastCamFactor = vid._camDistFactor;
+	vid._camDistFactor = 6.0;
 	for (int i = 0; i < (int)listSize; i++) {
 		waspsList.getWaspFromPos(i)->setNewPositionFromLastOne(initialImage);
 		circle( drawing, Point(waspsList.getWaspFromPos(i)->_x, waspsList.getWaspFromPos(i)->_y), 4, waspsList.getWaspFromPos(i)->getIdColor(), -1, 8, 0 );
 	}
+	
+	/* Now we check the potential results by finding orientation of the suggested wasps.
+	If no result is given for a certain wasp, it is deleted from the list.*/
+	checkWaspsOrientation(initialImage);
+	
+	//Post Procesado
+	postProcesado();
+	
+	vid._camDistFactor = lastCamFactor;
 }
 
 
@@ -1074,7 +1084,7 @@ void checkWaspsOrientation(Mat img) {
 		
 		//pintamos la linea
 		//sacamos el punto final de la linea
-		float longitud = biggestContour * 3.5;
+		float longitud = biggestContour * vid._camDistFactor;
 		
 		Point p = puntoFinalLinea(waspsListTest.getWaspFromPos(i)->_x, waspsListTest.getWaspFromPos(i)->_y, imagenResultado, longitud, rads);
 		Point etiqueta(waspsListTest.getWaspFromPos(i)->_x, waspsListTest.getWaspFromPos(i)->_y);
@@ -1168,7 +1178,7 @@ float getBodyOrientation(Mat img, Mat imgResta) {
 	//Bucle de grados en los que inclinar la linea
 	for(float gr = 0; gr < 360; gr += 1) {
 		float rad = gr * 0.0174532925;
-		float dist = img.size().width / 20 * 8;
+		float dist = img.size().width / 20 * vid._camDistFactor;
 		//Circulo grande donde acabaran las lineas
 		Point p(dist * cos(rad) + img.size().width / 2 , dist * sin(rad) + img.size().width / 2);
 		//circulo pequeño para que la linea no coja la etiqueta
