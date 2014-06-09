@@ -9,7 +9,6 @@
 #include "opencv2/features2d/features2d.hpp"
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/nonfree/nonfree.hpp"
-#include "headers.h"
 
 using namespace cv;
 using namespace std;
@@ -109,6 +108,7 @@ Point puntoFinalLinea(int x, int y, Mat img, float wihe, float rad);
 void newMethodWaspsOrientation(Mat img);
 int getWaspAngleByRotatedRect(RotatedRect rr, int w);
 int getWaspAngleByColor(float x, float y, Mat img);
+Point puntoFinalLineaNormal(int x, int y, Mat img, float distance, float rad);
 
 class Wasp {
 public:
@@ -124,6 +124,7 @@ public:
 	cv::Mat _heatMapPos;
 	bool _lost;
 	bool _cambio;
+	int _contour;
 	
 	Wasp(int x, int y, cv::Mat img) {
 		_x = x;
@@ -364,7 +365,7 @@ WaspList waspsListTest = WaspList();
 
 int main( int argc, char** argv )
 {
-	vid._path = "multimedia/video/17/00084.mts";
+	vid._path = "multimedia/v2.MTS";
 	roi = separanidogeneral(vid._path);
 	//cout << roi.x << " " << roi.y << " " << roi.width << " " << roi.height;
 	
@@ -815,7 +816,7 @@ void performGlobalMatching() {
 	The waspsTest list of wasps is refreshed with the new info.*/
 	previousIdsDetection();
 
-	checkWaspsOrientation(initialImage);
+	newMethodWaspsOrientation(initialImage);
 	postProcesado();
 	
 	//Mat hsv;
@@ -957,7 +958,7 @@ void previousIdsDetection() {
 	RNG rng(12345);
 	cv::Mat image, channel[3], canny;
 	vector<vector<Point> > contours;
-	vector<Point2f> mc( NULL );
+	vector<Point2f> mc;
 
 	// Getting image with the colours of interest.
 	ids = maskedImage(ids, initialImage);
@@ -1773,4 +1774,20 @@ int getWaspAngleByRotatedRect(RotatedRect rr, int w) {
 	
 	
 	return ang;
+}
+
+
+Point puntoFinalLineaNormal(int x, int y, Mat img, float distance, float rad) {
+
+	float left = distance * cos(rad) + x;
+	if(left < 0 ) left = 0;
+	if(left > img.size().width) left = img.size().width;
+	
+	float top = -(distance * sin(rad)) + y;
+	if(top < 0) top = 0;
+	if(top > img.size().height) top = img.size().height;
+	
+	Point ret(left,top);
+	
+	return ret;	
 }
