@@ -9,7 +9,6 @@ windowTitle = 'Imagen'
 gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
 
 minThres = 0
-maxThres = 100
 sobel = img
 blur = None
 ratio = 3
@@ -30,7 +29,7 @@ def fBlur(x):
     cv2.imshow(windowTitle, blur)
     
 def fMinCanny(x):
-    global minThres, maxThres, blur, sobel, ratio
+    global minThres, blur, sobel, ratio
     minThres = x
     if blur is None:
         blur = sobel
@@ -39,7 +38,8 @@ def fMinCanny(x):
     
 def fRatio(x):
     global ratio
-    ratio = x    
+    ratio = x 
+    fMinCanny(minThres)
 
 if __name__ == "__main__":
     
