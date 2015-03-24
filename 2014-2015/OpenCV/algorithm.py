@@ -16,14 +16,15 @@ Paso 4: Hallar la distancia buscada
 '''
 class Algorithm:
     def __init__(self, name_img):
-        self.img_original = cv2.imread(name_img, 0)
+        self.img_original = cv2.imread(name_img)
+        self.img_gray_original = cv2.cvtColor(self.img_original, cv2.COLOR_BGR2GRAY)
         self.img_horizontal = self.img_original
         self.step_one = False
     
     def to_horizontal(self):
         self.step_one = True
         # img_hough = im.copy()
-        edges_canny = cv2.Canny(self.img_original, 150, 200, apertureSize=3)
+        edges_canny = cv2.Canny(self.img_gray_original, 150, 200, apertureSize=3)
         lines = cv2.HoughLines(edges_canny, 1, np.pi / 180, 275)
         # http://homepages.inf.ed.ac.uk/rbf/HIPR2/hough.htm
         # http://opencv-python-tutroals.readthedocs.org/en/latest/py_tutorials/py_imgproc/py_houghlines/py_houghlines.html
@@ -45,7 +46,7 @@ class Algorithm:
             if abs((theta * 180 / np.pi) - 90) > 1: # 90 degrees line is horizontal, not use as reference
                 # print "theta = %s\n" % (theta * 180 / np.pi)
                 # http://opencv-python-tutroals.readthedocs.org/en/latest/py_tutorials/py_imgproc/py_geometric_transformations/py_geometric_transformations.html
-                rows, cols = self.img_original.shape
+                rows, cols = self.img_gray_original.shape
                 # rotate image to the horizontal (line of reference degrees minus 90 degrees)
                 M = cv2.getRotationMatrix2D((cols / 2, rows / 2), (theta * 180 / np.pi) - 90, 1)
                 self.img_horizontal = cv2.warpAffine(self.img_original, M, (cols, rows))

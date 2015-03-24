@@ -12,10 +12,10 @@ __author__ = 'mimadrid'
 if __name__ == '__main__':
         
     window_title = 'matrix'
-    img = cv2.imread('edi uveitis previa 11.png', 0)
-    
-    print img[0,0]
-    print img.shape    
+    img = cv2.imread('edi uveitis previa 11.png')
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    print gray[0,0]
+    print gray.shape    
     # si cv2.imread(..., 0) sólo escala de grises 0..255 y (332, 1031) si no, [0..255 0..255 0..255] (332, 1031, 3) 
     # y se puede dibujar con colores en la imagen 
     cv2.circle(img,(200,200),5,(0,255,0),1)  # draw the outer circle
