@@ -3,7 +3,7 @@ import cv2
 import algorithm
 import numpy as np
 
-__author__ = 'mimadrid'
+__author__ = "darnao"
 
 # http://docs.opencv.org/trunk/doc/py_tutorials/py_core/py_table_of_contents_core/py_table_of_contents_core.html#py-table-of-content-core
 # http://docs.opencv.org/trunk/doc/py_tutorials/py_core/py_basic_ops/py_basic_ops.html
