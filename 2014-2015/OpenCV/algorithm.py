@@ -19,8 +19,13 @@ class Algorithm:
         self.img_original = cv2.imread(name_img)
         self.img_gray_original = cv2.cvtColor(self.img_original, cv2.COLOR_BGR2GRAY)
         self.img_horizontal = self.img_original
-        self.step_one = False
-    
+	self.img_gray_horizontal = self.img_original
+	self.img_fovea_point = self.img_original 
+        self.step_one = False  
+	self.step_two = False
+	 
+
+
     def to_horizontal(self):
         self.step_one = True
         # img_hough = im.copy()
@@ -53,14 +58,62 @@ class Algorithm:
                 if self.img_horizontal is None:
                     self.img_horizontal = self.img_original
                 break
+	self.img_gray_horizontal = cv2.cvtColor(self.img_horizontal, cv2.COLOR_BGR2GRAY)
     
+    def calculate_fovea(self):
+	self.step_two = True
+	ret, otsu_threshold = cv2.threshold(self.img_gray_horizontal, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+	
+	print otsu_threshold[0,0]
+	print otsu_threshold.shape
+	# si cv2.imread(..., 0) sólo escala de grises 0..255 y (332, 1031) si no, [0..255 0..255 0..255] (332, 1031, 3) 
+        # y se puede dibujar con colores en la imagen 
+
+	y, x = otsu_threshold.shape
+
+	#Hemos comprobado que el threshold en más de una ocasión crea una línea recta horizontal en la fóvea. Para encontrar un punto céntrico, 
+        #llevaremos dos puntos de coordenadas, el de más a la izquierda y el de más a la derecha,
+        #para así luego poder calcular la media en el eje x
+        punto1 = (0, 0)
+        punto2 = (0, 0)
+	
+	#Restringimos el área para buscar en el eje de las x teniendo en cuenta que la fóvea esta siempre entre 1/3 y 2/3
+    	for i in xrange(x / 3, 2 * x / 3):  
+         	for j in xrange(y):
+             
+                    if otsu_threshold[j,i] == 255:
+                        
+                        #Actualización punto más bajo y a la derecha
+                        if punto1[0] == j:
+                            punto2 = (j, i)
+                            
+                        #Actualización de los puntos más bajos
+                        if punto1[0] < j:
+                            punto1 = (j, i)
+                            punto2 = (j, i) 
+                            
+                        break    
+    
+    	#Cálculo de la media de los valores de la x de los dos puntos
+   	x = (punto1[1] + punto2[1]) / 2
+    	y = punto1[0]
+
+	self.img_fovea_point = self.img_horizontal
+	cv2.circle(self.img_fovea_point, (x,y), 2, (0,0,255),3)  # draw the center of the circle
+
+
     def show_step (self, number):
         img = self.img_original
         title = 'Original'
         if number == 1 and self.step_one:
             img = self.img_horizontal
             title = 'Horizontal'
-        cv2.imshow(title, img)
+
+	if number == 2 and self.step_two:
+	    img = self.img_fovea_point
+	    title = 'FoveaPoint'
+	
+	cv2.imshow(title, img)
             
                 
 if __name__ == "__main__":
@@ -69,6 +122,8 @@ if __name__ == "__main__":
     algorithm.show_step(0)
     algorithm.to_horizontal()
     algorithm.show_step(1)
+    algorithm.calculate_fovea()
+    algorithm.show_step(2)
     cv2.waitKey(0) & 0xFF #  64 bits
 
     cv2.destroyAllWindows()
