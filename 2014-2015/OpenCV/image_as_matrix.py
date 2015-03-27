@@ -20,7 +20,7 @@ if __name__ == '__main__':
         
     window_title = 'matrix'
     
-    alg = algorithm.Algorithm('edi uveitis previa 11.png')
+    alg = algorithm.Algorithm('edi uveitis final1.png')
     alg.to_horizontal() 
     
     img = alg.img_horizontal
@@ -34,7 +34,7 @@ if __name__ == '__main__':
       
 
     y, x = otsu_threshold.shape
-    cv2.imshow('otsu', otsu_threshold)
+    #cv2.imshow('otsu', otsu_threshold)
 
     #Hemos comprobado que el threshold en más de una ocasión crea una línea recta horizontal en la fóvea. Para encontrar un punto céntrico, 
     #llevaremos dos puntos de coordenadas, el de más a la izquierda y el de más a la derecha,
@@ -64,7 +64,22 @@ if __name__ == '__main__':
     y = punto1[0]
     
     cv2.circle(img, (x,y), 2, (0,0,255),3)  # draw the center of the circle
-    cv2.imshow(window_title, img)    
+    
+    # Acotamos la x dentro de un rango para facilitar la detección de la corides
+    
+    left = x - 10
+    right = x + 10
+    
+    cv2.line(img, (left,0), (left, img.shape[0]), (255, 0, 0), 1)
+    cv2.line(img, (right,0), (right, img.shape[0]), (255, 0, 0), 1)
+    
+    
+    
+    # http://stackoverflow.com/a/9085008
+    # roi = gray[y1:y2, x1:x2]
+    cv2.imshow(window_title, img)  
+    roi = img[0:img.shape[0], left:right+1]
+    cv2.imshow('ROI (Region Of Interest', roi)    
     cv2.setMouseCallback(window_title, mouse_callback)
     cv2.waitKey(0) & 0xFF
     cv2.destroyAllWindows()
