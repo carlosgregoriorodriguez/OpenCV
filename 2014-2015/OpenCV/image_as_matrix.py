@@ -79,7 +79,8 @@ if __name__ == '__main__':
     # roi = gray[y1:y2, x1:x2]
     cv2.imshow(window_title, img)  
     roi = img[0:img.shape[0], left:right+1]
-    cv2.imshow('ROI (Region Of Interest', roi)    
+    resized = cv2.resize(roi, (0,0), fx=1.5, fy=1.5) 
+    cv2.imshow('ROI (Region Of Interest', resized)    
     cv2.setMouseCallback(window_title, mouse_callback)
     cv2.waitKey(0) & 0xFF
     cv2.destroyAllWindows()
