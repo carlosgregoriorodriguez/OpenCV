@@ -98,7 +98,7 @@ class Algorithm:
    	x = (punto1[1] + punto2[1]) / 2
     	y = punto1[0]
 
-	self.img_fovea_point = self.img_horizontal
+	self.img_fovea_point = self.img_horizontal.copy()
 	cv2.circle(self.img_fovea_point, (x,y), 2, (0,0,255),3)  # draw the center of the circle
 
 
