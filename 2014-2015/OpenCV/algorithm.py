@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import cv2
-import numpy as np
+import numpy
 
 __author__ = 'mimadrid'
 
@@ -17,25 +17,22 @@ Paso 4: Hallar la distancia buscada
 class Algorithm:
     def __init__(self, name_img):
         self.img_original = cv2.imread(name_img)
-	self.img_original_grey = cv2.imread(name_img, 0)
         self.img_gray_original = cv2.cvtColor(self.img_original, cv2.COLOR_BGR2GRAY)
         self.img_horizontal = self.img_original
 	self.img_gray_horizontal = self.img_original
-	self.img_original_grey_horizontal = self.img_original
-	self.img_fovea_point = self.img_original
-	self.adaptiveThres = self.img_original 
-	self.fovea_point = (0, 0)
+	self.img_fovea_point = self.img_original 
+        self.img_membranes = self.img_original
+        self.fovea_point = (0, 0)
         self.step_one = False  
 	self.step_two = False
-	self.step_three = False
+        self.step_three = False
 	
-
 
     def to_horizontal(self):
         self.step_one = True
         # img_hough = im.copy()
         edges_canny = cv2.Canny(self.img_gray_original, 150, 200, apertureSize=3)
-        lines = cv2.HoughLines(edges_canny, 1, np.pi / 180, 275)
+        lines = cv2.HoughLines(edges_canny, 1, numpy.pi / 180, 275)
         # http://homepages.inf.ed.ac.uk/rbf/HIPR2/hough.htm
         # http://opencv-python-tutroals.readthedocs.org/en/latest/py_tutorials/py_imgproc/py_houghlines/py_houghlines.html
         # https://github.com/abidrahmank/OpenCV2-Python/blob/master/Official_Tutorial_Python_Codes/3_imgproc/houghlines.py
@@ -53,14 +50,13 @@ class Algorithm:
             # Use the first not horizontal line as reference and rotate with that theta
     
             # radians to degrees (precision floar error allowed < 1)
-            if abs((theta * 180 / np.pi) - 90) > 1: # 90 degrees line is horizontal, not use as reference
+            if abs((theta * 180 / numpy.pi) - 90) > 1: # 90 degrees line is horizontal, not use as reference
                 # print "theta = %s\n" % (theta * 180 / np.pi)
                 # http://opencv-python-tutroals.readthedocs.org/en/latest/py_tutorials/py_imgproc/py_geometric_transformations/py_geometric_transformations.html
                 rows, cols = self.img_gray_original.shape
                 # rotate image to the horizontal (line of reference degrees minus 90 degrees)
-                M = cv2.getRotationMatrix2D((cols / 2, rows / 2), (theta * 180 / np.pi) - 90, 1)
+                M = cv2.getRotationMatrix2D((cols / 2, rows / 2), (theta * 180 / numpy.pi) - 90, 1)
                 self.img_horizontal = cv2.warpAffine(self.img_original, M, (cols, rows))
-		self.img_original_grey_horizontal = cv2.warpAffine(self.img_original_grey, M, (cols, rows))
                 if self.img_horizontal is None:
                     self.img_horizontal = self.img_original
                 break
@@ -70,8 +66,8 @@ class Algorithm:
 	self.step_two = True
 	ret, otsu_threshold = cv2.threshold(self.img_gray_horizontal, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
 	
-	print otsu_threshold[0,0]
-	print otsu_threshold.shape
+	#print otsu_threshold[0,0]
+	#print otsu_threshold.shape
 	# si cv2.imread(..., 0) sólo escala de grises 0..255 y (332, 1031) si no, [0..255 0..255 0..255] (332, 1031, 3) 
         # y se puede dibujar con colores en la imagen 
 
@@ -104,17 +100,24 @@ class Algorithm:
    	x = (punto1[1] + punto2[1]) / 2
     	y = punto1[0]
 
-	self.img_fovea_point = self.img_horizontal
-	cv2.circle(self.img_fovea_point, (x,y), 2, (0,0,255),3)  # draw the center of the circle
-	self.fovea_point = (x, y)
+	self.img_fovea_point = self.img_horizontal.copy()
+        self.fovea_point = (x,y)
+        cv2.circle(self.img_fovea_point, (x,y), 2, (0,0,255),3)  # draw the center of the circle
+        #cv2.line(self.img_fovea_point, self.fovea_point, (self.fovea_point[0], self.img_fovea_point.shape[0]), (255, 0, 0), 1)
+        
+        
 
 
-    def findA (self):
-	self.step_three = True
-	self.adaptiveThres = cv2.adaptiveThreshold(self.img_original_grey_horizontal, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 117, 2) 
-	cv2.imshow('original_grey', self.adaptiveThres)
-	prueba = cv2.adaptiveThreshold(self.img_original_grey_horizontal, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 117, 2)
-	cv2.imshow('prueba', prueba)
+    def membranes_detector(self):
+        self.step_three = True
+        blur = cv2.medianBlur(self.img_gray_horizontal,5)
+        adaptative_mean_threshold = cv2.adaptiveThreshold(blur, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 109, 0)
+        self.img_membranes = adaptative_mean_threshold
+        self.img_membranes =  cv2.Canny(self.img_membranes,500,500*3, apertureSize = 3)
+        
+        self.img_membranes = cv2.cvtColor(self.img_membranes, cv2.COLOR_GRAY2BGR)
+        cv2.line(self.img_membranes, self.fovea_point, (self.fovea_point[0], self.img_membranes.shape[0]), (0, 255, 0), 1)
+        self.img_membranes = cv2.addWeighted(self.img_horizontal,0.6,self.img_membranes,0.4,0)
 
     def show_step (self, number):
         img = self.img_original
@@ -126,13 +129,12 @@ class Algorithm:
 	if number == 2 and self.step_two:
 	    img = self.img_fovea_point
 	    title = 'FoveaPoint'
-
-	if number == 3 and self.step_three:
-	    img = self.adaptiveThres
-	    title = 'adaptiveThresh'
+            
+        if number == 3 and self.step_three:
+	    img = self.img_membranes
+	    title = 'Membranes'
 	
 	cv2.imshow(title, img)
-	
             
                 
 if __name__ == "__main__":
@@ -143,7 +145,7 @@ if __name__ == "__main__":
     algorithm.show_step(1)
     algorithm.calculate_fovea()
     algorithm.show_step(2)
-    algorithm.findA()
+    algorithm.membranes_detector()
     algorithm.show_step(3)
     cv2.waitKey(0) & 0xFF #  64 bits
 
