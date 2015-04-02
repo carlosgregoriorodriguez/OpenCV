@@ -24,6 +24,7 @@ class Algorithm:
         self.img_membranes = self.img_original
         self.fovea_point = (0, 0)
         self.first_point_coroides = (0, 0)
+        self.second_point_coroides = (0, 0)
         self.step_one = False  
 	self.step_two = False
         self.step_three = False
@@ -112,13 +113,23 @@ class Algorithm:
     def membranes_detector(self):
         self.step_three = True
         self.img_membranes = self.img_horizontal.copy()
-        self.img_membranes = cv2.Canny(self.img_membranes, 100, 100 * 3, apertureSize=3)
+        img_first_point = cv2.Canny(self.img_membranes, 100, 100 * 3, apertureSize=3)
         
-        for i in xrange(0, 2 * self.img_membranes.shape[0] / 3):
-            if self.img_membranes[i, self.fovea_point[0]] == 255:
-                first_point_coroides = (self.fovea_point[0], i)
-        self.img_membranes = cv2.cvtColor(self.img_membranes, cv2.COLOR_GRAY2BGR)
-        cv2.circle(self.img_membranes, first_point_coroides, 2, (0, 0, 255), 3)
+        for i in xrange(0, 2 * img_first_point.shape[0] / 3):
+            if img_first_point[i, self.fovea_point[0]] == 255:
+                self.first_point_coroides = (self.fovea_point[0], i)
+        
+        img_second_point = cv2.medianBlur(self.img_gray_horizontal,5)
+        img_second_point = cv2.adaptiveThreshold(img_second_point, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 101, 0)
+        img_second_point = cv2.Canny(img_second_point, 50, 50 * 3, apertureSize=3)
+        #cv2.imshow("Canny2", img_second_point)
+        for i in xrange(self.first_point_coroides[1], 5 * img_second_point.shape[0] / 6):
+            if img_second_point[i, self.fovea_point[0]] == 255:
+                self.second_point_coroides = (self.fovea_point[0], i)
+            
+        #print self.second_point_coroides
+        cv2.circle(self.img_membranes, self.first_point_coroides, 2, (0, 0, 255), 3)
+        cv2.circle(self.img_membranes, self.second_point_coroides, 2, (0, 0, 255), 3)
 
     def show_step (self, number):
         img = self.img_original
