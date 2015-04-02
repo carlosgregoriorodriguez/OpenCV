@@ -23,6 +23,7 @@ class Algorithm:
 	self.img_fovea_point = self.img_original 
         self.img_membranes = self.img_original
         self.fovea_point = (0, 0)
+        self.first_point_coroides = (0, 0)
         self.step_one = False  
 	self.step_two = False
         self.step_three = False
@@ -81,28 +82,28 @@ class Algorithm:
 	
 	#Restringimos el área para buscar en el eje de las x teniendo en cuenta que la fóvea esta siempre entre 1/3 y 2/3
     	for i in xrange(x / 3, 2 * x / 3):  
-         	for j in xrange(y):
+            for j in xrange(y):
              
-                    if otsu_threshold[j,i] == 255:
+                if otsu_threshold[j, i] == 255:
                         
-                        #Actualización punto más bajo y a la derecha
-                        if punto1[0] == j:
-                            punto2 = (j, i)
+                    #Actualización punto más bajo y a la derecha
+                    if punto1[0] == j:
+                        punto2 = (j, i)
                             
-                        #Actualización de los puntos más bajos
-                        if punto1[0] < j:
-                            punto1 = (j, i)
-                            punto2 = (j, i) 
+                    #Actualización de los puntos más bajos
+                    if punto1[0] < j:
+                        punto1 = (j, i)
+                        punto2 = (j, i) 
                             
-                        break    
+                    break    
     
     	#Cálculo de la media de los valores de la x de los dos puntos
    	x = (punto1[1] + punto2[1]) / 2
     	y = punto1[0]
 
 	self.img_fovea_point = self.img_horizontal.copy()
-        self.fovea_point = (x,y)
-        cv2.circle(self.img_fovea_point, (x,y), 2, (0,0,255),3)  # draw the center of the circle
+        self.fovea_point = (x, y)
+        cv2.circle(self.img_fovea_point, (x, y), 2, (0, 0, 255), 3)  # draw the center of the circle
         #cv2.line(self.img_fovea_point, self.fovea_point, (self.fovea_point[0], self.img_fovea_point.shape[0]), (255, 0, 0), 1)
         
         
@@ -110,14 +111,14 @@ class Algorithm:
 
     def membranes_detector(self):
         self.step_three = True
-        blur = cv2.medianBlur(self.img_gray_horizontal,5)
-        adaptative_mean_threshold = cv2.adaptiveThreshold(blur, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 109, 0)
-        self.img_membranes = adaptative_mean_threshold
-        self.img_membranes =  cv2.Canny(self.img_membranes,500,500*3, apertureSize = 3)
+        self.img_membranes = self.img_horizontal.copy()
+        self.img_membranes = cv2.Canny(self.img_membranes, 100, 100 * 3, apertureSize=3)
         
+        for i in xrange(0, 2 * self.img_membranes.shape[0] / 3):
+            if self.img_membranes[i, self.fovea_point[0]] == 255:
+                first_point_coroides = (self.fovea_point[0], i)
         self.img_membranes = cv2.cvtColor(self.img_membranes, cv2.COLOR_GRAY2BGR)
-        cv2.line(self.img_membranes, self.fovea_point, (self.fovea_point[0], self.img_membranes.shape[0]), (0, 255, 0), 1)
-        self.img_membranes = cv2.addWeighted(self.img_horizontal,0.6,self.img_membranes,0.4,0)
+        cv2.circle(self.img_membranes, first_point_coroides, 2, (0, 0, 255), 3)
 
     def show_step (self, number):
         img = self.img_original
