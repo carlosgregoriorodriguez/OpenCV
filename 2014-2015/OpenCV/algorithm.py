@@ -14,21 +14,22 @@ Paso 3: Trazar la vertical que pase por dicho punto
         y marcar la intersección con el resto de membranas
 Paso 4: Hallar la distancia buscada
 '''
+
+
 class Algorithm:
     def __init__(self, name_img):
         self.img_original = cv2.imread(name_img)
         self.img_gray_original = cv2.cvtColor(self.img_original, cv2.COLOR_BGR2GRAY)
         self.img_horizontal = self.img_original
-	self.img_gray_horizontal = self.img_original
-	self.img_fovea_point = self.img_original 
+        self.img_gray_horizontal = self.img_original
+        self.img_fovea_point = self.img_original
         self.img_membranes = self.img_original
         self.fovea_point = (0, 0)
         self.first_point_coroides = (0, 0)
         self.second_point_coroides = (0, 0)
-        self.step_one = False  
-	self.step_two = False
+        self.step_one = False
+        self.step_two = False
         self.step_three = False
-	
 
     def to_horizontal(self):
         self.step_one = True
@@ -43,16 +44,19 @@ class Algorithm:
             # b = np.sin(theta)
             # x0 = a * rho
             # y0 = b * rho
-            # x1 = int(x0 + 1000 * (-b))   # Here i have used int() instead of rounding the decimal value, so 3.8 --> 3
-            # y1 = int(y0 + 1000 * (a))    # But if you want to round the number, then use np.around() function, then 3.8 --> 4.0
-            # x2 = int(x0 - 1000 * (-b))   # But we need integers, so use int() function after that, ie int(np.around(x))
+            # Here i have used int() instead of rounding the decimal value, so 3.8 --> 3
+            # But if you want to round the number, then use np.around() function, then 3.8 --> 4.0
+            # But we need integers, so use int() function after that, ie int(np.around(x))
+            # x1 = int(x0 + 1000 * (-b))
+            # y1 = int(y0 + 1000 * (a))
+            # x2 = int(x0 - 1000 * (-b))
             # y2 = int(y0 - 1000 * (a))
             # cv2.line(img_hough, (x1, y1), (x2, y2), (0, 255, 0), 5)
- 
+
             # Use the first not horizontal line as reference and rotate with that theta
-    
+
             # radians to degrees (precision floar error allowed < 1)
-            if abs((theta * 180 / numpy.pi) - 90) > 1: # 90 degrees line is horizontal, not use as reference
+            if abs((theta * 180 / numpy.pi) - 90) > 1:  # 90 degrees line is horizontal, not use as reference
                 # print "theta = %s\n" % (theta * 180 / np.pi)
                 # http://opencv-python-tutroals.readthedocs.org/en/latest/py_tutorials/py_imgproc/py_geometric_transformations/py_geometric_transformations.html
                 rows, cols = self.img_gray_original.shape
@@ -62,95 +66,95 @@ class Algorithm:
                 if self.img_horizontal is None:
                     self.img_horizontal = self.img_original
                 break
-	self.img_gray_horizontal = cv2.cvtColor(self.img_horizontal, cv2.COLOR_BGR2GRAY)
-    
+        self.img_gray_horizontal = cv2.cvtColor(self.img_horizontal, cv2.COLOR_BGR2GRAY)
+
     def calculate_fovea(self):
-	self.step_two = True
-	ret, otsu_threshold = cv2.threshold(self.img_gray_horizontal, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-	
-	#print otsu_threshold[0,0]
-	#print otsu_threshold.shape
-	# si cv2.imread(..., 0) sólo escala de grises 0..255 y (332, 1031) si no, [0..255 0..255 0..255] (332, 1031, 3) 
+        self.step_two = True
+        ret, otsu_threshold = cv2.threshold(self.img_gray_horizontal, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+
+        # print otsu_threshold[0,0]
+        # print otsu_threshold.shape
+        # si cv2.imread(..., 0) sólo escala de grises 0..255 y (332, 1031) si no, [0..255 0..255 0..255] (332, 1031, 3)
         # y se puede dibujar con colores en la imagen 
 
-	y, x = otsu_threshold.shape
+        y, x = otsu_threshold.shape
 
-	#Hemos comprobado que el threshold en más de una ocasión crea una línea recta horizontal en la fóvea. Para encontrar un punto céntrico, 
-        #llevaremos dos puntos de coordenadas, el de más a la izquierda y el de más a la derecha,
-        #para así luego poder calcular la media en el eje x
+        # Hemos comprobado que el threshold en más de una ocasión crea una línea recta horizontal en la fóvea.
+        # Para encontrar un punto céntrico,
+        # llevaremos dos puntos de coordenadas, el de más a la izquierda y el de más a la derecha,
+        # para así luego poder calcular la media en el eje x
         punto1 = (0, 0)
         punto2 = (0, 0)
-	
-	#Restringimos el área para buscar en el eje de las x teniendo en cuenta que la fóvea esta siempre entre 1/3 y 2/3
-    	for i in xrange(x / 3, 2 * x / 3):  
+
+        # Restringimos el área para buscar en el eje de las x
+        # teniendo en cuenta que la fóvea esta siempre entre 1/3 y 2/3
+        for i in xrange(x / 3, 2 * x / 3):
             for j in xrange(y):
-             
+
                 if otsu_threshold[j, i] == 255:
-                        
-                    #Actualización punto más bajo y a la derecha
+
+                    # Actualización punto más bajo y a la derecha
                     if punto1[0] == j:
                         punto2 = (j, i)
-                            
-                    #Actualización de los puntos más bajos
+
+                    # Actualización de los puntosq más bajos
                     if punto1[0] < j:
                         punto1 = (j, i)
-                        punto2 = (j, i) 
-                            
-                    break    
-    
-    	#Cálculo de la media de los valores de la x de los dos puntos
-   	x = (punto1[1] + punto2[1]) / 2
-    	y = punto1[0]
+                        punto2 = (j, i)
 
-	self.img_fovea_point = self.img_horizontal.copy()
+                    break
+
+                # Cálculo de la media de los valores de la x de los dos puntos
+        x = (punto1[1] + punto2[1]) / 2
+        y = punto1[0]
+
+        self.img_fovea_point = self.img_horizontal.copy()
         self.fovea_point = (x, y)
         cv2.circle(self.img_fovea_point, (x, y), 2, (0, 0, 255), 3)  # draw the center of the circle
-        #cv2.line(self.img_fovea_point, self.fovea_point, (self.fovea_point[0], self.img_fovea_point.shape[0]), (255, 0, 0), 1)
-        
-        
-
+        # cv2.line(self.img_fovea_point, self.fovea_point, (self.fovea_point[0], self.img_fovea_point.shape[0]),
+        #          (255, 0, 0), 1)
 
     def membranes_detector(self):
         self.step_three = True
         self.img_membranes = self.img_horizontal.copy()
         img_first_point = cv2.Canny(self.img_membranes, 100, 100 * 3, apertureSize=3)
-        
+
         for i in xrange(0, 2 * img_first_point.shape[0] / 3):
             if img_first_point[i, self.fovea_point[0]] == 255:
                 self.first_point_coroides = (self.fovea_point[0], i)
-        
-        img_second_point = cv2.medianBlur(self.img_gray_horizontal,5)
-        img_second_point = cv2.adaptiveThreshold(img_second_point, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 101, 0)
+
+        img_second_point = cv2.medianBlur(self.img_gray_horizontal, 5)
+        img_second_point = cv2.adaptiveThreshold(img_second_point, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY,
+                                                 101, 0)
         img_second_point = cv2.Canny(img_second_point, 50, 50 * 3, apertureSize=3)
-        #cv2.imshow("Canny2", img_second_point)
+        # cv2.imshow("Canny2", img_second_point)
         for i in xrange(self.first_point_coroides[1], 5 * img_second_point.shape[0] / 6):
             if img_second_point[i, self.fovea_point[0]] == 255:
                 self.second_point_coroides = (self.fovea_point[0], i)
-            
-        #print self.second_point_coroides
+
+        # print self.second_point_coroides
         cv2.circle(self.img_membranes, self.first_point_coroides, 2, (0, 0, 255), 3)
         cv2.circle(self.img_membranes, self.second_point_coroides, 2, (0, 0, 255), 3)
 
-    def show_step (self, number):
+    def show_step(self, number):
         img = self.img_original
         title = 'Original'
         if number == 1 and self.step_one:
             img = self.img_horizontal
             title = 'Horizontal'
 
-	if number == 2 and self.step_two:
-	    img = self.img_fovea_point
-	    title = 'FoveaPoint'
-            
+        if number == 2 and self.step_two:
+            img = self.img_fovea_point
+            title = 'FoveaPoint'
+
         if number == 3 and self.step_three:
-	    img = self.img_membranes
-	    title = 'Membranes'
-	
-	cv2.imshow(title, img)
-            
-                
+            img = self.img_membranes
+            title = 'Membranes'
+
+        cv2.imshow(title, img)
+
+
 if __name__ == "__main__":
-    
     algorithm = Algorithm('edi uveitis previa 11.png')
     algorithm.show_step(0)
     algorithm.to_horizontal()
@@ -159,6 +163,7 @@ if __name__ == "__main__":
     algorithm.show_step(2)
     algorithm.membranes_detector()
     algorithm.show_step(3)
-    cv2.waitKey(0) & 0xFF #  64 bits
+    cv2.waitKey(0) & 0xFF  # 64 bits
 
     cv2.destroyAllWindows()
+
