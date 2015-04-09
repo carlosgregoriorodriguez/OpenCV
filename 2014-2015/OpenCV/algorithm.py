@@ -134,8 +134,12 @@ class Algorithm:
                 self.second_point_coroides = (self.fovea_point[0], i)
 
         # print self.second_point_coroides
-        cv2.circle(self.img_membranes, self.first_point_coroides, 2, (0, 0, 255), 3)
-        cv2.circle(self.img_membranes, self.second_point_coroides, 2, (0, 0, 255), 3)
+        #cv2.circle(self.img_membranes, self.first_point_coroides, 2, (0, 0, 255), 3)
+        #cv2.circle(cv2.line(result, (x1, y1), (x2, y2), (0, 255, 0), 2), self.second_point_coroides, 2, (0, 0, 255), 3)
+        cv2.line(self.img_membranes, (self.first_point_coroides[0], self.first_point_coroides[1]), (self.second_point_coroides[0], self.second_point_coroides[1]), (0, 255, 0), 1)
+        cv2.line(self.img_membranes, (self.first_point_coroides[0]-15, self.first_point_coroides[1]), (self.first_point_coroides[0]+15, self.first_point_coroides[1]), (0, 0, 255), 1)
+        cv2.line(self.img_membranes, (self.second_point_coroides[0]-10, self.second_point_coroides[1]), (self.second_point_coroides[0]+10, self.second_point_coroides[1]), (0, 0, 255), 1)
+        
 
     def show_step(self, number):
         img = self.img_original
