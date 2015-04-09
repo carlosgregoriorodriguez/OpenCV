@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import cv2
 import numpy
+import sys
 
 __author__ = 'mimadrid'
 
@@ -155,7 +156,11 @@ class Algorithm:
 
 
 if __name__ == "__main__":
-    algorithm = Algorithm('edi uveitis previa 11.png')
+    if len(sys.argv) == 1:
+	img_file = 'edi uveitis previa 11.png'
+    else:
+	img_file = sys.argv[1]
+    algorithm = Algorithm(img_file)
     algorithm.show_step(0)
     algorithm.to_horizontal()
     algorithm.show_step(1)
