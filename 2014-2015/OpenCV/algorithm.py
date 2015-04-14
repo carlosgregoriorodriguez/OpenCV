@@ -28,6 +28,7 @@ class Algorithm:
         self.fovea_point = (0, 0)
         self.first_point_coroides = (0, 0)
         self.second_point_coroides = (0, 0)
+	self.micras_por_pixel = 200 / 45
         self.step_one = False
         self.step_two = False
         self.step_three = False
@@ -140,6 +141,10 @@ class Algorithm:
         cv2.line(self.img_membranes, (self.first_point_coroides[0]-15, self.first_point_coroides[1]), (self.first_point_coroides[0]+15, self.first_point_coroides[1]), (0, 0, 255), 1)
         cv2.line(self.img_membranes, (self.second_point_coroides[0]-10, self.second_point_coroides[1]), (self.second_point_coroides[0]+10, self.second_point_coroides[1]), (0, 0, 255), 1)
         
+	micras = (self.second_point_coroides[1] - self.first_point_coroides[1]) * self.micras_por_pixel
+	p = (self.first_point_coroides[0] + 50, (self.first_point_coroides[1] + self.second_point_coroides[1]) / 2)
+        cv2.putText(self.img_membranes, str(micras), p, cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (255, 0, 255), 1, cv2.CV_AA)
+
 
     def show_step(self, number):
         img = self.img_original
