@@ -28,6 +28,7 @@ class Algorithm:
         self.fovea_point = (0, 0)
         self.first_point_coroides = (0, 0)
         self.second_point_coroides = (0, 0)
+	self.micras_por_pixel = 200 / 45
         self.step_one = False
         self.step_two = False
         self.step_three = False
@@ -126,12 +127,15 @@ class Algorithm:
 
         img_second_point = cv2.medianBlur(self.img_gray_horizontal, 5)
         img_second_point = cv2.adaptiveThreshold(img_second_point, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY,
-                                                 101, 0)
+                                                 187, 3)
         img_second_point = cv2.Canny(img_second_point, 50, 50 * 3, apertureSize=3)
+	
         # cv2.imshow("Canny2", img_second_point)
-        for i in xrange(self.first_point_coroides[1], 5 * img_second_point.shape[0] / 6):
+        for i in xrange(5 * img_second_point.shape[0] / 6, self.first_point_coroides[1], -1): 
             if img_second_point[i, self.fovea_point[0]] == 255:
-                self.second_point_coroides = (self.fovea_point[0], i)
+                if self.second_point_coroides[1] == 0:
+                      self.second_point_coroides = (self.fovea_point[0], i)
+
 
         # print self.second_point_coroides
         #cv2.circle(self.img_membranes, self.first_point_coroides, 2, (0, 0, 255), 3)
@@ -140,6 +144,10 @@ class Algorithm:
         cv2.line(self.img_membranes, (self.first_point_coroides[0]-15, self.first_point_coroides[1]), (self.first_point_coroides[0]+15, self.first_point_coroides[1]), (0, 0, 255), 1)
         cv2.line(self.img_membranes, (self.second_point_coroides[0]-10, self.second_point_coroides[1]), (self.second_point_coroides[0]+10, self.second_point_coroides[1]), (0, 0, 255), 1)
         
+	micras = (self.second_point_coroides[1] - self.first_point_coroides[1]) * self.micras_por_pixel
+	p = (self.first_point_coroides[0] + 50, (self.first_point_coroides[1] + self.second_point_coroides[1]) / 2)
+        cv2.putText(self.img_membranes, str(micras), p, cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (255, 0, 255), 1, cv2.CV_AA)
+
 
     def show_step(self, number):
         img = self.img_original
@@ -161,7 +169,7 @@ class Algorithm:
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
-	img_file = 'edi uveitis previa 11.png'
+	img_file = 'CASTILLO_HAROM6 sin medir.png'
     else:
 	img_file = sys.argv[1]
     algorithm = Algorithm(img_file)
