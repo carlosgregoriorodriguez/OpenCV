@@ -129,10 +129,13 @@ class Algorithm:
         img_second_point = cv2.adaptiveThreshold(img_second_point, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY,
                                                  101, 0)
         img_second_point = cv2.Canny(img_second_point, 50, 50 * 3, apertureSize=3)
+	
         # cv2.imshow("Canny2", img_second_point)
-        for i in xrange(self.first_point_coroides[1], 5 * img_second_point.shape[0] / 6):
+        for i in xrange(5 * img_second_point.shape[0] / 6, self.first_point_coroides[1], -1): 
             if img_second_point[i, self.fovea_point[0]] == 255:
-                self.second_point_coroides = (self.fovea_point[0], i)
+                if self.second_point_coroides[1] == 0:
+                      self.second_point_coroides = (self.fovea_point[0], i)
+
 
         # print self.second_point_coroides
         #cv2.circle(self.img_membranes, self.first_point_coroides, 2, (0, 0, 255), 3)
