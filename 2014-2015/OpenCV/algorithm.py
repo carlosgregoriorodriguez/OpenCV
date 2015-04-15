@@ -127,7 +127,7 @@ class Algorithm:
 
         img_second_point = cv2.medianBlur(self.img_gray_horizontal, 5)
         img_second_point = cv2.adaptiveThreshold(img_second_point, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY,
-                                                 101, 0)
+                                                 187, 3)
         img_second_point = cv2.Canny(img_second_point, 50, 50 * 3, apertureSize=3)
 	
         # cv2.imshow("Canny2", img_second_point)
@@ -169,7 +169,7 @@ class Algorithm:
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
-	img_file = 'edi uveitis previa 11.png'
+	img_file = 'CASTILLO_HAROM6 sin medir.png'
     else:
 	img_file = sys.argv[1]
     algorithm = Algorithm(img_file)
