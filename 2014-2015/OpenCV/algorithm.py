@@ -135,9 +135,11 @@ class Algorithm:
 
         #img_second_point = cv2.medianBlur(self.img_gray_horizontal, 5)
         img_second_point = cv2.adaptiveThreshold(self.img_gray_horizontal, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,
-                                                 179, 3)
-        img_second_point = cv2.medianBlur(img_second_point,25)
-        img_second_point = cv2.Canny(img_second_point, 50, 50 * 3, apertureSize=3)
+                                                 173, 3)
+	#cv2.imshow('img_second_point1', img_second_point)
+
+        img_second_point = cv2.medianBlur(img_second_point,5)
+        img_second_point = cv2.Canny(img_second_point, 50, 50 * 5, apertureSize=3)
 	#cv2.imshow('img_second_point', img_second_point)
 
         for i in xrange(5 * img_second_point.shape[0] / 6, self.first_point_coroides[1], -1): 
@@ -145,7 +147,7 @@ class Algorithm:
                 if self.second_point_coroides[1] == 0:
                       self.second_point_coroides = (self.fovea_point[0], i)
 
-               # print self.second_point_coroides
+
         #cv2.circle(self.img_membranes, self.first_point_coroides, 2, (0, 0, 255), 3)
         #cv2.circle(cv2.line(result, (x1, y1), (x2, y2), (0, 255, 0), 2), self.second_point_coroides, 2, (0, 0, 255), 3)
         cv2.line(self.img_membranes, (self.first_point_coroides[0], self.first_point_coroides[1]), (self.second_point_coroides[0], self.second_point_coroides[1]), (0, 255, 0), 1)
@@ -155,7 +157,6 @@ class Algorithm:
 	micras = (self.second_point_coroides[1] - self.first_point_coroides[1]) * self.micras_por_pixel
 	p = (self.first_point_coroides[0] + 50, (self.first_point_coroides[1] + self.second_point_coroides[1]) / 2)
         cv2.putText(self.img_membranes, str(micras), p, cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (255, 0, 255), 1, cv2.CV_AA)
-
 
     def show_step(self, number):
         img = self.img_original
@@ -177,7 +178,7 @@ class Algorithm:
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
-	img_file = 'CASTILLO_HAROM6 sin medir.png'
+	img_name = 'CASTILLO_HAROM6.png'
     else:
 	img_file = sys.argv[1]
     algorithm = Algorithm(img_file)
