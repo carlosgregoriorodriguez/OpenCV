@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import cv2
-import numpy
 import sys
+import numpy
+import roi_utils
 
 __author__ = 'mimadrid'
 
@@ -18,8 +19,8 @@ Paso 4: Hallar la distancia buscada
 
 
 class Algorithm:
-    def __init__(self, name_img):
-        self.img_original = cv2.imread(name_img)
+    def __init__(self, image):
+        self.img_original = image
         self.img_gray_original = cv2.cvtColor(self.img_original, cv2.COLOR_BGR2GRAY)
         self.img_horizontal = self.img_original
         self.img_gray_horizontal = self.img_original
@@ -28,10 +29,10 @@ class Algorithm:
         self.fovea_point = (0, 0)
         self.first_point_coroides = (0, 0)
         self.second_point_coroides = (0, 0)
-        #self.micras_por_pixel = 200/33.0
-        #self.micras_por_pixel = 6
-        self.micras_por_pixel = 200/50.0
-	#self.micras_por_pixel = 4.0
+        # self.micras_por_pixel = 200/33.0
+        # self.micras_por_pixel = 6
+        self.micras_por_pixel = 200 / 50.0
+        # self.micras_por_pixel = 4.0
         self.step_one = False
         self.step_two = False
         self.step_three = False
@@ -61,8 +62,9 @@ class Algorithm:
             # Use the first not horizontal line as reference and rotate with that theta
 
             # radians to degrees (precision floar error allowed < 1)
-            if abs((theta * 180 / numpy.pi) - 90) > 1:  # 90 degrees line is horizontal, not use as reference
-                # print "theta = %s\n" % (theta * 180 / np.pi)
+            # theta > 0 avoid vertical lines
+            if abs((theta * 180 / numpy.pi) - 90) > 1 and theta > 0:  # 90 degrees line is horizontal, not use as reference
+                # print "theta = %s\n" % (theta * 180 / numpy.pi)
                 # http://opencv-python-tutroals.readthedocs.org/en/latest/py_tutorials/py_imgproc/py_geometric_transformations/py_geometric_transformations.html
                 rows, cols = self.img_gray_original.shape
                 # rotate image to the horizontal (line of reference degrees minus 90 degrees)
@@ -109,7 +111,7 @@ class Algorithm:
 
                     break
 
-                # Cálculo de la media de los valores de la x de los dos puntos
+                    # Cálculo de la media de los valores de la x de los dos puntos
         x = (punto1[1] + punto2[1]) / 2
         y = punto1[0]
 
@@ -117,45 +119,49 @@ class Algorithm:
         self.fovea_point = (x, y)
         cv2.circle(self.img_fovea_point, (x, y), 2, (0, 0, 255), 3)  # draw the center of the circle
         # cv2.line(self.img_fovea_point, self.fovea_point, (self.fovea_point[0], self.img_fovea_point.shape[0]),
-        #          (255, 0, 0), 1)
+        # (255, 0, 0), 1)
 
     def membranes_detector(self):
         self.step_three = True
         self.img_membranes = self.img_horizontal.copy()
 
-        ret, img_first_point = cv2.threshold(self.img_gray_horizontal,179, 255, cv2.THRESH_BINARY)
+        ret, img_first_point = cv2.threshold(self.img_gray_horizontal, 179, 255, cv2.THRESH_BINARY)
 
         img_first_point = cv2.Canny(img_first_point, 100, 100 * 3, apertureSize=3)
-        #cv2.imshow('img_first_point', img_first_point)
+        # cv2.imshow('img_first_point', img_first_point)
 
         for i in xrange(2 * img_first_point.shape[0] / 3, self.fovea_point[1], -1):
             if img_first_point[i, self.fovea_point[0]] == 255:
                 if self.first_point_coroides[1] == 0:
-                      self.first_point_coroides = (self.fovea_point[0], i)
+                    self.first_point_coroides = (self.fovea_point[0], i)
 
-        #img_second_point = cv2.medianBlur(self.img_gray_horizontal, 5)
-        img_second_point = cv2.adaptiveThreshold(self.img_gray_horizontal, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,
+        # img_second_point = cv2.medianBlur(self.img_gray_horizontal, 5)
+        img_second_point = cv2.adaptiveThreshold(self.img_gray_horizontal, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+                                                 cv2.THRESH_BINARY,
                                                  173, 3)
-	#cv2.imshow('img_second_point1', img_second_point)
+        # cv2.imshow('img_second_point1', img_second_point)
 
-        img_second_point = cv2.medianBlur(img_second_point,5)
+        img_second_point = cv2.medianBlur(img_second_point, 5)
         img_second_point = cv2.Canny(img_second_point, 50, 50 * 5, apertureSize=3)
-	#cv2.imshow('img_second_point', img_second_point)
+        # cv2.imshow('img_second_point', img_second_point)
 
-        for i in xrange(5 * img_second_point.shape[0] / 6, self.first_point_coroides[1], -1): 
+        for i in xrange(5 * img_second_point.shape[0] / 6, self.first_point_coroides[1], -1):
             if img_second_point[i, self.fovea_point[0]] == 255:
                 if self.second_point_coroides[1] == 0:
-                      self.second_point_coroides = (self.fovea_point[0], i)
+                    self.second_point_coroides = (self.fovea_point[0], i)
 
 
-        #cv2.circle(self.img_membranes, self.first_point_coroides, 2, (0, 0, 255), 3)
-        #cv2.circle(cv2.line(result, (x1, y1), (x2, y2), (0, 255, 0), 2), self.second_point_coroides, 2, (0, 0, 255), 3)
-        cv2.line(self.img_membranes, (self.first_point_coroides[0], self.first_point_coroides[1]), (self.second_point_coroides[0], self.second_point_coroides[1]), (0, 255, 0), 1)
-        cv2.line(self.img_membranes, (self.first_point_coroides[0]-15, self.first_point_coroides[1]), (self.first_point_coroides[0]+15, self.first_point_coroides[1]), (0, 0, 255), 1)
-        cv2.line(self.img_membranes, (self.second_point_coroides[0]-10, self.second_point_coroides[1]), (self.second_point_coroides[0]+10, self.second_point_coroides[1]), (0, 0, 255), 1)
-        
-	micras = (self.second_point_coroides[1] - self.first_point_coroides[1]) * self.micras_por_pixel
-	p = (self.first_point_coroides[0] + 50, (self.first_point_coroides[1] + self.second_point_coroides[1]) / 2)
+        # cv2.circle(self.img_membranes, self.first_point_coroides, 2, (0, 0, 255), 3)
+        # cv2.circle(cv2.line(result, (x1, y1), (x2, y2), (0, 255, 0), 2), self.second_point_coroides, 2, (0, 0, 255), 3)
+        cv2.line(self.img_membranes, (self.first_point_coroides[0], self.first_point_coroides[1]),
+                 (self.second_point_coroides[0], self.second_point_coroides[1]), (0, 255, 0), 1)
+        cv2.line(self.img_membranes, (self.first_point_coroides[0] - 15, self.first_point_coroides[1]),
+                 (self.first_point_coroides[0] + 15, self.first_point_coroides[1]), (0, 0, 255), 1)
+        cv2.line(self.img_membranes, (self.second_point_coroides[0] - 10, self.second_point_coroides[1]),
+                 (self.second_point_coroides[0] + 10, self.second_point_coroides[1]), (0, 0, 255), 1)
+
+        micras = (self.second_point_coroides[1] - self.first_point_coroides[1]) * self.micras_por_pixel
+        p = (self.first_point_coroides[0] + 50, (self.first_point_coroides[1] + self.second_point_coroides[1]) / 2)
         cv2.putText(self.img_membranes, str(micras), p, cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (255, 0, 255), 1, cv2.CV_AA)
 
     def show_step(self, number):
@@ -178,10 +184,12 @@ class Algorithm:
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
-	img_name = 'CASTILLO_HAROM6.png'
+        img_name = 'edi uveitis  previa 11.bmp'
     else:
-	img_file = sys.argv[1]
-    algorithm = Algorithm(img_file)
+        img_name = sys.argv[1]
+    img_file = cv2.imread(img_name)
+    roi = roi_utils.to_roi(img_file)
+    algorithm = Algorithm(roi)
     algorithm.show_step(0)
     algorithm.to_horizontal()
     algorithm.show_step(1)
@@ -189,7 +197,7 @@ if __name__ == "__main__":
     algorithm.show_step(2)
     algorithm.membranes_detector()
     algorithm.show_step(3)
-    cv2.waitKey(0) & 0xFF  # 64 bits
 
+    cv2.waitKey(0) & 0xFF  # 64 bits
     cv2.destroyAllWindows()
 
