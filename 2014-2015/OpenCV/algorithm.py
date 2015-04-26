@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import cv2
-import sys
 import numpy
 import roi_utils
+import os
+import args_processor
 
 __author__ = 'mimadrid'
 
@@ -19,8 +20,15 @@ Paso 4: Hallar la distancia buscada
 
 
 class Algorithm:
-    def __init__(self, image):
-        self.img_original = image
+    def __init__(self, image_name):
+
+        img_file = cv2.imread(image_name)
+        cv2.imshow('roi', img_file)
+        cv2.waitKey(0) & 0xFF  # 64 bits
+        roi = roi_utils.to_roi(img_file)
+
+        self.image_name = image_name
+        self.img_original = roi.copy()
         self.img_gray_original = cv2.cvtColor(self.img_original, cv2.COLOR_BGR2GRAY)
         self.img_horizontal = self.img_original
         self.img_gray_horizontal = self.img_original
@@ -150,7 +158,6 @@ class Algorithm:
                 if self.second_point_coroides[1] == 0:
                     self.second_point_coroides = (self.fovea_point[0], i)
 
-
         # cv2.circle(self.img_membranes, self.first_point_coroides, 2, (0, 0, 255), 3)
         # cv2.circle(cv2.line(result, (x1, y1), (x2, y2), (0, 255, 0), 2), self.second_point_coroides, 2, (0, 0, 255), 3)
         cv2.line(self.img_membranes, (self.first_point_coroides[0], self.first_point_coroides[1]),
@@ -178,18 +185,13 @@ class Algorithm:
         if number == 3 and self.step_three:
             img = self.img_membranes
             title = 'Membranes'
-
+        cv2.imwrite(os.path.splitext(self.image_name)[0] + '_' + title + os.path.splitext(self.image_name)[1], img)
         cv2.imshow(title, img)
 
 
-if __name__ == "__main__":
-    if len(sys.argv) == 1:
-        img_name = 'edi uveitis  previa 11.bmp'
-    else:
-        img_name = sys.argv[1]
-    img_file = cv2.imread(img_name)
-    roi = roi_utils.to_roi(img_file)
-    algorithm = Algorithm(roi)
+def run_algorithm(img_name):
+
+    algorithm = Algorithm(img_name)
     algorithm.show_step(0)
     algorithm.to_horizontal()
     algorithm.show_step(1)
@@ -197,6 +199,27 @@ if __name__ == "__main__":
     algorithm.show_step(2)
     algorithm.membranes_detector()
     algorithm.show_step(3)
+
+
+if __name__ == "__main__":
+
+    args_processor.carpeta_procesada = 'PROCESADAS'
+    args_processor.args = args_processor.parser.parse_args()
+
+    if args_processor.args.pasos:
+        print 'opción pasos'
+
+    if args_processor.args.archivos:
+        print 'opción archivos'
+        for archivo in args_processor.args.archivos:
+            args_processor.procesar_archivo(archivo, args_processor.carpeta_procesada, run_algorithm)
+
+    if args_processor.args.carpetas:
+        print 'opción carpetas'
+        for carpeta in args_processor.args.carpetas:
+            os.chdir(carpeta)
+            args_processor.procesar_carpeta(args_processor.carpeta_procesada, run_algorithm)
+            os.chdir('..')
 
     cv2.waitKey(0) & 0xFF  # 64 bits
     cv2.destroyAllWindows()
