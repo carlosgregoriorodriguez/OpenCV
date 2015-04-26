@@ -1,0 +1,12 @@
+
+# Ignorar todas las imágenes
+OpenCV/**/*.bmp
+OpenCV/**/*.png
+OpenCV/**/*.tif
+
+# Ignorar archivos compilados de Python
+OpenCV/**/*.pyc
+
+# Ignorar los archivos auxiliares de LaTeX y el pdf
+memoria/**/*.aux
+memoria/**/*.pdf

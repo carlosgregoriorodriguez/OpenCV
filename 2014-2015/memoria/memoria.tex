@@ -1,4 +1,4 @@
-\documentclass[10pt,a4paper,oneside]{book}
+\documentclass[11pt,a4paper,twoside]{book}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[spanish]{babel}
@@ -8,20 +8,55 @@
 %\usepackage{amssymb}
 %\usepackage{graphicx}
 
-\title{Visión Computerizada: Aplicaciones Reales en Medicina}
-
-\author{Daniel Arnao Rodríguez \and Miguel Madrid Mencía }
-
-\date{2014 -2015}
 
 \begin{document}
 
-\maketitle
+% Portada
+\include{memoria/portada/portada}
 
 % números romanos
 \frontmatter
 
+% Dedicatorias
+\include{memoria/dedicatorias/dedicatorias}
+% Agradecimientos
+\include{memoria/agradecimientos/agradecimientos}
+% Palabras clave
+\include{memoria/palabras_clave/palabras_clave}
+% Resumen
+\include{memoria/resumen/resumen}
+% ¿Glosario?
+
 \tableofcontents
+
+% Índice
+% Parte 1 Introducción
+% 1. Introducción
+%    1.1 Problema
+%    1.2 Objetivos
+%
+% Parte 2 Visión computerizada
+% 2. Visión computerizada
+%    2.1 Estudio previo
+%    2.2 Conocimientos necesarios
+%    2.3 Tecnología utilizada
+%        OpenCV, SimpleCV, numpy
+% Parte 3 Investigación
+% 3. Detección de poros
+%
+% 4. Espesor coroides
+%    4.1 Definición
+%    4.2 Dificultades
+%    4.3 Detección
+%    4.4 Identificación
+%    4.5 Código
+% Parte 4 Conclusiones
+% 5. Conclusiones
+%
+% 6. Futuro
+% 7. Contribuciones
+
+% Lista de figuras
 
 % números arábigos
 \mainmatter
@@ -29,7 +64,7 @@
 \appendix
 
 % antes del final, para no numerar
-\backmatter 
+\backmatter
 
 %\bibliography{}
 
