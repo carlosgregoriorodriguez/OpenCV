@@ -23,10 +23,7 @@ class Algorithm:
     def __init__(self, image_name):
 
         img_file = cv2.imread(image_name)
-        cv2.imshow('roi', img_file)
-        cv2.waitKey(0) & 0xFF  # 64 bits
         roi = roi_utils.to_roi(img_file)
-
         self.image_name = image_name
         self.img_original = roi.copy()
         self.img_gray_original = cv2.cvtColor(self.img_original, cv2.COLOR_BGR2GRAY)
