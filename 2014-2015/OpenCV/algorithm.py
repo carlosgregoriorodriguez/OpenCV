@@ -138,7 +138,7 @@ class Algorithm:
         img_first_point = cv2.Canny(img_first_point, 100, 100 * 3, apertureSize=3)
         # cv2.imshow('img_first_point', img_first_point)
 
-        for i in xrange(2 * img_first_point.shape[0] / 3, self.fovea_point[1], -1):
+        for i in xrange(3 * img_first_point.shape[0] / 4, self.fovea_point[1], -1):
             if img_first_point[i, self.fovea_point[0]] == 255:
                 if self.first_point_coroides[1] == 0:
                     self.first_point_coroides = (self.fovea_point[0], i)
@@ -159,7 +159,7 @@ class Algorithm:
                     self.second_point_coroides = (self.fovea_point[0], i)
 
         # cv2.circle(self.img_membranes, self.first_point_coroides, 2, (0, 0, 255), 3)
-        # cv2.circle(cv2.line(result, (x1, y1), (x2, y2), (0, 255, 0), 2), self.second_point_coroides, 2, (0, 0, 255), 3)
+        # cv2.circle(self.img_membranes, self.second_point_coroides, 2, (0, 0, 255), 3)
         cv2.line(self.img_membranes, (self.first_point_coroides[0], self.first_point_coroides[1]),
                  (self.second_point_coroides[0], self.second_point_coroides[1]), (0, 255, 0), 1)
         cv2.line(self.img_membranes, (self.first_point_coroides[0] - 15, self.first_point_coroides[1]),
@@ -192,11 +192,11 @@ class Algorithm:
 def run_algorithm(img_name):
 
     algorithm = Algorithm(img_name)
-    algorithm.show_step(0)
+    # algorithm.show_step(0)
     algorithm.to_horizontal()
-    algorithm.show_step(1)
+    # algorithm.show_step(1)
     algorithm.calculate_fovea()
-    algorithm.show_step(2)
+    # algorithm.show_step(2)
     algorithm.membranes_detector()
     algorithm.show_step(3)
 
@@ -207,15 +207,13 @@ if __name__ == "__main__":
     args_processor.args = args_processor.parser.parse_args()
 
     if args_processor.args.pasos:
-        print 'opción pasos'
+        pass
 
     if args_processor.args.archivos:
-        print 'opción archivos'
         for archivo in args_processor.args.archivos:
             args_processor.procesar_archivo(archivo, args_processor.carpeta_procesada, run_algorithm)
 
     if args_processor.args.carpetas:
-        print 'opción carpetas'
         for carpeta in args_processor.args.carpetas:
             os.chdir(carpeta)
             args_processor.procesar_carpeta(args_processor.carpeta_procesada, run_algorithm)
