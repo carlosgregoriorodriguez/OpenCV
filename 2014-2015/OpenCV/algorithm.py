@@ -85,14 +85,16 @@ class Algorithm:
 
     def calculate_fovea(self):
         self.step_two = True
-        ret, otsu_threshold = cv2.threshold(self.img_gray_horizontal, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-
+        # ret, otsu_threshold = cv2.threshold(self.img_gray_horizontal, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        blur = cv2.medianBlur(self.img_gray_horizontal, 7)
+        ret, binary_threshold = cv2.threshold(blur, 30, 255, cv2.THRESH_BINARY)
+        # cv2.imwrite(os.path.splitext(self.image_name)[0] + '_' + 'thresh' + os.path.splitext(self.image_name)[1], otsu_threshold)
         # print otsu_threshold[0,0]
         # print otsu_threshold.shape
         # si cv2.imread(..., 0) sólo escala de grises 0..255 y (332, 1031) si no, [0..255 0..255 0..255] (332, 1031, 3)
         # y se puede dibujar con colores en la imagen 
 
-        y, x = otsu_threshold.shape
+        y, x = binary_threshold.shape
 
         # Hemos comprobado que el threshold en más de una ocasión crea una línea recta horizontal en la fóvea.
         # Para encontrar un punto céntrico,
@@ -106,26 +108,28 @@ class Algorithm:
         for i in xrange(x / 3, 2 * x / 3):
             for j in xrange(y):
 
-                if otsu_threshold[j, i] == 255:
+                if binary_threshold[j, i] == 255:
 
                     # Actualización punto más bajo y a la derecha
-                    if punto1[0] == j:
-                        punto2 = (j, i)
+                    if punto1[1] == j:
+                        punto2 = (i, j)
 
                     # Actualización de los puntosq más bajos
-                    if punto1[0] < j:
-                        punto1 = (j, i)
-                        punto2 = (j, i)
+                    if punto1[1] < j:
+                        punto1 = (i, j)
+                        punto2 = (i, j)
 
                     break
 
                     # Cálculo de la media de los valores de la x de los dos puntos
-        x = (punto1[1] + punto2[1]) / 2
-        y = punto1[0]
+        x = (punto1[0] + punto2[0]) / 2
+        y = punto1[1]
 
         self.img_fovea_point = self.img_horizontal.copy()
         self.fovea_point = (x, y)
-        cv2.circle(self.img_fovea_point, (x, y), 2, (0, 0, 255), 3)  # draw the center of the circle
+        # cv2.circle(self.img_fovea_point, punto1, 2, (0, 255, 0), 3)  # draw the center of the circle
+        cv2.circle(self.img_fovea_point, self.fovea_point, 2, (0, 0, 255), 3)  # draw the center of the circle
+        # cv2.circle(self.img_fovea_point, punto2, 2, (0, 255, 0), 3)  # draw the center of the circle
         # cv2.line(self.img_fovea_point, self.fovea_point, (self.fovea_point[0], self.img_fovea_point.shape[0]),
         # (255, 0, 0), 1)
 
