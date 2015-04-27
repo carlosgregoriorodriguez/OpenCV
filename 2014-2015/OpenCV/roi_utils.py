@@ -50,7 +50,7 @@ def to_roi(image):
         # cv2.line(img, first_point, (second_aux_point[0], third_point[1]), (0, 255, 0), 2)
         second_roi_point = (image.shape[1], third_point[1])
 
-    return image[first_roi_point[1]:second_roi_point[1], first_point[0]:second_roi_point[0]]
+    return image[first_roi_point[1]:second_roi_point[1], first_roi_point[0]:second_roi_point[0]]
 
 if __name__ == '__main__':
     name = 'at4'
