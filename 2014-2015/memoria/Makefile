@@ -10,6 +10,7 @@ pdflatex:
 clean:
 	@echo Eliminando los archivos auxiliares
 	@rm -f *.aux
+	@rm -f *.out        
 
 	@echo Eliminando los archivos de registro
 	@rm -f *.log

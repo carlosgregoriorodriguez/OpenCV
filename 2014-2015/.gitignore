@@ -9,6 +9,7 @@ OpenCV/**/*.pyc
 
 # Ignorar los archivos de construcción para LaTeX y el pdf
 memoria/**/*.aux
+memoria/**/*.out
 memoria/**/*.ilg
 memoria/**/*.ind
 memoria/**/*.gz
