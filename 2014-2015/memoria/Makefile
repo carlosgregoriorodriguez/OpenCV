@@ -5,6 +5,7 @@ MEMORIA_LATEX = memoria
 pdflatex:
 	pdflatex $(MEMORIA_LATEX)
 	-makeindex $(MEMORIA_LATEX)
+	pdflatex $(MEMORIA_LATEX)
 
 clean:
 	@echo Eliminando los archivos auxiliares
