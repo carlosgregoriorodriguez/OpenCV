@@ -18,3 +18,4 @@ memoria/**/*.pdf
 
 # Ignorar archivos de respaldo de Emacs
 \#*\#
+\.#*
