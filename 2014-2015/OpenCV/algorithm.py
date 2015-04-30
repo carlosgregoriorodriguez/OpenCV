@@ -147,20 +147,42 @@ class Algorithm:
                 if self.first_point_coroides[1] == 0:
                     self.first_point_coroides = (self.fovea_point[0], i)
 
-        # img_second_point = cv2.medianBlur(self.img_gray_horizontal, 5)
-        img_second_point = cv2.adaptiveThreshold(self.img_gray_horizontal, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-                                                 cv2.THRESH_BINARY,
-                                                 173, 3)
-        # cv2.imshow('img_second_point1', img_second_point)
-
-        img_second_point = cv2.medianBlur(img_second_point, 5)
-        img_second_point = cv2.Canny(img_second_point, 50, 50 * 5, apertureSize=3)
+        img_second_point = cv2.medianBlur(self.img_gray_horizontal, 13)
+        adaptative_threshold = cv2.adaptiveThreshold(img_second_point, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 173, 3)
         # cv2.imshow('img_second_point', img_second_point)
 
-        for i in xrange(5 * img_second_point.shape[0] / 6, self.first_point_coroides[1], -1):
+        # Generamos nuestro propio canny a partir de findcontours y quitar los más pequeños, el ruido
+        contours, hierarchy = cv2.findContours(adaptative_threshold, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        final_contours = []
+        for contour in contours:
+            if cv2.contourArea(contour) > 4000.0:
+                final_contours.append(contour)
+
+        # http://stackoverflow.com/a/12890573
+        black_img = numpy.zeros((self.img_membranes.shape[0], self.img_membranes.shape[1], 3), numpy.uint8)
+        cv2.drawContours(black_img, final_contours, -1, (255, 255, 255), 1)
+        cv2.line(black_img, (0, 6*black_img.shape[0]/7), (black_img.shape[1] - 1, 6*black_img.shape[0]/7), (0, 255, 0), 1)
+        img_second_point = cv2.cvtColor(black_img, cv2.COLOR_BGR2GRAY)
+        # img_second_point_canny = cv2.Canny(adaptative_threshold, 50, 50 * 5, apertureSize=5)
+        # cv2.imwrite(os.path.splitext(self.image_name)[0] + '_' + 'img_second_point_canny' + os.path.splitext(self.image_name)[1], img_second_point_canny)
+        # cv2.imwrite(os.path.splitext(self.image_name)[0] + '_' + 'img_second_point' + os.path.splitext(self.image_name)[1], img_second_point)
+        # cv2.imshow('img_second_point', img_second_point)
+
+        # detectar el punto inferior de arriba a abajo
+        # second = 0
+        # for i in xrange(self.first_point_coroides[1], img_second_point.shape[0], 1):
+        #     if img_second_point[i, self.fovea_point[0]] == 255:
+        #         self.second_point_coroides = (self.fovea_point[0], i)
+        #         second += 1
+        #         if second == 2:
+        #             break
+
+        # detectar el punto inferior de abajo a arriba
+        for i in xrange(6 * img_second_point.shape[0] / 7, self.first_point_coroides[1], -1):
             if img_second_point[i, self.fovea_point[0]] == 255:
                 if self.second_point_coroides[1] == 0:
                     self.second_point_coroides = (self.fovea_point[0], i)
+
 
         # cv2.circle(self.img_membranes, self.first_point_coroides, 2, (0, 0, 255), 3)
         # cv2.circle(self.img_membranes, self.second_point_coroides, 2, (0, 0, 255), 3)
