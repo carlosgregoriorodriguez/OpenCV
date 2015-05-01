@@ -2,16 +2,21 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[spanish]{babel}
+\usepackage[spanish]{translator}
 % Hacer que al pulsar el índice te vaya al contenido
 \usepackage[pdftex]{hyperref}
 % Quitar el color distintivo a los enlaces
 \hypersetup{hidelinks=true}
 
+\usepackage{glosstex}
+% Babel no traduce por defecto el título de la lista de acrónimos
+\def\listacronymname{Lista de acrónimos}
+
+
 % No descomentar hasta usarlos
 %\usepackage{amsmath}
 %\usepackage{amssymb}
 %\usepackage{graphicx}
-
 
 \begin{document}
 
@@ -29,7 +34,9 @@
 \include{memoria/palabras_clave/palabras_clave}
 % Resumen
 \include{memoria/resumen/resumen}
-% ¿Glosario?
+
+% Lista de acrónimos
+\printglosstex(acr)
 
 \tableofcontents
 
@@ -82,6 +89,10 @@
 
 % antes del final, para no numerar
 \backmatter
+
+% Glosario 
+\printglosstex(glo)
+
 
 %\bibliography{}
 

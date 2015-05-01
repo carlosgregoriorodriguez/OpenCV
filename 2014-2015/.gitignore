@@ -15,8 +15,18 @@ memoria/**/*.ind
 memoria/**/*.gz
 memoria/**/*.toc
 memoria/**/*.log
+memoria/**/*.glg
+memoria/**/*.glo
+memoria/**/*.gls
+memoria/**/*.glx
+memoria/**/*.ist
+memoria/**/*.xdy
+memoria/**/*.dvi
+memoria/**/*.gxg
+memoria/**/*.gxs
 memoria/**/*.pdf
 
 # Ignorar archivos de respaldo de Emacs
 \#*\#
 \.#*
+memoria/**/*.el
