@@ -11,15 +11,13 @@ pdflatex:
 
 # Listar glosario
 	-makeindex -t $(MEMORIA_LATEX).glg -s $(MEMORIA_LATEX).ist -o $(MEMORIA_LATEX).gls $(MEMORIA_LATEX).glo
-# glosstex
-#       -glosstex $(MEMORIA_LATEX) $(GLOSARIO_LATEX)
-#       -makeindex $(MEMORIA_LATEX).gxs -o $(MEMORIA_LATEX).glx -s glosstex.ist
 	pdflatex $(MEMORIA_LATEX)
 	pdflatex $(MEMORIA_LATEX)
 
 clean:
 	@echo Eliminando los archivos auxiliares
-	@rm -f *.aux
+# Eliminamos de todas las carpetas de la memoria los *.aux
+	@find . -name "*.aux" -type f -delete
 	@rm -f *.out
 
 	@echo Eliminando los archivos de registro
