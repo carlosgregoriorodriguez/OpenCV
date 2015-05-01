@@ -1,12 +1,19 @@
 # Makefile principal para generar la memoria
 
 MEMORIA_LATEX = memoria
-GLOSARIO_LATEX = glosario.gdf
 
 pdflatex:
 	pdflatex $(MEMORIA_LATEX)
-	-glosstex $(MEMORIA_LATEX) $(GLOSARIO_LATEX)
-	-makeindex $(MEMORIA_LATEX).gxs -o $(MEMORIA_LATEX).glx -s glosstex.ist
+# glossaries
+	-makeglossaries $(MEMORIA_LATEX).tex
+# Listar acrónimos
+	-makeindex -t $(MEMORIA_LATEX).alg -s $(MEMORIA_LATEX).ist -o $(MEMORIA_LATEX).acr $(MEMORIA_LATEX).acn
+
+# Listar glosario
+	-makeindex -t $(MEMORIA_LATEX).glg -s $(MEMORIA_LATEX).ist -o $(MEMORIA_LATEX).gls $(MEMORIA_LATEX).glo
+# glosstex
+#       -glosstex $(MEMORIA_LATEX) $(GLOSARIO_LATEX)
+#       -makeindex $(MEMORIA_LATEX).gxs -o $(MEMORIA_LATEX).glx -s glosstex.ist
 	pdflatex $(MEMORIA_LATEX)
 	pdflatex $(MEMORIA_LATEX)
 
@@ -24,16 +31,18 @@ clean:
 	@echo Eliminando los archivos de generación del índices
 	@rm -f *.ilg
 	@rm -f *.ind
+	@rm -f *.ist
 
 	@echo Eliminando los archivos de generación del glosario
 	@rm -f *.glg
-	@rm -f *.glo
 	@rm -f *.gls
-	@rm -f *.gxg
-	@rm -f *.gxs
-	@rm -f *.glx
-	@rm -f *.xdy
-	@rm -f *.ist
+	@rm -f *.glo
+
+	@echo Eliminando los archivos de generación de la lista de siglas
+	@rm -f *.acn
+	@rm -f *.acr
+	@rm -f *.alg
+
 
 	@echo Eliminando archivos de salida...
 	@rm -f *.dvi

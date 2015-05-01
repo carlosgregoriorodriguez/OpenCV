@@ -24,6 +24,9 @@ memoria/**/*.xdy
 memoria/**/*.dvi
 memoria/**/*.gxg
 memoria/**/*.gxs
+memoria/**/*.acn
+memoria/**/*.acr
+memoria/**/*.alg
 memoria/**/*.pdf
 
 # Ignorar archivos de respaldo de Emacs

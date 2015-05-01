@@ -2,16 +2,17 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[spanish]{babel}
-\usepackage[spanish]{translator}
-% Hacer que al pulsar el índice te vaya al contenido
+% \usepackage[spanish]{translator}
+% Permitir que todas las listas enlacen con su referencia
 \usepackage[pdftex]{hyperref}
 % Quitar el color distintivo a los enlaces
 \hypersetup{hidelinks=true}
 
-\usepackage[refpage]{glosstex}
-% Babel no traduce por defecto el título de la lista de acrónimos
-\def\listacronymname{Lista de acrónimos}
-
+% https://www.ctan.org/pkg/glossaries
+\usepackage[acronym]{glossaries}
+\makeglossaries
+% Añadir los términos del glosario
+\include{memoria/glosario/glosario}
 
 % No descomentar hasta usarlos
 %\usepackage{amsmath}
@@ -36,7 +37,7 @@
 \include{memoria/resumen/resumen}
 
 % Lista de acrónimos
-\printglosstex(acr)
+\printglossary[type=\acronymtype]
 
 \tableofcontents
 
@@ -91,10 +92,7 @@
 \backmatter
 
 % Glosario 
-\printglosstex(glo)
-% Introducimos un término directamente en el glosario
-% para que no falle la compilación al estar la lista vacía
-\glosstex{GPL}
+\printglossary[type=main]
 
 %\bibliography{}
 
