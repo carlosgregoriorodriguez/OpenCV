@@ -8,7 +8,7 @@
 % Quitar el color distintivo a los enlaces
 \hypersetup{hidelinks=true}
 
-\usepackage{glosstex}
+\usepackage[refpage]{glosstex}
 % Babel no traduce por defecto el título de la lista de acrónimos
 \def\listacronymname{Lista de acrónimos}
 
@@ -92,7 +92,9 @@
 
 % Glosario 
 \printglosstex(glo)
-
+% Introducimos un término directamente en el glosario
+% para que no falle la compilación al estar la lista vacía
+\glosstex{GPL}
 
 %\bibliography{}
 

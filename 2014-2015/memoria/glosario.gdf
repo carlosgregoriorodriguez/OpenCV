@@ -1,3 +1,5 @@
 % http://www-h.eng.cam.ac.uk/help/tpl/textprocessing/glosstex.html
+% http://osl.ugr.es/CTAN/support/glosstex/glosstex.pdf
+@entry{TCO, , \emph{Tomografía de Coherencia Óptica}, FALTA SU DESCRIPCIÓN}
 @entry{GPL, , \emph{General Public License}, Licencia Pública General de GNU}
-@entry{GPL2, , \emph{General Public License 2}, Licencia Pública General de GNU}
+
