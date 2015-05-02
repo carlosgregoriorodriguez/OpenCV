@@ -13,6 +13,7 @@ pdflatex:
 	-makeindex -t $(MEMORIA_LATEX).glg -s $(MEMORIA_LATEX).ist -o $(MEMORIA_LATEX).gls $(MEMORIA_LATEX).glo
 	pdflatex $(MEMORIA_LATEX)
 	pdflatex $(MEMORIA_LATEX)
+	@bash -c "xdg-open $(MEMORIA_LATEX).pdf" 2>/dev/null
 
 clean:
 	@echo Eliminando los archivos auxiliares
