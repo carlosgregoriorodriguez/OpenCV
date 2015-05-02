@@ -4,6 +4,8 @@ MEMORIA_LATEX = memoria
 
 pdflatex:
 	pdflatex $(MEMORIA_LATEX)
+# Generar bibliografía
+	-bibtex $(MEMORIA_LATEX)
 # glossaries
 	-makeglossaries $(MEMORIA_LATEX).tex
 # Listar acrónimos
@@ -41,6 +43,10 @@ clean:
 	@rm -f *.acn
 	@rm -f *.acr
 	@rm -f *.alg
+
+	@echo Eliminando los archivos de generación de la bibliografía
+	@rm -f *.bbl
+	@rm -f *.blg
 
 
 	@echo Eliminando archivos de salida...

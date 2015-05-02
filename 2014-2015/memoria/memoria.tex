@@ -12,8 +12,12 @@
 \usepackage[acronym]{glossaries}
 \makeglossaries
 % Añadir los términos del glosario
-\include{memoria/glosario/glosario}
+\input{memoria/glosario/glosario}
 
+% https://www.ctan.org/pkg/bibtex
+% Traducir bibtex con babel
+\usepackage{babelbib}
+\usepackage{cite}
 % No descomentar hasta usarlos
 %\usepackage{amsmath}
 %\usepackage{amssymb}
@@ -117,6 +121,9 @@
 % Glosario 
 \printglossary[type=main]
 
-%\bibliography{}
+% Bibliografía
+% Añadir la bibliografía
+\bibliography{memoria/bibliografia/bibliografia}
+\bibliographystyle{babplain}
 
 \end{document}

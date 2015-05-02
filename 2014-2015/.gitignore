@@ -27,6 +27,8 @@ memoria/**/*.gxs
 memoria/**/*.acn
 memoria/**/*.acr
 memoria/**/*.alg
+memoria/**/*.bbl
+memoria/**/*.blg
 memoria/**/*.pdf
 
 # Ignorar archivos de respaldo de Emacs
