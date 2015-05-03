@@ -24,6 +24,9 @@
 \usepackage{graphicx}
 
 \begin{document}
+% http://stackoverflow.com/a/22155949
+% Eliminar todas las páginas vacías
+\let\cleardoublepage\clearpage
 
 % Portada
 % Incluirá una portada normalizada conteniendo la siguiente información: título, autores,
@@ -37,9 +40,7 @@
 % Título: Visión Computerizada, aplicaciones reales en Medicina
 % Director: Carlos Gregorio
 % Alumnos: Miguel Madrid Mencía, Daniel Arnao Rodríguez
-\input{plantillas/plantilla_portada.cls}
 \include{memoria/portada/portada}
-
 % Contendrá al menos un índice; un resumen y una lista de no más de 10 palabras clave
 % para su búsqueda bibliográfica (ambos en castellano e inglés); una introducción con los
 % antecedentes, objetivos y plan de trabajo; los resultados y una discusión crítica y
