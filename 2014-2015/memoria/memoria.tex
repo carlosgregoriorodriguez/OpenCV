@@ -28,6 +28,20 @@
 % Eliminar todas las páginas vacías
 \let\cleardoublepage\clearpage
 
+% http://stackoverflow.com/a/2007143
+% Eliminar todas las páginas generadas automáticamente después de cada parte
+\makeatletter
+\renewcommand\@endpart{\vfil
+              \if@twoside
+                \null
+                \thispagestyle{empty}%
+                \newpage
+              \fi
+              \if@tempswa
+                \twocolumn
+              \fi}
+\makeatother
+
 % Portada
 % Incluirá una portada normalizada conteniendo la siguiente información: título, autores,
 % profesor director, codirector si es el caso, curso académico e identificación de la
