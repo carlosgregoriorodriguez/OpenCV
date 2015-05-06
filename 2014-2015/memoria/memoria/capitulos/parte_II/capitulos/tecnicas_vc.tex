@@ -1,17 +1,29 @@
 \chapter{Técnicas de visión computerizada}
 Aquí se detallan todas las técnicas con ejemplos aplicadas o
-descartadas a lo largo del trabajo.
+descartadas a lo largo de la investigación.
 \section{Operaciones básicas}
 \subsection{Acceso a píxeles}
+El acceso a los píxeles de una imagen se realiza a través de
+\emph{Numpy} como una matriz de dimensiones \emph{y}, \emph{x}.
 
 \subsection{Propiedades}
+Las dos propiedades más utilizadas las imágenes son su altura y anchura.
 
 \subsection{Región de interés}
+Una región de interés de una imagen es la zona en la que estamos
+interesados en procesar.
 
 \section{Operaciones aritméticas}
 \subsection{Superposición}
+La superposición de dos imágenes (del mismo tipo, profundidad o una
+que sea un valor escalar) se produce al sumarlas píxel a píxel
+como dos matrices de \emph{Numpy} que al hacerlo con diferentes
+intensidades da la sensación de superposición y transparencia. Dicha función viene dada por:
+\begin{equation*}
+g(x) = (1 - \alpha)f_0(x) + \alpha f_1(x)
+\end{equation*}
 
-\section{Cambiar espacio de color}
+\section{Cambios de color}
 
 \section{Operaciones de umbral}
 \subsection{Simples}
