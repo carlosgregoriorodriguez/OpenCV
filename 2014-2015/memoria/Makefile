@@ -3,18 +3,19 @@
 MEMORIA_LATEX = memoria
 
 pdflatex:
-	pdflatex $(MEMORIA_LATEX)
+	latexmk -pdf -pdflatex="pdflatex -interactive=nonstopmode  -shell-escape" -use-make $(MEMORIA_LATEX).tex
+#	pdflatex $(MEMORIA_LATEX)
 # Generar bibliografía
 	-bibtex $(MEMORIA_LATEX)
 # glossaries
-	-makeglossaries $(MEMORIA_LATEX).tex
+#	-makeglossaries $(MEMORIA_LATEX).tex
 # Listar acrónimos
-	-makeindex -t $(MEMORIA_LATEX).alg -s $(MEMORIA_LATEX).ist -o $(MEMORIA_LATEX).acr $(MEMORIA_LATEX).acn
+#	-makeindex -t $(MEMORIA_LATEX).alg -s $(MEMORIA_LATEX).ist -o $(MEMORIA_LATEX).acr $(MEMORIA_LATEX).acn
 
 # Listar glosario
-	-makeindex -t $(MEMORIA_LATEX).glg -s $(MEMORIA_LATEX).ist -o $(MEMORIA_LATEX).gls $(MEMORIA_LATEX).glo
-	pdflatex $(MEMORIA_LATEX)
-	pdflatex $(MEMORIA_LATEX)
+#	-makeindex -t $(MEMORIA_LATEX).glg -s $(MEMORIA_LATEX).ist -o $(MEMORIA_LATEX).gls $(MEMORIA_LATEX).glo
+#	pdflatex $(MEMORIA_LATEX)
+#	pdflatex $(MEMORIA_LATEX)
 	@bash -c "xdg-open $(MEMORIA_LATEX).pdf" 2>/dev/null
 
 clean:
