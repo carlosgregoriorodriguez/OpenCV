@@ -8,22 +8,29 @@
 % Quitar el color distintivo a los enlaces
 \hypersetup{hidelinks=true}
 
+% Paquetes para mostrar símbolos y operaciones matemáticas
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% Paquete para mostrar imágenes
+\usepackage{graphicx}
+
+% Paquete para realizar el glosario
 % https://www.ctan.org/pkg/glossaries
 \usepackage[acronym]{glossaries}
 \makeglossaries
 % Añadir los términos del glosario
 \input{memoria/glosario/glosario}
 
-% https://www.ctan.org/pkg/bibtex
 % Traducir bibtex con babel
+% https://www.ctan.org/pkg/bibtex
 \usepackage{babelbib}
 \usepackage{cite}
 
-% Paquetes para mostrar símbolos y operaciones matemáticas
-\usepackage{amsmath}
-\usepackage{amssymb}
+% Paquete para resaltar la sintaxis del código escrito en Python
+% https://www.ctan.org/pkg/minted
+\usepackage{minted}
 
-\usepackage{graphicx}
 
 \begin{document}
 % http://stackoverflow.com/a/22155949
