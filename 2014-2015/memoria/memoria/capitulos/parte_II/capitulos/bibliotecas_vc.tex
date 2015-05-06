@@ -1,5 +1,50 @@
 \chapter{Bibliotecas}
-Análisis de las bibliotecas utilizadas durante el proyecto
-\section{Numpy}
-\section{OpenCV}
-\section{SimpleCV}
+Todas las bibliotecas usadas el proyecto son de código abierto, así
+como también todo el código desarrollado con ellas.
+
+\section{Bibliotecas de terceros}
+\subsection{Numpy}
+Biblioteca principal para cálculo científico con \emph{Python}. Destaca por:
+\begin{itemize}
+\item Matrices N-dimensionales para albergar las imágenes.
+\item Operaciones de álgebra lineal para las matrices.
+\item Integración con el resto de bibliotecas del proyecto.
+\end{itemize}
+
+\subsection{matplotlib}
+Biblioteca de dibujado en 2D para \emph{Python}. Muy usada en visión
+computerizada para la visualización de histogramas.
+
+\subsection{OpenCV}
+Biblioteca de visión computerizada escrita en C++ y diseñada para
+permitir su utilización en aplicaciones de tiempo real. Proporciona:
+\begin{itemize}
+\item Integración precisa con \emph{Python} y \emph{Numpy}.
+\item Contiene funciones y algoritmos aplicables a todas las áreas de
+  visión computerizada especialmente para imágenes en 2D.
+\item Creación de interfaces gráficas con paneles para
+  facilitar la interacción con las técnicas aplicadas a las imágenes.
+\end{itemize}
+
+\subsection{SimpleCV}
+Biblioteca de visión computerizada escrita en \emph{Python} sobre
+\emph{OpenCV} con el objetivo de proveer varios algoritmos complejos y
+sobre todo una interfaz mucho más simple que OpenCV\@.
+
+\section{Bibliotecas propias}
+
+Bibliotecas desarrolladas por y para el proyecto. Son envolturas a
+otras bibliotecas con el objetivo de adaptarlas a las necesidades
+surgidas con las \gls{tcoa}.
+
+\subsection{Envoltura del módulo argparse}
+Biblioteca escrita para facilitar la integración con el módulo
+\emph{argparse} de la biblioteca estándar de \emph{Python} e incorporar
+procesamiento de argumentos por consola.
+
+\subsection{Extracción de zonas de interés}
+Biblioteca escrita con el objetivo de extraer de una \gls{tcoa}
+original sólo la región a estudiar.
+
+\subsection{Corrección de la inclinación}
+Biblioteca escrita para corregir la inclinación original de las \gls{tcoa}.
