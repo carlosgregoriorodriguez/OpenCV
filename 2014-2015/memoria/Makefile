@@ -2,7 +2,13 @@
 
 MEMORIA_LATEX = memoria
 
-pdflatex:
+# http://www.ctan.org/pkg/latexmk
+latexmk:
+# Realizar todo el proceso de compilación de la memoria con latexmk en
+# vez de realizarlo manualmente y paso por paso porque latexmk siempre
+# lo hará mejor, menos laborioso menos propenso a errores
+# Añadir -shell-escape para que el paquete minted interactue con el
+# paquete Pygments de Python
 	latexmk -pdf -pdflatex="pdflatex -interactive=nonstopmode  -shell-escape" -use-make $(MEMORIA_LATEX).tex
 #	pdflatex $(MEMORIA_LATEX)
 # Generar bibliografía
