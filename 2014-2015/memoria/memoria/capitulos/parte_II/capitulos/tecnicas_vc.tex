@@ -18,7 +18,7 @@ y, x = imagen.shape()
 \end{minted}
 
 \subsection{Región de interés}
-La región de interés de una imagen es la zona en la que estamos
+La región de interés (ROI) de una imagen es la zona en la que estamos
 interesados en procesar.
 
 \section{Operaciones aritméticas}
@@ -40,9 +40,28 @@ Donde \emph{x} e \emph{y} representan las coordenadas (horizontal y
 vertical respectivamente).
 
 
-\section{Cambios de color}
+\section{Cambio de espacio de color}
+Un espacio de color es un modelo matemático abstracto que describe 
+la forma en la que los colores pueden representarse como tuplas de 
+números. RGB, HSV o escala de grises son ejemplos de espacios de color. \\
+El espacio de color de una imagen se puede cambiar con la función \emph{cvtColor}.
+Esta función permite las siguientes conversiones:
+\begin{itemize}
+\item De \textbf{RGB} a \textbf{escala de grises}: CV_RGB2GRAY, CV_GRAY2RGB, CV_BGR2GRAY 
+  o CV_GRAY2BGR.
+\item De \textbf{RGB} a \textbf{CIE XYZ}: CV_BGR2XYZ, CV_RGB2XYZ, CV_XYZ2BGR o CV_XYZ2RGB.
+\item De \textbf{RGB} a \textbf{YCrCb JPEG} (o YCC): CV_BGR2YCrCb, CV_RGB2YCrCb, CV_YCrCb2BGR 
+  o CV_YCrCb2RGB.
+\item De \textbf{RGB} a \textbf{HSV}: CV_BGR2HSV, CV_RGB2HSV, CV_HSV2BGR o CV_HSV2RGB.
+\item De \textbf{RGB} a \textbf{HLS}: CV_BGR2HLS, CV_RGB2HLS, CV_HLS2BGR o CV_HLS2RGB.
+\item De \textbf{RGB} a \textbf{Bayer}: CV_BayerBG2BGR, CV_BayerGB2BGR, CV_BayerRG2BGR, 
+  CV_BayerGR2BGR, CV_BayerBG2RGB, CV_BayerGB2RGB, CV_BayerRG2RGB o CV_BayerGR2RGB.
+\end{itemize}
+Estas transformaciones permiten la detección rápida y sencilla de características
+de interés.
 
-\section{Operaciones de umbral}
+
+\section{Operaciones de \emph{threshold}}
 \subsection{Simples}
 \subsection{Adaptativos}
 \subsection{Binarización Otsu}
@@ -56,8 +75,8 @@ vertical respectivamente).
 \subsection{Mediana}
 
 \section{Transformaciones morfológicas}
-\subsection{Erosión}
-\subsection{Dilatación}
+\subsection{\emph{Erode}}
+\subsection{\emph{Dilate}}
 \subsection{Apertura}
 \subsection{Cierre}
 \subsection{Borde morfológico}
@@ -67,7 +86,7 @@ vertical respectivamente).
 \subsection{Scharr}
 \subsection{Laplaciana}
 
-\section{Algoritmo Canny}
+\section{Algoritmo \emph{Canny}}
 
 \section{Contornos}
 
