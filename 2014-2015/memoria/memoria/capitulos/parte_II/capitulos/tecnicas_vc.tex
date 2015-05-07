@@ -1,30 +1,44 @@
 \chapter{Técnicas de visión computerizada}
-Aquí se detallan todas las técnicas con ejemplos aplicadas o
-descartadas a lo largo de la investigación.
+Aquí se detallan todas las técnicas aplicadas o descartadas 
+a lo largo de la investigación. Se incluyen ejemplos.
 \section{Operaciones básicas}
 \subsection{Acceso a píxeles}
 El acceso a los píxeles de una imagen se realiza a través de
-\emph{Numpy} como una matriz de dimensiones \emph{y}, \emph{x}.
+\emph{Numpy} como una matriz de dimensiones [\emph{y}, \emph{x}],
+siendo \emph{y} la altura y \emph{x} el ancho.
 \begin{minted}{Python}
 pixel = imagen[y, x]
 \end{minted}
 
 \subsection{Propiedades}
-Las dos propiedades más utilizadas las imágenes son su altura y anchura.
+Las dos propiedades más utilizadas de las imágenes son su altura y anchura.
+Se pueden obtener con la función \emph{shape}.
+\begin{minted}{Python}
+y, x = imagen.shape()
+\end{minted}
 
 \subsection{Región de interés}
-Una región de interés de una imagen es la zona en la que estamos
+La región de interés de una imagen es la zona en la que estamos
 interesados en procesar.
 
 \section{Operaciones aritméticas}
 \subsection{Superposición}
 La superposición de dos imágenes (del mismo tipo, profundidad o una
-que sea un valor escalar) se produce al sumarlas píxel a píxel
-como dos matrices de \emph{Numpy} que al hacerlo con diferentes
-intensidades da la sensación de superposición y transparencia. Dicha función viene dada por:
+que sea un valor escalar) es la suma matricial de sus píxeles,
+dándole a cada imagen un peso diferente para dar la sensación
+de superposición y transparencia. La función sería:
 \begin{equation*}
-g(x) = (1 - \alpha)f_0(x) + \alpha f_1(x)
+g(n) = (1 - \alpha)f_0(n) + \alpha f_1(n)
 \end{equation*}
+Donde \emph{n} representa un punto de la imagen, \emph{\alpha} es 
+una constante entre 0 y 1, y \emph{f_0} y \emph{f_1} las imágenes.
+Expresado en forma de coordenadas:
+\begin{equation*}
+g(x, y) = (1 - \alpha)f_0(x, y) + \alpha f_1(x, y)
+\end{equation*}
+Donde \emph{x} e \emph{y} representan las coordenadas (horizontal y 
+vertical respectivamente).
+
 
 \section{Cambios de color}
 
