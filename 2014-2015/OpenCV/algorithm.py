@@ -183,7 +183,6 @@ class Algorithm:
                 if self.second_point_coroides[1] == 0:
                     self.second_point_coroides = (self.fovea_point[0], i)
 
-
         # cv2.circle(self.img_membranes, self.first_point_coroides, 2, (0, 0, 255), 3)
         # cv2.circle(self.img_membranes, self.second_point_coroides, 2, (0, 0, 255), 3)
         cv2.line(self.img_membranes, (self.first_point_coroides[0], self.first_point_coroides[1]),
@@ -232,6 +231,7 @@ if __name__ == "__main__":
     args_processor.carpeta_procesada = 'PROCESADAS'
     args_processor.args = args_processor.parser.parse_args()
 
+    start = cv2.getTickCount()
     if args_processor.args.pasos:
         pass
 
@@ -244,6 +244,10 @@ if __name__ == "__main__":
             os.chdir(carpeta)
             args_processor.procesar_carpeta(args_processor.carpeta_procesada, run_algorithm)
             os.chdir('..')
+
+    end = cv2.getTickCount()
+    seconds = (end - start) / cv2.getTickFrequency()
+    print 'seconds elapsed: ', seconds
 
     cv2.waitKey(0) & 0xFF  # 64 bits
     cv2.destroyAllWindows()
