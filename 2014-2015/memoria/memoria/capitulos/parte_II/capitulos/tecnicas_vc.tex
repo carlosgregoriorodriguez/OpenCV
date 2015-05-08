@@ -18,7 +18,7 @@ y, x = imagen.shape()
 \end{minted}
 
 \subsection{Región de interés}
-La región de interés (ROI) de una imagen es la zona en la que estamos
+La región de interés (ROI) de una imagen es la zona que estamos
 interesados en procesar.
 
 \section{Operaciones aritméticas}
@@ -45,20 +45,18 @@ Un espacio de color es un modelo matemático abstracto que describe
 la forma en la que los colores pueden representarse como tuplas de 
 números. RGB, HSV o escala de grises son ejemplos de espacios de color. \\
 El espacio de color de una imagen se puede cambiar con la función \emph{cvtColor}.
-Esta función permite las siguientes conversiones:
+Esta función permite las siguientes conversiones en las dos direcciones:
 \begin{itemize}
-\item De \textbf{RGB} a \textbf{escala de grises}: CV_RGB2GRAY, CV_GRAY2RGB, CV_BGR2GRAY 
-  o CV_GRAY2BGR\@.
-\item De \textbf{RGB} a \textbf{CIE XYZ}: CV_BGR2XYZ, CV_RGB2XYZ, CV_XYZ2BGR o CV_XYZ2RGB\@.
-\item De \textbf{RGB} a \textbf{YCrCb JPEG} (o YCC): CV_BGR2YCrCb, CV_RGB2YCrCb, CV_YCrCb2BGR 
-  o CV_YCrCb2RGB\@.
-\item De \textbf{RGB} a \textbf{HSV}: CV_BGR2HSV, CV_RGB2HSV, CV_HSV2BGR o CV_HSV2RGB\@.
-\item De \textbf{RGB} a \textbf{HLS}: CV_BGR2HLS, CV_RGB2HLS, CV_HLS2BGR o CV_HLS2RGB\@.
-\item De \textbf{RGB} a \textbf{Bayer}: CV_BayerBG2BGR, CV_BayerGB2BGR, CV_BayerRG2BGR, 
-  CV_BayerGR2BGR, CV_BayerBG2RGB, CV_BayerGB2RGB, CV_BayerRG2RGB o CV_BayerGR2RGB\@.
+\item  \textbf{RGB} - \textbf{escala de grises}.
+\item  \textbf{RGB} - \textbf{CIE XYZ}.
+\item  \textbf{RGB} - \textbf{YCrCb JPEG} (o YCC).
+\item  \textbf{RGB} - \textbf{HSV}.
+\item  \textbf{RGB} - \textbf{HLS}.
+\item  \textbf{RGB} - \textbf{Bayer}.
 \end{itemize}
 Estas transformaciones permiten la detección rápida y sencilla de características
-de interés.
+de interés. \\
+Para este proyecto se han usado las que implican RGB y escala de grises.
 
 
 \section{Operaciones de \emph{threshold}}
@@ -69,19 +67,19 @@ de interés.
 \section{Transformaciones geométricas}
 \subsection{Rotación}
 
-\section{Suavizado}
+\section{\emph{Blur}}
 \subsection{Promedio}
 \subsection{Gaussiano}
 \subsection{Mediana}
 
 \section{Transformaciones morfológicas}
-\subsection{\emph{Erode}}
-\subsection{\emph{Dilate}}
-\subsection{Apertura}
-\subsection{Cierre}
-\subsection{Borde morfológico}
+\subsection{\emph{Erosion}}
+\subsection{\emph{Dilation}}
+\subsection{\emph{Opening}}
+\subsection{\emph{Closing}}
+\subsection{Gradiente morfológico}
 
-\section{Bordes}
+\section{Gradientes}
 \subsection{Sobel}
 \subsection{Scharr}
 \subsection{Laplaciana}
