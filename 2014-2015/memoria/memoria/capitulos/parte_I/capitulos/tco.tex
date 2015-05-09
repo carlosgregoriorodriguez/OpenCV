@@ -1,11 +1,12 @@
 \chapter{Tomografías de Coherencia Óptica}
 Toda la información de este capítulo ha sido cuidadosamente
 seleccionada y adaptada de \emph{Avances en la exploración de la
-  retina: OCT: Qué es y para qué sirve}\cite{oct-bib}
+  retina: OCT:\@ Qué es y para qué sirve}\cite{oct-bib}
 \section{¿Qué son?}
-Las \glspl{tcoa} son un tipo de imágenes ampliamente utilizadas en el
-ámbito hospitalario por los oftalmólogos para estudiar y explorar las
-estructuras oculares de los pacientes.
+Las \gls{tcoa} son un tipo de imágenes ampliamente utilizadas en el
+ámbito hospitalario por los oftalmólogos para estudiar, explorar y monitorizar las
+estructuras oculares de los pacientes para el diagnóstico de
+enfermedades, especialmente, de difícil identificación oftalmológica.
 
 \section{Máquina \glsentrytext{tcog}}
 Una máquina \gls{tcoa} se utiliza para la exploración en tiempo real, sin ser
@@ -15,19 +16,57 @@ insustituible en el diagnóstico y control de numerosas patologías
 oculares, así como también la mejora de su rapidez y precisión.
 
 \subsection{Base teórica}
-La máquina \gls{tcoa} usa una técnica análoga a las máquina de ecografías
-pero sustituyendo los ultrasonidos por luz. La máquina mide la
-latencia o retardo e intensidad de la onda reflejada tras incidir en
-un tejido. La ventaja de una máquina \gls{tcoa} frente a una de ecografías es
-la velocidad de la luz, muy superior a la velocidad de los
-ultrasonidos, del orden de \emph{$10^{-15}$ fentosegundos}, requiriendo un sistema de medición indirecto.\\
-\emph{El interferómetro de Michelson} es la principal base del funcionamiento de
-estas máquinas. Consiste en dirigir la radiación a un divisor de haces
-que a su vez los divide en dos. Un haz se dirige por un medio conocido
-mientras que el otro por el medio a estudiar. Tras esto, ambos haces
-se reflejan para hacerlos coincidir en un mismo punto, patrón del que
-se registra la interferencia entre ambos para medir la intensidad y
-retardo del que recorrió el medio desconocido.
+La máquina \gls{tcoa} usa una técnica análoga a las máquina de
+ecografías pero sustituyendo los ultrasonidos por luz. La máquina mide
+la latencia o retardo e intensidad de la onda reflejada tras incidir
+en un tejido. La ventaja de una máquina \gls{tcoa} frente a una de
+ecografías es la velocidad de la luz, muy superior a la velocidad de
+los ultrasonidos, del orden de \emph{$10^{-15}$ fentosegundos}, requiriendo un sistema de medición indirecto.\\
+\emph{El interferómetro de Michelson} es la principal base del
+funcionamiento de estas máquinas. Consiste en dirigir la radiación a
+un divisor de haces que a su vez los divide en dos. Un haz se dirige
+por un medio conocido mientras que el otro por el medio a
+estudiar. Tras esto, ambos haces se reflejan para hacerlos coincidir
+en un mismo punto, patrón del que se registra la interferencia entre
+ambos para medir la intensidad y retardo del que recorrió el medio
+desconocido.
+
+\subsection{Historia}
+Estas primeras máquinas operaban sobre el \emph{dominio temporal}, es decir,
+el espejo recorría toda la superficie del medio a estudiar para así
+reflejar el haz de referencia. La velocidad de traslación del espejo
+se convertía en el factor crítico y limitante de la velocidad de
+captura, en los mejores casos, \emph{400 barridos por segundo}.\\
+La velocidad de barrido es crítica principalmente por dos motivos:
+\begin{description}
+\item [Disminución del tiempo de estudio] de la estructura ocular. Lo
+  que reduce la irritación y la sequedad del ojo del paciente que al
+  tener que permanecer abierto durante todo el proceso incide en la
+  calidad del resultado obtenido.
+\item [Aumento de la resolución y calidad] directamente proporcional
+  debido al mayor número de muestras realizadas.
+\end{description}
+Con el paso del tiempo y el perfeccionamiento de la técnica, se hizo
+posible fijar el espejo y aumentar así los barridos por segundo
+mediante el uso del \emph{dominio espectral o de Fourier}. Esta
+técnica se sustenta en una serie de dispositivos que analizan el haz a
+comparar con el de referencia. Con el espejo fijo en un punto y estos
+nuevos dispositivos, supuso un avance enorme al permitir \emph{25.000
+  barridos por segundo}.\\
+Actualmente, las máquinas más recientes trabajan con una variante del
+\emph{dominio espectral}, se denominan de tipo
+\emph{swept-source}. Utilizan el dominio de la frecuencia codificada
+en el tiempo (\emph{Time encoded frequency domain}). Para ello, un
+láser sintonizable emite el haz con una longitud de onda fija que
+muestrea secuencialmente el medio con una serie de longitudes de onda
+individuales que posteriormente descodifica. Así, alcanza un
+\emph{100.000 muestreos por segundo}. Además proporciona imágenes muy
+precisas y con mayor profundidad mostrando tejidos que anteriormente
+había que enfocar en niveles más profundos como la \textbf{coroides} o
+menos detalle como el vitreo.
+
+\subsection{Resolución y densidad de muestreo}
+
 
 
 
@@ -35,13 +74,14 @@ retardo del que recorrió el medio desconocido.
 La máquina \gls{tcoa} es capaz de medir y representar los distintos
 tipos de tejidos en escala de grises o colores según su reflectividad:
 \begin{description}
-\item[Reflectividad alta:] sangre, exudados lipídicos, epitelio pigmentario,
-coriocapilar o capas de fibras nerviosas perpendiculares al haz de
-luz. Representados con colores cálidos como rojo y blanco.
-\item[Reflectividad media:] capas retinianas de la limitante interna a la
-plexiforme externa. Representadas con colores verdes y amarillos
+\item[Reflectividad alta:] sangre, exudados lipídicos, epitelio
+  pigmentario, coriocapilar o capas de fibras nerviosas
+  perpendiculares al haz de luz. Representados con colores cálidos
+  como rojo y blanco.
+\item[Reflectividad media:] capas retinianas de la limitante interna a
+  la plexiforme externa. Representadas con colores verdes y amarillos
 \item[Reflectividad baja:] zonas de edema, vítreo y contenido seroso,
-dispuestos en paralelo al haz de luz. Representados con colores fríos
-como azul y negro.
+  dispuestos en paralelo al haz de luz. Representados con colores
+  fríos como azul y negro.
 \end{description}
 \section{Imágenes \glsentrytext{tcog}}
