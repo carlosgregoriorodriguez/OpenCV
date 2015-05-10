@@ -81,15 +81,72 @@ precisas y con mayor profundidad mostrando tejidos que anteriormente
 había que enfocar en niveles más profundos como la \textbf{coroides} o
 menos detalle como el vitreo.
 
-\subsection{Resolución y densidad de muestreo}
+\subsection{Tipo, resolución y densidad de muestreo}
+\subsubsection{Tipo}
+Para la reconstrucción de la imagen de un tejido, la máquina
+\gls{tcoa} explora el medio con un haz de luz en un punto o
+\emph{\textbf{A-scan}}. La repetición de puntos sobre una misma línea
+genera un plano denominado \emph{\textbf{B-scan}}. La repetición de
+estos planos construye un cubo.
+\subsubsection{Resolución}
+La resolución de muestreo se define como la distancia mínima entre dos
+puntos próximos distintos. Permite distinguir ambos puntos como
+diferentes.
+\begin{itemize}
+\item Resolución \textbf{axial}: limitada por la longitud de
+  coherencia de la onda.
+\item Resolución \textbf{transversal}: dependiente de la anchura del
+  haz de luz incidente
+\end{itemize}
+\subsubsection{Densidad}
+La densidad de muestreo se define como la cantidad de
+\emph{\textbf{A-scan}} por unidad de volumen de tejido. Es
+directamente al tiempo de exploración.
 
-\subsection{Número de rastreos en el mismo punto}
+\subsection{Número de muestreos en el mismo punto o \emph{frame
+    averaging}}
+Para incrementar la calidad de una imagen es recomendable aumentar el
+número de muestreos puesto que las máquinas \gls{tcoa} usan luz
+parcialmente coherente para realizar las exploraciones, reflexiones
+adyacentes producen interferencias o ruido en el tejido. Este ruido es
+siempre distinto en cada exploración por lo que al repetir cada punto
+del tejido y promediar su información al reconstruir la imagen, el
+ruido desaparece. Hace posible distinguir capas con bajo contraste o
+muy finas.\\
+Aunque el aumento de muestreos a priori puede parecer una buena
+técnica para mejorar la calidad, requiere incrementar
+considerablemente el tiempo de exploración produciendo en el ojo del
+paciente sequedad e irritación. Esto no sólo disminuye la calidad sino
+que incluso puede llegar a impedir finalizar correctamente la
+exploración. Por lo que hay que buscar un equilibrio entre número de
+muestreos y tiempo de exploración.\\
+La estimación de calidad-ruido se basa en la recomendación de
+\emph{\textbf{100 muestreos de tipo B-scan}} explicados anteriormente.
+
+\subsection{Tipos de exploración}
+Lo habitual es la \emph{exploración lineal} porque son las más rápidas
+de realizar y tolerables hasta para los ojos con
+fatiga.\\
+La reconstrucción en 3D de estructuras oculares mediante cubos
+proporciona mucha más información y permite seleccionar
+individualmente cada corte o punto que se quiera
+visualizar. Consecuentemente, alarga el proceso siendo inviable de
+realizar a pacientes poco colaboradores o con ojos con tendencia a
+secarse.\\
+Es importante saber que aunque las zonas ha explorar están estandarizadas, cada máquina
+\gls{tcoa} tiene su propia estrategia.
 
 \subsection{Software de análisis de la información}
 
-\subsection{Tipos de exploración}
-
 \subsection{Seguimiento}
+Las máquinas \gls{tcoa} más modernas son capaces de reconocer la zona
+que está siendo explorada a partir de características distintivas como
+los bordes de la papila o vasos sanguíneos. Permite asegurar así con
+exploraciones sucesivas a lo largo del tiempo de una misma zona que
+los cambios detectados en un punto son reales y no artefactos de
+puntos próximos y distintos.\\
+Este seguimiento permite además medir la distancia en micras de cada
+punto con respecto al punto de una exploración anterior.
 
 \subsection{Otras características}
 
