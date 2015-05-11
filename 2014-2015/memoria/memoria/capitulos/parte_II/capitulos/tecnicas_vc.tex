@@ -19,7 +19,12 @@ y, x = imagen.shape
 
 \subsection{Región de interés}
 La región de interés (ROI) de una imagen es la zona que estamos
-interesados en procesar.
+interesados en procesar. Se expresa mediante los vértices opuestos de
+un rectángulo o cuadrado definidos como los píxeles [$y_1$, $x_1$] y [$y_2$,$x2$]
+de la imagen
+\begin{minted}{Python}
+roi = imagen[y1:y2, x1:x2]
+\end{minted}
 
 \section{Operaciones aritméticas}
 \subsection{Superposición}
@@ -47,20 +52,29 @@ números. RGB, HSV o escala de grises son ejemplos de espacios de color. \\
 El espacio de color de una imagen se puede cambiar con la función \emph{cvtColor}.
 Esta función permite las siguientes conversiones en las dos direcciones:
 \begin{itemize}
-\item  \textbf{RGB} - \textbf{escala de grises}.
-\item  \textbf{RGB} - \textbf{CIE XYZ}.
-\item  \textbf{RGB} - \textbf{YCrCb JPEG} (o YCC).
-\item  \textbf{RGB} - \textbf{HSV}.
-\item  \textbf{RGB} - \textbf{HLS}.
-\item  \textbf{RGB} - \textbf{Bayer}.
+\item  \textbf{RGB} --- \textbf{escala de grises}.
+\item  \textbf{RGB} --- \textbf{CIE XYZ}.
+\item  \textbf{RGB} --- \textbf{YCrCb JPEG} (o YCC).
+\item  \textbf{RGB} --- \textbf{HSV}.
+\item  \textbf{RGB} --- \textbf{HLS}.
+\item  \textbf{RGB} --- \textbf{Bayer}.
 \end{itemize}
 Estas transformaciones permiten la detección rápida y sencilla de características
 de interés. \\
 Para este proyecto se han usado las que implican RGB y escala de grises.
 
-
 \section{Operaciones de \emph{threshold}}
+Las operaciones de \emph{threshold} convierten los píxeles de una
+imagen (en escala de grises [0 --- 255]) superiores a un valor de
+umbral a blanco [255] o a negro [0] según el \emph{threshold} aplicado.
 \subsection{Simples}
+\begin{itemize}
+\item cv2.THRESH\_BINARY
+\item cv2.THRESH\_BINARY\_INV
+\item cv2.THRESH\_TRUNC
+\item cv2.THRESH\_TOZERO
+\item cv2.THRESH\_TOZERO\_INV
+\end{itemize}
 \subsection{Adaptativos}
 \subsection{Binarización Otsu}
 
