@@ -7,7 +7,7 @@ El acceso a los píxeles de una imagen se realiza a través de
 \emph{Numpy} como una matriz de dimensiones [\emph{y}, \emph{x}],
 siendo \emph{y} la altura y \emph{x} el ancho.
 \begin{minted}{Python}
-pixel = imagen[y, x]
+  pixel = imagen[y, x]
 \end{minted}
 
 \subsection{Propiedades}
@@ -20,7 +20,7 @@ y, x = imagen.shape
 \subsection{Región de interés}
 La región de interés (ROI) de una imagen es la zona que estamos
 interesados en procesar. Se expresa mediante los vértices opuestos de
-un rectángulo o cuadrado definidos como los píxeles [$y_1$, $x_1$] y [$y_2$,$x2$]
+un rectángulo o cuadrado definidos como los píxeles [$y_1$, $x_1$] y [$y_2$,$x_2$]
 de la imagen
 \begin{minted}{Python}
 roi = imagen[y1:y2, x1:x2]
@@ -41,7 +41,7 @@ Expresado en forma de coordenadas:
 \begin{equation*}
 g(x, y) = (1 - \alpha)f_0(x, y) + \alpha f_1(x, y)
 \end{equation*}
-Donde \emph{x} e \emph{y} representan las coordenadas (horizontal y 
+Donde \emph{x} e \emph{y} representan las coordenadas (horizontal y
 vertical respectivamente).
 
 
@@ -79,8 +79,47 @@ umbral a blanco [255] o a negro [0] según el \emph{threshold} aplicado.
 \subsection{Binarización Otsu}
 
 \section{Transformaciones geométricas}
+Las transformaciones geométricas son aquellas técnicas en las que se
+aplica una matriz o \emph{kernel} de transformación a la imagen original.
 \subsection{Rotación}
-
+Para rotar una imagen desde un ángulo $\theta$ se opera con la
+siguiente matriz de transformación.
+\begin{equation*}
+  M =
+  \begin{bmatrix}
+    \cos \theta & -\sin \theta \\ \sin \theta & \cos \theta
+  \end{bmatrix}
+\end{equation*}
+\emph{OpenCV} además, facilita una matriz de rotación escalable con
+centro ajustable para el punto que se prefiera.
+\begin{equation*}
+  \begin{bmatrix}
+    \alpha & \beta & (1 - \alpha) \cdot centro.x - \beta \cdot centro.y \\
+    - \beta & \alpha & \beta \cdot centro.x + (1 - \alpha) \cdot centro.y
+  \end{bmatrix}
+\end{equation*}
+donde:
+\begin{center}
+$
+\alpha = escala \cdot \cos \theta
+$
+\\
+$
+\beta = escala \cdot \sin \theta
+$
+\end{center}
+Para facilitar todavía más la rotación, \emph{OpenCV} proporciona la función
+\begin{center}
+\textbf{cv2.getRotationMatrix2D}(centro, ángulo, escala) \\
+$\downarrow$ \\
+matriz de transformación
+\end{center}
+Posteriormente hay que aplicar la función de afinidad con la matriz de transformación anterior \\
+\begin{center}
+\textbf{cv2.warpAffine}(imagen, matriz, tamaño)\\
+$\downarrow$ \\
+imagen destino
+\end{center}
 \section{\emph{Blur}}
 \subsection{Promedio}
 \subsection{Gaussiano}
