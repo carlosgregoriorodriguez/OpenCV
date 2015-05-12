@@ -94,8 +94,8 @@ siguiente matriz de transformación.
 centro ajustable para el punto que se prefiera.
 \begin{equation*}
   \begin{bmatrix}
-    \alpha & \beta & (1 - \alpha) \cdot centro.x - \beta \cdot centro.y \\
-    - \beta & \alpha & \beta \cdot centro.x + (1 - \alpha) \cdot centro.y
+    \alpha & \beta & (1 - \alpha) \cdot centro_x - \beta \cdot centro_y \\
+    - \beta & \alpha & \beta \cdot centro_x + (1 - \alpha) \cdot centro_y
   \end{bmatrix}
 \end{equation*}
 donde:
@@ -120,12 +120,31 @@ Posteriormente hay que aplicar la función de afinidad con la matriz de transfor
 $\downarrow$ \\
 imagen destino
 \end{center}
+
 \section{\emph{Blur}}
+\emph{Blur} o suavizado es una técnica usada para principalmente
+reducir el ruido y los artefactos (contenido de alta frecuencia) de la
+imagen aunque también se usa para disminuir la resolución. Se basa en
+aplicar a la imagen un \emph{kernel} de convolución como el siguiente.
 \subsection{Promedio}
+\begin{equation*}
+  K = \frac{1}{9}
+  \begin{bmatrix}
+    1 & 1 & 1 \\
+    1 & 1 & 1 \\
+    1 & 1 & 1 \\
+  \end{bmatrix}
+\end{equation*}
 \subsection{Gaussiano}
 \subsection{Mediana}
 
 \section{Transformaciones morfológicas}
+Las operaciones de transformación morfológicas se aplican sobre la
+forma de la imagen. Se suelen usar para reducir el ruido, aislar o
+juntar elementos. El \emph{kernel} aplicado a la imagen define el
+resultado de la operación. Para enteder mejor la operación supondremos
+que la imagen está \emph{binarizada} (píxeles únicamente blancos o
+negros)
 \subsection{\emph{Erosion}}
 \subsection{\emph{Dilation}}
 \subsection{\emph{Opening}}
