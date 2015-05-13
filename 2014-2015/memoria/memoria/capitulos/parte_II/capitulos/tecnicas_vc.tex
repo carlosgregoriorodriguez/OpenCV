@@ -1,6 +1,14 @@
 \chapter{Técnicas de visión computerizada}
-Aquí se detallan todas las técnicas aplicadas o descartadas 
-a lo largo de la investigación. Se incluyen ejemplos.
+Aquí se detallan todas las técnicas aplicadas o descartadas a lo largo
+de la investigación. Se incluyen ejemplos.
+
+\section{Histogramas}
+Un histograma es un gráfico con la distribución de color o
+intensidades de la imagen. Es tan importante su estudio dentro de la
+visión computerizada que se podría definir informalmente como el
+gráfico que contiene la naturaleza de la imagen.
+\subsection{Ecualización}
+
 \section{Operaciones básicas}
 \subsection{Acceso a píxeles}
 El acceso a los píxeles de una imagen se realiza a través de
@@ -11,111 +19,132 @@ siendo \emph{y} la altura y \emph{x} el ancho.
 \end{minted}
 
 \subsection{Propiedades}
-Las dos propiedades más utilizadas de las imágenes son su altura y anchura.
-Se pueden obtener con la función \emph{shape}.
+Las dos propiedades más utilizadas de las imágenes son su altura y
+anchura.  Se pueden obtener con la función \emph{shape}.
 \begin{minted}{Python}
-y, x = imagen.shape
+  y, x = imagen.shape
 \end{minted}
 
 \subsection{Región de interés}
 La región de interés (ROI) de una imagen es la zona que estamos
 interesados en procesar. Se expresa mediante los vértices opuestos de
-un rectángulo o cuadrado definidos como los píxeles [$y_1$, $x_1$] y [$y_2$,$x_2$]
-de la imagen
+un rectángulo o cuadrado definidos como los píxeles [$y_1$, $x_1$] y
+[$y_2$,$x_2$] de la imagen
 \begin{minted}{Python}
-roi = imagen[y1:y2, x1:x2]
+  roi = imagen[y1:y2, x1:x2]
 \end{minted}
 
 \section{Operaciones aritméticas}
 \subsection{Superposición}
 La superposición de dos imágenes (del mismo tipo, profundidad o una
-que sea un valor escalar) es la suma matricial de sus píxeles,
-dándole a cada imagen un peso diferente para dar la sensación
-de superposición y transparencia. La función sería:
+que sea un valor escalar) es la suma matricial de sus píxeles, dándole
+a cada imagen un peso diferente para dar la sensación de superposición
+y transparencia. La función sería:
 \begin{equation*}
-g(n) = (1 - \alpha)f_0(n) + \alpha f_1(n)
+  g(n) = (1 - \alpha)f_0(n) + \alpha f_1(n)
 \end{equation*}
-Donde \emph{n} representa un punto de la imagen, \emph{$\alpha$} es 
+Donde \emph{n} representa un punto de la imagen, \emph{$\alpha$} es
 una constante entre 0 y 1, y \emph{$f_0$} y \emph{$f_1$} las imágenes.
 Expresado en forma de coordenadas:
 \begin{equation*}
-g(x, y) = (1 - \alpha)f_0(x, y) + \alpha f_1(x, y)
+  g(x, y) = (1 - \alpha)f_0(x, y) + \alpha f_1(x, y)
 \end{equation*}
 Donde \emph{x} e \emph{y} representan las coordenadas (horizontal y
 vertical respectivamente).
 
 
 \section{Cambio de espacio de color}
-Un espacio de color es un modelo matemático abstracto que describe 
-la forma en la que los colores pueden representarse como tuplas de 
+Un espacio de color es un modelo matemático abstracto que describe la
+forma en la que los colores pueden representarse como tuplas de
 números. RGB, HSV o escala de grises son ejemplos de espacios de color. \\
-El espacio de color de una imagen se puede cambiar con la función \emph{cvtColor}.
-Esta función permite las siguientes conversiones en las dos direcciones:
+El espacio de color de una imagen se puede cambiar con la función
+\emph{cvtColor}.  Esta función permite las siguientes conversiones en
+las dos direcciones:
 \begin{itemize}
-\item  \textbf{RGB} --- \textbf{escala de grises}.
-\item  \textbf{RGB} --- \textbf{CIE XYZ}.
-\item  \textbf{RGB} --- \textbf{YCrCb JPEG} (o YCC).
-\item  \textbf{RGB} --- \textbf{HSV}.
-\item  \textbf{RGB} --- \textbf{HLS}.
-\item  \textbf{RGB} --- \textbf{Bayer}.
+\item \textbf{RGB} --- \textbf{escala de grises}.
+\item \textbf{RGB} --- \textbf{CIE XYZ}.
+\item \textbf{RGB} --- \textbf{YCrCb JPEG} (o YCC).
+\item \textbf{RGB} --- \textbf{HSV}.
+\item \textbf{RGB} --- \textbf{HLS}.
+\item \textbf{RGB} --- \textbf{Bayer}.
 \end{itemize}
-Estas transformaciones permiten la detección rápida y sencilla de características
+Estas transformaciones permiten la detección rápida y sencilla de
+características
 de interés. \\
-Para este proyecto se han usado las que implican RGB y escala de grises.
+Para este proyecto se han usado las que implican RGB y escala de
+grises.
 
 \section{Operaciones de \emph{threshold}}
 Las operaciones de \emph{threshold} convierten los píxeles de una
 imagen (en escala de grises [0 --- 255]) superiores a un valor de
-umbral a blanco [255] o a negro [0] según el \emph{threshold} aplicado.
+umbral a blanco [255] o a negro [0] según el \emph{threshold}
+aplicado.
 \subsection{Simples}
-\begin{itemize}
-\item cv2.THRESH\_BINARY
+\subsubsection{cv2.THRESH\_BINARY}
+Todos los píxeles que superen el valor del umbral se les aplica el
+valor máximo, el caso contrario el valor mínimo. La expresión es
 \begin{equation*}
-destino(x, y) =
-\begin{cases}
-255 & \text{si } entrada(x, y) > umbral \\
-0 & \text{cualquier otro caso}
-\end{cases}
+  destino(x, y) =
+  \begin{cases}
+    255 & \text{si } entrada(x, y) > umbral \\
+    0 & \text{cualquier otro caso}
+  \end{cases}
 \end{equation*}
-\item cv2.THRESH\_BINARY\_INV
+\subsubsection{cv2.THRESH\_BINARY\_INV}
+Todos los píxeles que superen el valor del umbral se les aplica el
+valor mínimo, en caso contrario el valor máximo. La expresión es
 \begin{equation*}
-destino(x, y) =
-\begin{cases}
-0 & \text{si } entrada(x, y) > umbral \\
-255 & \text{cualquier otro caso}
-\end{cases}
+  destino(x, y) =
+  \begin{cases}
+    0 & \text{si } entrada(x, y) > umbral \\
+    255 & \text{cualquier otro caso}
+  \end{cases}
 \end{equation*}
-\item cv2.THRESH\_TRUNC
+\subsubsection{cv2.THRESH\_TRUNC}
+Todos los píxeles que superen el valor del umbral se les aplica el
+valor máximo, en caso contrario se conserva el valor original. La
+expresión es
 \begin{equation*}
-destino(x, y) =
-\begin{cases}
-255 & \text{si } entrada(x, y) > umbral \\
-entrada(x, y) & \text{cualquier otro caso}
-\end{cases}
+  destino(x, y) =
+  \begin{cases}
+    255 & \text{si } entrada(x, y) > umbral \\
+    entrada(x, y) & \text{cualquier otro caso}
+  \end{cases}
 \end{equation*}
-\item cv2.THRESH\_TOZERO
+\subsubsection{cv2.THRESH\_TOZERO}
+Todos los píxeles que superen el valor del umbral se les aplica el
+valor mínimo, en caso contrario se conserva el valor original. La
+expresión es
 \begin{equation*}
-destino(x, y) =
-\begin{cases}
-0 & \text{si } entrada(x, y) > umbral \\
-entrada(x, y) & \text{cualquier otro caso}
-\end{cases}
+  destino(x, y) =
+  \begin{cases}
+    0 & \text{si } entrada(x, y) > umbral \\
+    entrada(x, y) & \text{cualquier otro caso}
+  \end{cases}
 \end{equation*}
-\item cv2.THRESH\_TOZERO\_INV
+\subsubsection{cv2.THRESH\_TOZERO\_INV}
+Todos los píxeles que superen el valor del umbral conservar su valor,
+en caso contrario se les aplica el valor mínimo. La expresión es
 \begin{equation*}
-destino(x, y) =
-\begin{cases}
-entrada(x, y) & \text{si } entrada(x, y) > umbral \\
-0 & \text{cualquier otro caso}
-\end{cases}
+  destino(x, y) =
+  \begin{cases}
+    entrada(x, y) & \text{si } entrada(x, y) > umbral \\
+    0 & \text{cualquier otro caso}
+  \end{cases}
 \end{equation*}
-\end{itemize}
 \subsection{Adaptativos}
+En imágenes uniformes aplicar valores umbral globales y fijos suele
+ser una buena opción pero para imágenes no uniformes hay que adaptar
+dicho valor a cada área de la imagen.
+\subsubsection{cv2.ADAPTIVE_THRESH_MEAN_C }
+\subsubsection{cv2.ADAPTIVE_THRESH_GAUSSIAN_C}
+
 \subsection{Binarización Otsu}
 
 \section{Transformaciones geométricas}
 Las transformaciones geométricas son aquellas técnicas en las que se
-aplica una matriz o \emph{kernel} de transformación a la imagen original.
+aplica una matriz o \emph{kernel} de transformación a la imagen
+original.
 \subsection{Rotación}
 Para rotar una imagen desde un ángulo $\theta$ se opera con la
 siguiente matriz de transformación.
@@ -130,30 +159,28 @@ centro ajustable para el punto que se prefiera.
 \begin{equation*}
   \begin{bmatrix}
     \alpha & \beta & (1 - \alpha) \cdot centro_x - \beta \cdot centro_y \\
-    - \beta & \alpha & \beta \cdot centro_x + (1 - \alpha) \cdot centro_y
+    - \beta & \alpha & \beta \cdot centro_x + (1 - \alpha) \cdot
+    centro_y
   \end{bmatrix}
 \end{equation*}
 donde:
 \begin{center}
-$
-\alpha = escala \cdot \cos \theta
-$
-\\
-$
-\beta = escala \cdot \sin \theta
-$
+  $ \alpha = escala \cdot \cos \theta $
+  \\
+  $ \beta = escala \cdot \sin \theta $
 \end{center}
-Para facilitar todavía más la rotación, \emph{OpenCV} proporciona la función
+Para facilitar todavía más la rotación, \emph{OpenCV} proporciona la
+función
 \begin{center}
-\textbf{cv2.getRotationMatrix2D}(centro, ángulo, escala) \\
-$\downarrow$ \\
-matriz de transformación
+  \textbf{cv2.getRotationMatrix2D}(centro, ángulo, escala) \\
+  $\downarrow$ \\
+  matriz de transformación
 \end{center}
 Posteriormente hay que aplicar la función de afinidad con la matriz de transformación anterior \\
 \begin{center}
-\textbf{cv2.warpAffine}(imagen, matriz, tamaño)\\
-$\downarrow$ \\
-imagen destino
+  \textbf{cv2.warpAffine}(imagen, matriz, tamaño)\\
+  $\downarrow$ \\
+  imagen destino
 \end{center}
 
 \section{\emph{Blur}}
@@ -194,9 +221,6 @@ negros)
 \section{Algoritmo \emph{Canny}}
 
 \section{Contornos}
-
-\section{Histogramas}
-\subsection{Ecualización}
 
 \section{Transformada de Hough}
 \subsection{Rectas}
