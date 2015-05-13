@@ -70,10 +70,45 @@ umbral a blanco [255] o a negro [0] según el \emph{threshold} aplicado.
 \subsection{Simples}
 \begin{itemize}
 \item cv2.THRESH\_BINARY
+\begin{equation*}
+destino(x, y) =
+\begin{cases}
+255 & \text{si } entrada(x, y) > umbral \\
+0 & \text{cualquier otro caso}
+\end{cases}
+\end{equation*}
 \item cv2.THRESH\_BINARY\_INV
+\begin{equation*}
+destino(x, y) =
+\begin{cases}
+0 & \text{si } entrada(x, y) > umbral \\
+255 & \text{cualquier otro caso}
+\end{cases}
+\end{equation*}
 \item cv2.THRESH\_TRUNC
+\begin{equation*}
+destino(x, y) =
+\begin{cases}
+255 & \text{si } entrada(x, y) > umbral \\
+entrada(x, y) & \text{cualquier otro caso}
+\end{cases}
+\end{equation*}
 \item cv2.THRESH\_TOZERO
+\begin{equation*}
+destino(x, y) =
+\begin{cases}
+0 & \text{si } entrada(x, y) > umbral \\
+entrada(x, y) & \text{cualquier otro caso}
+\end{cases}
+\end{equation*}
 \item cv2.THRESH\_TOZERO\_INV
+\begin{equation*}
+destino(x, y) =
+\begin{cases}
+entrada(x, y) & \text{si } entrada(x, y) > umbral \\
+0 & \text{cualquier otro caso}
+\end{cases}
+\end{equation*}
 \end{itemize}
 \subsection{Adaptativos}
 \subsection{Binarización Otsu}
