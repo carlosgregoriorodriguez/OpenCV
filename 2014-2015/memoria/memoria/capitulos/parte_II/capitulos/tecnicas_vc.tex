@@ -37,7 +37,7 @@ un rectángulo o cuadrado definidos como los píxeles [$y_1$, $x_1$] y
 \section{Operaciones aritméticas}
 \subsection{Superposición}
 La superposición de dos imágenes (del mismo tipo, profundidad o una
-que sea un valor escalar) es la suma matricial de sus píxeles, dándole
+que sea un valor escalar) es la suma matricial de sus píxeles, asignando
 a cada imagen un peso diferente para dar la sensación de superposición
 y transparencia. La función sería:
 \begin{equation*}
@@ -82,7 +82,7 @@ aplicado.
 \subsection{Simples}
 \subsubsection{cv2.THRESH\_BINARY}
 Todos los píxeles que superen el valor del umbral se les aplica el
-valor máximo, el caso contrario el valor mínimo. La expresión es
+valor máximo, el caso contrario, el valor mínimo. La expresión es
 \begin{equation*}
   destino(x, y) =
   \begin{cases}
@@ -92,7 +92,7 @@ valor máximo, el caso contrario el valor mínimo. La expresión es
 \end{equation*}
 \subsubsection{cv2.THRESH\_BINARY\_INV}
 Todos los píxeles que superen el valor del umbral se les aplica el
-valor mínimo, en caso contrario el valor máximo. La expresión es
+valor mínimo, en caso contrario, el valor máximo. La expresión es
 \begin{equation*}
   destino(x, y) =
   \begin{cases}
@@ -102,42 +102,44 @@ valor mínimo, en caso contrario el valor máximo. La expresión es
 \end{equation*}
 \subsubsection{cv2.THRESH\_TRUNC}
 Todos los píxeles que superen el valor del umbral se les aplica el
-valor máximo, en caso contrario se conserva el valor original. La
+valor del umbral, en caso contrario, se conserva el valor original. La
 expresión es
 \begin{equation*}
   destino(x, y) =
   \begin{cases}
-    255 & \text{si } entrada(x, y) > umbral \\
+    umbral & \text{si } entrada(x, y) > umbral \\
     entrada(x, y) & \text{cualquier otro caso}
   \end{cases}
 \end{equation*}
 \subsubsection{cv2.THRESH\_TOZERO}
-Todos los píxeles que superen el valor del umbral se les aplica el
-valor mínimo, en caso contrario se conserva el valor original. La
+Todos los píxeles que superen el valor del umbral conservan su valor
+original, en caso contrario, se les aplica el valor mínimo. La
 expresión es
 \begin{equation*}
   destino(x, y) =
   \begin{cases}
-    0 & \text{si } entrada(x, y) > umbral \\
-    entrada(x, y) & \text{cualquier otro caso}
+    entrada(x, y) & \text{si } entrada(x, y) > umbral \\
+    0  & \text{cualquier otro caso}
   \end{cases}
 \end{equation*}
 \subsubsection{cv2.THRESH\_TOZERO\_INV}
-Todos los píxeles que superen el valor del umbral conservar su valor,
-en caso contrario se les aplica el valor mínimo. La expresión es
+Todos los píxeles que superen el valor del umbral se les aplica el
+valor mínimo, en caso contrario, conservar el valor original. La
+expresión es
 \begin{equation*}
   destino(x, y) =
   \begin{cases}
-    entrada(x, y) & \text{si } entrada(x, y) > umbral \\
-    0 & \text{cualquier otro caso}
+    0  & \text{si } entrada(x, y) > umbral \\
+    entrada(x, y) & \text{cualquier otro caso}
   \end{cases}
 \end{equation*}
 \subsection{Adaptativos}
 En imágenes uniformes aplicar valores umbral globales y fijos suele
 ser una buena opción pero para imágenes no uniformes hay que adaptar
 dicho valor a cada área de la imagen.
-\subsubsection{cv2.ADAPTIVE_THRESH_MEAN_C }
-\subsubsection{cv2.ADAPTIVE_THRESH_GAUSSIAN_C}
+
+\subsubsection{cv2.ADAPTIVE\_THRESH\_MEAN\_C}
+\subsubsection{cv2.ADAPTIVE\_THRESH\_GAUSSIAN\_C}
 
 \subsection{Binarización Otsu}
 
