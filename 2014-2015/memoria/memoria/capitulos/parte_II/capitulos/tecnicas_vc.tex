@@ -1,12 +1,33 @@
 \chapter{Técnicas de visión computerizada}
 Aquí se detallan todas las técnicas aplicadas o descartadas a lo largo
-de la investigación. Se incluyen ejemplos.
-
+de la investigación. Incluye ejemplos de las tomografías para poder
+relacionar la técnica con el resultado visual.\\
+Toda la información presente en este capítulo ha sido redactada acorde
+a las siguientes fuentes:
+% TODO: Falta añadir bibliografías de Learn OpenCV, el tutorial de
+% Python y la API
 \section{Histogramas}
 Un histograma es un gráfico con la distribución de color o
-intensidades de la imagen. Es tan importante su estudio dentro de la
+intensidades de la imagen, por simplificación, suponemos siempre una
+imagen en escala de grises. Es tan importante su estudio dentro de la
 visión computerizada que se podría definir informalmente como el
 gráfico que contiene la naturaleza de la imagen.
+\begin{description}
+\item[Columnas:] representan intensidades. Cada columna tiene una
+  altura que corresponde proporcionalmente a la cantidad de píxeles
+  con dicho valor.
+\item[Dimensiones:] parámetros o número de datos a mostrar en el
+  histograma. En el caso de una escala de grises sólo hay una
+  dimensión, la intensidad, que puede ser 1 si el píxel tiene dicha
+  intensidad o 0 en caso contrario.
+\item[Rango:] es el número de columnas. En escala de grises el rango
+  es de 256 columnas desde 0 hasta 255.
+\end{description}
+
+\subsection{Cálculo}
+
+\subsection{Dibujado}
+
 \subsection{Ecualización}
 
 \section{Operaciones básicas}
@@ -37,9 +58,9 @@ un rectángulo o cuadrado definidos como los píxeles [$y_1$, $x_1$] y
 \section{Operaciones aritméticas}
 \subsection{Superposición}
 La superposición de dos imágenes (del mismo tipo, profundidad o una
-que sea un valor escalar) es la suma matricial de sus píxeles, asignando
-a cada imagen un peso diferente para dar la sensación de superposición
-y transparencia. La función sería:
+que sea un valor escalar) es la suma matricial de sus píxeles,
+asignando a cada imagen un peso diferente para dar la sensación de
+superposición y transparencia. La función sería:
 \begin{equation*}
   g(n) = (1 - \alpha)f_0(n) + \alpha f_1(n)
 \end{equation*}
@@ -58,7 +79,7 @@ Un espacio de color es un modelo matemático abstracto que describe la
 forma en la que los colores pueden representarse como tuplas de
 números. RGB, HSV o escala de grises son ejemplos de espacios de color. \\
 El espacio de color de una imagen se puede cambiar con la función
-\emph{cvtColor}.  Esta función permite las siguientes conversiones en
+\emph{cvtColor}. Esta función permite las siguientes conversiones en
 las dos direcciones:
 \begin{itemize}
 \item \textbf{RGB} --- \textbf{escala de grises}.
@@ -119,7 +140,7 @@ expresión es
   destino(x, y) =
   \begin{cases}
     entrada(x, y) & \text{si } entrada(x, y) > umbral \\
-    0  & \text{cualquier otro caso}
+    0 & \text{cualquier otro caso}
   \end{cases}
 \end{equation*}
 \subsubsection{cv2.THRESH\_TOZERO\_INV}
@@ -136,7 +157,8 @@ expresión es
 \subsection{Adaptativos}
 En imágenes uniformes aplicar valores umbral globales y fijos suele
 ser una buena opción pero para imágenes no uniformes hay que adaptar
-dicho valor a cada área de la imagen.
+dicho valor a cada área de la imagen. Por ello, se aplican las dos
+técnicas siguientes.
 
 \subsubsection{cv2.ADAPTIVE\_THRESH\_MEAN\_C}
 \subsubsection{cv2.ADAPTIVE\_THRESH\_GAUSSIAN\_C}
