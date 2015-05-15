@@ -108,13 +108,14 @@ grises.
 
 \section{Operaciones de \emph{threshold}}
 Las operaciones de \emph{threshold} convierten los píxeles de una
-imagen (en escala de grises [0 --- 255]) superiores a un valor de
-umbral a blanco [255] o a negro [0] según el \emph{threshold}
-aplicado.
+imagen (en escala de grises [0 --- 255]) superiores a un valor,
+conocido como valor de umbral, a blanco [255] o a negro [0], 
+según el \emph{threshold} aplicado.
 \subsection{Simples}
 \subsubsection{cv2.THRESH\_BINARY}
-Todos los píxeles que superen el valor del umbral se les aplica el
-valor máximo, el caso contrario, el valor mínimo. La expresión es
+Todos los píxeles con un valor mayor que el valor de umbral se transforman,
+asignándoles el valor máximo. Los que no lo superen, adquieren el valor mínimo. 
+La expresión es
 \begin{equation*}
   destino(x, y) =
   \begin{cases}
@@ -123,8 +124,9 @@ valor máximo, el caso contrario, el valor mínimo. La expresión es
   \end{cases}
 \end{equation*}
 \subsubsection{cv2.THRESH\_BINARY\_INV}
-Todos los píxeles que superen el valor del umbral se les aplica el
-valor mínimo, en caso contrario, el valor máximo. La expresión es
+Es la operación contraria al anterior: a los píxeles con un valor mayor que 
+el valor de umbral se les asigna el valor mínimo, mientras que los demás 
+adquieren el valor máximo. La expresión es
 \begin{equation*}
   destino(x, y) =
   \begin{cases}
@@ -133,9 +135,9 @@ valor mínimo, en caso contrario, el valor máximo. La expresión es
   \end{cases}
 \end{equation*}
 \subsubsection{cv2.THRESH\_TRUNC}
-Todos los píxeles que superen el valor del umbral se les aplica el
-valor del umbral, en caso contrario, se conserva el valor original. La
-expresión es
+Se trunca el valor de los píxeles de forma que todos los píxeles que superen 
+el valor de umbral toman dicho valor. En caso contrario se conserva el valor 
+original. La expresión es
 \begin{equation*}
   destino(x, y) =
   \begin{cases}
@@ -144,9 +146,9 @@ expresión es
   \end{cases}
 \end{equation*}
 \subsubsection{cv2.THRESH\_TOZERO}
-Todos los píxeles que superen el valor del umbral conservan su valor
-original, en caso contrario, se les aplica el valor mínimo. La
-expresión es
+Es la operación contraria a la anterior: los píxeles que superen el valor del 
+umbral conservan su valor original, mientras que en el caso contrario se les 
+aplica el valor mínimo. La expresión es
 \begin{equation*}
   destino(x, y) =
   \begin{cases}
@@ -155,8 +157,8 @@ expresión es
   \end{cases}
 \end{equation*}
 \subsubsection{cv2.THRESH\_TOZERO\_INV}
-Todos los píxeles que superen el valor del umbral se les aplica el
-valor mínimo, en caso contrario, conservar el valor original. La
+A los píxeles que superen el valor de umbral se les aplica el
+valor mínimo, mientras que en caso contrario conservan el valor original. La
 expresión es
 \begin{equation*}
   destino(x, y) =
@@ -219,9 +221,9 @@ Posteriormente hay que aplicar la función de afinidad con la matriz de transfor
 \end{center}
 
 \section{\emph{Blur}}
-\emph{Blur} o suavizado es una técnica usada para principalmente
+\emph{Blur} o suavizado es una técnica usada con el objetivo principal de
 reducir el ruido y los artefactos (contenido de alta frecuencia) de la
-imagen aunque también se usa para disminuir la resolución. Se basa en
+imagen, aunque también se usa para disminuir la resolución. Se basa en
 aplicar a la imagen un \emph{kernel} de convolución como el siguiente.
 \subsection{Promedio}
 \begin{equation*}

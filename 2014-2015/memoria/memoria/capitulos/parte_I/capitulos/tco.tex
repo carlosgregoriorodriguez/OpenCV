@@ -11,7 +11,7 @@ enfermedades, especialmente, de difícil identificación oftalmológica.
 
 \section{Máquina \glsentrytext{tcog}}
 Una máquina \gls{tcoa} se utiliza para la exploración en tiempo real, sin ser
-invasiva e indolora, para obtener con resolución micrométrica imágenes
+invasiva ni dolorosa, para obtener con resolución micrométrica imágenes
 de estructuras de tejidos vivos. Con el paso del tiempo se ha hecho
 insustituible en el diagnóstico y control de numerosas patologías
 oculares, así como también la mejora de su rapidez y precisión.
@@ -43,8 +43,8 @@ funcionamiento de estas máquinas. Consiste en dirigir la radiación a
 un divisor de haces que a su vez los divide en dos. Un haz se dirige
 por un medio conocido mientras que el otro por el medio a
 estudiar. Tras esto, ambos haces se reflejan para hacerlos coincidir
-en un mismo punto, patrón del que se registra la interferencia entre
-ambos para medir la intensidad y retardo del que recorrió el medio
+en un mismo punto, usándolo como patrón para registrar la interferencia entre
+ambos y medir la intensidad y el retardo del haz que recorrió el medio
 desconocido.
 
 \subsection{Historia}
@@ -55,31 +55,32 @@ se convertía en el factor crítico y limitante de la velocidad de
 captura, en los mejores casos, \emph{400 barridos por segundo}.\\
 La velocidad de barrido es crítica principalmente por dos motivos:
 \begin{description}
-\item [Disminución del tiempo de estudio] de la estructura ocular. Lo
-  que reduce la irritación y la sequedad del ojo del paciente que al
-  tener que permanecer abierto durante todo el proceso incide en la
+\item [Disminución del tiempo de estudio] de la estructura ocular. Esto
+  que reduce la irritación y la sequedad del ojo del paciente que, al
+  tenerlo abierto durante todo el proceso, hacen que se reduzca la
   calidad del resultado obtenido.
-\item [Aumento de la resolución y calidad] directamente proporcional
-  debido al mayor número de muestras realizadas.
+\item [La resolución y calidad] son directamente proporcionales
+  número de muestras realizadas. Es decir, cuantos más barridos,
+  mejores resultados.
 \end{description}
 Con el paso del tiempo y el perfeccionamiento de la técnica, se hizo
 posible fijar el espejo y aumentar así los barridos por segundo
 mediante el uso del \emph{dominio espectral o de Fourier}. Esta
 técnica se sustenta en una serie de dispositivos que analizan el haz a
-comparar con el de referencia. Con el espejo fijo en un punto y estos
-nuevos dispositivos, supuso un avance enorme al permitir \emph{25.000
-  barridos por segundo}.\\
+comparar con el de referencia. Con el espejo fijo en un punto y los
+nuevos dispositivos, se consiguió hacer los barridos hasta 700 veces
+más rápido, alcanzando los \emph{25.000 barridos por segundo}.\\
 Actualmente, las máquinas más recientes trabajan con una variante del
-\emph{dominio espectral}, se denominan de tipo
-\emph{swept-source}. Utilizan el dominio de la frecuencia codificada
+\emph{dominio espectral}: las llamadas de tipo
+\emph{swept-source}. Estas utilizan el dominio de la frecuencia codificada
 en el tiempo (\emph{Time encoded frequency domain}). Para ello, un
 láser sintonizable emite el haz con una longitud de onda fija que
 muestrea secuencialmente el medio con una serie de longitudes de onda
-individuales que posteriormente descodifica. Así, alcanza un
-\emph{100.000 muestreos por segundo}. Además proporciona imágenes muy
-precisas y con mayor profundidad mostrando tejidos que anteriormente
-había que enfocar en niveles más profundos como la \textbf{coroides} o
-menos detalle como el vitreo.
+individuales que posteriormente descodifica. Así, alcanza una velocidad de
+\emph{100.000 muestreos por segundo}. Además, proporciona imágenes muy
+precisas y con mayor profundidad, mostrando tejidos que anteriormente
+había que enfocar en niveles más profundos, como la \textbf{coroides}, o
+el vítreo.
 
 \subsection{Tipo, resolución y densidad de muestreo}
 \subsubsection{Tipo}
@@ -96,22 +97,22 @@ diferentes.
 \item Resolución \textbf{axial}: limitada por la longitud de
   coherencia de la onda.
 \item Resolución \textbf{transversal}: dependiente de la anchura del
-  haz de luz incidente
+  haz de luz incidente.
 \end{itemize}
 \subsubsection{Densidad}
 La densidad de muestreo se define como la cantidad de
 \emph{\textbf{A-scan}} por unidad de volumen de tejido. Es
-directamente al tiempo de exploración.
+directamente proporcional al tiempo de exploración.
 
 \subsection{Número de muestreos en el mismo punto o \emph{frame
     averaging}}
 Para incrementar la calidad de una imagen es recomendable aumentar el
 número de muestreos puesto que las máquinas \gls{tcoa} usan luz
-parcialmente coherente para realizar las exploraciones, reflexiones
+parcialmente coherente y las reflexiones
 adyacentes producen interferencias o ruido en el tejido. Este ruido es
-siempre distinto en cada exploración por lo que al repetir cada punto
-del tejido y promediar su información al reconstruir la imagen, el
-ruido desaparece. Hace posible distinguir capas con bajo contraste o
+siempre distinto en cada exploración por lo que, al repetir el proceso
+en cada punto del tejido y hacer su promedio para reconstruir la imagen, el
+ruido desaparece. Esto hace posible distinguir capas con bajo contraste o
 muy finas.\\
 Aunque el aumento de muestreos a priori puede parecer una buena
 técnica para mejorar la calidad, requiere incrementar
@@ -126,7 +127,7 @@ La estimación de calidad-ruido se basa en la recomendación de
 \subsection{Tipos de exploración}
 Lo habitual es la \emph{exploración lineal} porque son las más rápidas
 de realizar y tolerables hasta para los ojos con
-fatiga.\\
+fatiga, habitual en las personas a partir de cierta edad.\\
 La reconstrucción en 3D de estructuras oculares mediante cubos
 proporciona mucha más información y permite seleccionar
 individualmente cada corte o punto que se quiera
@@ -141,7 +142,7 @@ Un aspecto crítico de las máquinas \gls{tcoa} es el software que
 incorporan mediante algoritmos de segmentación para medir las
 dimensiones de las estructuras previamente exploradas. Teniendo en
 cuenta que al tener cada máquina su propia estrategia de exploración,
-un mismo tejido en máquinas \gls{tcoa} distintas muy seguramente de
+un mismo tejido en máquinas \gls{tcoa} distintas muy seguramente proporcione
 medidas diferentes.
 
 \subsection{Seguimiento}
@@ -156,16 +157,16 @@ punto con respecto al punto de una exploración anterior.
 
 \subsection{Otras características}
 La mayoría de las máquinas \gls{tcoa} tienen por objetivo el segmento
-anterior o el posterior pero no los dos simultáneamente por tener
-longitudes de onda idóneas diferentes.\\
-Sin embargo, las que están dirigidas al segmento posterior si se aleja
-la máquina del ojo, también puede explorar el segmento anterior.
+anterior o el posterior, pero no los dos simultáneamente, ya que
+las longitudes de onda idóneas para cada uno son diferentes.\\
+Sin embargo, si se aleja la máquina del ojo, las ondas dirigidas 
+al segmento posterior también pueden usarse para explorar el segmento anterior.
 
 \subsection{Informes}
 Las máquinas \gls{tcoa} emiten informes de todas las exploraciones de
 uno o ambos ojos con múltiples parámetros. \emph{Informes de análisis}
 sobre una única exploración o sobre diversas marcando los cambios. Con
-algunas enfermedades incluso además de un informe de análisis se puede
+algunas enfermedades además de un informe de análisis, se puede
 generar un \emph{informe de evolución} acerca del grosor de algunas
 capas.\\
 Todos los informes para saber que sus datos son los correctos tienen
