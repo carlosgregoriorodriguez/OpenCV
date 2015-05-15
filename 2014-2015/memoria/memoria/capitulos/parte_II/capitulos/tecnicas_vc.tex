@@ -25,10 +25,21 @@ gráfico que contiene la naturaleza de la imagen.
 \end{description}
 
 \subsection{Cálculo}
+Para realizar el cálculo de un histograma y por simplificación se usa
+una biblioteca. Tanto \emph{Numpy} como \emph{OpenCV} son capaces de
+realizar los cálculos necesarios pero por mucha mayor eficiencia se usa
+\emph{OpenCV}.
 
 \subsection{Dibujado}
+El resultado de un histograma es una matriz de \emph{Numpy} por lo que
+para poder dibujarla tiene que usarse \emph{Matplotlib} o transformar
+la matriz en una imagen de \emph{OpenCV}.
 
 \subsection{Ecualización}
+La ecualización de un histograma consiste en distribuir los píxeles
+por por todo el rango. Esta acción aumenta el contraste en aquellas
+imágenes que tienen la mayoría confinados en una zona pequeña del
+rango.
 
 \section{Operaciones básicas}
 \subsection{Acceso a píxeles}
