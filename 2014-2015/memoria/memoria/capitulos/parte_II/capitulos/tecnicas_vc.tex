@@ -6,7 +6,10 @@ Toda la información presente en este capítulo ha sido redactada acorde
 a las siguientes fuentes:
 % TODO: Falta añadir bibliografías de Learn OpenCV, el tutorial de
 % Python y la API
-\section{Histogramas}
+
+\section{Conocimientos previos necesarios}
+
+\subsection{Histogramas}
 Un histograma es un gráfico con la distribución de color o
 intensidades de la imagen, por simplificación, suponemos siempre una
 imagen en escala de grises. Es tan importante su estudio dentro de la
@@ -24,22 +27,35 @@ gráfico que contiene la naturaleza de la imagen.
   es de 256 columnas desde 0 hasta 255.
 \end{description}
 
-\subsection{Cálculo}
+\subsubsection{Cálculo}
 Para realizar el cálculo de un histograma y por simplificación se usa
 una biblioteca. Tanto \emph{Numpy} como \emph{OpenCV} son capaces de
 realizar los cálculos necesarios pero por eficiencia se usa
 \emph{OpenCV}.
 
-\subsection{Dibujado}
+\subsubsection{Dibujado}
 El resultado de un histograma es una matriz de \emph{Numpy} por lo que
 para poder dibujarla tiene que usarse \emph{Matplotlib} o transformar
 la matriz en una imagen de \emph{OpenCV}.
 
-\subsection{Ecualización}
+\subsubsection{Ecualización}
 La ecualización de un histograma consiste en distribuir los píxeles
 por todo el rango. Esta acción aumenta el contraste en aquellas
 imágenes que tienen la mayoría confinados en una zona pequeña del
 rango.
+
+\subsection{Convolución de matrices}
+La \emph{convolución} de una matriz sobre una imagen que al fin y al
+cabo es otra matriz, es la principal base de la mayoría de las técnicas aquí
+descritas. \\
+Un \emph{kernel} es una matriz fija de coeficientes numéricos e impar
+para tener un elemento en el centro. \\
+Para calcular la convolución de un píxel concreto se sitúa éste en el
+centro del \emph{kernel} y se calcula su valor con respecto a los
+píxeles de alrededor multiplicando su valor por el valor del
+\emph{kernel} para esa posición. Finalmente cada multiplicación se
+suma y se guarda el resultado total en la posición central. Este
+proceso se repite con cada píxel.
 
 \section{Operaciones básicas}
 \subsection{Acceso a píxeles}
@@ -174,12 +190,21 @@ expresión es
 En imágenes uniformes aplicar valores umbral globales y fijos suele
 ser una buena opción pero para imágenes no uniformes hay que adaptar
 dicho valor a cada área de la imagen. Por ello, se aplican las dos
-técnicas siguientes.
+técnicas siguientes. En ambas, el área a realizar el \emph{threshold}
+depende del tamaño del \emph{kernel} usado.
 
 \subsubsection{cv2.ADAPTIVE\_THRESH\_MEAN\_C}
-\subsubsection{cv2.ADAPTIVE\_THRESH\_GAUSSIAN\_C}
+El valor de cada píxel se establece por la media de sus vecinos.
 
-\subsection{Binarización Otsu}
+\subsubsection{cv2.ADAPTIVE\_THRESH\_GAUSSIAN\_C}
+El valor de cada píxel se establece por el resultado de una función
+Gaussiana a partir de sus vecinos.
+
+\subsection{ Otsu}
+Este \emph{threshold} calcula el valor umbral a partir del histograma
+de la imagen. La precisión de esta técnica depende de que el
+histograma sea lo más bimodal posible, en los que predomina dos
+columnas.
 
 \section{Transformaciones geométricas}
 Las transformaciones geométricas son aquellas técnicas en las que se
