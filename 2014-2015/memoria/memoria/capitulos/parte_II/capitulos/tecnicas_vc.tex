@@ -46,8 +46,8 @@ rango.
 
 \subsection{Convolución de matrices}
 La \emph{convolución} de una matriz sobre una imagen que al fin y al
-cabo es otra matriz, es la principal base de la mayoría de las técnicas aquí
-descritas. \\
+cabo es otra matriz, es la principal base de la mayoría de las
+técnicas aquí descritas. \\
 Un \emph{kernel} es una matriz fija de coeficientes numéricos e impar
 para tener un elemento en el centro. \\
 Para calcular la convolución de un píxel concreto se sitúa éste en el
@@ -55,7 +55,14 @@ centro del \emph{kernel} y se calcula su valor con respecto a los
 píxeles de alrededor multiplicando su valor por el valor del
 \emph{kernel} para esa posición. Finalmente cada multiplicación se
 suma y se guarda el resultado total en la posición central. Este
-proceso se repite con cada píxel.
+proceso se repite con cada píxel. \\
+La ecuación que representa el proceso anterior si definimos la imagen
+como $I(x, y)$, el \emph{kernel} como $K(i, j)$ (donde
+$0 < i < M_j - 1$ y $0 < j < M_j - 1$) y el centro de la matriz de
+convolución es $(c_i, c_j)$ definimos la imagen resultante como
+\begin{equation*}
+  R(x, y) = \sum_{i=0}^{M_i-1} \sum_{j=0}^{M_j-1}  I(x + i - c_i, y + j - c_j)K(i,j)
+\end{equation*}
 
 \section{Operaciones básicas}
 \subsection{Acceso a píxeles}
@@ -139,8 +146,8 @@ La expresión es
     0 & \text{cualquier otro caso}
   \end{cases}
 \end{equation*}
-\includegraphics {imagenes/EjemploOriginal.png}
-\includegraphics {imagenes/EjemploThreshBin.png}
+\includegraphics[scale=0.22]{imagenes/EjemploOriginal.png}
+\includegraphics[scale=0.22]{imagenes/EjemploThreshBin.png}
 
 \subsubsection{cv2.THRESH\_BINARY\_INV}
 Es la operación contraria al anterior: a los píxeles con un valor mayor que 
