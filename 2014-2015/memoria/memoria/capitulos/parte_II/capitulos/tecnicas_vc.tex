@@ -34,8 +34,8 @@ realizar los cálculos necesarios pero por eficiencia se usa
 \emph{OpenCV}.
 
 \subsubsection{Dibujado}
-El resultado de un histograma es una matriz de \emph{Numpy} por lo que
-para poder dibujarla tiene que usarse \emph{Matplotlib} o transformar
+El resultado de un histograma es una matriz de \emph{Numpy} por lo que,
+para poder dibujarla, tiene que usarse \emph{Matplotlib} o transformar
 la matriz en una imagen de \emph{OpenCV}.
 
 \subsubsection{Ecualización}
@@ -45,26 +45,26 @@ imágenes que tienen la mayoría confinados en una zona pequeña del
 rango.
 
 \subsection{Convolución de matrices}
-La \emph{convolución} de una matriz sobre una imagen que al fin y al
+La \emph{convolución} de una matriz sobre una imagen, que al fin y al
 cabo es otra matriz, es la principal base de la mayoría de las
 técnicas aquí descritas. \\
-Un \emph{kernel} es una matriz fija de coeficientes numéricos y en
-todas las técnicas de este capítulo de dimensión \textbf{impar}
+Un \emph{kernel} es una matriz fija de coeficientes numéricos y 
+dimensión \textbf{impar} que se usa en todas las técnicas de este capítulo 
 para tener un elemento como el elemento central. \\
 Para calcular la convolución de un píxel concreto se sitúa éste en el
 centro del \emph{kernel} y se calcula su valor con respecto a los
-píxeles de alrededor multiplicando su valor por el valor del
-\emph{kernel} para esa posición. Finalmente cada multiplicación se
+píxeles de alrededor, multiplicando su valor por el valor del
+\emph{kernel} para esa posición. Finalmente, cada multiplicación se
 suma y se guarda el resultado total en la posición central. Este
 proceso se repite con cada píxel. \\
-La ecuación que representa el proceso anterior si definimos la imagen
+La ecuación que representa el proceso anterior, definiendo la imagen
 como $I(x, y)$, el \emph{kernel} como $K(i, j)$ (donde
 $0 < i < M_j - 1$ y $0 < j < M_j - 1$) y el centro de la matriz de
 convolución es $(c_i, c_j)$ definimos la imagen resultante como
 \begin{equation*}
   R(x, y) = \sum_{i=0}^{M_i-1} \sum_{j=0}^{M_j-1}  I(x + i - c_i, y + j - c_j)K(i,j)
 \end{equation*}
-En el caso de \emph{OpenCV} tanto la imagen original \emph{I} como la
+En el caso de \emph{OpenCV}, tanto la imagen original \emph{I} como la
 imagen resultante \emph{R} son del mismo tamaño. Esto se debe a que
 \emph{OpenCV} duplica el borde de manera virtual para que el
 \emph{kernel} de convolución se pueda aplicar hasta el mismo borde de
@@ -327,13 +327,13 @@ A modo de ejemplo, el \emph{kernel} de $3x3$ es.
   \end{bmatrix}
 \end{equation*}
 \subsection{Basado en una función Gaussiana}
-Esta técnica smuestra buenos resultados sólo si se utiliza para
+Esta técnica muestra buenos resultados sólo si se utiliza para
 reducir ruido generado por una función Gaussiana. Cabe destacar que al
 aplicar este método puede darse como resultado valores de píxeles que
 no estuvieran en la imagen original. 
 \subsection{Basado en la mediana}
 En el caso de un \emph{median Blur} y como oposición al \emph{Blur},
-el cual se basa en la media, el \emph{median Blur} calcula el valor
+,que se basa en la media, el \emph{median Blur} calcula el valor
 del píxel central mediante la mediana de los píxeles colindantes. \\
 Esta técnica es muy útil para reducir el ruido granulado de la
 imagen. 
