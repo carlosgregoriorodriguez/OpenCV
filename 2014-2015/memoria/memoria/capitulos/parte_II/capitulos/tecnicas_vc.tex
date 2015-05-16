@@ -71,9 +71,9 @@ imagen resultante \emph{R} son del mismo tamaño. Esto se debe a que
 la imagen. Hay distintas maneras de duplicar el borde pero aquí sólo
 se muestra la más simple y sobre el eje de abscisas:
 \begin{center}
-$imagen(-dx, y) = imagen(0, y)$
-\\
-$imagen(w + dx) = imagen(w - 1, y)$
+  $imagen(-dx, y) = imagen(0, y)$
+  \\
+  $imagen(w + dx) = imagen(w - 1, y)$
 \end{center}
 
 
@@ -137,21 +137,20 @@ las dos direcciones:
 \item \textbf{RGB} --- \textbf{Bayer}.
 \end{itemize}
 Estas transformaciones permiten la detección rápida y sencilla de
-características
-de interés. \\
+características de interés. \\
 Para este proyecto se han usado las que implican RGB y escala de
 grises.
 
 \section{Operaciones de \emph{threshold}}
 Las operaciones de \emph{threshold} convierten los píxeles de una
 imagen (en escala de grises [0 --- 255]) superiores a un valor,
-conocido como valor de umbral, a blanco [255] o a negro [0], 
-según el \emph{threshold} aplicado.
+conocido como valor de umbral, a blanco [255] o a negro [0], según el
+\emph{threshold} aplicado.
 \subsection{Simples}
 \subsubsection{cv2.THRESH\_BINARY}
-Todos los píxeles con un valor mayor que el valor de umbral se transforman,
-asignándoles el valor máximo. Los que no lo superen, adquieren el valor mínimo. 
-La expresión es
+Todos los píxeles con un valor mayor que el valor de umbral se
+transforman, asignándoles el valor máximo. Los que no lo superen,
+adquieren el valor mínimo.  La expresión es
 \begin{equation*}
   destino(x, y) =
   \begin{cases}
@@ -166,9 +165,9 @@ obtenido tras aplicar el filtro):
 \includegraphics[scale=0.40]{imagenes/EjemploTecnicasThresholdBinary_127.png}
 
 \subsubsection{cv2.THRESH\_BINARY\_INV}
-Es la operación contraria al anterior: a los píxeles con un valor mayor que 
-el valor de umbral se les asigna el valor mínimo, mientras que los demás 
-adquieren el valor máximo. La expresión es
+Es la operación contraria al anterior: a los píxeles con un valor
+mayor que el valor de umbral se les asigna el valor mínimo, mientras
+que los demás adquieren el valor máximo. La expresión es
 \begin{equation*}
   destino(x, y) =
   \begin{cases}
@@ -184,9 +183,9 @@ obtenido tras aplicar el filtro):
 
 
 \subsubsection{cv2.THRESH\_TRUNC}
-Se trunca el valor de los píxeles de forma que todos los píxeles que superen 
-el valor de umbral toman dicho valor. En caso contrario se conserva el valor 
-original. La expresión es
+Se trunca el valor de los píxeles de forma que todos los píxeles que
+superen el valor de umbral toman dicho valor. En caso contrario se
+conserva el valor original. La expresión es
 \begin{equation*}
   destino(x, y) =
   \begin{cases}
@@ -202,9 +201,9 @@ obtenido tras aplicar el filtro):
 
 
 \subsubsection{cv2.THRESH\_TOZERO}
-Es la operación contraria a la anterior: los píxeles que superen el valor del 
-umbral conservan su valor original, mientras que en el caso contrario se les 
-aplica el valor mínimo. La expresión es
+Es la operación contraria a la anterior: los píxeles que superen el
+valor del umbral conservan su valor original, mientras que en el caso
+contrario se les aplica el valor mínimo. La expresión es
 \begin{equation*}
   destino(x, y) =
   \begin{cases}
@@ -220,8 +219,8 @@ obtenido tras aplicar el filtro):
 
 
 \subsubsection{cv2.THRESH\_TOZERO\_INV}
-A los píxeles que superen el valor de umbral se les aplica el
-valor mínimo, mientras que en caso contrario conservan el valor original. La
+A los píxeles que superen el valor de umbral se les aplica el valor
+mínimo, mientras que en caso contrario conservan el valor original. La
 expresión es
 \begin{equation*}
   destino(x, y) =
@@ -299,10 +298,10 @@ Posteriormente hay que aplicar la función de afinidad con la matriz de transfor
 \end{center}
 
 \section{\emph{Blur}}
-\emph{Blur} o suavizado es una técnica usada con el objetivo principal de
-reducir el ruido y los artefactos (contenido de alta frecuencia) de la
-imagen, aunque también se usa para disminuir la resolución. Se basa en
-aplicar a la imagen un \emph{kernel} de convolución.
+\emph{Blur} o suavizado es una técnica usada con el objetivo principal
+de reducir el ruido y los artefactos (contenido de alta frecuencia) de
+la imagen, aunque también se usa para disminuir la resolución. Se basa
+en aplicar a la imagen un \emph{kernel} de convolución.
 \subsection{Basado en la media}
 En el caso de un \emph{blur}, se suman todos los valores de los
 píxeles contenidos en la matriz y se divide entre el número de
@@ -315,9 +314,10 @@ vecinos. El \emph{kernel} a aplicar es el siguiente
     \vdots & \vdots & \ddots & \vdots \\
     1_{n1} & 1_{n2} & \cdots & 1_{nn} \\
   \end{bmatrix}
+  \text{siendo \emph{n} un número \textbf{impar}}
 \end{equation*}
 
-A modo de ejemplo, el \emph{kernel} de $3x3$ es.
+A modo de ejemplo, el \emph{kernel} de dimensión $3\times3$ es
 \begin{equation*}
   K = \frac{1}{9}
   \begin{bmatrix}
@@ -327,16 +327,30 @@ A modo de ejemplo, el \emph{kernel} de $3x3$ es.
   \end{bmatrix}
 \end{equation*}
 \subsection{Basado en una función Gaussiana}
-Esta técnica muestra buenos resultados sólo si se utiliza para
-reducir ruido generado por una función Gaussiana. Cabe destacar que al
-aplicar este método puede darse como resultado valores de píxeles que
-no estuvieran en la imagen original. 
+Esta técnica es la que mejor resultados suele dar y especialmente si
+se utiliza para reducir ruido generado por un \emph{kernel
+  Gaussiano}. Cabe destacar que al aplicar este método puede darse
+como resultado valores de píxeles que no estuvieran en la imagen
+original. Este \emph{Blur} es el menos eficiente de todos pero
+\emph{OpenCV} lo optimiza para las sigmas $\sigma_x$ e $\sigma_y$
+predeterminadas para los \emph{kernels} de $3\times3$, $5\times5$ y
+$\times7$. Debido a esto, sólo mostraremos como se
+generan estas sigmas predeterminas y un ejemplo con ellas.\\
+\emph{OpenCV} obliga a introducir $\sigma_x$ y en el caso de que este
+sea 0, se determinan ambos sigmas a partir del tamaño del
+\emph{kernel} introducido mediante las fórmulas siguientes:
+\begin{equation*}
+  \sigma_x = \left(\frac{n_x}{2} - 1 \right) \cdot 0,30 + 0.80, n_x = \text{anchura del \emph{kernel}}
+\end{equation*}
+\begin{equation*}
+  \sigma_y = \left(\frac{n_y}{2} - 1 \right) \cdot 0,30 + 0.80, n_y = \text{altura del \emph{kernel}}
+\end{equation*}
+
 \subsection{Basado en la mediana}
 En el caso de un \emph{median Blur} y como oposición al \emph{Blur},
 ,que se basa en la media, el \emph{median Blur} calcula el valor
 del píxel central mediante la mediana de los píxeles colindantes. \\
-Esta técnica es muy útil para reducir el ruido granulado de la
-imagen. 
+Esta técnica es muy útil para reducir el ruido granulado de la imagen.
 
 \section{Transformaciones morfológicas}
 Las operaciones de transformación morfológicas se aplican sobre la
