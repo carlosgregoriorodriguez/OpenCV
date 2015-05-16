@@ -159,8 +159,11 @@ La expresión es
     0 & \text{cualquier otro caso}
   \end{cases}
 \end{equation*}
-\includegraphics[scale=0.22]{imagenes/EjemploOriginal.png}
-\includegraphics[scale=0.22]{imagenes/EjemploThreshBin.png}
+Ejemplo para un valor de umbral de 127 (Arriba original y abajo el resultado
+obtenido tras aplicar el filtro):
+
+\includegraphics[scale=0.40]{imagenes/EjemploTecnicasThresholdOriginal.png}\\
+\includegraphics[scale=0.40]{imagenes/EjemploTecnicasThresholdBinary_127.png}
 
 \subsubsection{cv2.THRESH\_BINARY\_INV}
 Es la operación contraria al anterior: a los píxeles con un valor mayor que 
@@ -173,6 +176,13 @@ adquieren el valor máximo. La expresión es
     255 & \text{cualquier otro caso}
   \end{cases}
 \end{equation*}
+Ejemplo para un valor de umbral de 127 (Arriba original y abajo el resultado
+obtenido tras aplicar el filtro):
+
+\includegraphics[scale=0.40]{imagenes/EjemploTecnicasThresholdOriginal.png}\\
+\includegraphics[scale=0.40]{imagenes/EjemploTecnicasThresholdBinaryInv_127.png}
+
+
 \subsubsection{cv2.THRESH\_TRUNC}
 Se trunca el valor de los píxeles de forma que todos los píxeles que superen 
 el valor de umbral toman dicho valor. En caso contrario se conserva el valor 
@@ -184,6 +194,13 @@ original. La expresión es
     entrada(x, y) & \text{cualquier otro caso}
   \end{cases}
 \end{equation*}
+Ejemplo para un valor de umbral de 127 (Arriba original y abajo el resultado
+obtenido tras aplicar el filtro):
+
+\includegraphics[scale=0.40]{imagenes/EjemploTecnicasThresholdOriginal.png}\\
+\includegraphics[scale=0.40]{imagenes/EjemploTecnicasThresholdTrunc_127.png}
+
+
 \subsubsection{cv2.THRESH\_TOZERO}
 Es la operación contraria a la anterior: los píxeles que superen el valor del 
 umbral conservan su valor original, mientras que en el caso contrario se les 
@@ -195,6 +212,13 @@ aplica el valor mínimo. La expresión es
     0 & \text{cualquier otro caso}
   \end{cases}
 \end{equation*}
+Ejemplo para un valor de umbral de 127 (Arriba original y abajo el resultado
+obtenido tras aplicar el filtro):
+
+\includegraphics[scale=0.40]{imagenes/EjemploTecnicasThresholdOriginal.png}\\
+\includegraphics[scale=0.40]{imagenes/EjemploTecnicasThresholdTo0_127.png}
+
+
 \subsubsection{cv2.THRESH\_TOZERO\_INV}
 A los píxeles que superen el valor de umbral se les aplica el
 valor mínimo, mientras que en caso contrario conservan el valor original. La
@@ -207,6 +231,13 @@ expresión es
   \end{cases}
 \end{equation*}
 \subsection{Adaptativos}
+Ejemplo para un valor de umbral de 127 (Arriba original y abajo el resultado
+obtenido tras aplicar el filtro):
+
+\includegraphics[scale=0.40]{imagenes/EjemploTecnicasThresholdOriginal.png}\\
+\includegraphics[scale=0.40]{imagenes/EjemploTecnicasThresholdTo0Inv_127.png}
+
+
 En imágenes uniformes aplicar valores umbral globales y fijos suele
 ser una buena opción pero para imágenes no uniformes hay que adaptar
 dicho valor a cada área de la imagen. Por ello, se aplican las dos
