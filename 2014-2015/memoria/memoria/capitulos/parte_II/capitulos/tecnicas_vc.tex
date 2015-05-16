@@ -365,6 +365,7 @@ A diferencia de los \emph{kernel} de convolución, los \emph{kernel}
 morfológicos no necesitan ser de dimensión cuadrada ni contener
 valores numéricos porque se utilizan como referencia para indicar las
 posiciones de los píxeles.
+\subsection{\emph{Erosion}}
 Es una técnica que usa un \emph{kernel} a modo de máscara, sustituye
 el píxel central por el \emph{mínimo local} de sus vecinos. Si algún
 vecino es un píxel negro, automáticamente el píxel central se
@@ -386,6 +387,7 @@ reduciendo sus concavidades. La fórmula es:
 \begin{equation*}
   dilate(x, y) = \max_{\substack{(x', y' \in kernel)}} imagen(x + x', y + y')
 \end{equation*}
+
 \subsection{\emph{Opening}}
 La técnica de \emph{Opening} consiste en la realización de un
 \emph{Erode} seguido de un \emph{Dilate}. Se utiliza para la
