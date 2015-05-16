@@ -359,8 +359,18 @@ juntar elementos. El \emph{kernel} aplicado a la imagen define el
 resultado de la operación. Para enteder mejor la operación supondremos
 que la imagen está \emph{binarizada} (píxeles únicamente blancos o
 negros)
-\subsection{\emph{Erosion}}
+
 \subsection{\emph{Dilation}}
+Esta operación transforma la imagen usando un \emph{kernel} de cualquier tamaño,
+de forma que el valor del píxel en el centro de dicho \emph{kernel} se reemplaza
+por el valor máximo de los píxeles del mismo. De esta forma se consigue dilatar
+las zonas más claras de la imagen.
+ 
+\subsection{\emph{Erosion}}
+Esta operación es la contraria a la anterior, reemplazando, en este caso, el valor
+del píxel central por el del mínimo local del \emph{kernel}. Así se consigue contraer
+la zona más clara de la imagen.
+
 \subsection{\emph{Opening}}
 \subsection{\emph{Closing}}
 \subsection{Gradiente morfológico}
