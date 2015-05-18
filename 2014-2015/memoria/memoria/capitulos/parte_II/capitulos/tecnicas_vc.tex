@@ -314,7 +314,7 @@ vecinos. El \emph{kernel} a aplicar es el siguiente
     \vdots & \vdots & \ddots & \vdots \\
     1_{n1} & 1_{n2} & \cdots & 1_{nn} \\
   \end{bmatrix}
-  \text{siendo \emph{n} un número \textbf{impar}}
+  \text{siendo \emph{n} un número impar}
 \end{equation*}
 
 A modo de ejemplo, el \emph{kernel} de dimensión $3\times3$ es
@@ -407,9 +407,63 @@ del artefacto. La expresión es:
 \end{equation*}
 
 \section{Gradientes}
+El cálculo de gradientes o bordes se realiza mediante la convolución
+de derivadas parciales del estilo:
+\begin{equation*}
+\frac{\delta^{2}}{\delta x \delta y}
+\end{equation*}
+Por simplificación y eficiencia, nos centraremos en describir sus
+aproximaciones, más fáciles de entender.
+
 \subsection{Sobel}
+\begin{center}
+$
+G_x = \begin{bmatrix}
+    -1 & 0 & +1 \\
+    -2 & 0 & +2 \\
+    -1 & 0 & +1 \\
+  \end{bmatrix}
+  \hspace{0.5cm} \text{ y } \hspace{0.5cm} G_y = \begin{bmatrix}
+    -1 & -2 & -1 \\
+    0 & 0 & 0 \\
+    +1 & +2 & +1 \\
+  \end{bmatrix}
+  $
+  \\[0.5cm]
+  $G = \sqrt{G_x\,^2 + G_y\,{2}}$
+  \\[0.5cm]
+  $\Theta= \arctan\left(frac{G_y}{G_x} \right)$
+\end{center}
+
 \subsection{Scharr}
+\begin{center}
+  $ G_x = \begin{bmatrix}
+    +3 & 0 & -3 \\
+    +10 & 0 & -10 \\
+    +3 & 0 & -3 \\
+  \end{bmatrix}
+  \hspace{0.5cm} \text{ y } \hspace{0.5cm} G_y = \begin{bmatrix}
+    +3 & +10 & +10 \\
+    0 & 0 & 0 \\
+    -3 & -10 & -10 \\
+  \end{bmatrix}
+$
+\end{center}
 \subsection{Laplaciana}
+Calcula la \emph{Laplaciana} de la imagen dada por la relación:
+\begin{equation*}
+Laplaciana(imagen) = \frac{\delta^{2} imagen}{\delta x^{2}} + \frac{\delta^{2} imagen}{\delta y^{2}}
+\end{equation*}
+donde cada derivada se encuentra usando derivadas de \emph{Sobel}. Por
+motivos de eficiencia, se aproxima con el \emph{kernel} siguiente.
+\begin{center}
+$ kernel = \begin{bmatrix}
+  0 & +1 & 0 \\
+  +1 & -4 & +1 \\
+  0 & +1 & 0 \\
+  \end{bmatrix}
+$
+\end{center}
 
 \section{Algoritmo \emph{Canny}}
 
