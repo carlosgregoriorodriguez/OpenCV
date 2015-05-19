@@ -466,6 +466,44 @@ $
 \end{center}
 
 \section{Algoritmo \emph{Canny}}
+El \emph{Canny} es un algoritmo de detección de bordes conocido como el 
+\emph{detector óptimo} con la función de satisfacer tres criterios principales:
+\begin{itemize}
+\item Bajo índice de error.
+\item Minimización de la distancia entre los bordes detectados y los reales.
+\item Un único detector por borde.
+\end{itemize}
+Para ello lo primero que hace es descartar el ruido usando el filtro Gaussiano.
+El \emph{kernel} usado para este filtro no es fijo.\\
+Luego encuentra la intensidad del gradiente de la imagen con procedimiendo
+similar al Sobel con las mismas máscaras de convolución, fuerza del gradiente
+y dirección:\\
+\subsection{Sobel}
+\begin{center}
+$
+G_x = \begin{bmatrix}
+    -1 & 0 & +1 \\
+    -2 & 0 & +2 \\
+    -1 & 0 & +1 \\
+  \end{bmatrix}
+  \hspace{0.5cm} \text{ y } \hspace{0.5cm} G_y = \begin{bmatrix}
+    -1 & -2 & -1 \\
+    0 & 0 & 0 \\
+    +1 & +2 & +1 \\
+  \end{bmatrix}
+  $
+  \\[0.5cm]
+  $G = \sqrt{G_x\,^2 + G_y\,{2}}$
+  \\[0.5cm]
+  $\Theta= \arctan\left(frac{G_y}{G_x} \right)$
+\end{center}
+Posteriormente, se suprimen los píxeles que no se consideran parte del borde 
+de forma que solo queden unas finas líneas. Estas líneas son los posibles bordes.\\
+Por último, se usan dos \emph{thresholds}, uno alto y uno bajo: Si el gradiente del
+píxel es mayor que el threshold alto, el píxel formará parte del borde; si el 
+gradiente del píxel es menor que el threshold bajo, no se tendrá en cuenta; en caso
+de que el gradiente del píxel esté entre ambos thresholds se considerará solo si está
+contiguo a un píxel cuyo gradiente sea superior al threshold alto.
 
 \section{Contornos}
 
