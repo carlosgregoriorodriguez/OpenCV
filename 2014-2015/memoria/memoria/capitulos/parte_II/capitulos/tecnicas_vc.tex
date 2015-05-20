@@ -441,11 +441,39 @@ I_x'(x) \approx I(x + 1) - I(x)
 Si extraemos los coeficientes de las imágenes a un \emph{kernel} el
 resultado es
 \begin{equation*}
-kernel = \left[1 -1 \right]
+kernel = \begin{bmatrix}
+1 & -1
+\end{bmatrix}
 \end{equation*}
 Nótese que la suma de todos los coeficientes siempre será $0$. Para
 alargar alargar el \emph{kernel} y abarcar más píxeles por ejemplo
-tres se procede a introducir $0$ entre medias dando lugar a $\left[1 0 -1 \right]$
+tres se procede a introducir $0$ entre medias dando lugar a
+$\begin{bmatrix} 1 & 0 & -1 \end{bmatrix}$ \\
+Si realizamos este mismo proceso con la segunda derivada y alargamos
+el \emph{kernel} en los ejes $x, y$ obtendremos con el \emph{kernel}
+\emph{Sobel} que se explicará con detenimiento en el siguiente apartado. \\
+La segunda derivada viene dada por:
+\begin{equation*}
+  I''(x) = \lim_{\delta x \to 0}\frac{I'(x+\delta x) - I'(x)}{\delta x}
+\end{equation*}
+Si aproximamos como la vez anterior $\delta x = 1$ obtenemos
+\begin{equation*}
+  I_x''(x) \approx I'(x + 1) - I'(x)
+\end{equation*}
+Como ya hemos aproximado la primera derivada:
+\begin{equation*}
+I'(x) \approx I(x + 1) - I(x)
+\end{equation*}
+Podemos aplicarla a la segunda
+\begin{equation*}
+  I''(x) \approx \underbrace{I'(x + 1)}_{I(x + 2) - I(x + 1)} - \underbrace{I'(x)}_{I(x + 1) - I(x)}
+\end{equation*}
+Dando como resultado:
+\begin{equation*}
+I''(x) \approx I(x) - 2I(x + 1) + I(x + 2)
+\end{equation*}
+Y al \emph{kernel} $\begin{bmatrix} 1 & -2 & 1 \end{bmatrix}$
+presentando el siguiente apartado
 \subsection{Sobel}
 Como el operador \emph{Sobel} está definido en un espacio discreto no
 es exactamente una derivada, representa un polinomio y la segunda
