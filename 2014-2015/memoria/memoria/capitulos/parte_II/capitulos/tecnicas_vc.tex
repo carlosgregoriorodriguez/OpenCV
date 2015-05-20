@@ -34,9 +34,9 @@ realizar los cálculos necesarios pero por eficiencia se usa
 \emph{OpenCV}.
 
 \subsubsection{Dibujado}
-El resultado de un histograma es una matriz de \emph{Numpy} por lo que,
-para poder dibujarla, tiene que usarse \emph{Matplotlib} o transformar
-la matriz en una imagen de \emph{OpenCV}.
+El resultado de un histograma es una matriz de \emph{Numpy} por lo
+que, para poder dibujarla, tiene que usarse \emph{Matplotlib} o
+transformar la matriz en una imagen de \emph{OpenCV}.
 
 \subsubsection{Ecualización}
 La ecualización de un histograma consiste en distribuir los píxeles
@@ -48,8 +48,9 @@ rango.
 La \emph{convolución} de una matriz sobre una imagen, que al fin y al
 cabo es otra matriz, es la principal base de la mayoría de las
 técnicas aquí descritas. \\
-Un \emph{kernel} es una matriz fija de coeficientes numéricos y 
-dimensión \textbf{impar} que se usa en todas las técnicas de este capítulo 
+Un \emph{kernel} es una matriz fija de coeficientes numéricos y
+dimensión \textbf{impar} que se usa en todas las técnicas de este
+capítulo
 para tener un elemento como el elemento central. \\
 Para calcular la convolución de un píxel concreto se sitúa éste en el
 centro del \emph{kernel} y se calcula su valor con respecto a los
@@ -111,8 +112,8 @@ superposición y transparencia. La función sería:
 \begin{equation*}
   g(n) = (1 - \alpha)f_0(n) + \alpha f_1(n)
 \end{equation*}
-Donde \emph{n} representa un punto de la imagen, \emph{$\alpha$} es
-una constante entre 0 y 1, y \emph{$f_0$} y \emph{$f_1$} las imágenes.
+Donde \emph{n} representa un punto de la imagen, \emph{$\alpha$} es una
+constante entre 0 y 1, y \emph{$f_0$} y \emph{$f_1$} las imágenes.
 Expresado en forma de coordenadas:
 \begin{equation*}
   g(x, y) = (1 - \alpha)f_0(x, y) + \alpha f_1(x, y)
@@ -158,8 +159,8 @@ adquieren el valor mínimo.  La expresión es
     0 & \text{cualquier otro caso}
   \end{cases}
 \end{equation*}
-Ejemplo para un valor de umbral de 127 (Arriba original y abajo el resultado
-obtenido tras aplicar el filtro):
+Ejemplo para un valor de umbral de 127 (Arriba original y abajo el
+resultado obtenido tras aplicar el filtro):
 
 \includegraphics[scale=0.40]{imagenes/EjemploTecnicasThresholdOriginal.png}\\
 \includegraphics[scale=0.40]{imagenes/EjemploTecnicasThresholdBinary_127.png}
@@ -175,8 +176,8 @@ que los demás adquieren el valor máximo. La expresión es
     255 & \text{cualquier otro caso}
   \end{cases}
 \end{equation*}
-Ejemplo para un valor de umbral de 127 (Arriba original y abajo el resultado
-obtenido tras aplicar el filtro):
+Ejemplo para un valor de umbral de 127 (Arriba original y abajo el
+resultado obtenido tras aplicar el filtro):
 
 \includegraphics[scale=0.40]{imagenes/EjemploTecnicasThresholdOriginal.png}\\
 \includegraphics[scale=0.40]{imagenes/EjemploTecnicasThresholdBinaryInv_127.png}
@@ -193,8 +194,8 @@ conserva el valor original. La expresión es
     entrada(x, y) & \text{cualquier otro caso}
   \end{cases}
 \end{equation*}
-Ejemplo para un valor de umbral de 127 (Arriba original y abajo el resultado
-obtenido tras aplicar el filtro):
+Ejemplo para un valor de umbral de 127 (Arriba original y abajo el
+resultado obtenido tras aplicar el filtro):
 
 \includegraphics[scale=0.40]{imagenes/EjemploTecnicasThresholdOriginal.png}\\
 \includegraphics[scale=0.40]{imagenes/EjemploTecnicasThresholdTrunc_127.png}
@@ -211,8 +212,8 @@ contrario se les aplica el valor mínimo. La expresión es
     0 & \text{cualquier otro caso}
   \end{cases}
 \end{equation*}
-Ejemplo para un valor de umbral de 127 (Arriba original y abajo el resultado
-obtenido tras aplicar el filtro):
+Ejemplo para un valor de umbral de 127 (Arriba original y abajo el
+resultado obtenido tras aplicar el filtro):
 
 \includegraphics[scale=0.40]{imagenes/EjemploTecnicasThresholdOriginal.png}\\
 \includegraphics[scale=0.40]{imagenes/EjemploTecnicasThresholdTo0_127.png}
@@ -229,8 +230,8 @@ expresión es
     entrada(x, y) & \text{cualquier otro caso}
   \end{cases}
 \end{equation*}
-Ejemplo para un valor de umbral de 127 (Arriba original y abajo el resultado
-obtenido tras aplicar el filtro):
+Ejemplo para un valor de umbral de 127 (Arriba original y abajo el
+resultado obtenido tras aplicar el filtro):
 
 \includegraphics[scale=0.40]{imagenes/EjemploTecnicasThresholdOriginal.png}\\
 \includegraphics[scale=0.40]{imagenes/EjemploTecnicasThresholdTo0Inv_127.png}
@@ -260,8 +261,8 @@ Las transformaciones geométricas son aquellas técnicas en las que se
 aplica una matriz o \emph{kernel} de transformación a la imagen
 original.
 \subsection{Rotación}
-Para rotar una imagen desde un ángulo $\theta$ se opera con la
-siguiente matriz de transformación.
+Para rotar una imagen desde un ángulo $\theta$ se opera con la siguiente
+matriz de transformación.
 \begin{equation*}
   M =
   \begin{bmatrix}
@@ -273,8 +274,7 @@ centro ajustable para el punto que se prefiera.
 \begin{equation*}
   \begin{bmatrix}
     \alpha & \beta & (1 - \alpha) \cdot centro_x - \beta \cdot centro_y \\
-    - \beta & \alpha & \beta \cdot centro_x + (1 - \alpha) \cdot
-    centro_y
+    - \beta & \alpha & \beta \cdot centro_x + (1 - \alpha) \cdot centro_y
   \end{bmatrix}
 \end{equation*}
 donde:
@@ -334,17 +334,22 @@ como resultado valores de píxeles que no estuvieran en la imagen
 original. Este \emph{Blur} es el menos eficiente de todos pero
 \emph{OpenCV} lo optimiza para las sigmas $\sigma_x$ e $\sigma_y$
 predeterminadas para los \emph{kernels} de $3\times3$, $5\times5$ y
-$\times7$. Debido a esto, sólo mostraremos como se
+$7\times7$. Debido a esto, sólo mostraremos como se
 generan estas sigmas predeterminas y un ejemplo con ellas.\\
-\emph{OpenCV} obliga a introducir $\sigma_x$ y en el caso de que este
-sea 0, se determinan ambos sigmas a partir del tamaño del
-\emph{kernel} introducido mediante las fórmulas siguientes:
+\emph{OpenCV} obliga a introducir $\sigma_x$ y en el caso de que este sea 0,
+se determinan ambos sigmas a partir del tamaño del \emph{kernel}
+introducido mediante las fórmulas siguientes:
 \begin{equation*}
   \sigma_x = \left(\frac{n_x}{2} - 1 \right) \cdot 0,30 + 0.80, n_x = \text{anchura del \emph{kernel}}
 \end{equation*}
 \begin{equation*}
   \sigma_y = \left(\frac{n_y}{2} - 1 \right) \cdot 0,30 + 0.80, n_y = \text{altura del \emph{kernel}}
 \end{equation*}
+Y la función \emph{Gaussiana} en la que se aplican:
+\begin{equation*}
+Gaussiana(x, y) = \frac{1}{\sqrt{2 \pi \sigma^{2}}}e^{- \frac{x^{2}+y^{2}}{2\sigma^{2}}}
+\end{equation*}
+
 
 \subsection{Basado en la mediana}
 En el caso de un \emph{median Blur} y como oposición al \emph{Blur},
@@ -410,11 +415,37 @@ del artefacto. La expresión es:
 El cálculo de gradientes o bordes se realiza mediante la convolución
 de derivadas parciales del estilo:
 \begin{equation*}
-\frac{\delta^{2}}{\delta x \delta y}
+  \frac{\delta^{2}}{\delta x \delta y}
 \end{equation*}
 Por simplificación y eficiencia nos centraremos en describir sus
-aproximaciones, más fáciles de entender.
-
+aproximaciones, más fáciles de entender. \\
+El origen de los números de los \emph{kernels} se basa en el siguiente
+proceso:\\
+Una imagen se puede representar como una función de una señal continua y
+discreta. Nos centraremos en ver el proceso con una fila de píxeles de
+la imagen. Un borde es un cambio de color que en la función está
+representado como un cambio de valor entre una posición y
+otra. Matemáticamente la manera de medir cuánto cambia entre un punto
+por ejemplo $x$ y otro muy próximo $x + \delta x$ se realiza mediante la
+derivación.\\
+La fórmula para derivar una imagen $I$ que sólo contenga una fila de
+píxeles es siguiente:
+\begin{equation*}
+I'_x(x) = \lim_{\delta x \to 0}\frac{I(x+\delta x) - I(x)}{\delta x}
+\end{equation*}
+Como sólo se pueden computar valores discretos, el punto de la función
+más cercano a $0$ es $\delta x = 1$. Esto aproxima la derivada a
+\begin{equation*}
+I_x'(x) \approx I(x + 1) - I(x)
+\end{equation*}
+Si extraemos los coeficientes de las imágenes a un \emph{kernel} el
+resultado es
+\begin{equation*}
+kernel = \left[1 -1 \right]
+\end{equation*}
+Nótese que la suma de todos los coeficientes siempre será $0$. Para
+alargar alargar el \emph{kernel} y abarcar más píxeles por ejemplo
+tres se procede a introducir $0$ entre medias dando lugar a $\left[1 0 -1 \right]$
 \subsection{Sobel}
 Como el operador \emph{Sobel} está definido en un espacio discreto no
 es exactamente una derivada, representa un polinomio y la segunda
@@ -440,8 +471,8 @@ más tolerancia al ruido.
 \end{center}
 La aproximación con el \emph{kernel} se hace de la siguiente manera:
 \begin{equation*}
-Sobel(imagen) = \frac{\delta^{orden_x + orden_y} imagen}{\delta x^{orden_x} \delta
-  y^{orden_y}} \text{siendo el orden de derivación} orden_y \text{ y } orden_y > 0
+  Sobel(imagen) = \frac{\delta^{orden_x + orden_y} imagen}{\delta x^{orden_x} \delta
+    y^{orden_y}} \text{siendo el orden de derivación } orden_y \text{ y } orden_y > 0
 \end{equation*}
 
 \subsection{Scharr}
@@ -473,31 +504,34 @@ operador \emph{Sobel} de la siguiente manera:
 \end{equation*}
 Por motivos de eficiencia, se aproxima con el \emph{kernel} siguiente
 \begin{center}
-$ kernel = \begin{bmatrix}
-  0 & +1 & 0 \\
-  +1 & -4 & +1 \\
-  0 & +1 & 0 \\
+  $ kernel = \begin{bmatrix}
+    0 & +1 & 0 \\
+    +1 & -4 & +1 \\
+    0 & +1 & 0 \\
   \end{bmatrix}
-$
+  $
 \end{center}
 
 \section{Algoritmo \emph{Canny}}
-El \emph{Canny} es un algoritmo de detección de bordes conocido como el 
-\emph{detector óptimo} con la función de satisfacer tres criterios principales:
+El \emph{Canny} es un algoritmo de detección de bordes conocido como
+el \emph{detector óptimo} con la función de satisfacer tres criterios
+principales:
 \begin{itemize}
 \item Bajo índice de error.
-\item Minimización de la distancia entre los bordes detectados y los reales.
+\item Minimización de la distancia entre los bordes detectados y los
+  reales.
 \item Un único detector por borde.
 \end{itemize}
-Para ello lo primero que hace es descartar el ruido usando el filtro Gaussiano.
+Para ello lo primero que hace es descartar el ruido usando el filtro
+Gaussiano.
 El \emph{kernel} usado para este filtro no es fijo.\\
-Luego encuentra la intensidad del gradiente de la imagen con procedimiendo
-similar al Sobel con las mismas máscaras de convolución, fuerza del gradiente
+Luego encuentra la intensidad del gradiente de la imagen con
+procedimiento similar al Sobel con las mismas máscaras de convolución,
+fuerza del gradiente
 y dirección:\\
 \subsection{Sobel}
 \begin{center}
-$
-G_x = \begin{bmatrix}
+  $ G_x = \begin{bmatrix}
     -1 & 0 & +1 \\
     -2 & 0 & +2 \\
     -1 & 0 & +1 \\
@@ -513,12 +547,13 @@ G_x = \begin{bmatrix}
   \\[0.5cm]
   $\Theta= \arctan\left(\frac{G_y}{G_x} \right)$
 \end{center}
-Posteriormente, se suprimen los píxeles que no se consideran parte del borde 
-de forma que solo queden unas finas líneas. Estas líneas son los posibles bordes.\\
-Por último, se usan dos \emph{thresholds}, uno alto y uno bajo: Si el gradiente del
-píxel es mayor que el threshold alto, el píxel formará parte del borde; si el 
-gradiente del píxel es menor que el threshold bajo, no se tendrá en cuenta; en caso
-de que el gradiente del píxel esté entre ambos \emph{thresholds} se considerará solo si está
+Posteriormente, se suprimen los píxeles que no se consideran parte del
+borde de forma que solo queden unas finas líneas. Estas líneas son los posibles bordes.\\
+Por último, se usan dos \emph{thresholds}, uno alto y uno bajo: Si el
+gradiente del píxel es mayor que el threshold alto, el píxel formará
+parte del borde; si el gradiente del píxel es menor que el threshold
+bajo, no se tendrá en cuenta; en caso de que el gradiente del píxel
+esté entre ambos \emph{thresholds} se considerará solo si está
 contiguo a un píxel cuyo gradiente sea superior al threshold alto.
 
 \section{Contornos}
