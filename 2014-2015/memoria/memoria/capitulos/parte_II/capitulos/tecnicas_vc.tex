@@ -449,8 +449,12 @@ Nótese que la suma de todos los coeficientes siempre será $0$. Para
 alargar alargar el \emph{kernel} y abarcar más píxeles por ejemplo
 tres se procede a introducir $0$ entre medias dando lugar a
 $\begin{bmatrix} 1 & 0 & -1 \end{bmatrix}$ \\
-Si realizamos este mismo proceso con la segunda derivada y alargamos
-el \emph{kernel} en los ejes $x, y$ obtendremos con el \emph{kernel}
+Al realizar la primera derivada, nos encontramos que para interpretar
+el gradiente tiene que ser un máximo local y suficientemente alto para
+distinguirlo. Por lo que si aplicamos segunda derivada suavizamos el
+gradiente y obtenemos de manera precisa el máximo local porque toma el
+valor $0$ en el eje de abcisas. Si alargamos el \emph{kernel} en los
+ejes $x, y$ obtendremos el \emph{kernel}
 \emph{Sobel} que se explicará con detenimiento en el siguiente apartado. \\
 La segunda derivada viene dada por:
 \begin{equation*}
@@ -462,7 +466,7 @@ Si aproximamos como la vez anterior $\delta x = 1$ obtenemos
 \end{equation*}
 Como ya hemos aproximado la primera derivada:
 \begin{equation*}
-I'(x) \approx I(x + 1) - I(x)
+  I'(x) \approx I(x + 1) - I(x)
 \end{equation*}
 Podemos aplicarla a la segunda
 \begin{equation*}
@@ -470,7 +474,7 @@ Podemos aplicarla a la segunda
 \end{equation*}
 Dando como resultado:
 \begin{equation*}
-I''(x) \approx I(x) - 2I(x + 1) + I(x + 2)
+  I''(x) \approx I(x) - 2I(x + 1) + I(x + 2)
 \end{equation*}
 Y al \emph{kernel} $\begin{bmatrix} 1 & -2 & 1 \end{bmatrix}$
 presentando el siguiente apartado
@@ -586,5 +590,28 @@ contiguo a un píxel cuyo gradiente sea superior al threshold alto.
 
 \section{Contornos}
 
-\section{Transformada de Hough}
+\section{Transformada de \emph{Hough}}
+La transformada de \emph{Hough} es una técnica que se aplica para
+encontrar formas en una imagen incluso a pesar de ruido siempre que se
+puedan expresar matemáticamente como líneas rectas y curvas. Nos
+centraremos sólo en explicar las primeras.
 \subsection{Rectas}
+Cualquier punto de una imagen \emph{binarizada} puede formar parte de
+una línea recta. Representamos una recta como
+\begin{equation*}
+  y = mx +c
+\end{equation*}
+O de forma paramétrica
+\begin{equation*}
+  \rho = x \cos \theta + y \sin \theta
+\end{equation*}
+donde $\rho$ es la distancia perpendicular a la recta desde el origen y
+$\theta$ el ángulo que forman la recta de la distancia con el
+origen. En \emph{OpenCV} el origen está situado en la parte superior
+izquierda. Si la recta a dibujar corta al eje de abcisas con un valor
+positivo el ángulo $\theta$ es menor que $180º$ y el valor de $\rho$
+es positivo. Por el contrario, si corta al eje de abcisas por un valor
+negativo, el ángulo $\theta$ es mayor de $180º$ y $\rho$ es
+negativo. Los casos extremos son las líneas verticales $0º$ y
+horizontales $90º$.
+\section{Puntos de interés o \emph{Blobs}}
