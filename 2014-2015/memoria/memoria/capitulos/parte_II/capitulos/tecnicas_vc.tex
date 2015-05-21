@@ -592,16 +592,19 @@ contiguo a un píxel cuyo gradiente sea superior al threshold alto.
 
 \section{Transformada de \emph{Hough}}
 La transformada de \emph{Hough} es una técnica que se aplica para
-encontrar formas en una imagen incluso a pesar de ruido siempre que se
-puedan expresar matemáticamente como líneas rectas y curvas. Nos
-centraremos sólo en explicar las primeras.
+encontrar formas en una imagen \emph{binarizada} o tras haber aplicado
+un algoritmo de detetcción de bordes o contornos como el \emph{Canny}
+incluso a pesar de ruido siempre que se puedan expresar
+matemáticamente como líneas rectas y curvas. Nos centraremos sólo en
+explicar las primeras.
 \subsection{Rectas}
-Cualquier punto de una imagen \emph{binarizada} puede formar parte de
-una línea recta. Representamos una recta como
+Cualquier punto obtenido de una imagen puede formar parte de una línea
+recta. Representamos una recta de manera simplificada como
 \begin{equation*}
-  y = mx +c
+  y = mx + c
 \end{equation*}
-O de forma paramétrica
+O mejor, de forma paramétrica porque al pasar infinitas rectas por un
+punto lo más sencillo es limitar a un rango de ángulos.
 \begin{equation*}
   \rho = x \cos \theta + y \sin \theta
 \end{equation*}
@@ -613,5 +616,15 @@ positivo el ángulo $\theta$ es menor que $180º$ y el valor de $\rho$
 es positivo. Por el contrario, si corta al eje de abcisas por un valor
 negativo, el ángulo $\theta$ es mayor de $180º$ y $\rho$ es
 negativo. Los casos extremos son las líneas verticales $0º$ y
-horizontales $90º$.
+horizontales $90º$.\\
+Por claridad, imaginemos sólo dos puntos por los que queremos trazar
+una recta. Para ello, trazaremos tantas rectas como $\theta$
+determinemos por cada punto, almacenando de cada uno su $\theta$ y su
+$\rho$. Con estos pares, se construye una gráfica donde el eje $y$ de
+ordenadas sea $\rho$ y el eje $x$ de abcisas sea $\theta$. Cada punto
+genera una curva y en el punto de intersección de las dos encontramos
+la $\theta$ y $\rho$ de la recta que pasa por los dos puntos. Por
+supuesto, \emph{OpenCV} no calcula la gráfica sino que guarda los
+pares y acumula el número de apariciones de cada uno y finalmente
+devuelve el máximo local.
 \section{Puntos de interés o \emph{Blobs}}
