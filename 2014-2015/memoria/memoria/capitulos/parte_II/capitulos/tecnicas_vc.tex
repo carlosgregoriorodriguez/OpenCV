@@ -476,8 +476,8 @@ Dando como resultado:
 \begin{equation*}
   I''(x) \approx I(x) - 2I(x + 1) + I(x + 2)
 \end{equation*}
-Y al \emph{kernel} $\begin{bmatrix} 1 & -2 & 1 \end{bmatrix}$
-presentando el siguiente apartado
+Y al \emph{kernel} $\begin{bmatrix} 1 & -2 & 1 \end{bmatrix}$ que si
+se expande en dos direcciones del espacio se obtiene el \emph{kernel} siguiente.
 \subsection{Sobel}
 Como el operador \emph{Sobel} está definido en un espacio discreto no
 es exactamente una derivada, representa un polinomio y la segunda
@@ -588,8 +588,6 @@ bajo, no se tendrá en cuenta; en caso de que el gradiente del píxel
 esté entre ambos \emph{thresholds} se considerará solo si está
 contiguo a un píxel cuyo gradiente sea superior al threshold alto.
 
-\section{Contornos}
-
 \section{Transformada de \emph{Hough}}
 La transformada de \emph{Hough} es una técnica que se aplica para
 encontrar formas en una imagen \emph{binarizada} o tras haber aplicado
@@ -627,4 +625,35 @@ la $\theta$ y $\rho$ de la recta que pasa por los dos puntos. Por
 supuesto, \emph{OpenCV} no calcula la gráfica sino que guarda los
 pares y acumula el número de apariciones de cada uno y finalmente
 devuelve el máximo local.
+
+\section{Contornos}
+Un contorno es una línea curva formada por la únión de puntos que
+tienen el mismo color o intensidad. La detección de contornos se usa
+para estudiar la forma de los artefactos de la imagen. \emph{OpenCV}
+entiende detectar contornos como la búsqueda de artefactos blancos
+sobre un fondo negro por lo que la imagen, tiene que ser previamente
+\emph{binarizada}. Normalmente, se preprocesa con la aplicación de un
+\emph{Canny} o similar y una vez obtenidos los contornos se almacenan
+en una estructura de árbol para indicar los contornos que están dentro
+de otros. \\
+Por esta razón, siempre que se pueda, es recomendable usar un
+algoritmo de detección de contornos para luego filtrarlos y/o
+tratarlos individualmente en vez de un algoritmo de detección de
+gradientes o de tipo \emph{Canny}.\\
+Estos algoritmos están divididos en dos partes:
+\begin{description}
+\item[Detección:] parte encargada de la búsqueda y jerarquización de
+  los contornos.
+\item[Dibujado:] parte encargada del coloreado y grosor de las líneas.
+\end{description}
+
 \section{Puntos de interés o \emph{Blobs}}
+Las bibliotecas de visión computerizada proporcionan numerosas
+técnicas de detección de gradientes, contornos y algoritmos de tipo
+\emph{Canny}. Además, traen abstracciones de alto nivel para la
+detección de \emph{Blobs} o puntos de interés. \\
+La detección de \emph{Blobs} es el siguiente paso de abstracción
+después de la detección de contornos. Un \emph{Blob} es una región
+blanca en una imagen previamente \emph{binarizada} \\
+\emph{OpenCV} carece de esta abstracción por lo que esta es la única
+sección en la que es necesario usar la biblioteca \emph{SimpleCV}.
