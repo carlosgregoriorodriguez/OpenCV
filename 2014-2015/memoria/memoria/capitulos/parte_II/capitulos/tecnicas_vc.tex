@@ -11,7 +11,7 @@ a las siguientes fuentes:
 
 \subsection{Histogramas}
 Un histograma es un gráfico con la distribución de color o
-intensidades de la imagen, por simplificación, suponemos siempre una
+intensidades de la imagen. Por simplificación, supondremos siempre una
 imagen en escala de grises. Es tan importante su estudio dentro de la
 visión computerizada que se podría definir informalmente como el
 gráfico que contiene la naturaleza de la imagen.
@@ -327,13 +327,13 @@ A modo de ejemplo, el \emph{kernel} de dimensión $3\times3$ es
   \end{bmatrix}
 \end{equation*}
 \subsection{Basado en una función Gaussiana}
-Esta técnica es la que mejor resultados suele dar y especialmente si
-se utiliza para reducir ruido generado por un \emph{kernel
-  Gaussiano}. Cabe destacar que al aplicar este método puede darse
+Esta técnica es la que mejor resultados suele dar, especialmente si
+se utiliza para reducir el ruido generado por un \emph{kernel
+  Gaussiano}. Cabe destacar que al aplicar este método puede dar
 como resultado valores de píxeles que no estuvieran en la imagen
 original. Este \emph{Blur} es el menos eficiente de todos pero
-\emph{OpenCV} lo optimiza para las sigmas $\sigma_x$ e $\sigma_y$
-predeterminadas para los \emph{kernels} de $3\times3$, $5\times5$ y
+\emph{OpenCV} lo optimiza para las sigmas $\sigma_x$ y $\sigma_y$
+predeterminadas de los \emph{kernels} de $3\times3$, $5\times5$ y
 $7\times7$. Debido a esto, sólo mostraremos como se
 generan estas sigmas predeterminas y un ejemplo con ellas.\\
 \emph{OpenCV} obliga a introducir $\sigma_x$ y en el caso de que este sea 0,
@@ -425,11 +425,11 @@ Una imagen se puede representar como una función de una señal continua y
 discreta. Nos centraremos en ver el proceso con una fila de píxeles de
 la imagen. Un borde es un cambio de color que en la función está
 representado como un cambio de valor entre una posición y
-otra. Matemáticamente la manera de medir cuánto cambia entre un punto
-por ejemplo $x$ y otro muy próximo $x + \delta x$ se realiza mediante la
+otra. Matemáticamente, la manera de medir cuánto cambia entre un punto
+,por ejemplo $x$, y otro muy próximo, $x + \delta x$, se realiza mediante la
 derivación.\\
 La fórmula para derivar una imagen $I$ que sólo contenga una fila de
-píxeles es siguiente:
+píxeles es la siguiente:
 \begin{equation*}
 I'_x(x) = \lim_{\delta x \to 0}\frac{I(x+\delta x) - I(x)}{\delta x}
 \end{equation*}
@@ -438,21 +438,21 @@ más cercano a $0$ es $\delta x = 1$. Esto aproxima la derivada a
 \begin{equation*}
 I_x'(x) \approx I(x + 1) - I(x)
 \end{equation*}
-Si extraemos los coeficientes de las imágenes a un \emph{kernel} el
-resultado es
+Si extraemos los coeficientes de las imágenes a un \emph{kernel}, el
+resultado es:
 \begin{equation*}
 kernel = \begin{bmatrix}
 1 & -1
 \end{bmatrix}
 \end{equation*}
 Nótese que la suma de todos los coeficientes siempre será $0$. Para
-alargar alargar el \emph{kernel} y abarcar más píxeles por ejemplo
-tres se procede a introducir $0$ entre medias dando lugar a
+alargar el \emph{kernel} y abarcar más píxeles, por ejemplo
+tres, se procede a introducir $0$ entre medias dando lugar a
 $\begin{bmatrix} 1 & 0 & -1 \end{bmatrix}$ \\
 Al realizar la primera derivada, nos encontramos que para interpretar
 el gradiente tiene que ser un máximo local y suficientemente alto para
-distinguirlo. Por lo que si aplicamos segunda derivada suavizamos el
-gradiente y obtenemos de manera precisa el máximo local porque toma el
+distinguirlo. Por lo que si aplicamos la segunda derivada suavizamos el
+gradiente y obtenemos, de manera precisa, el máximo local, porque toma el
 valor $0$ en el eje de abcisas. Si alargamos el \emph{kernel} en los
 ejes $x, y$ obtendremos el \emph{kernel}
 \emph{Sobel} que se explicará con detenimiento en el siguiente apartado. \\
@@ -509,10 +509,10 @@ La aproximación con el \emph{kernel} se hace de la siguiente manera:
 
 \subsection{Scharr}
 El operador \emph{Scharr} se utiliza como el sustituto del operador
-\emph{Sobel} cuando es necesario aplicar \emph{kernels} pequeños
-especialmente de tamaño $3 \times 3$ en los cuales al tener tan pocos
+\emph{Sobel} cuando es necesario aplicar \emph{kernels} pequeños,
+especialmente de tamaño $3 \times 3$, en los cuales al tener tan pocos
 píxeles, los bordes no suelen estar posicionados sobre los ejes $x$ e
-$y$ como en la superficie de los \emph{kernel} de gran tamaño siendo
+$y$ como en la superficie de los \emph{kernel} de gran tamaño. siendo
 la aproximación de \emph{Sobel} bastante inexacta con los gradientes
 en forma de ángulo.
 \begin{center}
@@ -591,8 +591,8 @@ contiguo a un píxel cuyo gradiente sea superior al threshold alto.
 \section{Transformada de \emph{Hough}}
 La transformada de \emph{Hough} es una técnica que se aplica para
 encontrar formas en una imagen \emph{binarizada} o tras haber aplicado
-un algoritmo de detetcción de bordes o contornos como el \emph{Canny}
-incluso a pesar de ruido siempre que se puedan expresar
+un algoritmo de detetcción de bordes o contornos como el \emph{Canny},
+incluso aunque haya ruido, siempre que se puedan expresar
 matemáticamente como líneas rectas y curvas. Nos centraremos sólo en
 explicar las primeras.
 \subsection{Rectas}
@@ -654,6 +654,6 @@ técnicas de detección de gradientes, contornos y algoritmos de tipo
 detección de \emph{Blobs} o puntos de interés. \\
 La detección de \emph{Blobs} es el siguiente paso de abstracción
 después de la detección de contornos. Un \emph{Blob} es una región
-blanca en una imagen previamente \emph{binarizada} \\
+blanca en una imagen previamente \emph{binarizada}. \\
 \emph{OpenCV} carece de esta abstracción por lo que esta es la única
 sección en la que es necesario usar la biblioteca \emph{SimpleCV}.
