@@ -4,8 +4,11 @@ de la investigación. Incluye ejemplos de las tomografías para poder
 relacionar la técnica con el resultado visual.\\
 Toda la información presente en este capítulo ha sido redactada acorde
 a las siguientes fuentes:
-% TODO: Falta añadir bibliografías de Learn OpenCV, el tutorial de
-% Python y la API
+\begin{description}
+\item[Learning OpenCV]\cite{opencv_book-bib}
+\item[Tutorial de OpenCV para Python]\cite{opencv_tutorial-bib}
+\item[API de OpenCV]\cite{opencv_api-bib}
+\end{description}
 
 \section{Conocimientos previos necesarios}
 
@@ -112,8 +115,8 @@ superposición y transparencia. La función sería:
 \begin{equation*}
   g(n) = (1 - \alpha)f_0(n) + \alpha f_1(n)
 \end{equation*}
-Donde \emph{n} representa un punto de la imagen, \emph{$\alpha$} es una
-constante entre 0 y 1, y \emph{$f_0$} y \emph{$f_1$} las imágenes.
+Donde \emph{n} representa un punto de la imagen, \emph{$\alpha$} es
+una constante entre 0 y 1, y \emph{$f_0$} y \emph{$f_1$} las imágenes.
 Expresado en forma de coordenadas:
 \begin{equation*}
   g(x, y) = (1 - \alpha)f_0(x, y) + \alpha f_1(x, y)
@@ -261,8 +264,8 @@ Las transformaciones geométricas son aquellas técnicas en las que se
 aplica una matriz o \emph{kernel} de transformación a la imagen
 original.
 \subsection{Rotación}
-Para rotar una imagen desde un ángulo $\theta$ se opera con la siguiente
-matriz de transformación.
+Para rotar una imagen desde un ángulo $\theta$ se opera con la
+siguiente matriz de transformación.
 \begin{equation*}
   M =
   \begin{bmatrix}
@@ -274,7 +277,8 @@ centro ajustable para el punto que se prefiera.
 \begin{equation*}
   \begin{bmatrix}
     \alpha & \beta & (1 - \alpha) \cdot centro_x - \beta \cdot centro_y \\
-    - \beta & \alpha & \beta \cdot centro_x + (1 - \alpha) \cdot centro_y
+    - \beta & \alpha & \beta \cdot centro_x + (1 - \alpha) \cdot
+    centro_y
   \end{bmatrix}
 \end{equation*}
 donde:
@@ -327,18 +331,18 @@ A modo de ejemplo, el \emph{kernel} de dimensión $3\times3$ es
   \end{bmatrix}
 \end{equation*}
 \subsection{Basado en una función Gaussiana}
-Esta técnica es la que mejor resultados suele dar, especialmente si
-se utiliza para reducir el ruido generado por un \emph{kernel
-  Gaussiano}. Cabe destacar que al aplicar este método puede dar
-como resultado valores de píxeles que no estuvieran en la imagen
+Esta técnica es la que mejor resultados suele dar, especialmente si se
+utiliza para reducir el ruido generado por un \emph{kernel
+  Gaussiano}. Cabe destacar que al aplicar este método puede dar como
+resultado valores de píxeles que no estuvieran en la imagen
 original. Este \emph{Blur} es el menos eficiente de todos pero
 \emph{OpenCV} lo optimiza para las sigmas $\sigma_x$ y $\sigma_y$
 predeterminadas de los \emph{kernels} de $3\times3$, $5\times5$ y
 $7\times7$. Debido a esto, sólo mostraremos como se
 generan estas sigmas predeterminas y un ejemplo con ellas.\\
-\emph{OpenCV} obliga a introducir $\sigma_x$ y en el caso de que este sea 0,
-se determinan ambos sigmas a partir del tamaño del \emph{kernel}
-introducido mediante las fórmulas siguientes:
+\emph{OpenCV} obliga a introducir $\sigma_x$ y en el caso de que este
+sea 0, se determinan ambos sigmas a partir del tamaño del
+\emph{kernel} introducido mediante las fórmulas siguientes:
 \begin{equation*}
   \sigma_x = \left(\frac{n_x}{2} - 1 \right) \cdot 0,30 + 0.80, n_x = \text{anchura del \emph{kernel}}
 \end{equation*}
@@ -347,7 +351,7 @@ introducido mediante las fórmulas siguientes:
 \end{equation*}
 Y la función \emph{Gaussiana} en la que se aplican:
 \begin{equation*}
-Gaussiana(x, y) = \frac{1}{\sqrt{2 \pi \sigma^{2}}}e^{- \frac{x^{2}+y^{2}}{2\sigma^{2}}}
+  Gaussiana(x, y) = \frac{1}{\sqrt{2 \pi \sigma^{2}}}e^{- \frac{x^{2}+y^{2}}{2\sigma^{2}}}
 \end{equation*}
 
 
@@ -421,40 +425,41 @@ Por simplificación y eficiencia nos centraremos en describir sus
 aproximaciones, más fáciles de entender. \\
 El origen de los números de los \emph{kernels} se basa en el siguiente
 proceso:\\
-Una imagen se puede representar como una función de una señal continua y
-discreta. Nos centraremos en ver el proceso con una fila de píxeles de
-la imagen. Un borde es un cambio de color que en la función está
+Una imagen se puede representar como una función de una señal continua
+y discreta. Nos centraremos en ver el proceso con una fila de píxeles
+de la imagen. Un borde es un cambio de color que en la función está
 representado como un cambio de valor entre una posición y
 otra. Matemáticamente, la manera de medir cuánto cambia entre un punto
-,por ejemplo $x$, y otro muy próximo, $x + \delta x$, se realiza mediante la
+,por ejemplo $x$, y otro muy próximo, $x + \delta x$, se realiza
+mediante la
 derivación.\\
 La fórmula para derivar una imagen $I$ que sólo contenga una fila de
 píxeles es la siguiente:
 \begin{equation*}
-I'_x(x) = \lim_{\delta x \to 0}\frac{I(x+\delta x) - I(x)}{\delta x}
+  I'_x(x) = \lim_{\delta x \to 0}\frac{I(x+\delta x) - I(x)}{\delta x}
 \end{equation*}
 Como sólo se pueden computar valores discretos, el punto de la función
 más cercano a $0$ es $\delta x = 1$. Esto aproxima la derivada a
 \begin{equation*}
-I_x'(x) \approx I(x + 1) - I(x)
+  I_x'(x) \approx I(x + 1) - I(x)
 \end{equation*}
 Si extraemos los coeficientes de las imágenes a un \emph{kernel}, el
 resultado es:
 \begin{equation*}
-kernel = \begin{bmatrix}
-1 & -1
-\end{bmatrix}
+  kernel = \begin{bmatrix}
+    1 & -1
+  \end{bmatrix}
 \end{equation*}
 Nótese que la suma de todos los coeficientes siempre será $0$. Para
-alargar el \emph{kernel} y abarcar más píxeles, por ejemplo
-tres, se procede a introducir $0$ entre medias dando lugar a
+alargar el \emph{kernel} y abarcar más píxeles, por ejemplo tres, se
+procede a introducir $0$ entre medias dando lugar a
 $\begin{bmatrix} 1 & 0 & -1 \end{bmatrix}$ \\
 Al realizar la primera derivada, nos encontramos que para interpretar
 el gradiente tiene que ser un máximo local y suficientemente alto para
-distinguirlo. Por lo que si aplicamos la segunda derivada suavizamos el
-gradiente y obtenemos, de manera precisa, el máximo local, porque toma el
-valor $0$ en el eje de abcisas. Si alargamos el \emph{kernel} en los
-ejes $x, y$ obtendremos el \emph{kernel}
+distinguirlo. Por lo que si aplicamos la segunda derivada suavizamos
+el gradiente y obtenemos, de manera precisa, el máximo local, porque
+toma el valor $0$ en el eje de abcisas. Si alargamos el \emph{kernel}
+en los ejes $x, y$ obtendremos el \emph{kernel}
 \emph{Sobel} que se explicará con detenimiento en el siguiente apartado. \\
 La segunda derivada viene dada por:
 \begin{equation*}
@@ -477,7 +482,8 @@ Dando como resultado:
   I''(x) \approx I(x) - 2I(x + 1) + I(x + 2)
 \end{equation*}
 Y al \emph{kernel} $\begin{bmatrix} 1 & -2 & 1 \end{bmatrix}$ que si
-se expande en dos direcciones del espacio se obtiene el \emph{kernel} siguiente.
+se expande en dos direcciones del espacio se obtiene el \emph{kernel}
+siguiente.
 \subsection{Sobel}
 Como el operador \emph{Sobel} está definido en un espacio discreto no
 es exactamente una derivada, representa un polinomio y la segunda
@@ -504,7 +510,7 @@ más tolerancia al ruido.
 La aproximación con el \emph{kernel} se hace de la siguiente manera:
 \begin{equation*}
   Sobel(imagen) = \frac{\delta^{orden_x + orden_y} imagen}{\delta x^{orden_x} \delta
-    y^{orden_y}} \text{siendo el orden de derivación } orden_y \text{ y } orden_y > 0
+    y^{orden_y}} \text{ siendo el orden de derivación } orden_y \text{ y } orden_y > 0
 \end{equation*}
 
 \subsection{Scharr}
@@ -559,26 +565,7 @@ Gaussiano.
 El \emph{kernel} usado para este filtro no es fijo.\\
 Luego encuentra la intensidad del gradiente de la imagen con
 procedimiento similar al Sobel con las mismas máscaras de convolución,
-fuerza del gradiente
-y dirección:\\
-\subsection{Sobel}
-\begin{center}
-  $ G_x = \begin{bmatrix}
-    -1 & 0 & +1 \\
-    -2 & 0 & +2 \\
-    -1 & 0 & +1 \\
-  \end{bmatrix}
-  \hspace{0.5cm} \text{ y } \hspace{0.5cm} G_y = \begin{bmatrix}
-    -1 & -2 & -1 \\
-    0 & 0 & 0 \\
-    +1 & +2 & +1 \\
-  \end{bmatrix}
-  $
-  \\[0.5cm]
-  $G = \sqrt{G_x\,^2 + G_y\,{2}}$
-  \\[0.5cm]
-  $\Theta= \arctan\left(\frac{G_y}{G_x} \right)$
-\end{center}
+fuerza del gradiente y dirección:\\
 Posteriormente, se suprimen los píxeles que no se consideran parte del
 borde de forma que solo queden unas finas líneas. Estas líneas son los posibles bordes.\\
 Por último, se usan dos \emph{thresholds}, uno alto y uno bajo: Si el
@@ -679,7 +666,7 @@ la descripción de su código en los siguientes pasos:
     \item[Los 7 momentos de \emph{Hu}:] los momentos son varios
       cálculos distintos de alta complejidad para determinar de manera
       inequívoca al \emph{Blob} como si de un invariante se tratase
-      ante cambios de escala, rotación o ambos. \footnote{Los momentos
+      ante cambios de escala, rotación o ambos.\footnote{Los momentos
         de una imagen se han dejado sin explicar en profundidad porque
         su descripción no es relevante para el entendimiento del
         algoritmo.}
