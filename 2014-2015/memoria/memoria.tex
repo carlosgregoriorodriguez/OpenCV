@@ -61,8 +61,9 @@
 % Eliminar todas las páginas vacías
 \let\cleardoublepage\clearpage
 
+% Eliminar todas las páginas generadas automáticamente después de cada
+% parte
 % http://stackoverflow.com/a/2007143
-% Eliminar todas las páginas generadas automáticamente después de cada parte
 \makeatletter
 \renewcommand\@endpart{\vfil
               \if@twoside
@@ -73,6 +74,12 @@
               \if@tempswa
                 \twocolumn
               \fi}
+\makeatother
+
+% Añadir orden para introducir notas a pie de página sin numerar
+% http://en.wikibooks.org/wiki/LaTeX/Footnotes_and_Margin_Notes
+\makeatletter
+\def\blfootnote{\xdef\@thefnmark{}\@footnotetext}
 \makeatother
 
 % Portada
