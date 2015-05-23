@@ -642,21 +642,21 @@ detección de \emph{Blobs} o puntos de interés. \\
 La detección de \emph{Blobs} es el siguiente paso de abstracción
 después de la detección de contornos. Un \emph{Blob} es una región
 blanca en una imagen previamente \emph{binarizada}. \\
-\emph{OpenCV} carece de esta abstracción siendo necesario usar la
-biblioteca \emph{SimpleCV}. Para explicar su funcionamiento requiere
+\emph{OpenCV} carece de esta abstracción, siendo necesario usar la
+biblioteca \emph{SimpleCV}. Explicar su funcionamiento requiere
 la descripción de su código en los siguientes pasos:
 \begin{enumerate}
-\item Se realiza a la imagen una \emph{binarización} mediante un
-  \emph{threshold} que puede ser con un valor umbral fijo o por el
-  contrario, un \emph{threshold adaptativo}, la implementación en este
+\item Se realiza una \emph{binarización} a la imagen mediante un
+  \emph{threshold}, que puede ser con un valor umbral fijo o, por el
+  contrario, un \emph{threshold adaptativo}. La implementación en este
   caso aplica \emph{Otsu}.
-\item Se utiliza el algoritmo detección de contornos anteriormente
+\item Se utiliza el algoritmo de detección de contornos anteriormente
   explicado.
 \item Se analizan los contornos encontrados:
   \begin{enumerate}[label*=\arabic*.]
   \item\label{paso:contornos} Si es un hueco, se descarta y se pasa al
-    siguiente contorno, en caso contrario, se devuelven sus
-    propiedades, las más importantes son:
+    siguiente contorno. En caso contrario, se devuelven sus
+    propiedades. Las propiedades más importantes son:
     \begin{description}
     \item[Área]
     \item[Perímetro]
@@ -671,7 +671,7 @@ la descripción de su código en los siguientes pasos:
         su descripción no es relevante para el entendimiento del
         algoritmo.}
     \end{description}
-  \item Si hay un contorno interno, se almacena para procesa
+  \item Si hay un contorno interno, se almacena para procesarlo
     posteriormente.
   \item Se procede a analizar el siguiente contorno externo volviendo
     al paso~\ref{paso:contornos} hasta que no quede ninguno.
