@@ -56,9 +56,9 @@ nuevos problemas.
   \item Convierte la imagen de escala \emph{RGB} a \emph{escala de
       grises}
   \item Duplica la imagen, en una aplica un \emph{threshold Otsu} y en
-    otra un \emph{threshold binario} para \emph{binarizar} las imagen.
-  \item Se recorrer la imagen del \emph{threshold Otsu} con una
-    horizontal de derecha a izquierda desde la esquina superior
+    otra un \emph{threshold binario} para \emph{binarizar} la imagen.
+  \item Se recorre la imagen del \emph{threshold Otsu} con una
+    horizontal de derecha a izquierda, desde la esquina superior
     derecha con las coordenadas, 0 como $x$ y ancho de la imagen como
     $y$ encontrar el borde de separación entre las dos imágenes.
   \item Al conocer el  \textbf{punto del borde de separación en la parte
@@ -72,11 +72,11 @@ nuevos problemas.
     \begin{enumerate}[label*=\arabic*.]
     \item Para eliminar dicha zona y como la imagen no tiene por qué
       estar en posición horizontal, se procede a buscar dos puntos
-      auxiliares, uno empieza con la $x$ igual a $2/4$ de la anchura
-      de la imagen y el otro con la $x$ igual a $3/4$ de la
+      auxiliares: uno empieza con la $x$ igual a $2/4$ de la anchura
+      de la imagen, y el otro con la $x$ igual a $3/4$ de la
       anchura. Ambos empiezan con $y$ igual al borde inferior
-      provisional hacia arriba ignorando toda el área negra.
-    \item Una vez obtenidos los dos puntos se procede a obtener los el
+      provisional hacia arriba, ignorando toda el área negra.
+    \item Una vez obtenidos los dos puntos, se procede a obtener el
       punto definitivo para generar el rectángulo que contiene la
       imagen de estudio.
     \item Para calcular dicho punto, el que está situado más cerca del
