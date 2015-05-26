@@ -131,5 +131,40 @@ nuevos problemas.
       original como la $x$.
     \end{enumerate}
   \end{enumerate}
-
+\item Una vez delimitada la zona de interés ... %completar
+\item Teniendo la imagen horizontal para evitar fallos debidos a la 
+  inclinación, se procedió a desarrollar un algoritmo para encontrar 
+  el punto de referencia, la \emph{fóvea}.
+  \begin{enumerate}[label*=\arabic*.] 
+  \item Se somete una copia de la imagen (para no deformar la original)
+    a un \emph{median Blur} con un kernel de tamaño 7 para eliminar 
+    el ruido granulado.
+  \item Sobre esta copia transformada, se aplica un 
+    \emph{threshold binario} con valor umbral de 30. Con esto se 
+    pretende binarizar la imagen para facilitar el siguiente paso.
+  \item Una vez binarizada la imagen, se procede a hacer un "barrido" 
+    vertical, de arriba hacia abajo y de izquierda a derecha. Para 
+    reducir el tiempo de computación, se decidió recorrer el eje 
+    horizontal de la imagen empezando desde un tercio de la anchura y 
+    acabando en los dos tercios, una vez se aseguró que la \emph{fóvea} 
+    siempre se encontraba en esa zona. \\
+    El objetivo de este barrido es el de encontrar, en cada iteración 
+    vertical, el primer punto blanco, que se corresponde con la línea 
+    en la que está la \emph{fóvea}. Además, mientras itera sobre el 
+    eje horizontal, busca la posición en el que este punto blanco 
+    está más abajo.
+  \item En más de una ocasión surge un pequeño inconveniente que 
+    proviene de someter la imagen a los filtros: no hay un "punto
+    más bajo", sino que aparece una línea horizontal en su lugar, 
+    con muchos "puntos más bajos", haciendo que la \emph{fóvea} quedara 
+    descentrada. Para resolver esto y tras comprobar la simetría de 
+    esta línea con respecto a la vertical que pasa por la \emph{fóvea},
+    en lugar de un único punto, se calcularon dos: El primero, el punto 
+    de la línea más a la izquierda; el segundo, el punto de la línea más 
+    a la derecha. Haciendo la media de dichos puntos, se encuentra el 
+    punto medio: \emph{la fóvea}. \\
+    Nótese que en los casos en que esta línea no se genera y hay un único 
+    punto "más bajo", este algoritmo sigue siendo válido, pues la media 
+    de un elemento repetido es el mismo elemento.
+  \end{enumerate}
 \end{enumerate}
