@@ -9,7 +9,12 @@ latexmk:
 # lo hará mejor, menos laborioso menos propenso a errores
 # Añadir -shell-escape para que el paquete minted interactue con el
 # paquete Pygments de Python
-	latexmk -pdf -pdflatex="pdflatex -interactive=nonstopmode  -shell-escape" -use-make $(MEMORIA_LATEX).tex
+
+	latexmk -pdf \
+	-synctex=1 \
+	-r "glossaries.latexmk" \
+	-pdflatex="pdflatex -interactive=nonstopmode  -shell-escape" \
+	-use-make $(MEMORIA_LATEX).tex
 #	pdflatex $(MEMORIA_LATEX)
 # Generar bibliografía
 	-bibtex $(MEMORIA_LATEX)
