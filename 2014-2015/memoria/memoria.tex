@@ -4,9 +4,8 @@
 \usepackage[spanish]{babel}
 % \usepackage[spanish]{translator}
 % Permitir que todas las listas enlacen con su referencia
-\usepackage[pdftex]{hyperref}
 % Quitar el color distintivo a los enlaces
-\hypersetup{hidelinks=true}
+\usepackage[pdftex, hidelinks=true]{hyperref}
 
 % Paquetes para mostrar símbolos y operaciones matemáticas
 % https://www.ctan.org/pkg/amsmath
@@ -19,11 +18,22 @@
 % Paquete para mostrar imágenes
 \usepackage{graphicx}
 
-% Paquete para realizar el glosario
+% Paquete para generar el glosario
 % https://www.ctan.org/pkg/glossaries
 \usepackage[acronym]{glossaries}
+
+% Entrada en la lista de acrónimos y glosario simultáneamente
+% http://en.wikibooks.org/wiki/LaTeX/Glossary
+\usepackage{xparse}
+\DeclareDocumentCommand{\newdualentry}{ O{} O{} m m m m } {
+  \newglossaryentry{gls-#3}{name={#5},text={#5\glsadd{#3}},
+    description={#6},#1
+  }
+  \newacronym[see={[Glosario:]{gls-#3}},#2]{#3}{#4}{#5\glsadd{gls-#3}}
+}
+
 \makeglossaries
-% Añadir los términos del glosario
+% Añadir los acrónimos y términos del  glosario
 \input{memoria/glosario/glosario}
 
 % Traducir bibtex con babel
