@@ -220,8 +220,31 @@ nuevos problemas.
   \item Luego se determina la posición del punto inferior de la
     \emph{coroides} de la siguiente manera:
     \begin{enumerate}[label*=\arabic*.]
-    \item Contenido segundo punto
+    \item Como en el paso anterior, se transforma una copia de la imagen
+      para calcular el punto. En este ocasión se utiliza primero un
+      \emph{median Blur} con un kernel de tamaño 13 para eliminar ruido 
+      granulado.
+    \item Una vez eliminado el ruido, se utiliza un \emph{threshold adaptativo
+    gaussiano} con un valor umbral de 173 para binarizar la imagen.
+    \item Usando la función \emph{findContours} se genera un Canny ad-hoc
+    para encontrar los bordes, descartando los bordes más pequeños (ruido no
+    eliminado por el Blur).
+    \item Una vez eliminado el ruido y detectados los bordes, se busca sobre
+    la vertical que pasa por la \emph{fóvea}, de abajo hacia arriba y empezando
+    en los 6/7 de la altura de la imagen, el primer punto blanco, que se corresponde
+    con el borde inferior de la coroides y señala el segundo punto que se 
+    necesita para medir su espesor. 
     \end{enumerate}
-  \item Medición del espesor de la coroides
+  \item Una vez determinados los dos puntos que delimitan la coroides se
+    puede determinar la medida de la misma.
+    \begin{enumerate}[label*=\arabic*.]
+    \item Como la imagen está horizontalizada y los dos puntos encontrados
+    se encuentran sobre la misma vertical, la distancia entre ellos se 
+    puede calcular restando los valores de sus coordenadas sobre el eje de
+    las ordenadas.
+    \item Como esta resta devuelve un resultado en \emph{píxeles}, es necesario
+    calcular la relación entre micras y píxeles. Para ello se ha usado la 
+    proporción indicada en la parte inferior izquierda de la imagen original.
+    \end{enumerate}
   \end{enumerate}
 \end{enumerate}
