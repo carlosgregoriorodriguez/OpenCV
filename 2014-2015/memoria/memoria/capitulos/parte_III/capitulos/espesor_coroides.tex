@@ -131,7 +131,38 @@ nuevos problemas.
       original como la $x$.
     \end{enumerate}
   \end{enumerate}
-\item Una vez delimitada la zona de interés ... %completar
+\item Una vez delimitada la zona de interés, es necesario corregir
+  la inclinación del corte de la máquina con respecto de la 
+  estructura ocular. \\
+  Para esta labor se desarrolló una biblioteca, que aplica el
+  siguiente procedimiento a la imagen.
+  \begin{enumerate}[label*=\arabic*.]
+  \item El primer paso mide el ángulo de inclinación de la
+    estructura ocular para así poder realizar la rotación que la corrija.
+    Para ello se busca y escoge un ángulo de referencia, aplicando
+    la \emph{Transformada de Hough} para rectas. La estructura ocular
+    posee una capa con una intensidad muy alta denominada
+    \emph{membrana de Bruch} en la que si se aplica dicha
+    transformada, se obtiene sobre ella una recta que puede ser usada
+    como referencia. Todas las líneas detectadas están almacenadas de
+    forma paramétrica en una matriz de pares
+    $\left( \rho, \theta \right)$. La primera línea de la matriz que
+    no sea vertical ($\theta \neq 0º$) es la recta buscada sobre la
+    membrana.
+  \item Una vez obtenida la $\theta$ de la pendiente a corregir respecto la
+    horizontal $\left( \theta = 90º \right)$ hay que calcular la
+    diferencia de inclinación. Para ello se calcula la diferencia con
+    la siguiente fórmula:
+    \begin{equation*}
+      \theta_\text{Corrección} = \theta_{Bruch} - \theta_{horizontal} 
+    \end{equation*}
+    \begin{center}
+      siendo $\theta_{horizontal} = 90º$
+    \end{center}
+  \item Finalmente se procede a rotar la imagen con la
+    $\theta_{\text{Corrección}}$, usando como centro de rotación el
+    punto central de la imagen.
+  \end{enumerate}
 \item Teniendo la imagen horizontal para evitar fallos debidos a la 
   inclinación, se procedió a desarrollar un algoritmo para encontrar 
   el punto de referencia, la \emph{fóvea}.
@@ -167,5 +198,30 @@ nuevos problemas.
     punto "más bajo", este algoritmo sigue siendo válido, pues el punto 
     más a la derecha y el punto más a la izquierda coinciden, y la media 
     de un elemento repetido es el mismo elemento.
+  \end{enumerate}
+\item La última fase se divide en tres grandes pasos: encontrar el
+  punto superior de la coroides por el que pasa la misma vertical
+  que por la \emph{fóvea}; encontrar el punto inferior de la coroides
+  por el que pasa la misma vertical; medir la distancia entre los dos
+  puntos y mostrar el resultado en micras.
+  \begin{enumerate}[label*=\arabic*.]
+  \item Primero se determina la posición del punto superior de la
+    \emph{coroides} de la siguiente manera:
+    \begin{enumerate}[label*=\arabic*.]
+    \item Se somete una copia de la imagen horizontal a un 
+      \emph{threshold binario} con un valor umbral de 179 y se usa un
+      \emph{Canny} para obtener los bordes. 
+    \item Sobre la imagen resultante se busca en la vertical que pasa 
+      por la \emph{fóvea}, de abajo hacia arriba y empezando en un 
+      cuarto de la altura de la imagen (esto evita fallos provocados 
+      por una zona negra generada durante la corrección de la inclinación), 
+      el primer punto negro. Este será el punto superior de la coroides.
+    \end{enumerate}
+  \item Luego se determina la posición del punto inferior de la
+    \emph{coroides} de la siguiente manera:
+    \begin{enumerate}[label*=\arabic*.]
+    \item Contenido segundo punto
+    \end{enumerate}
+  \item Medición del espesor de la coroides
   \end{enumerate}
 \end{enumerate}
