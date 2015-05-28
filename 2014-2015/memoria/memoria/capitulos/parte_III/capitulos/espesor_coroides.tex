@@ -2,7 +2,7 @@
 \section{Problema}
 Los estudios demuestran que hay una relación entre la inflamación de
 la \emph{coroides} y la aparición de la \emph{uveítis}. Es necesario,
-por tanto, medir el espesor de la coroides para prevenir esta
+por tanto, medir el espesor de la \emph{coroides} para prevenir esta
 enfermedad y para seguir su evolución en el tiempo.\\
 La \emph{coroides} o \emph{úvea} es una membrana por la que pasan gran
 cantidad de vasos sanguíneos, cuya función es mantener la temperatura
@@ -52,7 +52,7 @@ nuevos problemas.
     extracción del área de estudio.}
 \item El corte programado durante la exploración tiene un grado de
   inclinación sobre la estructura ocular. \textbf{En la mayoría de las
-    exploraciones el corte no es horizontal} o ,si se realizan
+    exploraciones el corte no es horizontal}, si se realizan
   exploraciones desde todos los ángulos, sólo uno muestra la
   estructura
   de manera horizontal. \\
@@ -77,7 +77,6 @@ nuevos problemas.
     espesor de la \emph{coroides}}
 \end{enumerate}
 
-
 \section{Algoritmo propuesto}
 \begin{enumerate}
 \item La primera fase consistió en delimitar y extraer el área a
@@ -93,38 +92,38 @@ nuevos problemas.
     otra un \emph{threshold binario} para \emph{binarizar} la imagen.
   \item Se recorre la imagen del \emph{threshold Otsu} con una
     horizontal de derecha a izquierda, desde la esquina superior
-    derecha con las coordenadas, 0 como $x$ y ancho de la imagen como
-    $y$ encontrar el borde de separación entre las dos imágenes.
+    derecha con las coordenadas, $0$ como $x$ y ancho de la imagen
+    como $y$ encontrar el borde de separación entre las dos imágenes.
   \item Al conocer el \textbf{punto del borde de separación en la
       parte superior}, queda buscarlo también en la parte inferior de
     abajo a arriba en la imagen del \emph{threshold binario} con las
     coordenadas, el borde de separación como $x$ y la altura de la
     imagen como $y$.
   \item Con estos puntos ya se puede obtener la zona de la imagen
-    original a estudiar. Si se apura y se recorta el negro sobrante de
-    la parte inferior evita errores en la detección del segundo punto
-    de la \emph{coroides} en algunos casos.
+    original a estudiar. \textbf{Si se apura y se recorta el negro
+      sobrante de la parte inferior evita errores} en la detección del
+    segundo punto de la \emph{coroides} en algunos casos.
     \begin{enumerate}[label*=\arabic*.]
-    \item Para eliminar dicha zona y como la imagen no tiene por qué
-      estar en posición horizontal, se procede a buscar dos puntos
-      auxiliares: uno empieza con la $x$ igual a $2/4$ de la anchura
-      de la imagen, y el otro con la $x$ igual a $3/4$ de la
-      anchura. Ambos empiezan con $y$ igual al borde inferior
-      provisional hacia arriba, ignorando toda el área negra.
-    \item Una vez obtenidos los dos puntos, se procede a obtener el
-      punto definitivo para generar el rectángulo que contiene la
-      imagen de estudio.
-    \item Para calcular dicho punto, el que está situado más cerca del
-      borde inferior para no recortar parte de la propia imagen si no
-      está horizontal, hay que calcular primero otros dos. Esos puntos
-      son la intersección de una recta imaginaria con los puntos
-      auxiliares del paso anterior. Se calculan añadiendo a la $y$ de
-      cada punto auxiliar la diferencia con respecto a la $y$ del otro
-      punto auxiliar.
-    \item Obtenidos estos dos puntos, el que tenga mayor $y$, es
-      \textbf{el más cercano al borde inferior} y por tanto el
-      utilizado como base para obtener el segundo punto del
-      rectángulo.
+    \item \textbf{Para eliminar dicha zona} y como la imagen no tiene
+      por qué estar en posición horizontal, \textbf{se procede a
+        buscar dos puntos auxiliares}: uno empieza con la $x$ igual a
+      $2/4$ de la anchura de la imagen, y el otro con la $x$ igual a
+      $3/4$ de la anchura. Ambos empiezan con $y$ igual al borde
+      inferior provisional hacia arriba, ignorando toda el área negra.
+    \item \textbf{Una vez obtenidos los dos puntos, se procede a
+        obtener el punto definitivo para generar el rectángulo} que
+      contiene la imagen de estudio.
+    \item \textbf{Para calcular dicho punto}, el que está situado más
+      cerca del borde inferior para no recortar parte de la propia
+      imagen si no está horizontal, \textbf{hay que calcular primero}
+      otros dos. Esos puntos son \textbf{la intersección con el borde
+        de sepación y de una recta imaginaria con los puntos
+        auxiliares} del paso anterior. Se calculan añadiendo a la $y$
+      de cada punto auxiliar la diferencia con respecto a la $y$ del
+      otro punto auxiliar.
+    \item Obtenidos estos dos puntos, el que tenga mayor $y$, es el
+      más cercano al borde inferior y por tanto el utilizado como base
+      para obtener el segundo punto del rectángulo.
     \item Finalmente, \textbf{se obtiene el rectángulo que contiene a}
       la parte de \textbf{la imagen} que queremos estudiar \textbf{con
         el punto del borde de separación de la parte superior y el
@@ -133,121 +132,123 @@ nuevos problemas.
       original como la $x$.
     \end{enumerate}
   \end{enumerate}
-\item Una vez delimitada la zona de interés, es necesario corregir la
-  inclinación del corte de la máquina con respecto de la
-  estructura ocular. \\
+\item Una vez delimitada la zona de interés, \textbf{es necesario
+    corregir la inclinación del corte de la máquina} con respecto de
+  la estructura ocular. \\
   Para esta labor se desarrolló una biblioteca, que aplica el
   siguiente procedimiento a la imagen.
   \begin{enumerate}[label*=\arabic*.]
-  \item El primer paso mide el ángulo de inclinación de la estructura
-    ocular para así poder realizar la rotación que la corrija.  Para
-    ello se busca y escoge un ángulo de referencia, aplicando la
-    \emph{Transformada de Hough} para rectas. La estructura ocular
-    posee una capa con una intensidad muy alta denominada
-    \emph{membrana de Bruch} en la que si se aplica dicha
-    transformada, se obtiene sobre ella una recta que puede ser usada
-    como referencia. Todas las líneas detectadas están almacenadas de
-    forma paramétrica en una matriz de pares
+  \item \textbf{El primer paso mide el ángulo de inclinación} de la
+    estructura ocular \textbf{para así poder realizar la rotación que
+      la corrija}.  Para ello se busca y escoge un ángulo de
+    referencia, aplicando la \emph{Transformada de Hough} para
+    rectas. La estructura ocular posee una capa con una intensidad muy
+    alta denominada \emph{membrana de Bruch} en la que si se aplica
+    dicha transformada, se obtiene sobre ella una recta que puede ser
+    usada como referencia. Todas las líneas detectadas están
+    almacenadas de forma paramétrica en una matriz de pares
     $\left( \rho, \theta \right)$. La primera línea de la matriz que
     no sea vertical ($\theta \neq 0º$) es la recta buscada sobre la
     membrana.
-  \item Una vez obtenida la $\theta$ de la pendiente a corregir respecto la
-    horizontal $\left( \theta = 90º \right)$ hay que calcular la
-    diferencia de inclinación. Para ello se calcula la diferencia con
-    la siguiente fórmula:
+  \item \textbf{Una vez obtenida la $\theta$ de la pendiente a corregir
+      respecto la horizontal} $\left( \theta = 90º \right)$ hay que
+    calcular la diferencia de inclinación. Para ello se calcula la
+    diferencia con la siguiente fórmula:
     \begin{equation*}
-      \theta_\text{Corrección} = \theta_{Bruch} - \theta_{horizontal} 
+      \theta_\text{Corrección} = \theta_{Bruch} - \theta_{horizontal}
     \end{equation*}
     \begin{center}
       siendo $\theta_{horizontal} = 90º$
     \end{center}
-  \item Finalmente se procede a rotar la imagen con la
-    $\theta_{\text{Corrección}}$, usando como centro de rotación el
+  \item \textbf{Finalmente} se procede a \textbf{rotar la imagen} con
+    la $\theta_{\text{Corrección}}$, usando como centro de rotación el
     punto central de la imagen.
   \end{enumerate}
 \item Teniendo la imagen horizontal para evitar fallos debidos a la
-  inclinación, se procedió a desarrollar un algoritmo para encontrar
-  el punto de referencia, la \emph{fóvea}.
+  inclinación, se procedió a desarrollar un algoritmo para
+  \textbf{encontrar el punto de referencia, la \emph{fóvea}}.
   \begin{enumerate}[label*=\arabic*.]
-  \item Se somete una copia de la imagen (para no deformar la
-    original) a un \emph{median Blur} con un kernel de tamaño 7 para
-    eliminar el ruido granulado.
-  \item Sobre esta copia transformada, se aplica un \emph{threshold
-      binario} con valor umbral de 30. Con esto se pretende binarizar
-    la imagen para facilitar el siguiente paso.
-  \item Una vez binarizada la imagen, se procede a hacer un ``barrido''
-    vertical, de arriba hacia abajo y de izquierda a derecha. Para
-    reducir el tiempo de computación, se decidió recorrer el eje
-    horizontal de la imagen empezando desde un tercio de la anchura y
-    acabando en los dos tercios, una vez se aseguró que la
-    \emph{fóvea} siempre se encontraba en esa zona. \\
-    El objetivo de este barrido es el de encontrar, en cada iteración
-    vertical, el primer punto blanco, que se corresponde con la línea
-    en la que está la \emph{fóvea}. Además, mientras itera sobre el
-    eje horizontal, busca la posición en el que este punto blanco está
-    más abajo.
+  \item \textbf{Se somete} una copia de \textbf{la imagen} (para no
+    alterar la original) \textbf{a un \emph{median Blur}} con un
+    \emph{kernel} de tamaño $7$ \textbf{para eliminar el ruido
+      granulado}.
+  \item Sobre esta copia transformada, \textbf{se aplica un
+      \emph{threshold binario}} con valor umbral de $30$. Con esto se
+    pretende binarizar la imagen para facilitar el siguiente paso.
+  \item \textbf{Una vez binarizada la imagen, se procede a hacer un
+      ``barrido'' vertical}, de arriba hacia abajo y de izquierda a
+    derecha. Para reducir el tiempo de computación, se decidió
+    recorrer el eje horizontal de la imagen empezando desde un tercio
+    de la anchura y acabando en los dos tercios, una vez se aseguró
+    que la \emph{fóvea} siempre se encontraba en esa zona. \\
+    \textbf{ El objetivo de este barrido es el de encontrar}, en cada
+    iteración vertical, el primer punto blanco, que se corresponde con
+    la línea en la que está \textbf{la \emph{fóvea}}. Además, mientras
+    itera sobre el eje horizontal, busca la posición en el que este
+    punto blanco está más abajo.
   \item En más de una ocasión surge un pequeño inconveniente que
-    proviene de someter la imagen a los filtros: no hay un ``punto más
-    bajo'', sino que aparece una línea horizontal en su lugar, con
-    muchos ``puntos más bajos'', haciendo que la \emph{fóvea} quedara
-    descentrada. Para resolver esto y tras comprobar la simetría de
-    esta línea con respecto a la vertical que pasa por la
-    \emph{fóvea}, en lugar de un único punto, se calcularon dos: El
-    primero, el punto de la línea más a la izquierda; el segundo, el
-    punto de la línea más a la derecha. Haciendo la media de dichos
-    puntos, se encuentra el
-    punto medio: \emph{la fóvea}. \\
+    proviene de someter la imagen al \emph{threshold binario}: no hay
+    un ``punto más bajo'', sino que aparece una línea horizontal en su
+    lugar porque el \emph{threshold binario} transforma las curvas en
+    escaleras, con muchos ``puntos más bajos'', haciendo que la
+    \emph{fóvea} quedara descentrada. Para resolver esto y tras
+    comprobar la simetría de esta línea con respecto a la vertical que
+    pasa por la \emph{fóvea}, en lugar de un único punto, se
+    calcularon dos: El primero, el punto de la línea más a la
+    izquierda; el segundo, el punto de la línea más a la
+    derecha. Haciendo la media de dichos
+    puntos, se encuentra el punto medio: la \emph{fóvea}. \\
     Nótese que en los casos en que esta línea no se genera y hay un
     único punto ``más bajo'', este algoritmo sigue siendo válido, pues
     el punto más a la derecha y el punto más a la izquierda coinciden,
     y la media de un elemento repetido es el mismo elemento.
   \end{enumerate}
-\item La última fase se divide en tres grandes pasos: encontrar el
-  punto superior de la coroides por el que pasa la misma vertical que
-  por la \emph{fóvea}; encontrar el punto inferior de la coroides por
-  el que pasa la misma vertical; medir la distancia entre los dos
-  puntos y mostrar el resultado en micras.
+\item \textbf{La última fase se divide en} tres grandes pasos:
+  encontrar el punto superior de la \emph{coroides} por el que pasa la
+  misma vertical que por la \emph{fóvea}; encontrar el punto inferior
+  de la \emph{coroides} por el que pasa la misma vertical; medir la
+  distancia entre los dos puntos y mostrar el resultado en micras.
   \begin{enumerate}[label*=\arabic*.]
-  \item Primero se determina la posición del punto superior de la
-    \emph{coroides} de la siguiente manera:
+  \item \textbf{Primero se determina la posición del punto superior de
+      la \emph{coroides}} de la siguiente manera:
     \begin{enumerate}[label*=\arabic*.]
     \item Se somete una copia de la imagen horizontal a un
-      \emph{threshold binario} con un valor umbral de 179 y se usa un
-      \emph{Canny} para obtener los bordes.
+      \emph{threshold binario} con un valor umbral de $179$ y se usa
+      un \emph{Canny} para obtener los bordes.
     \item Sobre la imagen resultante se busca en la vertical que pasa
       por la \emph{fóvea}, de abajo hacia arriba y empezando en un
       cuarto de la altura de la imagen (esto evita fallos provocados
       por una zona negra generada durante la corrección de la
       inclinación), el primer punto negro. Este será el punto superior
-      de la coroides.
+      de la \emph{coroides}.
     \end{enumerate}
-  \item Luego se determina la posición del punto inferior de la
-    \emph{coroides} de la siguiente manera:
+  \item \textbf{Luego se determina la posición del punto inferior de
+      la \emph{coroides}} de la siguiente manera:
     \begin{enumerate}[label*=\arabic*.]
     \item Como en el paso anterior, se transforma una copia de la
       imagen para calcular el punto. En este ocasión se utiliza
-      primero un \emph{median Blur} con un kernel de tamaño 13 para
-      eliminar ruido granulado.
+      primero un \emph{median Blur} con un \emph{kernel} de tamaño
+      $13$ para eliminar ruido granulado.
     \item Una vez eliminado el ruido, se utiliza un \emph{threshold
-        adaptativo gaussiano} con un valor umbral de 173 para
-      binarizar la imagen.
-    \item Usando la función \emph{findContours} se genera un Canny
-      ad-hoc para encontrar los bordes, descartando los bordes más
-      pequeños (ruido no eliminado por el Blur).
+        adaptativo gaussiano} con un valor umbral de $173$ para
+      \emph{binarizar} la imagen.
+    \item Usando la función \emph{findContours} se genera un
+      \emph{Canny} para encontrar los bordes, descartando los bordes
+      más pequeños (ruido no eliminado por el \emph{Blur}).
     \item Una vez eliminado el ruido y detectados los bordes, se busca
       sobre la vertical que pasa por la \emph{fóvea}, de abajo hacia
-      arriba y empezando en los 6/7 de la altura de la imagen, el
+      arriba y empezando en los $6/7$ de la altura de la imagen, el
       primer punto blanco, que se corresponde con el borde inferior de
-      la coroides y señala el segundo punto que se necesita para medir
-      su espesor.
+      la \emph{coroides} y señala el segundo punto que se necesita
+      para medir su espesor.
     \end{enumerate}
-  \item Una vez determinados los dos puntos que delimitan la coroides
-    se puede determinar la medida de la misma.
+  \item \textbf{Una vez determinados los dos puntos que delimitan la
+      coroides se puede determinar la medida de la misma}.
     \begin{enumerate}[label*=\arabic*.]
-    \item Como la imagen está horizontalizada y los dos puntos
-      encontrados se encuentran sobre la misma vertical, la distancia
-      entre ellos se puede calcular restando los valores de sus
-      coordenadas sobre el eje de las ordenadas.
+    \item Como la imagen está horizontal y los dos puntos encontrados
+      se encuentran sobre la misma vertical, la distancia entre ellos
+      se puede calcular restando los valores de sus coordenadas sobre
+      el eje de ordenadas.
     \item Como esta resta devuelve un resultado en \emph{píxeles}, es
       necesario calcular la relación entre micras y píxeles. Para ello
       se ha usado la proporción indicada en la parte inferior
