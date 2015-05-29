@@ -12,7 +12,7 @@ a las siguientes fuentes:
 
 \section{Conocimientos previos necesarios}
 
-\subsection{Histogramas}
+\subsection{Histogramas}\label{tecnica:histogramas}
 Un histograma es un gráfico con la distribución de color o
 intensidades de la imagen. Por simplificación, supondremos siempre una
 imagen en escala de grises. Es tan importante su estudio dentro de la
@@ -97,7 +97,7 @@ anchura.  Se pueden obtener con la función \emph{shape}.
   y, x = imagen.shape
 \end{minted}
 
-\subsection{Región de interés}
+\subsection{Región de interés}\label{tecnica:roi}
 La región de interés (ROI) de una imagen es la zona que estamos
 interesados en procesar. Se expresa mediante los vértices opuestos de
 un rectángulo o cuadrado definidos como los píxeles [$y_1$, $x_1$] y
@@ -125,7 +125,7 @@ Donde \emph{x} e \emph{y} representan las coordenadas (horizontal y
 vertical respectivamente).
 
 
-\section{Cambio de espacio de color}
+\section{Cambio de espacio de color}\label{tecnica:cambio-color}
 Un espacio de color es un modelo matemático abstracto que describe la
 forma en la que los colores pueden representarse como tuplas de
 números. RGB, HSV o escala de grises son ejemplos de espacios de color. \\
@@ -151,7 +151,8 @@ imagen (en escala de grises [0 --- 255]) superiores a un valor,
 conocido como valor de umbral, a blanco [255] o a negro [0], según el
 \emph{threshold} aplicado.
 \subsection{Simples}
-\subsubsection{cv2.THRESH\_BINARY o \emph{Binarización}}
+\subsubsection{cv2.THRESH\_BINARY o
+  \emph{Binarización}}\label{tecnica:threshold-binario}
 Todos los píxeles con un valor mayor que el valor de umbral se
 transforman, asignándoles el valor máximo. Los que no lo superen,
 adquieren el valor mínimo.  La expresión es
@@ -249,11 +250,11 @@ depende del tamaño del \emph{kernel} usado.
 \subsubsection{cv2.ADAPTIVE\_THRESH\_MEAN\_C}
 El valor de cada píxel se establece por la media de sus vecinos.
 
-\subsubsection{cv2.ADAPTIVE\_THRESH\_GAUSSIAN\_C}
+\subsubsection{cv2.ADAPTIVE\_THRESH\_GAUSSIAN\_C}\label{tecnica:threshold-adaptativo-gauss}
 El valor de cada píxel se establece por el resultado de una función
 Gaussiana a partir de sus vecinos.
 
-\subsection{ Otsu}
+\subsection{Otsu}\label{tecnica:threshold-otsu}
 Este \emph{threshold} calcula el valor umbral a partir del histograma
 de la imagen. La precisión de esta técnica depende de que el
 histograma sea lo más bimodal posible, en los que predomina dos
@@ -355,7 +356,7 @@ Y la función \emph{Gaussiana} en la que se aplican:
 \end{equation*}
 
 
-\subsection{Basado en la mediana}
+\subsection{Basado en la mediana}\label{tecnica:blur-median}
 En el caso de un \emph{median Blur} y como oposición al \emph{Blur},
 que se basa en la media, el \emph{median Blur} calcula el valor
 del píxel central mediante la mediana de los píxeles colindantes. \\
@@ -550,7 +551,7 @@ Por motivos de eficiencia, se aproxima con el \emph{kernel} siguiente
   $
 \end{center}
 
-\section{Algoritmo \emph{Canny}}
+\section{Algoritmo \emph{Canny}}\label{tecnica:canny}
 El \emph{Canny} es un algoritmo de detección de bordes conocido como
 el \emph{detector óptimo} con la función de satisfacer tres criterios
 principales:
@@ -575,7 +576,7 @@ bajo, no se tendrá en cuenta; en caso de que el gradiente del píxel
 esté entre ambos \emph{thresholds} se considerará solo si está
 contiguo a un píxel cuyo gradiente sea superior al threshold alto.
 
-\section{Transformada de \emph{Hough}}
+\section{Transformada de \emph{Hough}}\label{tecnica:hough}
 La transformada de \emph{Hough} es una técnica que se aplica para
 encontrar formas en una imagen \emph{binarizada} o tras haber aplicado
 un algoritmo de detetcción de bordes o contornos como el \emph{Canny},
@@ -613,7 +614,7 @@ supuesto, \emph{OpenCV} no calcula la gráfica sino que guarda los
 pares y acumula el número de apariciones de cada uno y finalmente
 devuelve el máximo local.
 
-\section{Contornos}
+\section{Contornos}\label{tecnica:contornos}
 Un contorno es una línea curva formada por la únión de puntos que
 tienen el mismo color o intensidad. La detección de contornos se usa
 para estudiar la forma de los artefactos de la imagen. \emph{OpenCV}
