@@ -6,7 +6,7 @@ ha detectado una posible relación con la aparición y tamaño de
 porosidades en la \emph{papila retiniana}. \\
 La \emph{papila retiniana} o \emph{disco óptico} es el punto donde el
 nervio óptico entra en el globo ocular. Tiene la forma de un pequeño
-disco rosado de aproximadamente 2 $\times$ 1.5 milímetros y está
+disco rosado de aproximadamente $2 \times 1.5$ milímetros y está
 situado en la parte posterior del globo ocular. Hasta hace
 relativamente poco no se sabía mucho de ella debido a las carencias
 tecnológicas. Gracias a las \gls{tco}, se han podido conseguir datos
@@ -28,12 +28,18 @@ siendo este procedimiento supervisado por personal médico.
 \end{itemize}
 
 \section{Estudio}
-Al ser un estudio pionero, lo primero que se procedió a realizar fue un
-análisis previo de viabilidad de las \gls{tco} obtenidas. El
+Al ser un estudio pionero, lo primero que se procedió a realizar fue
+un análisis previo de viabilidad de las \gls{tco} obtenidas. El
 principal problema encontrado es la dificultad de enfoque de la papila
-que provoca que las imágenes sean totalmente distintas por cada paciente. Sin
-embargo, con el enfoque adecuado, si es viable proceder a estudiar los
-poros aunque no hay una forma clara de estandarizar el proceso. Una
-vez demostrado la viabilidad de las \gls{tco} que produce la máquina,
-se procedió a realizar el estudio.
+que provoca que las imágenes sean totalmente distintas por cada
+paciente. Sin embargo, con el enfoque adecuado, si es viable proceder
+a estudiar los poros aunque no hay una forma clara de estandarizar el
+proceso. Una vez demostrado la viabilidad de las \gls{tco} que produce
+la máquina, se procedió a realizar el estudio.\\
+\begin{enumerate}
+\item Se realiza una búsqueda de los poros mediante la técnica
+  \emph{findBlobs\deftecnica{tecnica:blobs}} de \emph{SimpleCV} con
+  área máxima de $150$ píxeles.
+\end{enumerate}
+
 \section{Algoritmo propuesto}
