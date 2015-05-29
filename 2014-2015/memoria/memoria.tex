@@ -17,6 +17,13 @@
 % % https://www.ctan.org/pkg/hyperref
 \usepackage[pdftex, hidelinks=true]{hyperref}
 
+% Comando para enlazar técnica como pie de nota
+\makeatletter
+\newcommand{\deftecnica}[1]{
+\footnote{\autoref{#1}~\nameref{#1},
+        página~\pageref{#1}}}
+\makeatother
+
 % Paquetes para mostrar símbolos y operaciones matemáticas
 % https://www.ctan.org/pkg/amsmath
 \usepackage{amsmath}
