@@ -15,7 +15,8 @@ debidos principalmente a fallos humanos: Si la imagen no está en
 posición horizontal es difícil trazar una línea perpendicular, puede
 fallar el pulso, etc. Esta línea se debe trazar por el punto menos
 profundo de la retina, conocido como \emph{fóvea} y de forma
-perpendicular a la \emph{membrana de Bruch}. Una vez trazada la línea,
+perpendicular a la \emph{membrana de Bruch}. Una vez trazada
+ la línea,
 hay que medirla.
 
 
@@ -79,7 +80,7 @@ nuevos problemas.
 
 \section{Algoritmo propuesto}
 \begin{enumerate}
-\item La primera fase consistió en delimitar y extraer el área a
+\item La primera fase consistió en delimitar y extraer el área\deftecnica{tecnica:roi} a
   investigar. Esto es así, porque las máquinas \gls{tco} en una misma
   imagen presentan el corte analizado y su resultado.\\
   Para resolver este problema de forma automática se procedió a
@@ -87,9 +88,10 @@ nuevos problemas.
   imagen.
   \begin{enumerate}[label*=\arabic*.]
   \item Convierte la imagen de escala \emph{RGB} a \emph{escala de
-      grises}
-  \item Duplica la imagen, en una aplica un \emph{threshold Otsu} y en
-    otra un \emph{threshold binario} para \emph{binarizar} la imagen.
+      grises\deftecnica{tecnica:cambio-color}}.
+  \item Duplica la imagen, en una aplica un \emph{threshold
+      Otsu\deftecnica{tecnica:threshold-otsu}} y en otra un
+    \emph{threshold binario\deftecnica{tecnica:threshold-binario}} para \emph{binarizar} la imagen.
   \item Se recorre la imagen del \emph{threshold Otsu} con una
     horizontal de derecha a izquierda, desde la esquina superior
     derecha con las coordenadas, $0$ como $x$ y ancho de la imagen
@@ -141,14 +143,15 @@ nuevos problemas.
   \item \textbf{El primer paso mide el ángulo de inclinación} de la
     estructura ocular \textbf{para así poder realizar la rotación que
       la corrija}.  Para ello se busca y escoge un ángulo de
-    referencia, aplicando la \emph{Transformada de Hough} para
-    rectas. La estructura ocular posee una capa con una intensidad muy
-    alta denominada \emph{membrana de Bruch} en la que si se aplica
-    dicha transformada, se obtiene sobre ella una recta que puede ser
-    usada como referencia. Todas las líneas detectadas están
-    almacenadas de forma paramétrica en una matriz de pares
-    $\left( \rho, \theta \right)$. La primera línea de la matriz que
-    no sea vertical ($\theta \neq 0º$) es la recta buscada sobre la
+    referencia, aplicando la \emph{Transformada de
+      Hough\deftecnica{tecnica:hough}} para rectas. La estructura
+    ocular posee una capa con una intensidad muy alta denominada
+    \emph{membrana de Bruch} en la que si se aplica dicha
+    transformada, se obtiene sobre ella una recta que puede ser usada
+    como referencia. Todas las líneas detectadas están almacenadas de
+    forma paramétrica en una matriz de pares
+    $\left(\rho, \theta \right)$. La primera línea de la matriz que no
+    sea vertical ($\theta \neq 0º$) es la recta buscada sobre la
     membrana.
   \item \textbf{Una vez obtenida la $\theta$ de la pendiente a corregir
       respecto la horizontal} $\left( \theta = 90º \right)$ hay que
@@ -169,9 +172,9 @@ nuevos problemas.
   \textbf{encontrar el punto de referencia, la \emph{fóvea}}.
   \begin{enumerate}[label*=\arabic*.]
   \item \textbf{Se somete} una copia de \textbf{la imagen} (para no
-    alterar la original) \textbf{a un \emph{median Blur}} con un
-    \emph{kernel} de tamaño $7$ \textbf{para eliminar el ruido
-      granulado}.
+    alterar la original) \textbf{a un \emph{median
+        Blur\deftecnica{tecnica:blur-median}}} con un \emph{kernel} de
+    tamaño $7$ \textbf{para eliminar el ruido granulado}.
   \item Sobre esta copia transformada, \textbf{se aplica un
       \emph{threshold binario}} con valor umbral de $30$. Con esto se
     pretende binarizar la imagen para facilitar el siguiente paso.
@@ -230,11 +233,14 @@ nuevos problemas.
       primero un \emph{median Blur} con un \emph{kernel} de tamaño
       $13$ para eliminar ruido granulado.
     \item Una vez eliminado el ruido, se utiliza un \emph{threshold
-        adaptativo gaussiano} con un valor umbral de $173$ para
-      \emph{binarizar} la imagen.
-    \item Usando la función \emph{findContours} se genera un
-      \emph{Canny} para encontrar los bordes, descartando los bordes
-      más pequeños (ruido no eliminado por el \emph{Blur}).
+        adaptativo
+        gaussiano\deftecnica{tecnica:threshold-adaptativo-gauss}} con
+      un valor umbral de $173$ para \emph{binarizar} la imagen.
+    \item Usando la función
+      \emph{findContours\deftecnica{tecnica:contornos}} se genera un
+      \emph{Canny\deftecnica{tecnica:canny}} para encontrar los
+      bordes, descartando los bordes más pequeños (ruido no eliminado
+      por el \emph{Median Blur}).
     \item Una vez eliminado el ruido y detectados los bordes, se busca
       sobre la vertical que pasa por la \emph{fóvea}, de abajo hacia
       arriba y empezando en los $6/7$ de la altura de la imagen, el
