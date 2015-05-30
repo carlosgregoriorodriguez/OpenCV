@@ -24,7 +24,8 @@ cantidad, la posición o la forma y la aparición del \emph{glaucoma},
 siendo este procedimiento supervisado por personal médico.
 \begin{itemize}
 \item Detección de los poros de la papila así como también de la mayor
-  cantidad de sus propiedades: área, coordenadas, distribución, etc.
+  cantidad posible de sus propiedades: área, coordenadas,
+  distribución, etc.
 \end{itemize}
 
 \section{Estudio}
@@ -36,10 +37,22 @@ paciente. Sin embargo, con el enfoque adecuado, si es viable proceder
 a estudiar los poros aunque no hay una forma clara de estandarizar el
 proceso. Una vez demostrado la viabilidad de las \gls{tco} que produce
 la máquina, se procedió a realizar el estudio.\\
+El principal problema y a pesar de todas las técnicas y tiempo
+dedicados en su solución es la dificultad del enfoque de los poros así
+como el desconocimiento en la reducción de detección de falsos poros
+mediante la aplicación de manera genérica de algoritmos de búsqueda de
+zonas de interés\deftecnica{tecnica:blobs} que impliquen aprendizaje
+máquina. Aún así, se tuvo muy en cuenta durante todo el proceso la
+utilización y el análisis de resultados del algoritmo
+\emph{ORB\footnote{\url{http://opencv-python-tutroals.readthedocs.org/en/latest/py\_tutorials/py\_feature2d/py\_brief/py\_brief.html\#brief}}\cite{orb-bib}}
 \begin{enumerate}
 \item Se realiza una búsqueda de los poros mediante la técnica
-  \emph{findBlobs\deftecnica{tecnica:blobs}} de \emph{SimpleCV} con
-  área máxima de $150$ píxeles.
+  \emph{findBlobs} de \emph{SimpleCV} con área máxima de $150$
+  píxeles.
 \end{enumerate}
 
 \section{Algoritmo propuesto}
+Esta sección se deja vacía por la ausencia de una propuesta propia
+debido a la imposibilidad explicada en la sección anterior de mejorar
+las ya existentes técnicas. Sin embargo, se proporciona descrito en
+profundidad el código concreto de la biblioteca usada para tal efecto.
