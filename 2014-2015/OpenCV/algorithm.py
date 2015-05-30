@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
+import os
+
 import cv2
 import numpy
+
 import roi_utils
-import os
 import args_processor
 
 __author__ = 'mimadrid'
@@ -20,10 +22,12 @@ Paso 4: Hallar la distancia buscada
 
 
 class Algorithm:
-    def __init__(self, image_name):
+    def __init__(self, image_name, debug_mode):
 
         img_file = cv2.imread(image_name)
         roi = roi_utils.to_roi(img_file)
+        self.debug_counter = 0
+        self.debug_mode = debug_mode
         self.image_name = image_name
         self.img_original = roi.copy()
         self.img_gray_original = cv2.cvtColor(self.img_original, cv2.COLOR_BGR2GRAY)
@@ -44,7 +48,6 @@ class Algorithm:
 
     def to_horizontal(self):
         self.step_one = True
-        # img_hough = im.copy()
         edges_canny = cv2.Canny(self.img_gray_original, 150, 200, apertureSize=3)
         lines = cv2.HoughLines(edges_canny, 1, numpy.pi / 180, 275)
         if lines is None:
@@ -54,33 +57,48 @@ class Algorithm:
             # http://opencv-python-tutroals.readthedocs.org/en/latest/py_tutorials/py_imgproc/py_houghlines/py_houghlines.html
             # https://github.com/abidrahmank/OpenCV2-Python/blob/master/Official_Tutorial_Python_Codes/3_imgproc/houghlines.py
             for rho, theta in lines[0]:
-                # a = np.cos(theta)
-                # b = np.sin(theta)
-                # x0 = a * rho
-                # y0 = b * rho
-                # Here i have used int() instead of rounding the decimal value, so 3.8 --> 3
-                # But if you want to round the number, then use np.around() function, then 3.8 --> 4.0
-                # But we need integers, so use int() function after that, ie int(np.around(x))
-                # x1 = int(x0 + 1000 * (-b))
-                # y1 = int(y0 + 1000 * (a))
-                # x2 = int(x0 - 1000 * (-b))
-                # y2 = int(y0 - 1000 * (a))
-                # cv2.line(img_hough, (x1, y1), (x2, y2), (0, 255, 0), 5)
-
                 # Use the first not horizontal line as reference and rotate with that theta
-
                 # radians to degrees (precision float error allowed < 1)
                 # theta > 0 avoid vertical lines
-                if abs((theta * 180 / numpy.pi) - 90) > 1 and theta > 0:  # 90 degrees line is horizontal, not use as reference
+                # 90 degrees line is horizontal, not use as reference
+                if abs((theta * 180 / numpy.pi) - 90) > 1 and theta > 0:
+
+
                     # print "theta = %s\n" % (theta * 180 / numpy.pi)
                     # http://opencv-python-tutroals.readthedocs.org/en/latest/py_tutorials/py_imgproc/py_geometric_transformations/py_geometric_transformations.html
                     rows, cols = self.img_gray_original.shape
                     # rotate image to the horizontal (line of reference degrees minus 90 degrees)
-                    M = cv2.getRotationMatrix2D((cols / 2, rows / 2), (theta * 180 / numpy.pi) - 90, 1)
-                    self.img_horizontal = cv2.warpAffine(self.img_original, M, (cols, rows))
+                    rotation = cv2.getRotationMatrix2D((cols / 2, rows / 2), (theta * 180 / numpy.pi) - 90, 1)
+                    self.img_horizontal = cv2.warpAffine(self.img_original, rotation, (cols, rows))
                     if self.img_horizontal is None:
                         self.img_horizontal = self.img_original
+
+                    if debug_mode:
+                        a = numpy.cos(theta)
+                        b = numpy.sin(theta)
+                        x0 = a * rho
+                        y0 = b * rho
+                        x1 = int(x0 + 1000 * (-b))
+                        y1 = int(y0 + 1000 * a)
+                        x2 = int(x0 - 1000 * (-b))
+                        y2 = int(y0 - 1000 * a)
+                        draw_line_img = self.img_original.copy()
+                        edges_canny = cv2.cvtColor(edges_canny, cv2.COLOR_GRAY2BGR)
+                        self.debug_step(edges_canny, 'Canny_Hough')
+                        edges_canny_line = edges_canny.copy()
+                        cv2.line(edges_canny_line, (x1, y1), (x2, y2), (0, 0, 255), 2)
+                        cv2.line(draw_line_img, (x1, y1), (x2, y2), (0, 0, 255), 2)
+                        cv2.line(edges_canny, (x1, y1), (x2, y2), (0, 0, 255), 2)
+                        self.debug_step(edges_canny_line, 'Canny_Hough_recta')
+                        canny_hough = cv2.addWeighted(draw_line_img, 0.3, edges_canny, 0.7, 0)
+                        self.debug_step(canny_hough, 'Canny+Hough')
+                        self.debug_step(draw_line_img, 'Hough_recta')
+                        horizontal_hough_img = cv2.warpAffine(draw_line_img, rotation, (cols, rows))
+                        self.debug_step(horizontal_hough_img, 'Horizontal')
+                        self.debug_step(self.img_horizontal, 'Horizontal')
                     break
+
+
         self.img_gray_horizontal = cv2.cvtColor(self.img_horizontal, cv2.COLOR_BGR2GRAY)
 
     def calculate_fovea(self):
@@ -88,11 +106,11 @@ class Algorithm:
         # ret, otsu_threshold = cv2.threshold(self.img_gray_horizontal, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
         blur = cv2.medianBlur(self.img_gray_horizontal, 7)
         ret, binary_threshold = cv2.threshold(blur, 30, 255, cv2.THRESH_BINARY)
-        # cv2.imwrite(os.path.splitext(self.image_name)[0] + '_' + 'thresh' + os.path.splitext(self.image_name)[1], otsu_threshold)
+        # cv2.imwrite(os.path.splitext(self.image_name)[0] + '_' + 'thresh' + os.path.splitext(self.image_name)[1], binary_threshold)
         # print otsu_threshold[0,0]
         # print otsu_threshold.shape
         # si cv2.imread(..., 0) sólo escala de grises 0..255 y (332, 1031) si no, [0..255 0..255 0..255] (332, 1031, 3)
-        # y se puede dibujar con colores en la imagen 
+        # y se puede dibujar con colores en la imagen
 
         y, x = binary_threshold.shape
 
@@ -114,7 +132,7 @@ class Algorithm:
                     if punto1[1] == j:
                         punto2 = (i, j)
 
-                    # Actualización de los puntosq más bajos
+                    # Actualización de los puntos más bajos
                     if punto1[1] < j:
                         punto1 = (i, j)
                         punto2 = (i, j)
@@ -148,7 +166,8 @@ class Algorithm:
                     self.first_point_coroides = (self.fovea_point[0], i)
 
         img_second_point = cv2.medianBlur(self.img_gray_horizontal, 13)
-        adaptative_threshold = cv2.adaptiveThreshold(img_second_point, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 173, 3)
+        adaptative_threshold = cv2.adaptiveThreshold(img_second_point, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+                                                     cv2.THRESH_BINARY, 173, 3)
         # cv2.imshow('img_second_point', img_second_point)
 
         # Generamos nuestro propio canny a partir de findcontours y quitar los más pequeños, el ruido
@@ -161,7 +180,8 @@ class Algorithm:
         # http://stackoverflow.com/a/12890573
         black_img = numpy.zeros((self.img_membranes.shape[0], self.img_membranes.shape[1], 3), numpy.uint8)
         cv2.drawContours(black_img, final_contours, -1, (255, 255, 255), 1)
-        cv2.line(black_img, (0, 6*black_img.shape[0]/7), (black_img.shape[1] - 1, 6*black_img.shape[0]/7), (0, 255, 0), 1)
+        cv2.line(black_img, (0, 6 * black_img.shape[0] / 7), (black_img.shape[1] - 1, 6 * black_img.shape[0] / 7),
+                 (0, 255, 0), 1)
         img_second_point = cv2.cvtColor(black_img, cv2.COLOR_BGR2GRAY)
         # img_second_point_canny = cv2.Canny(adaptative_threshold, 50, 50 * 5, apertureSize=5)
         # cv2.imwrite(os.path.splitext(self.image_name)[0] + '_' + 'img_second_point_canny' + os.path.splitext(self.image_name)[1], img_second_point_canny)
@@ -196,6 +216,12 @@ class Algorithm:
         p = (self.first_point_coroides[0] + 50, (self.first_point_coroides[1] + self.second_point_coroides[1]) / 2)
         cv2.putText(self.img_membranes, str(micras), p, cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (255, 0, 255), 1, cv2.CV_AA)
 
+    def debug_step(self, img, title):
+        if debug_mode:
+            self.debug_counter += 1
+            cv2.imwrite(os.path.splitext(self.image_name)[0] + '_' + str(self.debug_counter) + '_' + title +
+                        os.path.splitext(self.image_name)[1], img)
+
     def show_step(self, number):
         img = self.img_original
         title = 'Original'
@@ -214,9 +240,8 @@ class Algorithm:
         cv2.imshow(title, img)
 
 
-def run_algorithm(img_name):
-
-    algorithm = Algorithm(img_name)
+def run_algorithm(img_name, debug_mode):
+    algorithm = Algorithm(img_name, debug_mode)
     # algorithm.show_step(0)
     algorithm.to_horizontal()
     # algorithm.show_step(1)
@@ -230,19 +255,20 @@ if __name__ == "__main__":
 
     args_processor.carpeta_procesada = 'PROCESADAS'
     args_processor.args = args_processor.parser.parse_args()
+    debug_mode = False
 
     start = cv2.getTickCount()
     if args_processor.args.pasos:
-        pass
+        debug_mode = True
 
     if args_processor.args.archivos:
         for archivo in args_processor.args.archivos:
-            args_processor.procesar_archivo(archivo, args_processor.carpeta_procesada, run_algorithm)
+            args_processor.procesar_archivo(archivo, args_processor.carpeta_procesada, debug_mode, run_algorithm)
 
     if args_processor.args.carpetas:
         for carpeta in args_processor.args.carpetas:
             os.chdir(carpeta)
-            args_processor.procesar_carpeta(args_processor.carpeta_procesada, run_algorithm)
+            args_processor.procesar_carpeta(args_processor.carpeta_procesada, debug_mode, run_algorithm)
             os.chdir('..')
 
     end = cv2.getTickCount()
@@ -251,4 +277,3 @@ if __name__ == "__main__":
 
     cv2.waitKey(0) & 0xFF  # 64 bits
     cv2.destroyAllWindows()
-
