@@ -266,3 +266,30 @@ nuevos problemas.
     \end{enumerate}
   \end{enumerate}
 \end{enumerate}
+
+\subsection{Tiempo de procesamiento}
+Aunque se ha tenido un especial cuidado en la elaboración del código;
+el tiempo de procesamiento de los algoritmos no ha sido objetivo de
+estudio, ni se ha tenido en cuenta en este trabajo. Sí se ha
+considerado hacer una evaluación del mismo para futuras
+consideraciones y restricciones como tiempo
+real y vídeo.\\
+Para este proceso se elaboró un ``caso peor'' de $70$ imágenes a
+procesar de manera consecutiva, un número muy superior al estudio real
+del historial individual de cualquier paciente.\\
+\begin{center}
+  $70$ imágenes procesadas $\approx$ $43$ segundos
+  \\[0.5cm]
+  $\frac{43 \text{ segundos}}{70 \text{ imágenes}} \approx 0,614
+  \text{ segundos de media por cada imagen}$
+\end{center}
+Con el resultado calculado de $0,614$ segundos por imagen, sí puede
+pensar en aplicar el algoritmo en tiempo real y vídeo. Aunque por
+defecto todas las técnicas de las bibliotecas se realizan con
+optimizaciones, si se realizase un análisis minucioso del código y su
+tiempo de ejecución de las operaciones con menor rendimiento se podría
+reducir todavía más el tiempo de procesamiento. Sin embargo, como el
+procesamiento de cada imagen es radicalmente inferior al tiempo de
+estudio por parte de un oftalmólogo en realizar el mismo proceso, se
+descartó completamente un análisis de este tipo y en dar más
+relevancia a este apartado.
