@@ -63,7 +63,6 @@ class Algorithm:
                 # 90 degrees line is horizontal, not use as reference
                 if abs((theta * 180 / numpy.pi) - 90) > 1 and theta > 0:
 
-
                     # print "theta = %s\n" % (theta * 180 / numpy.pi)
                     # http://opencv-python-tutroals.readthedocs.org/en/latest/py_tutorials/py_imgproc/py_geometric_transformations/py_geometric_transformations.html
                     rows, cols = self.img_gray_original.shape
@@ -73,7 +72,7 @@ class Algorithm:
                     if self.img_horizontal is None:
                         self.img_horizontal = self.img_original
 
-                    if debug_mode:
+                    if step_mode:
                         a = numpy.cos(theta)
                         b = numpy.sin(theta)
                         x0 = a * rho
@@ -84,20 +83,19 @@ class Algorithm:
                         y2 = int(y0 - 1000 * a)
                         draw_line_img = self.img_original.copy()
                         edges_canny = cv2.cvtColor(edges_canny, cv2.COLOR_GRAY2BGR)
-                        self.debug_step(edges_canny, 'Canny_Hough')
+                        self.save_step(edges_canny, 'horizontal_Canny_Hough')
                         edges_canny_line = edges_canny.copy()
                         cv2.line(edges_canny_line, (x1, y1), (x2, y2), (0, 0, 255), 2)
                         cv2.line(draw_line_img, (x1, y1), (x2, y2), (0, 0, 255), 2)
                         cv2.line(edges_canny, (x1, y1), (x2, y2), (0, 0, 255), 2)
-                        self.debug_step(edges_canny_line, 'Canny_Hough_recta')
+                        self.save_step(edges_canny_line, 'horizontal_Canny_Hough_recta')
                         canny_hough = cv2.addWeighted(draw_line_img, 0.3, edges_canny, 0.7, 0)
-                        self.debug_step(canny_hough, 'Canny+Hough')
-                        self.debug_step(draw_line_img, 'Hough_recta')
+                        self.save_step(canny_hough, 'horizontal_Canny+Hough')
+                        self.save_step(draw_line_img, 'horizontal_Hough_recta')
                         horizontal_hough_img = cv2.warpAffine(draw_line_img, rotation, (cols, rows))
-                        self.debug_step(horizontal_hough_img, 'Horizontal')
-                        self.debug_step(self.img_horizontal, 'Horizontal')
+                        self.save_step(horizontal_hough_img, 'horizontal_Horizontal_recta')
+                        self.save_step(self.img_horizontal, 'horizontal_Horizontal_final')
                     break
-
 
         self.img_gray_horizontal = cv2.cvtColor(self.img_horizontal, cv2.COLOR_BGR2GRAY)
 
@@ -105,7 +103,9 @@ class Algorithm:
         self.step_two = True
         # ret, otsu_threshold = cv2.threshold(self.img_gray_horizontal, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
         blur = cv2.medianBlur(self.img_gray_horizontal, 7)
+        self.save_step(blur, 'fovea_blur')
         ret, binary_threshold = cv2.threshold(blur, 30, 255, cv2.THRESH_BINARY)
+        self.save_step(binary_threshold, 'fovea_threshold')
         # cv2.imwrite(os.path.splitext(self.image_name)[0] + '_' + 'thresh' + os.path.splitext(self.image_name)[1], binary_threshold)
         # print otsu_threshold[0,0]
         # print otsu_threshold.shape
@@ -140,6 +140,19 @@ class Algorithm:
                     break
 
                     # Cálculo de la media de los valores de la x de los dos puntos
+        if self.step_mode:
+            img_points = self.img_horizontal.copy()
+            img_lines = img_points.copy()
+            cv2.circle(img_points, punto1, 2, (0, 255, 0), 3)  # draw the center of the circle
+            cv2.circle(img_points, punto2, 2, (0, 255, 0), 3)  # draw the center of the circle
+            cv2.line(img_lines, (img_lines.shape[1]/3, 0), (img_lines.shape[1]/3, img_lines.shape[0]), (0, 255, 255), 1)
+            cv2.line(img_lines, (2*img_lines.shape[1]/3, 0), (2*img_lines.shape[1]/3, img_lines.shape[0]), (0, 255, 255), 1)
+            self.save_step(img_lines, 'fovea_lines')
+            cv2.circle(img_lines, punto1, 2, (0, 255, 0), 3)  # draw the center of the circle
+            cv2.circle(img_lines, punto2, 2, (0, 255, 0), 3)  # draw the center of the circle
+            self.save_step(img_lines, 'fovea_points_lines')
+            self.save_step(img_points, 'fovea_points')
+
         x = (punto1[0] + punto2[0]) / 2
         y = punto1[1]
 
@@ -150,6 +163,7 @@ class Algorithm:
         # cv2.circle(self.img_fovea_point, punto2, 2, (0, 255, 0), 3)  # draw the center of the circle
         # cv2.line(self.img_fovea_point, self.fovea_point, (self.fovea_point[0], self.img_fovea_point.shape[0]),
         # (255, 0, 0), 1)
+        self.save_step(self.img_fovea_point, 'fovea_point')
 
     def membranes_detector(self):
         self.step_three = True
@@ -158,6 +172,7 @@ class Algorithm:
         ret, img_first_point = cv2.threshold(self.img_gray_horizontal, 179, 255, cv2.THRESH_BINARY)
 
         img_first_point = cv2.Canny(img_first_point, 100, 100 * 3, apertureSize=3)
+        self.save_step(img_first_point, 'espesor_Canny_primer_punto')
         # cv2.imshow('img_first_point', img_first_point)
 
         for i in xrange(3 * img_first_point.shape[0] / 4, self.fovea_point[1], -1):
@@ -165,13 +180,30 @@ class Algorithm:
                 if self.first_point_coroides[1] == 0:
                     self.first_point_coroides = (self.fovea_point[0], i)
 
+        if self.step_mode:
+            img_line = cv2.cvtColor(img_first_point, cv2.COLOR_GRAY2BGR)
+            cv2.line(img_line, (0, 3 * img_first_point.shape[0] / 4), (img_line.shape[1] - 1, 3 * img_first_point.shape[0] / 4), (0, 255, 0), 1)
+            self.save_step(img_line, 'espesor_primer_punto_rango')
+            img_point = cv2.cvtColor(img_first_point, cv2.COLOR_GRAY2BGR)
+            cv2.circle(img_point, self.first_point_coroides, 2, (0, 0, 255), 3)  # draw the center of the circle
+            cv2.circle(img_line, self.first_point_coroides, 2, (0, 0, 255), 3)  # draw the center of the circle
+            self.save_step(img_line, 'espesor_primer_punto_linea')
+            self.save_step(img_point, 'espesor_primer_punto_final')
+
         img_second_point = cv2.medianBlur(self.img_gray_horizontal, 13)
+        self.save_step(img_second_point, 'espesor_medianBlur_segundo_punto')
         adaptative_threshold = cv2.adaptiveThreshold(img_second_point, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
                                                      cv2.THRESH_BINARY, 173, 3)
+        self.save_step(adaptative_threshold, 'espesor_adaptative_threshold_segundo_punto')
         # cv2.imshow('img_second_point', img_second_point)
 
         # Generamos nuestro propio canny a partir de findcontours y quitar los más pequeños, el ruido
         contours, hierarchy = cv2.findContours(adaptative_threshold, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        if step_mode:
+            black_img = numpy.zeros((self.img_membranes.shape[0], self.img_membranes.shape[1], 3), numpy.uint8)
+            cv2.drawContours(black_img, contours, -1, (255, 255, 255), 1)
+            self.save_step(black_img, 'espesor_findContours_todos_segundo_punto')
+
         final_contours = []
         for contour in contours:
             if cv2.contourArea(contour) > 4000.0:
@@ -180,8 +212,12 @@ class Algorithm:
         # http://stackoverflow.com/a/12890573
         black_img = numpy.zeros((self.img_membranes.shape[0], self.img_membranes.shape[1], 3), numpy.uint8)
         cv2.drawContours(black_img, final_contours, -1, (255, 255, 255), 1)
-        cv2.line(black_img, (0, 6 * black_img.shape[0] / 7), (black_img.shape[1] - 1, 6 * black_img.shape[0] / 7),
-                 (0, 255, 0), 1)
+        self.save_step(black_img, 'espesor_findContours_grandes_segundo_punto')
+        if self.step_mode:
+            img_point = black_img.copy()
+            cv2.line(img_point, (0, 6 * black_img.shape[0] / 7), (black_img.shape[1] - 1, 6 * black_img.shape[0] / 7),
+                     (0, 255, 0), 1)
+            self.save_step(img_point, 'espesor_findContours_grandes_rango_segundo_punto')
         img_second_point = cv2.cvtColor(black_img, cv2.COLOR_BGR2GRAY)
         # img_second_point_canny = cv2.Canny(adaptative_threshold, 50, 50 * 5, apertureSize=5)
         # cv2.imwrite(os.path.splitext(self.image_name)[0] + '_' + 'img_second_point_canny' + os.path.splitext(self.image_name)[1], img_second_point_canny)
@@ -203,6 +239,21 @@ class Algorithm:
                 if self.second_point_coroides[1] == 0:
                     self.second_point_coroides = (self.fovea_point[0], i)
 
+        if self.step_mode:
+            img_point = black_img.copy()
+            cv2.circle(img_point, self.second_point_coroides, 2, (0, 0, 255), 3)  # draw the center of the circle
+            img_line = img_point.copy()
+            cv2.line(img_line, (0, 6 * black_img.shape[0] / 7), (black_img.shape[1] - 1, 6 * black_img.shape[0] / 7),
+                     (0, 255, 0), 1)
+            self.save_step(img_line, 'espesor_segundo_punto_linea')
+            self.save_step(img_point, 'espesor_segundo_punto_final')
+
+        if self.step_mode:
+            img_points = cv2.addWeighted(cv2.cvtColor(img_first_point, cv2.COLOR_GRAY2BGR), 0.5, black_img, 0.5, 0)
+            cv2.circle(img_points, self.first_point_coroides, 2, (0, 0, 255), 3)  # draw the center of the circle
+            cv2.circle(img_points, self.second_point_coroides, 2, (0, 0, 255), 3)  # draw the center of the circle
+            self.save_step(img_points, 'espesor_findContours_grandes_ambos_puntos')
+
         # cv2.circle(self.img_membranes, self.first_point_coroides, 2, (0, 0, 255), 3)
         # cv2.circle(self.img_membranes, self.second_point_coroides, 2, (0, 0, 255), 3)
         cv2.line(self.img_membranes, (self.first_point_coroides[0], self.first_point_coroides[1]),
@@ -215,60 +266,44 @@ class Algorithm:
         micras = (self.second_point_coroides[1] - self.first_point_coroides[1]) * self.micras_por_pixel
         p = (self.first_point_coroides[0] + 50, (self.first_point_coroides[1] + self.second_point_coroides[1]) / 2)
         cv2.putText(self.img_membranes, str(micras), p, cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (255, 0, 255), 1, cv2.CV_AA)
+        self.save_img(self.img_membranes, 'espesor_final')
 
-    def debug_step(self, img, title):
-        if debug_mode:
-            self.debug_counter += 1
-            cv2.imwrite(os.path.splitext(self.image_name)[0] + '_' + str(self.debug_counter) + '_' + title +
-                        os.path.splitext(self.image_name)[1], img)
+    def save_step(self, img, title):
+        if step_mode:
+            self.save_img(img, title)
 
-    def show_step(self, number):
-        img = self.img_original
-        title = 'Original'
-        if number == 1 and self.step_one:
-            img = self.img_horizontal
-            title = 'Horizontal'
-
-        if number == 2 and self.step_two:
-            img = self.img_fovea_point
-            title = 'FoveaPoint'
-
-        if number == 3 and self.step_three:
-            img = self.img_membranes
-            title = 'Membranes'
-        cv2.imwrite(os.path.splitext(self.image_name)[0] + '_' + title + os.path.splitext(self.image_name)[1], img)
-        cv2.imshow(title, img)
+    def save_img(self, img, title):
+        self.steps_counter += 1
+        cv2.imwrite(os.path.splitext(self.image_name)[0] + '_' + str(self.steps_counter) + '_' + title +
+                    os.path.splitext(self.image_name)[1], img)
 
 
-def run_algorithm(img_name, debug_mode):
-    algorithm = Algorithm(img_name, debug_mode)
-    # algorithm.show_step(0)
+def run_algorithm(img_name, step_mode):
+    algorithm = Algorithm(img_name, step_mode)
+    algorithm.to_roi()
     algorithm.to_horizontal()
-    # algorithm.show_step(1)
     algorithm.calculate_fovea()
-    # algorithm.show_step(2)
     algorithm.membranes_detector()
-    algorithm.show_step(3)
 
 
 if __name__ == "__main__":
 
     args_processor.carpeta_procesada = 'PROCESADAS'
     args_processor.args = args_processor.parser.parse_args()
-    debug_mode = False
+    step_mode = False
 
     start = cv2.getTickCount()
     if args_processor.args.pasos:
-        debug_mode = True
+        step_mode = True
 
     if args_processor.args.archivos:
         for archivo in args_processor.args.archivos:
-            args_processor.procesar_archivo(archivo, args_processor.carpeta_procesada, debug_mode, run_algorithm)
+            args_processor.procesar_archivo(archivo, args_processor.carpeta_procesada, step_mode, run_algorithm)
 
     if args_processor.args.carpetas:
         for carpeta in args_processor.args.carpetas:
             os.chdir(carpeta)
-            args_processor.procesar_carpeta(args_processor.carpeta_procesada, debug_mode, run_algorithm)
+            args_processor.procesar_carpeta(args_processor.carpeta_procesada, step_mode, run_algorithm)
             os.chdir('..')
 
     end = cv2.getTickCount()
