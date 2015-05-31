@@ -1,10 +1,10 @@
 \chapter{Medición del área de los poros de la papila}
 \section{Problema}
 En el curso de la investigación que se está llevando a cabo
-actualmente sobre el \emph{glaucoma} y las causas que lo provocan, se
+actualmente sobre el \emph{\gls{glaucoma}} y las causas que lo provocan, se
 ha detectado una posible relación con la aparición y tamaño de
-porosidades en la \emph{papila retiniana}. \\
-La \emph{papila retiniana} o \emph{disco óptico} es el punto donde el
+porosidades en la \emph{\gls{papila-retiniana}}. \\
+La \emph{\gls{papila-retiniana}} o \emph{disco óptico} es el punto donde el
 nervio óptico entra en el globo ocular. Tiene la forma de un pequeño
 disco rosado de aproximadamente $2 \times 1.5$ milímetros y está
 situado en la parte posterior del globo ocular. Hasta hace
@@ -12,7 +12,7 @@ relativamente poco no se sabía mucho de ella debido a las carencias
 tecnológicas. Gracias a las \gls{tco}, se han podido conseguir datos
 con cierta precisión, entre los que se encuentra el objeto de este
 estudio: unos poros de los que se cree que puedan estar
-relacionados con la aparición del \emph{glaucoma}.\\
+relacionados con la aparición del \emph{\gls{glaucoma}}.\\
 % Hay que añadir cómo se generan las imágenes
 
 \section{Objetivos}
@@ -20,7 +20,7 @@ El objetivo principal de esta parte de la investigación implica
 encontrar automáticamente, mediante algoritmos de visión
 computerizada, los poros del disco óptico para medirlos y, en la
 medida de lo posible, establecer una correlación entre su tamaño, la
-cantidad, la posición o la forma y la aparición del \emph{glaucoma},
+cantidad, la posición o la forma y la aparición del \emph{\gls{glaucoma}},
 siendo este procedimiento supervisado por personal médico.
 \begin{itemize}
 \item Detección de los poros de la papila así como también de la mayor
@@ -38,13 +38,13 @@ a estudiar los poros aunque no hay una forma clara de estandarizar el
 proceso. Una vez demostrado la viabilidad de las \gls{tco} que produce
 la máquina, se procedió a realizar el estudio.\\
 El principal problema, a pesar de todas las técnicas y tiempo
-dedicados en su solución, es la dificultad del enfoque de los poros así
-como el desconocimiento en la reducción de detección de falsos poros
-mediante la aplicación de manera genérica de algoritmos de búsqueda de
-zonas de interés\deftecnica{tecnica:blobs} que impliquen aprendizaje
-máquina. Aún así, se tuvo muy en cuenta durante todo el proceso la
-utilización y el análisis de resultados del algoritmo
-\emph{ORB\footnote{\url{http://opencv-python-tutroals.readthedocs.org/en/latest/py\_tutorials/py\_feature2d/py\_brief/py\_brief.html\#brief}}\cite{orb-bib}}
+dedicados en su solución, es la dificultad del enfoque de los poros
+así como el desconocimiento en la reducción de detección de falsos
+poros mediante la aplicación de manera genérica de algoritmos de
+búsqueda de zonas de interés\deftecnica{tecnica:blobs} que impliquen
+aprendizaje máquina. Aún así, se tuvo muy en cuenta durante todo el
+proceso la utilización y el análisis de resultados del algoritmo
+\emph{\gls{ORB}\footnote{\url{http://opencv-python-tutroals.readthedocs.org/en/latest/py\_tutorials/py\_feature2d/py\_brief/py\_brief.html\#brief}}\cite{orb-bib}}
 \begin{enumerate}
 \item Se realiza una búsqueda de los poros mediante la técnica
   \emph{findBlobs} de \emph{SimpleCV} con área máxima de $150$
