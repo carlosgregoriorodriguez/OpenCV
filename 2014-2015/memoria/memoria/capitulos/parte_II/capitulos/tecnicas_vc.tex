@@ -166,16 +166,11 @@ adquieren el valor mínimo.  La expresión es
 Ejemplo para un valor de umbral de 127 (Arriba original y abajo el
 resultado obtenido tras aplicar el filtro):
 
-\begin{figure}[t]
-  \caption{Original}
+\begin{figure}[H]
   \centering
-    \includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdOriginal.png}
-\end{figure}
-
-\begin{figure}[t]
+    \subfigure{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdOriginal.png}}
+    \subfigure{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdBinary_127.png}}
   \caption{Treshold Binario}
-  \centering
-    \includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdBinary_127.png}
 \end{figure}
 
 \subsubsection{cv2.THRESH\_BINARY\_INV o \emph{Binarización inversa}}
@@ -192,16 +187,14 @@ que los demás adquieren el valor máximo. La expresión es
 Ejemplo para un valor de umbral de 127 (Arriba original y abajo el
 resultado obtenido tras aplicar el filtro):
 
-\begin{figure}[t]
+\begin{figure}[H]
 \caption{Original}
   \centering
-    \includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdOriginal.png}
-\end{figure}
-
-\begin{figure}[t]
+    \setlength\fboxsep{0pt}
+    \setlength\fboxrule{0.5pt}
+    \subfigure{\fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdOriginal.png}}}
+    \subfigure{\fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdBinaryInv_127.png}}}
   \caption{Threshold Binario Inverso}
-  \centering
-\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdBinaryInv_127.png}
 \end{figure}
 
 
@@ -219,16 +212,20 @@ conserva el valor original. La expresión es
 Ejemplo para un valor de umbral de 127 (Arriba original y abajo el
 resultado obtenido tras aplicar el filtro):
 
-\begin{figure}[t]
+\begin{figure}[H]
   \caption{Original}
   \centering
-\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdOriginal.png}
+  \setlength\fboxsep{0pt}
+  \setlength\fboxrule{0.5pt}
+    \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdOriginal.png}}
 \end{figure}
 
-\begin{figure}[t]
-  \caption{Threshold de Truncado}
+\begin{figure}[H]
   \centering
-\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdTrunc_127.png}
+  \setlength\fboxsep{0pt}
+  \setlength\fboxrule{0.5pt}
+    \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdTrunc_127.png}}
+  \caption{Threshold de Truncado}
 \end{figure}
 
 
@@ -246,16 +243,16 @@ contrario se les aplica el valor mínimo. La expresión es
 Ejemplo para un valor de umbral de 127 (Arriba original y abajo el
 resultado obtenido tras aplicar el filtro):
 
-\begin{figure}[t]
+\begin{figure}[H]
   \caption{Original}
   \centering
 \includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdOriginal.png}
 \end{figure}
 
-\begin{figure}[t]
-  \caption{Threshold to Zero}
+\begin{figure}[H]
   \centering
-\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdTo0_127.png}
+    \includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdTo0_127.png}
+  \caption{Threshold to Zero}
 \end{figure}
 
 \subsubsection{cv2.THRESH\_TOZERO\_INV}
@@ -272,16 +269,16 @@ expresión es
 Ejemplo para un valor de umbral de 127 (Arriba original y abajo el
 resultado obtenido tras aplicar el filtro):
 
-\begin{figure}[t]
+\begin{figure}[H]
   \caption{Original}
   \centering
 \includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdOriginal.png}
 \end{figure}
 
-\begin{figure}[t]
-  \caption{Threshold to Zero Inverso}
+\begin{figure}[H]
   \centering
-\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdTo0Inv_127.png}
+    \includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdTo0Inv_127.png}
+  \caption{Threshold to Zero Inverso}
 \end{figure}
 
 \subsection{Adaptativos}
