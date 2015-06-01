@@ -174,7 +174,7 @@ resultado obtenido tras aplicar el filtro):
     \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdOriginal.png}}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
   \centering
     \setlength\fboxsep{0pt}
     \setlength\fboxrule{0.5pt}
@@ -204,7 +204,7 @@ resultado obtenido tras aplicar el filtro):
     \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdOriginal.png}}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
   \centering
     \setlength\fboxsep{0pt}
     \setlength\fboxrule{0.5pt}
@@ -307,22 +307,70 @@ resultado obtenido tras aplicar el filtro):
 \subsection{Adaptativos}
 En imágenes uniformes aplicar valores umbral globales y fijos suele
 ser una buena opción pero para imágenes no uniformes hay que adaptar
-dicho valor a cada área de la imagen. Por ello, se aplican las dos
+dicho valor a cada área de la imagen. Por ello, se aplican las
 técnicas siguientes. En ambas, el área a realizar el \emph{threshold}
 depende del tamaño del \emph{kernel} usado.
 
 \subsubsection{cv2.ADAPTIVE\_THRESH\_MEAN\_C}
 El valor de cada píxel se establece por la media de sus vecinos.
 
+\begin{figure}[H]
+  \caption{Original}
+  \centering
+    \setlength\fboxsep{0pt}
+    \setlength\fboxrule{0.5pt}
+    \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdOriginal.png}}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+    \setlength\fboxsep{0pt}
+    \setlength\fboxrule{0.5pt}
+    \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdAdaptiveMeanKernel11Constant2.png}}
+  \caption{Mean Adaptive Threshold}
+\end{figure}
+
 \subsubsection{cv2.ADAPTIVE\_THRESH\_GAUSSIAN\_C}\label{tecnica:threshold-adaptativo-gauss}
 El valor de cada píxel se establece por el resultado de una función
 Gaussiana a partir de sus vecinos.
+
+\begin{figure}[H]
+  \caption{Original}
+  \centering
+    \setlength\fboxsep{0pt}
+    \setlength\fboxrule{0.5pt}
+    \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdOriginal.png}}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+    \setlength\fboxsep{0pt}
+    \setlength\fboxrule{0.5pt}
+    \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdAdaptiveGaussianKernel11Constant2.png}}
+  \caption{Gaussian Adaptive Threshold}
+\end{figure}
 
 \subsection{Otsu}\label{tecnica:threshold-otsu}
 Este \emph{threshold} calcula el valor umbral a partir del histograma
 de la imagen. La precisión de esta técnica depende de que el
 histograma sea lo más bimodal posible, en los que predomina dos
 columnas.
+
+\begin{figure}[H]
+  \caption{Original}
+  \centering
+    \setlength\fboxsep{0pt}
+    \setlength\fboxrule{0.5pt}
+    \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdOriginal.png}}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+    \setlength\fboxsep{0pt}
+    \setlength\fboxrule{0.5pt}
+    \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdOtsu.png}}
+  \caption{Otsu Threshold}
+\end{figure}
 
 \section{Transformaciones geométricas}
 Las transformaciones geométricas son aquellas técnicas en las que se
