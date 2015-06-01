@@ -288,16 +288,14 @@ class Algorithm:
         # (255, 0, 0), 1)
         self.save_step(self.img_fovea_point, 'fovea_point')
 
-    def membranes_detector(self, size):
+    def membranes_detector(self):
         self.step_three = True
-        self.iteration_number += 1
         self.img_membranes = self.img_horizontal.copy()
-        iteration = 'iteration=' + str(self.iteration_number) + '_'
 
-        ret, img_first_point = cv2.threshold(self.img_gray_horizontal, 179, 255, cv2.THRESH_BINARY)
-
+        img_second_point = cv2.medianBlur(self.img_gray_horizontal, 9)
+        ret, img_first_point = cv2.threshold(img_second_point, 179, 255, cv2.THRESH_BINARY)
         img_first_point = cv2.Canny(img_first_point, 100, 100 * 3, apertureSize=3)
-        self.save_step(img_first_point, iteration + 'espesor_Canny_primer_punto')
+        self.save_step(img_first_point, 'espesor_Canny_primer_punto')
         # cv2.imshow('img_first_point', img_first_point)
 
         for i in xrange(3 * img_first_point.shape[0] / 4, self.fovea_point[1], -1):
@@ -308,18 +306,18 @@ class Algorithm:
         if self.step_mode:
             img_line = cv2.cvtColor(img_first_point, cv2.COLOR_GRAY2BGR)
             cv2.line(img_line, (0, 3 * img_first_point.shape[0] / 4), (img_line.shape[1] - 1, 3 * img_first_point.shape[0] / 4), (0, 255, 0), 1)
-            self.save_step(img_line, iteration + 'espesor_primer_punto_rango')
+            self.save_step(img_line, 'espesor_primer_punto_rango')
             img_point = cv2.cvtColor(img_first_point, cv2.COLOR_GRAY2BGR)
             cv2.circle(img_point, self.first_point_coroides, 2, (0, 0, 255), 3)  # draw the center of the circle
             cv2.circle(img_line, self.first_point_coroides, 2, (0, 0, 255), 3)  # draw the center of the circle
-            self.save_step(img_line, iteration + 'espesor_primer_punto_linea')
-            self.save_step(img_point, iteration + 'espesor_primer_punto_final')
+            self.save_step(img_line, 'espesor_primer_punto_linea')
+            self.save_step(img_point, 'espesor_primer_punto_final')
 
         img_second_point = cv2.medianBlur(self.img_gray_horizontal, 15)
-        self.save_step(img_second_point, iteration + 'espesor_medianBlur_segundo_punto')
+        self.save_step(img_second_point, 'espesor_medianBlur_segundo_punto')
         adaptative_threshold = cv2.adaptiveThreshold(img_second_point, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
                                                      cv2.THRESH_BINARY, 173, 3)
-        self.save_step(adaptative_threshold, iteration + 'espesor_adaptative_threshold_segundo_punto')
+        self.save_step(adaptative_threshold, 'espesor_adaptative_threshold_segundo_punto')
         # cv2.imshow('img_second_point', img_second_point)
 
         # Generamos nuestro propio canny a partir de findcontours y quitar los más pequeños, el ruido
@@ -327,81 +325,90 @@ class Algorithm:
         if step_mode:
             black_img = numpy.zeros((self.img_membranes.shape[0], self.img_membranes.shape[1], 3), numpy.uint8)
             cv2.drawContours(black_img, contours, -1, (255, 255, 255), 1)
-            self.save_step(black_img, iteration + 'espesor_findContours_todos_segundo_punto')
+            self.save_step(black_img, 'espesor_findContours_todos_segundo_punto')
+            micras = -1
+            size = 4000
+            while micras < 0:
+                self.iteration_number += 1
+                iteration = 'iteration=' + str(self.iteration_number) + '_'
+                final_contours = []
+                for contour in contours:
+                    if cv2.contourArea(contour) > size:
+                        final_contours.append(contour)
 
-        final_contours = []
-        for contour in contours:
-            if cv2.contourArea(contour) > size:
-                final_contours.append(contour)
+                # http://stackoverflow.com/a/12890573
+                black_img = numpy.zeros((self.img_membranes.shape[0], self.img_membranes.shape[1], 3), numpy.uint8)
+                cv2.drawContours(black_img, final_contours, -1, (255, 255, 255), 1)
+                self.save_step(black_img, iteration + 'espesor_findContours_grandes_segundo_punto')
+                if self.step_mode:
+                    img_point = black_img.copy()
+                    cv2.line(img_point, (0, 6 * black_img.shape[0] / 7), (black_img.shape[1] - 1, 6 * black_img.shape[0] / 7),
+                             (0, 255, 0), 1)
+                    self.save_step(img_point, iteration + 'espesor_findContours_grandes_rango_segundo_punto')
+                img_second_point = cv2.cvtColor(black_img, cv2.COLOR_BGR2GRAY)
+                # img_second_point_canny = cv2.Canny(adaptative_threshold, 50, 50 * 5, apertureSize=5)
+                # cv2.imwrite(os.path.splitext(self.image_name)[0] + '_' + 'img_second_point_canny' + os.path.splitext(self.image_name)[1], img_second_point_canny)
+                # cv2.imwrite(os.path.splitext(self.image_name)[0] + '_' + 'img_second_point' + os.path.splitext(self.image_name)[1], img_second_point)
+                # cv2.imshow('img_second_point', img_second_point)
 
-        # http://stackoverflow.com/a/12890573
-        black_img = numpy.zeros((self.img_membranes.shape[0], self.img_membranes.shape[1], 3), numpy.uint8)
-        cv2.drawContours(black_img, final_contours, -1, (255, 255, 255), 1)
-        self.save_step(black_img, iteration + 'espesor_findContours_grandes_segundo_punto')
-        if self.step_mode:
-            img_point = black_img.copy()
-            cv2.line(img_point, (0, 6 * black_img.shape[0] / 7), (black_img.shape[1] - 1, 6 * black_img.shape[0] / 7),
-                     (0, 255, 0), 1)
-            self.save_step(img_point, iteration + 'espesor_findContours_grandes_rango_segundo_punto')
-        img_second_point = cv2.cvtColor(black_img, cv2.COLOR_BGR2GRAY)
-        # img_second_point_canny = cv2.Canny(adaptative_threshold, 50, 50 * 5, apertureSize=5)
-        # cv2.imwrite(os.path.splitext(self.image_name)[0] + '_' + 'img_second_point_canny' + os.path.splitext(self.image_name)[1], img_second_point_canny)
-        # cv2.imwrite(os.path.splitext(self.image_name)[0] + '_' + 'img_second_point' + os.path.splitext(self.image_name)[1], img_second_point)
-        # cv2.imshow('img_second_point', img_second_point)
+                # detectar el punto inferior de abajo a arriba
+                for i in xrange(6 * img_second_point.shape[0] / 7, self.first_point_coroides[1], -1):
+                    if img_second_point[i, self.fovea_point[0]] == 255:
+                        self.second_point_coroides = (self.fovea_point[0], i)
+                        break
 
-        # detectar el punto inferior de abajo a arriba
-        for i in xrange(6 * img_second_point.shape[0] / 7, self.first_point_coroides[1], -1):
-            if img_second_point[i, self.fovea_point[0]] == 255:
-                self.second_point_coroides = (self.fovea_point[0], i)
-                break
+                if self.step_mode:
+                    img_point = black_img.copy()
+                    cv2.circle(img_point, self.second_point_coroides, 2, (0, 0, 255), 3)  # draw the center of the circle
+                    img_line = img_point.copy()
+                    cv2.line(img_line, (0, 6 * black_img.shape[0] / 7), (black_img.shape[1] - 1, 6 * black_img.shape[0] / 7),
+                             (0, 255, 0), 1)
+                    self.save_step(img_line, iteration + 'espesor_segundo_punto_linea')
+                    self.save_step(img_point, iteration + 'espesor_segundo_punto_final')
 
-        if self.step_mode:
-            img_point = black_img.copy()
-            cv2.circle(img_point, self.second_point_coroides, 2, (0, 0, 255), 3)  # draw the center of the circle
-            img_line = img_point.copy()
-            cv2.line(img_line, (0, 6 * black_img.shape[0] / 7), (black_img.shape[1] - 1, 6 * black_img.shape[0] / 7),
-                     (0, 255, 0), 1)
-            self.save_step(img_line, iteration + 'espesor_segundo_punto_linea')
-            self.save_step(img_point, iteration + 'espesor_segundo_punto_final')
+                if self.step_mode:
+                    img_points = cv2.addWeighted(cv2.cvtColor(img_first_point, cv2.COLOR_GRAY2BGR), 0.5, black_img, 0.5, 0)
+                    cv2.circle(img_points, self.first_point_coroides, 2, (0, 0, 255), 3)  # draw the center of the circle
+                    cv2.circle(img_points, self.second_point_coroides, 2, (0, 0, 255), 3)  # draw the center of the circle
+                    self.save_step(img_points, iteration + 'espesor_findContours_grandes_ambos_puntos')
 
-        if self.step_mode:
-            img_points = cv2.addWeighted(cv2.cvtColor(img_first_point, cv2.COLOR_GRAY2BGR), 0.5, black_img, 0.5, 0)
-            cv2.circle(img_points, self.first_point_coroides, 2, (0, 0, 255), 3)  # draw the center of the circle
-            cv2.circle(img_points, self.second_point_coroides, 2, (0, 0, 255), 3)  # draw the center of the circle
-            self.save_step(img_points, iteration + 'espesor_findContours_grandes_ambos_puntos')
+                # cv2.circle(self.img_membranes, self.first_point_coroides, 2, (0, 0, 255), 3)
+                # cv2.circle(self.img_membranes, self.second_point_coroides, 2, (0, 0, 255), 3)
+                cv2.line(self.img_membranes, (self.first_point_coroides[0], self.first_point_coroides[1]),
+                         (self.second_point_coroides[0], self.second_point_coroides[1]), (0, 255, 0), 1)
+                cv2.line(self.img_membranes, (self.first_point_coroides[0] - 15, self.first_point_coroides[1]),
+                         (self.first_point_coroides[0] + 15, self.first_point_coroides[1]), (0, 0, 255), 1)
+                cv2.line(self.img_membranes, (self.second_point_coroides[0] - 10, self.second_point_coroides[1]),
+                         (self.second_point_coroides[0] + 10, self.second_point_coroides[1]), (0, 0, 255), 1)
 
-        # cv2.circle(self.img_membranes, self.first_point_coroides, 2, (0, 0, 255), 3)
-        # cv2.circle(self.img_membranes, self.second_point_coroides, 2, (0, 0, 255), 3)
-        cv2.line(self.img_membranes, (self.first_point_coroides[0], self.first_point_coroides[1]),
-                 (self.second_point_coroides[0], self.second_point_coroides[1]), (0, 255, 0), 1)
-        cv2.line(self.img_membranes, (self.first_point_coroides[0] - 15, self.first_point_coroides[1]),
-                 (self.first_point_coroides[0] + 15, self.first_point_coroides[1]), (0, 0, 255), 1)
-        cv2.line(self.img_membranes, (self.second_point_coroides[0] - 10, self.second_point_coroides[1]),
-                 (self.second_point_coroides[0] + 10, self.second_point_coroides[1]), (0, 0, 255), 1)
-
-        micras = (self.second_point_coroides[1] - self.first_point_coroides[1]) * self.micras_por_pixel
-        p = (self.first_point_coroides[0] + 50, (self.first_point_coroides[1] + self.second_point_coroides[1]) / 2)
-        cv2.putText(self.img_membranes, str(micras), p, cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (255, 0, 255), 1, cv2.CV_AA)
-        self.save_img(self.img_membranes, iteration + 'espesor_final')
-        if micras < 0:
-            self.membranes_detector(size-500)
+                micras = (self.second_point_coroides[1] - self.first_point_coroides[1]) * self.micras_por_pixel
+                p = (self.first_point_coroides[0] + 50, (self.first_point_coroides[1] + self.second_point_coroides[1]) / 2)
+                cv2.putText(self.img_membranes, str(micras), p, cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (255, 0, 255), 1, cv2.CV_AA)
+                if micras < 0:
+                    size -= 500
+                    self.img_membranes = self.img_horizontal.copy()
+                else:
+                    self.save_img(self.img_membranes, iteration + 'espesor_final')
 
     def save_step(self, img, title):
         if step_mode:
             self.save_img(img, title)
 
     def save_img(self, img, title):
-        self.steps_counter += 1
-        cv2.imwrite(os.path.splitext(self.image_name)[0] + '_' + str(self.steps_counter) + '_' + title +
-                    os.path.splitext(self.image_name)[1], img)
-
+        if step_mode:
+            self.steps_counter += 1
+            cv2.imwrite(os.path.splitext(self.image_name)[0] + '_' + str(self.steps_counter) + '_' + title +
+                        os.path.splitext(self.image_name)[1], img)
+        else:
+            cv2.imwrite(os.path.splitext(self.image_name)[0] + '_' + title +
+                        os.path.splitext(self.image_name)[1], img)
 
 def run_algorithm(img_name, step_mode):
     algorithm = Algorithm(img_name, step_mode)
     algorithm.to_roi()
     algorithm.to_horizontal()
     algorithm.calculate_fovea()
-    algorithm.membranes_detector(4000)
+    algorithm.membranes_detector()
 
 
 if __name__ == "__main__":
