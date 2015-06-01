@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
-
 import cv2
-
 import numpy
-
 import args_processor
 
 __author__ = 'mimadrid'
@@ -53,35 +50,35 @@ class Algorithm:
         second_aux_point = (0, 0)
         gray = cv2.cvtColor(self.roi, cv2.COLOR_BGR2GRAY)
         ret, otsu_threshold = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        dilation = cv2.dilate(otsu_threshold, numpy.ones((15, 15), numpy.uint8), iterations=2)
         if step_mode:
             img_line = self.roi.copy()
-            cv2.line(img_line, (2*img_line.shape[1]/3, 0), (2*img_line.shape[1]/3, img_line.shape[0]), (0, 0, 255), 1)
+            cv2.line(img_line, (int(round(1.25*self.roi.shape[1]/3)), 0), (int(round(1.25*self.roi.shape[1]/3)), img_line.shape[0]), (0, 0, 255), 1)
             self.save_step(img_line, 'roi_rang_first_point')
         self.save_step(otsu_threshold, 'roi_otsu_first_point')
-        dilate = cv2.dilate(otsu_threshold, numpy.ones((17, 17), numpy.uint8), iterations=1)
-        self.save_step(dilate, 'roi_otsu_dilate_first_point')
-        ret, binary_threshold = cv2.threshold(dilate, 10, 255, cv2.THRESH_BINARY)
+        self.save_step(dilation, 'roi_otsu_dilation')
         # Punto de arriba a la izquierda del área de trabajo
-        for i in xrange(2*self.roi.shape[1]/3, 0, -1):
-            if otsu_threshold[10, i] != 0:
-                first_point = (i, 10)
+        for i in xrange(int(round(1.25*self.roi.shape[1]/3)), 0, -1):
+            if dilation[50, i] != 0:
+                first_point = (i, 50)
                 break
 
         if self.step_mode:
             img_point = self.roi.copy()
-            cv2.circle(img_point, first_point, 2, (0, 0, 255), 8)  # draw the center of the circle
+            cv2.circle(img_point, first_point, 2, (0, 0, 255), 4)  # draw the center of the circle
             self.save_step(img_point, 'roi_first_point')
 
         # Punto de abajo a la izquierda del área de trabajo (auxiliar, hay que disminuirlo)
         for i in xrange(self.roi.shape[0]-1, 0, -1):
-            if binary_threshold[i, first_point[0]] != 0:
+            if dilation[i, first_point[0]] != 0:
                 second_aux_point = (first_point[0], i)
                 break
 
+        ret, binary_threshold = cv2.threshold(gray, 10, 255, cv2.THRESH_BINARY)
         if self.step_mode:
             self.save_step(binary_threshold, 'roi_binary_first_point')
             img_point = self.roi.copy()
-            cv2.circle(img_point, second_aux_point, 2, (0, 0, 255), 8)  # draw the center of the circle
+            cv2.circle(img_point, second_aux_point, 2, (0, 0, 255), 4)  # draw the center of the circle
             self.save_step(img_point, 'roi_second_aux_point')
 
         first_aux_middle_point = (0, 0)
@@ -89,12 +86,14 @@ class Algorithm:
             if binary_threshold[i, 2*binary_threshold.shape[1]/4] != 0:
                 first_aux_middle_point = (2*binary_threshold.shape[1]/4, i)
                 break
+
         # cv2.circle(image, first_aux_middle_point, 1, (0, 0, 255), 3)
         second_aux_middle_point = (0, 0)
         for i in xrange(second_aux_point[1], 0, -1):
             if binary_threshold[i, 3*binary_threshold.shape[1]/4] != 0:
                 second_aux_middle_point = (3*binary_threshold.shape[1]/4, i)
                 break
+
         # cv2.circle(image, second_aux_middle_point, 1, (0, 0, 255), 3)
         # Punto de abajo a la izquierda definitivo
         second_point = (second_aux_point[0], first_aux_middle_point[1] + (first_aux_middle_point[1] - second_aux_middle_point[1]))
@@ -102,6 +101,29 @@ class Algorithm:
         # Punto de abajo a la derecha
         third_point = (binary_threshold.shape[1], second_aux_middle_point[1] + (second_aux_middle_point[1] - first_aux_middle_point[1]))
         # cv2.circle(img, third_point, 1, (0, 0, 255), 3)
+        if self.step_mode:
+            img_first_point = self.roi.copy()
+            img_line = self.roi.copy()
+            cv2.line(img_line, (second_aux_point[0], second_aux_point[1]), (img_line.shape[1], second_aux_point[1]), (255, 0, 0), 1)
+            self.save_step(img_line, 'roi_botton_lower_line')
+            cv2.circle(img_first_point, first_aux_middle_point, 2, (0, 255, 0), 4)  # draw the center of the circle
+            self.save_step(img_first_point, 'roi_first_aux_middle_point')
+            img_second_point = self.roi.copy()
+            cv2.circle(img_second_point, second_aux_middle_point, 2, (0, 255, 0), 4)  # draw the center of the circle
+            self.save_step(img_second_point, 'roi_second_aux_middle_point')
+            cv2.circle(img_first_point, second_aux_middle_point, 2, (0, 255, 0), 4)  # draw the center of the circle
+            self.save_step(img_first_point, 'roi_aux_middle_points')
+            img_second_point = self.roi.copy()
+            cv2.circle(img_second_point, second_point, 2, (0, 0, 255), 5)  # draw the center of the circle
+            self.save_step(img_second_point, 'roi_second_point')
+            img_third_point = self.roi.copy()
+            cv2.circle(img_third_point, third_point, 2, (0, 0, 255), 5)  # draw the center of the circle
+            self.save_step(img_third_point, 'roi_third_point')
+            cv2.circle(img_second_point, third_point, 2, (0, 0, 255), 5)  # draw the center of the circle
+            self.save_step(img_second_point, 'roi_points')
+            cv2.circle(img_second_point, first_aux_middle_point, 2, (0, 255, 0), 4)  # draw the center of the circle
+            cv2.circle(img_second_point, second_aux_middle_point, 2, (0, 255, 0), 4)  # draw the center of the circle
+            self.save_step(img_second_point, 'roi_all_points')
 
         first_roi_point = first_point
 
@@ -114,6 +136,15 @@ class Algorithm:
             # cv2.line(img, (second_aux_point[0], third_point[1]), (img.shape[1], third_point[1]), (0, 255, 0), 2)
             # cv2.line(img, first_point, (second_aux_point[0], third_point[1]), (0, 255, 0), 2)
             second_roi_point = (self.roi.shape[1], third_point[1])
+        if step_mode:
+            img_point = self.roi.copy()
+            cv2.circle(img_point, second_roi_point, 2, (0, 255, 255), 8)  # draw the center of the circle
+            self.save_step(img_point, 'roi_final_point')
+            cv2.circle(img_point, first_roi_point, 2, (0, 255, 255), 8)  # draw the center of the circle
+            self.save_step(img_point, 'roi_final_points')
+            cv2.rectangle(img_point, first_roi_point, second_roi_point, (255, 0, 255), 2)
+            self.save_step(img_point, 'roi_final_rectangle')
+
         self.roi = self.roi[first_roi_point[1]:second_roi_point[1], first_roi_point[0]:second_roi_point[0]]
         self.img_original = self.roi.copy()
         self.img_gray_original = cv2.cvtColor(self.img_original, cv2.COLOR_BGR2GRAY)
@@ -173,6 +204,21 @@ class Algorithm:
                         self.save_step(self.img_horizontal, 'horizontal_Horizontal_final')
                     break
 
+        self.img_gray_horizontal = cv2.cvtColor(self.img_horizontal, cv2.COLOR_BGR2GRAY)
+        ret, binary_threshold = cv2.threshold(self.img_gray_horizontal, 10, 255, cv2.THRESH_BINARY)
+        self.save_step(binary_threshold, 'roi_binary_horizontal')
+        roi_point = (0, 0)
+        for i in xrange(binary_threshold.shape[0]-1, 0, -1):
+            if binary_threshold[i, binary_threshold.shape[1]/2] != 0:
+                roi_point = (binary_threshold.shape[1]/2, i)
+                break
+
+        if self.step_mode:
+            img_point = self.img_horizontal.copy()
+            cv2.circle(img_point, roi_point, 2, (0, 255, 0), 4)  # draw the center of the circle
+            self.save_step(img_point, 'roi_point_horizontal')
+
+        self.img_horizontal = self.img_horizontal[0:roi_point[1], 0:self.img_horizontal.shape[1]]
         self.img_gray_horizontal = cv2.cvtColor(self.img_horizontal, cv2.COLOR_BGR2GRAY)
 
     def calculate_fovea(self):
