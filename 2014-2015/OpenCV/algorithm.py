@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
-
 import cv2
-
 import numpy
-
 import args_processor
 
 __author__ = 'mimadrid'
@@ -27,6 +24,7 @@ class Algorithm:
         self.img_file = cv2.imread(image_name)
         self.roi = self.img_file
         self.steps_counter = 0
+        self.iteration_number = 0
         self.step_mode = step_mode
         self.image_name = image_name
         self.img_original = None
@@ -53,35 +51,35 @@ class Algorithm:
         second_aux_point = (0, 0)
         gray = cv2.cvtColor(self.roi, cv2.COLOR_BGR2GRAY)
         ret, otsu_threshold = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        dilation = cv2.dilate(otsu_threshold, numpy.ones((15, 15), numpy.uint8), iterations=2)
         if step_mode:
             img_line = self.roi.copy()
-            cv2.line(img_line, (2*img_line.shape[1]/3, 0), (2*img_line.shape[1]/3, img_line.shape[0]), (0, 0, 255), 1)
+            cv2.line(img_line, (int(round(1.25*self.roi.shape[1]/3)), 0), (int(round(1.25*self.roi.shape[1]/3)), img_line.shape[0]), (0, 0, 255), 1)
             self.save_step(img_line, 'roi_rang_first_point')
         self.save_step(otsu_threshold, 'roi_otsu_first_point')
-        dilate = cv2.dilate(otsu_threshold, numpy.ones((17, 17), numpy.uint8), iterations=1)
-        self.save_step(dilate, 'roi_otsu_dilate_first_point')
-        ret, binary_threshold = cv2.threshold(dilate, 10, 255, cv2.THRESH_BINARY)
+        self.save_step(dilation, 'roi_otsu_dilation')
         # Punto de arriba a la izquierda del área de trabajo
-        for i in xrange(2*self.roi.shape[1]/3, 0, -1):
-            if otsu_threshold[10, i] != 0:
-                first_point = (i, 10)
+        for i in xrange(int(round(1.25*self.roi.shape[1]/3)), 0, -1):
+            if dilation[50, i] != 0:
+                first_point = (i, 50)
                 break
 
         if self.step_mode:
             img_point = self.roi.copy()
-            cv2.circle(img_point, first_point, 2, (0, 0, 255), 8)  # draw the center of the circle
+            cv2.circle(img_point, first_point, 2, (0, 0, 255), 4)  # draw the center of the circle
             self.save_step(img_point, 'roi_first_point')
 
         # Punto de abajo a la izquierda del área de trabajo (auxiliar, hay que disminuirlo)
         for i in xrange(self.roi.shape[0]-1, 0, -1):
-            if binary_threshold[i, first_point[0]] != 0:
+            if dilation[i, first_point[0]] != 0:
                 second_aux_point = (first_point[0], i)
                 break
 
+        ret, binary_threshold = cv2.threshold(gray, 10, 255, cv2.THRESH_BINARY)
         if self.step_mode:
             self.save_step(binary_threshold, 'roi_binary_first_point')
             img_point = self.roi.copy()
-            cv2.circle(img_point, second_aux_point, 2, (0, 0, 255), 8)  # draw the center of the circle
+            cv2.circle(img_point, second_aux_point, 2, (0, 0, 255), 4)  # draw the center of the circle
             self.save_step(img_point, 'roi_second_aux_point')
 
         first_aux_middle_point = (0, 0)
@@ -89,12 +87,14 @@ class Algorithm:
             if binary_threshold[i, 2*binary_threshold.shape[1]/4] != 0:
                 first_aux_middle_point = (2*binary_threshold.shape[1]/4, i)
                 break
+
         # cv2.circle(image, first_aux_middle_point, 1, (0, 0, 255), 3)
         second_aux_middle_point = (0, 0)
         for i in xrange(second_aux_point[1], 0, -1):
             if binary_threshold[i, 3*binary_threshold.shape[1]/4] != 0:
                 second_aux_middle_point = (3*binary_threshold.shape[1]/4, i)
                 break
+
         # cv2.circle(image, second_aux_middle_point, 1, (0, 0, 255), 3)
         # Punto de abajo a la izquierda definitivo
         second_point = (second_aux_point[0], first_aux_middle_point[1] + (first_aux_middle_point[1] - second_aux_middle_point[1]))
@@ -102,6 +102,29 @@ class Algorithm:
         # Punto de abajo a la derecha
         third_point = (binary_threshold.shape[1], second_aux_middle_point[1] + (second_aux_middle_point[1] - first_aux_middle_point[1]))
         # cv2.circle(img, third_point, 1, (0, 0, 255), 3)
+        if self.step_mode:
+            img_first_point = self.roi.copy()
+            img_line = self.roi.copy()
+            cv2.line(img_line, (second_aux_point[0], second_aux_point[1]), (img_line.shape[1], second_aux_point[1]), (255, 0, 0), 1)
+            self.save_step(img_line, 'roi_botton_lower_line')
+            cv2.circle(img_first_point, first_aux_middle_point, 2, (0, 255, 0), 4)  # draw the center of the circle
+            self.save_step(img_first_point, 'roi_first_aux_middle_point')
+            img_second_point = self.roi.copy()
+            cv2.circle(img_second_point, second_aux_middle_point, 2, (0, 255, 0), 4)  # draw the center of the circle
+            self.save_step(img_second_point, 'roi_second_aux_middle_point')
+            cv2.circle(img_first_point, second_aux_middle_point, 2, (0, 255, 0), 4)  # draw the center of the circle
+            self.save_step(img_first_point, 'roi_aux_middle_points')
+            img_second_point = self.roi.copy()
+            cv2.circle(img_second_point, second_point, 2, (0, 0, 255), 5)  # draw the center of the circle
+            self.save_step(img_second_point, 'roi_second_point')
+            img_third_point = self.roi.copy()
+            cv2.circle(img_third_point, third_point, 2, (0, 0, 255), 5)  # draw the center of the circle
+            self.save_step(img_third_point, 'roi_third_point')
+            cv2.circle(img_second_point, third_point, 2, (0, 0, 255), 5)  # draw the center of the circle
+            self.save_step(img_second_point, 'roi_points')
+            cv2.circle(img_second_point, first_aux_middle_point, 2, (0, 255, 0), 4)  # draw the center of the circle
+            cv2.circle(img_second_point, second_aux_middle_point, 2, (0, 255, 0), 4)  # draw the center of the circle
+            self.save_step(img_second_point, 'roi_all_points')
 
         first_roi_point = first_point
 
@@ -114,6 +137,15 @@ class Algorithm:
             # cv2.line(img, (second_aux_point[0], third_point[1]), (img.shape[1], third_point[1]), (0, 255, 0), 2)
             # cv2.line(img, first_point, (second_aux_point[0], third_point[1]), (0, 255, 0), 2)
             second_roi_point = (self.roi.shape[1], third_point[1])
+        if step_mode:
+            img_point = self.roi.copy()
+            cv2.circle(img_point, second_roi_point, 2, (0, 255, 255), 8)  # draw the center of the circle
+            self.save_step(img_point, 'roi_final_point')
+            cv2.circle(img_point, first_roi_point, 2, (0, 255, 255), 8)  # draw the center of the circle
+            self.save_step(img_point, 'roi_final_points')
+            cv2.rectangle(img_point, first_roi_point, second_roi_point, (255, 0, 255), 2)
+            self.save_step(img_point, 'roi_final_rectangle')
+
         self.roi = self.roi[first_roi_point[1]:second_roi_point[1], first_roi_point[0]:second_roi_point[0]]
         self.img_original = self.roi.copy()
         self.img_gray_original = cv2.cvtColor(self.img_original, cv2.COLOR_BGR2GRAY)
@@ -173,6 +205,21 @@ class Algorithm:
                         self.save_step(self.img_horizontal, 'horizontal_Horizontal_final')
                     break
 
+        self.img_gray_horizontal = cv2.cvtColor(self.img_horizontal, cv2.COLOR_BGR2GRAY)
+        ret, binary_threshold = cv2.threshold(self.img_gray_horizontal, 10, 255, cv2.THRESH_BINARY)
+        self.save_step(binary_threshold, 'roi_binary_horizontal')
+        roi_point = (0, 0)
+        for i in xrange(binary_threshold.shape[0]-1, 0, -1):
+            if binary_threshold[i, binary_threshold.shape[1]/2] != 0:
+                roi_point = (binary_threshold.shape[1]/2, i)
+                break
+
+        if self.step_mode:
+            img_point = self.img_horizontal.copy()
+            cv2.circle(img_point, roi_point, 2, (0, 255, 0), 4)  # draw the center of the circle
+            self.save_step(img_point, 'roi_point_horizontal')
+
+        self.img_horizontal = self.img_horizontal[0:roi_point[1], 0:self.img_horizontal.shape[1]]
         self.img_gray_horizontal = cv2.cvtColor(self.img_horizontal, cv2.COLOR_BGR2GRAY)
 
     def calculate_fovea(self):
@@ -241,36 +288,38 @@ class Algorithm:
         # (255, 0, 0), 1)
         self.save_step(self.img_fovea_point, 'fovea_point')
 
-    def membranes_detector(self):
+    def membranes_detector(self, size):
         self.step_three = True
+        self.iteration_number += 1
         self.img_membranes = self.img_horizontal.copy()
+        iteration = 'iteration=' + str(self.iteration_number) + '_'
 
         ret, img_first_point = cv2.threshold(self.img_gray_horizontal, 179, 255, cv2.THRESH_BINARY)
 
         img_first_point = cv2.Canny(img_first_point, 100, 100 * 3, apertureSize=3)
-        self.save_step(img_first_point, 'espesor_Canny_primer_punto')
+        self.save_step(img_first_point, iteration + 'espesor_Canny_primer_punto')
         # cv2.imshow('img_first_point', img_first_point)
 
         for i in xrange(3 * img_first_point.shape[0] / 4, self.fovea_point[1], -1):
             if img_first_point[i, self.fovea_point[0]] == 255:
-                if self.first_point_coroides[1] == 0:
-                    self.first_point_coroides = (self.fovea_point[0], i)
+                self.first_point_coroides = (self.fovea_point[0], i)
+                break
 
         if self.step_mode:
             img_line = cv2.cvtColor(img_first_point, cv2.COLOR_GRAY2BGR)
             cv2.line(img_line, (0, 3 * img_first_point.shape[0] / 4), (img_line.shape[1] - 1, 3 * img_first_point.shape[0] / 4), (0, 255, 0), 1)
-            self.save_step(img_line, 'espesor_primer_punto_rango')
+            self.save_step(img_line, iteration + 'espesor_primer_punto_rango')
             img_point = cv2.cvtColor(img_first_point, cv2.COLOR_GRAY2BGR)
             cv2.circle(img_point, self.first_point_coroides, 2, (0, 0, 255), 3)  # draw the center of the circle
             cv2.circle(img_line, self.first_point_coroides, 2, (0, 0, 255), 3)  # draw the center of the circle
-            self.save_step(img_line, 'espesor_primer_punto_linea')
-            self.save_step(img_point, 'espesor_primer_punto_final')
+            self.save_step(img_line, iteration + 'espesor_primer_punto_linea')
+            self.save_step(img_point, iteration + 'espesor_primer_punto_final')
 
-        img_second_point = cv2.medianBlur(self.img_gray_horizontal, 13)
-        self.save_step(img_second_point, 'espesor_medianBlur_segundo_punto')
+        img_second_point = cv2.medianBlur(self.img_gray_horizontal, 15)
+        self.save_step(img_second_point, iteration + 'espesor_medianBlur_segundo_punto')
         adaptative_threshold = cv2.adaptiveThreshold(img_second_point, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
                                                      cv2.THRESH_BINARY, 173, 3)
-        self.save_step(adaptative_threshold, 'espesor_adaptative_threshold_segundo_punto')
+        self.save_step(adaptative_threshold, iteration + 'espesor_adaptative_threshold_segundo_punto')
         # cv2.imshow('img_second_point', img_second_point)
 
         # Generamos nuestro propio canny a partir de findcontours y quitar los más pequeños, el ruido
@@ -278,42 +327,33 @@ class Algorithm:
         if step_mode:
             black_img = numpy.zeros((self.img_membranes.shape[0], self.img_membranes.shape[1], 3), numpy.uint8)
             cv2.drawContours(black_img, contours, -1, (255, 255, 255), 1)
-            self.save_step(black_img, 'espesor_findContours_todos_segundo_punto')
+            self.save_step(black_img, iteration + 'espesor_findContours_todos_segundo_punto')
 
         final_contours = []
         for contour in contours:
-            if cv2.contourArea(contour) > 4000.0:
+            if cv2.contourArea(contour) > size:
                 final_contours.append(contour)
 
         # http://stackoverflow.com/a/12890573
         black_img = numpy.zeros((self.img_membranes.shape[0], self.img_membranes.shape[1], 3), numpy.uint8)
         cv2.drawContours(black_img, final_contours, -1, (255, 255, 255), 1)
-        self.save_step(black_img, 'espesor_findContours_grandes_segundo_punto')
+        self.save_step(black_img, iteration + 'espesor_findContours_grandes_segundo_punto')
         if self.step_mode:
             img_point = black_img.copy()
             cv2.line(img_point, (0, 6 * black_img.shape[0] / 7), (black_img.shape[1] - 1, 6 * black_img.shape[0] / 7),
                      (0, 255, 0), 1)
-            self.save_step(img_point, 'espesor_findContours_grandes_rango_segundo_punto')
+            self.save_step(img_point, iteration + 'espesor_findContours_grandes_rango_segundo_punto')
         img_second_point = cv2.cvtColor(black_img, cv2.COLOR_BGR2GRAY)
         # img_second_point_canny = cv2.Canny(adaptative_threshold, 50, 50 * 5, apertureSize=5)
         # cv2.imwrite(os.path.splitext(self.image_name)[0] + '_' + 'img_second_point_canny' + os.path.splitext(self.image_name)[1], img_second_point_canny)
         # cv2.imwrite(os.path.splitext(self.image_name)[0] + '_' + 'img_second_point' + os.path.splitext(self.image_name)[1], img_second_point)
         # cv2.imshow('img_second_point', img_second_point)
 
-        # detectar el punto inferior de arriba a abajo
-        # second = 0
-        # for i in xrange(self.first_point_coroides[1], img_second_point.shape[0], 1):
-        #     if img_second_point[i, self.fovea_point[0]] == 255:
-        #         self.second_point_coroides = (self.fovea_point[0], i)
-        #         second += 1
-        #         if second == 2:
-        #             break
-
         # detectar el punto inferior de abajo a arriba
         for i in xrange(6 * img_second_point.shape[0] / 7, self.first_point_coroides[1], -1):
             if img_second_point[i, self.fovea_point[0]] == 255:
-                if self.second_point_coroides[1] == 0:
-                    self.second_point_coroides = (self.fovea_point[0], i)
+                self.second_point_coroides = (self.fovea_point[0], i)
+                break
 
         if self.step_mode:
             img_point = black_img.copy()
@@ -321,14 +361,14 @@ class Algorithm:
             img_line = img_point.copy()
             cv2.line(img_line, (0, 6 * black_img.shape[0] / 7), (black_img.shape[1] - 1, 6 * black_img.shape[0] / 7),
                      (0, 255, 0), 1)
-            self.save_step(img_line, 'espesor_segundo_punto_linea')
-            self.save_step(img_point, 'espesor_segundo_punto_final')
+            self.save_step(img_line, iteration + 'espesor_segundo_punto_linea')
+            self.save_step(img_point, iteration + 'espesor_segundo_punto_final')
 
         if self.step_mode:
             img_points = cv2.addWeighted(cv2.cvtColor(img_first_point, cv2.COLOR_GRAY2BGR), 0.5, black_img, 0.5, 0)
             cv2.circle(img_points, self.first_point_coroides, 2, (0, 0, 255), 3)  # draw the center of the circle
             cv2.circle(img_points, self.second_point_coroides, 2, (0, 0, 255), 3)  # draw the center of the circle
-            self.save_step(img_points, 'espesor_findContours_grandes_ambos_puntos')
+            self.save_step(img_points, iteration + 'espesor_findContours_grandes_ambos_puntos')
 
         # cv2.circle(self.img_membranes, self.first_point_coroides, 2, (0, 0, 255), 3)
         # cv2.circle(self.img_membranes, self.second_point_coroides, 2, (0, 0, 255), 3)
@@ -342,7 +382,9 @@ class Algorithm:
         micras = (self.second_point_coroides[1] - self.first_point_coroides[1]) * self.micras_por_pixel
         p = (self.first_point_coroides[0] + 50, (self.first_point_coroides[1] + self.second_point_coroides[1]) / 2)
         cv2.putText(self.img_membranes, str(micras), p, cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (255, 0, 255), 1, cv2.CV_AA)
-        self.save_img(self.img_membranes, 'espesor_final')
+        self.save_img(self.img_membranes, iteration + 'espesor_final')
+        if micras < 0:
+            self.membranes_detector(size-500)
 
     def save_step(self, img, title):
         if step_mode:
@@ -359,7 +401,7 @@ def run_algorithm(img_name, step_mode):
     algorithm.to_roi()
     algorithm.to_horizontal()
     algorithm.calculate_fovea()
-    algorithm.membranes_detector()
+    algorithm.membranes_detector(4000)
 
 
 if __name__ == "__main__":
