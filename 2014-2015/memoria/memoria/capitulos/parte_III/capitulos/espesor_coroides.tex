@@ -93,22 +93,85 @@ nuevos problemas.
   \begin{enumerate}[label*=\arabic*.]
   \item Convierte la imagen de escala \emph{RGB} a \emph{escala de
       grises\deftecnica{tecnica:cambio-color}}.
+
+        \begin{figure}[H]
+          \caption{Original}
+          \centering
+            \setlength\fboxsep{0pt}
+            \setlength\fboxrule{0.5pt}
+            \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/AlgoritmoOriginal.png}}
+        \end{figure}
+
   \item Duplica la imagen, en una aplica un \emph{threshold
-      Otsu\deftecnica{tecnica:threshold-otsu}} y en otra un
+      Otsu\deftecnica{tecnica:threshold-otsu}} con \emph{dilation\deftecnica{tecnica:dilation} y en otra un
     \emph{threshold binario\deftecnica{tecnica:threshold-binario}} para \emph{binarizar} la imagen.
-  \item Se recorre la imagen del \emph{threshold Otsu} con una
+ 
+        \begin{figure}[H]
+          \caption{Duplicado Threshold Otsu}
+          \centering
+            \setlength\fboxsep{0pt}
+            \setlength\fboxrule{0.5pt}
+            \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_2_roi_otsu_first_point.png}}
+        \end{figure}
+
+        \begin{figure}[H]
+          \caption{Duplicado Threshold Otsu con Dilation}
+          \centering
+            \setlength\fboxsep{0pt}
+            \setlength\fboxrule{0.5pt}
+            \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_3_roi_otsu_dilation.png}}
+        \end{figure}
+
+ \item Se recorre la imagen del \emph{threshold Otsu} con una
     horizontal de derecha a izquierda, desde la esquina superior
     derecha con las coordenadas, $0$ como $x$ y ancho de la imagen
-    como $y$ encontrar el borde de separación entre las dos imágenes.
+    como $y$ encontrar el borde de separación entre las dos imágenes. 
+    Este borde está ligeramente desplazado a la derecha para ignorar
+    espacios en negro.
+
+        \begin{figure}[H]
+          \caption{Primer punto de separación}
+          \centering
+            \setlength\fboxsep{0pt}
+            \setlength\fboxrule{0.5pt}
+            \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_4_roi_first_point.png}}
+        \end{figure}
+
   \item Al conocer el \textbf{punto del borde de separación en la
       parte superior}, queda buscarlo también en la parte inferior de
     abajo a arriba en la imagen del \emph{threshold binario} con las
     coordenadas, el borde de separación como $x$ y la altura de la
     imagen como $y$.
+
+        \begin{figure}[H]
+          \caption{Duplicado Threshold Binario}
+          \centering
+            \setlength\fboxsep{0pt}
+            \setlength\fboxrule{0.5pt}
+            \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_5_roi_binary_first_point.png}}
+        \end{figure}
+
+        \begin{figure}[H]
+          \caption{Segundo punto de separación}
+          \centering
+            \setlength\fboxsep{0pt}
+            \setlength\fboxrule{0.5pt}
+            \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_5_roi_binary_first_point.png}}
+        \end{figure}
+
   \item Con estos puntos ya se puede obtener la zona de la imagen
     original a estudiar. \textbf{Si se apura y se recorta el negro
       sobrante de la parte inferior evita errores} en la detección del
     segundo punto de la \emph{\gls{coroides}} en algunos casos.
+
+        \begin{figure}[H]
+          \caption{Parte inferior a borrar}
+          \centering
+            \setlength\fboxsep{0pt}
+            \setlength\fboxrule{0.5pt}
+            \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_7_roi_botton_lower_line.png}}
+        \end{figure}
+
     \begin{enumerate}[label*=\arabic*.]
     \item \textbf{Para eliminar dicha zona} y como la imagen no tiene
       por qué estar en posición horizontal, \textbf{se procede a
@@ -116,9 +179,19 @@ nuevos problemas.
       $2/4$ de la anchura de la imagen, y el otro con la $x$ igual a
       $3/4$ de la anchura. Ambos empiezan con $y$ igual al borde
       inferior provisional hacia arriba, ignorando toda el área negra.
+
+        \begin{figure}[H]
+          \caption{Puntos auxiliares}
+          \centering
+            \setlength\fboxsep{0pt}
+            \setlength\fboxrule{0.5pt}
+            \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_10_roi_aux_middle_points.png}}
+        \end{figure}
+
     \item \textbf{Una vez obtenidos los dos puntos, se procede a
         obtener el punto definitivo para generar el rectángulo} que
       contiene la imagen de estudio.
+
     \item \textbf{Para calcular dicho punto}, el que está situado más
       cerca del borde inferior para no recortar parte de la propia
       imagen si no está horizontal, \textbf{hay que calcular primero}
@@ -127,15 +200,42 @@ nuevos problemas.
         auxiliares} del paso anterior. Se calculan añadiendo a la $y$
       de cada punto auxiliar la diferencia con respecto a la $y$ del
       otro punto auxiliar.
+
+        \begin{figure}[H]
+          \caption{Puntos de intersección (en rojo) y auxiliares (verde)}
+          \centering
+            \setlength\fboxsep{0pt}
+            \setlength\fboxrule{0.5pt}
+            \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_14_roi_all_points.png}}
+        \end{figure}
+
     \item Obtenidos estos dos puntos, el que tenga mayor $y$, es el
       más cercano al borde inferior y por tanto el utilizado como base
       para obtener el segundo punto del rectángulo.
+
+        \begin{figure}[H]
+          \caption{Segundo punto del rectángulo}
+          \centering
+            \setlength\fboxsep{0pt}
+            \setlength\fboxrule{0.5pt}
+            \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_15_roi_final_point.png}}
+        \end{figure}
+
     \item Finalmente, \textbf{se obtiene el rectángulo que contiene a}
       la parte de \textbf{la imagen} que queremos estudiar \textbf{con
         el punto del borde de separación de la parte superior y el
         punto} formado por la $y$ del punto \textbf{más cercano al
         borde inferior} del paso anterior y la anchura de la imagen
       original como la $x$.
+
+        \begin{figure}[H]
+          \caption{Zona de interés o \emph{ROI}}
+          \centering
+            \setlength\fboxsep{0pt}
+            \setlength\fboxrule{0.5pt}
+            \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_17_roi_final_rectangle.png}}
+        \end{figure}
+
     \end{enumerate}
   \end{enumerate}
 \item Una vez delimitada la zona de interés, \textbf{es necesario
