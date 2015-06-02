@@ -35,7 +35,13 @@ evolución y control de la \emph{\gls{uveitis}} una automatización
 completa del seguimiento, pudiendo realizar las medidas de todo el
 historial de un paciente en pocos segundos. Lo más importante no es el
 tiempo ahorrado sino la erradicación de errores de precisión manuales
-y resultados distintos de una misma imagen.
+y resultados distintos de una misma imagen.\\
+En la siguiente imagen se muestra un ejemplo de medición hecha por los médicos
+    \begin{figure}[H]
+      \caption{Medición hecha por los médicos}
+      \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+      \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/EjemploImagenMedida.png}}
+    \end{figure}
 
 \section{Estudio}
 El estudio se ha realizado en distintas fases, todas ellas de manera
@@ -364,12 +370,26 @@ nuevos problemas.
     \item Se somete una copia de la imagen horizontal a un
       \emph{threshold binario} con un valor umbral de $179$ y se usa
       un \emph{Canny} para obtener los bordes.
+
+      \begin{figure}[H]
+        \caption{Resultado tras aplicar \emph{Threshold} y \emph{Canny}}
+        \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+        \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_32_espesor_Canny_primer_punto.png}}
+      \end{figure}
+
     \item Sobre la imagen resultante se busca en la vertical que pasa
       por la \emph{\gls{fovea}}, de abajo hacia arriba y empezando en
       un cuarto de la altura de la imagen (esto evita fallos
       provocados por una zona negra generada durante la corrección de
-      la inclinación), el primer punto negro. Este será el punto
+      la inclinación), el primer punto blanco. Este será el punto
       superior de la \emph{\gls{coroides}}.
+
+      \begin{figure}[H]
+        \caption{Primer punto (en rojo)}
+        \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+        \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_34_espesor_primer_punto_linea.png}}
+      \end{figure}
+
     \end{enumerate}
   \item \textbf{Luego se determina la posición del punto inferior de
       la \emph{\gls{coroides}}} de la siguiente manera:
@@ -378,21 +398,49 @@ nuevos problemas.
       imagen para calcular el punto. En este ocasión se utiliza
       primero un \emph{median Blur} con un \emph{kernel} de tamaño
       $13$ para eliminar ruido granulado.
+
+      \begin{figure}[H]
+        \caption{Resultado de aplicar \emph{Median Blur}}
+        \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+        \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_36_espesor_medianBlur_segundo_punto.png}}
+      \end{figure}
+
     \item Una vez eliminado el ruido, se utiliza un \emph{threshold
         adaptativo
         gaussiano\deftecnica{tecnica:threshold-adaptativo-gauss}} con
       un valor umbral de $173$ para \emph{binarizar} la imagen.
+
+      \begin{figure}[H]
+        \caption{Resultado de aplicar \emph{Threshold}}
+        \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+        \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_37_espesor_adaptative_threshold_segundo_punto.png}}
+      \end{figure}
+
     \item Usando la función
       \emph{findContours\deftecnica{tecnica:contornos}} se genera un
       \emph{Canny\deftecnica{tecnica:canny}} para encontrar los
       bordes, descartando los bordes más pequeños (ruido no eliminado
       por el \emph{Median Blur}).
+
+      \begin{figure}[H]
+        \caption{Resultado de aplicar la detección de bordes}
+        \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+        \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_39_iteration=1_espesor_findContours_grandes_segundo_punto.png}}
+      \end{figure}
+
     \item Una vez eliminado el ruido y detectados los bordes, se busca
       sobre la vertical que pasa por la \emph{\gls{fovea}}, de abajo
       hacia arriba y empezando en los $6/7$ de la altura de la imagen,
       el primer punto blanco, que se corresponde con el borde inferior
       de la \emph{\gls{coroides}} y señala el segundo punto que se
       necesita para medir su espesor.
+
+      \begin{figure}[H]
+        \caption{Segundo punto (en rojo)}
+        \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+        \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_41_iteration=1_espesor_segundo_punto_linea.png}}
+      \end{figure}
+
     \end{enumerate}
   \item \textbf{Una vez determinados los dos puntos que delimitan la
       \gls{coroides} se puede determinar la medida de la misma}.
@@ -401,6 +449,13 @@ nuevos problemas.
       se encuentran sobre la misma vertical, la distancia entre ellos
       se puede calcular restando los valores de sus coordenadas sobre
       el eje de ordenadas.
+
+      \begin{figure}[H]
+        \caption{Los dos puntos que delimitan el espesor}
+        \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+        \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_43_iteration=1_espesor_findContours_grandes_ambos_puntos.png}}
+      \end{figure}
+
     \item Como esta resta devuelve un resultado en \emph{píxeles}, es
       necesario calcular la relación entre micras y píxeles. Para ello
       se ha usado la proporción indicada en la parte inferior
@@ -410,6 +465,13 @@ nuevos problemas.
     \item Sabiendo la resolución de la imagen, calcular la distancia
       en micras entre los dos puntos es realizar una sencilla
       multiplicación.
+
+      \begin{figure}[H]
+        \caption{Resultado final}
+        \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+        \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_44_iteration=1_espesor_final.png}}
+      \end{figure}
+
     \end{enumerate}
   \end{enumerate}
 \end{enumerate}
