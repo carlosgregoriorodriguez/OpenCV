@@ -84,8 +84,9 @@ nuevos problemas.
 
 \section{Algoritmo propuesto}
 \begin{enumerate}
-\item La primera fase consistió en delimitar y extraer el área\deftecnica{tecnica:roi} a
-  investigar. Esto es así, porque las máquinas \gls{tco} en una misma
+\item La primera fase consistió en delimitar y extraer el
+  área\deftecnica{tecnica:roi} a investigar. Esto es así, porque las
+  máquinas \gls{tco} en una misma
   imagen presentan el corte analizado y su resultado.\\
   Para resolver este problema de forma automática se procedió a
   realizar una biblioteca que realiza el siguiente procedimiento a la
@@ -94,48 +95,42 @@ nuevos problemas.
   \item Convierte la imagen de escala \emph{RGB} a \emph{escala de
       grises\deftecnica{tecnica:cambio-color}}.
 
-        \begin{figure}[H]
-          \caption{Original}
-          \centering
-            \setlength\fboxsep{0pt}
-            \setlength\fboxrule{0.5pt}
-            \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/AlgoritmoOriginal.png}}
-        \end{figure}
+    \begin{figure}[H]
+      \caption{Original}
+      \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+      \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/AlgoritmoOriginal.png}}
+    \end{figure}
 
   \item Duplica la imagen, en una aplica un \emph{threshold
-      Otsu\deftecnica{tecnica:threshold-otsu}} con \emph{dilation\deftecnica{tecnica:dilation} y en otra un
-    \emph{threshold binario\deftecnica{tecnica:threshold-binario}} para \emph{binarizar} la imagen.
+      Otsu\deftecnica{tecnica:threshold-otsu}} con
+    \emph{dilation\deftecnica{tecnica:dilation}} y en otra un
+    \emph{threshold binario\deftecnica{tecnica:threshold-binario}}
+    para \emph{binarizar} la imagen.
  
-        \begin{figure}[H]
-          \caption{Duplicado Threshold Otsu}
-          \centering
-            \setlength\fboxsep{0pt}
-            \setlength\fboxrule{0.5pt}
-            \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_2_roi_otsu_first_point.png}}
-        \end{figure}
+    \begin{figure}[H]
+      \caption{Duplicado Threshold Otsu}
+      \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+      \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_2_roi_otsu_first_point.png}}
+    \end{figure}
 
-        \begin{figure}[H]
-          \caption{Duplicado Threshold Otsu con Dilation}
-          \centering
-            \setlength\fboxsep{0pt}
-            \setlength\fboxrule{0.5pt}
-            \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_3_roi_otsu_dilation.png}}
-        \end{figure}
+    \begin{figure}[H]
+      \caption{Duplicado Threshold Otsu con Dilation}
+      \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+      \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_3_roi_otsu_dilation.png}}
+    \end{figure}
 
- \item Se recorre la imagen del \emph{threshold Otsu} con una
+  \item Se recorre la imagen del \emph{threshold Otsu} con una
     horizontal de derecha a izquierda, desde la esquina superior
     derecha con las coordenadas, $0$ como $x$ y ancho de la imagen
-    como $y$ encontrar el borde de separación entre las dos imágenes. 
+    como $y$ encontrar el borde de separación entre las dos imágenes.
     Este borde está ligeramente desplazado a la derecha para ignorar
     espacios en negro.
 
-        \begin{figure}[H]
-          \caption{Primer punto de separación}
-          \centering
-            \setlength\fboxsep{0pt}
-            \setlength\fboxrule{0.5pt}
-            \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_4_roi_first_point.png}}
-        \end{figure}
+    \begin{figure}[H]
+      \caption{Primer punto de separación}
+      \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+      \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_4_roi_first_point.png}}
+    \end{figure}
 
   \item Al conocer el \textbf{punto del borde de separación en la
       parte superior}, queda buscarlo también en la parte inferior de
@@ -143,34 +138,28 @@ nuevos problemas.
     coordenadas, el borde de separación como $x$ y la altura de la
     imagen como $y$.
 
-        \begin{figure}[H]
-          \caption{Duplicado Threshold Binario}
-          \centering
-            \setlength\fboxsep{0pt}
-            \setlength\fboxrule{0.5pt}
-            \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_5_roi_binary_first_point.png}}
-        \end{figure}
+    \begin{figure}[H]
+      \caption{Duplicado Threshold Binario}
+      \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+      \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_5_roi_binary_first_point.png}}
+    \end{figure}
 
-        \begin{figure}[H]
-          \caption{Segundo punto de separación}
-          \centering
-            \setlength\fboxsep{0pt}
-            \setlength\fboxrule{0.5pt}
-            \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_5_roi_binary_first_point.png}}
-        \end{figure}
+    \begin{figure}[H]
+      \caption{Segundo punto de separación}
+      \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+      \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_5_roi_binary_first_point.png}}
+    \end{figure}
 
   \item Con estos puntos ya se puede obtener la zona de la imagen
     original a estudiar. \textbf{Si se apura y se recorta el negro
       sobrante de la parte inferior evita errores} en la detección del
     segundo punto de la \emph{\gls{coroides}} en algunos casos.
 
-        \begin{figure}[H]
-          \caption{Parte inferior a borrar}
-          \centering
-            \setlength\fboxsep{0pt}
-            \setlength\fboxrule{0.5pt}
-            \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_7_roi_botton_lower_line.png}}
-        \end{figure}
+    \begin{figure}[H]
+      \caption{Parte inferior a borrar}
+      \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+      \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_7_roi_botton_lower_line.png}}
+    \end{figure}
 
     \begin{enumerate}[label*=\arabic*.]
     \item \textbf{Para eliminar dicha zona} y como la imagen no tiene
@@ -180,13 +169,11 @@ nuevos problemas.
       $3/4$ de la anchura. Ambos empiezan con $y$ igual al borde
       inferior provisional hacia arriba, ignorando toda el área negra.
 
-        \begin{figure}[H]
-          \caption{Puntos auxiliares}
-          \centering
-            \setlength\fboxsep{0pt}
-            \setlength\fboxrule{0.5pt}
-            \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_10_roi_aux_middle_points.png}}
-        \end{figure}
+      \begin{figure}[H]
+        \caption{Puntos auxiliares}
+        \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+        \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_10_roi_aux_middle_points.png}}
+      \end{figure}
 
     \item \textbf{Una vez obtenidos los dos puntos, se procede a
         obtener el punto definitivo para generar el rectángulo} que
@@ -201,25 +188,22 @@ nuevos problemas.
       de cada punto auxiliar la diferencia con respecto a la $y$ del
       otro punto auxiliar.
 
-        \begin{figure}[H]
-          \caption{Puntos de intersección (en rojo) y auxiliares (verde)}
-          \centering
-            \setlength\fboxsep{0pt}
-            \setlength\fboxrule{0.5pt}
-            \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_14_roi_all_points.png}}
-        \end{figure}
+      \begin{figure}[H]
+        \caption{Puntos de intersección (en rojo) y auxiliares
+          (verde)}
+        \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+        \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_14_roi_all_points.png}}
+      \end{figure}
 
     \item Obtenidos estos dos puntos, el que tenga mayor $y$, es el
       más cercano al borde inferior y por tanto el utilizado como base
       para obtener el segundo punto del rectángulo.
 
-        \begin{figure}[H]
-          \caption{Segundo punto del rectángulo}
-          \centering
-            \setlength\fboxsep{0pt}
-            \setlength\fboxrule{0.5pt}
-            \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_15_roi_final_point.png}}
-        \end{figure}
+      \begin{figure}[H]
+        \caption{Segundo punto del rectángulo}
+        \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+        \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_15_roi_final_point.png}}
+      \end{figure}
 
     \item Finalmente, \textbf{se obtiene el rectángulo que contiene a}
       la parte de \textbf{la imagen} que queremos estudiar \textbf{con
@@ -228,13 +212,11 @@ nuevos problemas.
         borde inferior} del paso anterior y la anchura de la imagen
       original como la $x$.
 
-        \begin{figure}[H]
-          \caption{Zona de interés o \emph{ROI}}
-          \centering
-            \setlength\fboxsep{0pt}
-            \setlength\fboxrule{0.5pt}
-            \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_17_roi_final_rectangle.png}}
-        \end{figure}
+      \begin{figure}[H]
+        \caption{Zona de interés o \emph{ROI}}
+        \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+        \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_17_roi_final_rectangle.png}}
+      \end{figure}
 
     \end{enumerate}
   \end{enumerate}
@@ -250,13 +232,12 @@ nuevos problemas.
     referencia, aplicando la \emph{Transformada de
       Hough\deftecnica{tecnica:hough}} para rectas. La estructura
     ocular posee una capa con una intensidad muy alta denominada
-    \emph{\gls{mBruch}} en la que si se aplica dicha
-    transformada, se obtiene sobre ella una recta que puede ser usada
-    como referencia. Todas las líneas detectadas están almacenadas de
-    forma paramétrica en una matriz de pares
-    $\left(\rho, \theta \right)$. La primera línea de la matriz que no
-    sea vertical ($\theta \neq 0º$) es la recta buscada sobre la
-    membrana.
+    \emph{\gls{mBruch}} en la que si se aplica dicha transformada, se
+    obtiene sobre ella una recta que puede ser usada como
+    referencia. Todas las líneas detectadas están almacenadas de forma
+    paramétrica en una matriz de pares $\left(\rho, \theta \right)$.
+    La primera línea de la matriz que no sea vertical
+    ($\theta \neq 0º$) es la recta buscada sobre la membrana.
   \item \textbf{Una vez obtenida la $\theta$ de la pendiente a corregir
       respecto la horizontal} $\left( \theta = 90º \right)$ hay que
     calcular la diferencia de inclinación. Para ello se calcula la
@@ -290,9 +271,9 @@ nuevos problemas.
     que la \emph{\gls{fovea}} siempre se encontraba en esa zona. \\
     \textbf{ El objetivo de este barrido es el de encontrar}, en cada
     iteración vertical, el primer punto blanco, que se corresponde con
-    la línea en la que está \textbf{la \emph{\gls{fovea}}}. Además, mientras
-    itera sobre el eje horizontal, busca la posición en el que este
-    punto blanco está más abajo.
+    la línea en la que está \textbf{la \emph{\gls{fovea}}}. Además,
+    mientras itera sobre el eje horizontal, busca la posición en el
+    que este punto blanco está más abajo.
   \item En más de una ocasión surge un pequeño inconveniente que
     proviene de someter la imagen al \emph{threshold binario}: no hay
     un ``punto más bajo'', sino que aparece una línea horizontal en su
@@ -311,10 +292,11 @@ nuevos problemas.
     y la media de un elemento repetido es el mismo elemento.
   \end{enumerate}
 \item \textbf{La última fase se divide en} tres grandes pasos:
-  encontrar el punto superior de la \emph{\gls{coroides}} por el que pasa la
-  misma vertical que por la \emph{\gls{fovea}}; encontrar el punto inferior
-  de la \emph{\gls{coroides}} por el que pasa la misma vertical; medir la
-  distancia entre los dos puntos y mostrar el resultado en micras.
+  encontrar el punto superior de la \emph{\gls{coroides}} por el que
+  pasa la misma vertical que por la \emph{\gls{fovea}}; encontrar el
+  punto inferior de la \emph{\gls{coroides}} por el que pasa la misma
+  vertical; medir la distancia entre los dos puntos y mostrar el
+  resultado en micras.
   \begin{enumerate}[label*=\arabic*.]
   \item \textbf{Primero se determina la posición del punto superior de
       la \emph{\gls{coroides}}} de la siguiente manera:
@@ -323,11 +305,11 @@ nuevos problemas.
       \emph{threshold binario} con un valor umbral de $179$ y se usa
       un \emph{Canny} para obtener los bordes.
     \item Sobre la imagen resultante se busca en la vertical que pasa
-      por la \emph{\gls{fovea}}, de abajo hacia arriba y empezando en un
-      cuarto de la altura de la imagen (esto evita fallos provocados
-      por una zona negra generada durante la corrección de la
-      inclinación), el primer punto negro. Este será el punto superior
-      de la \emph{\gls{coroides}}.
+      por la \emph{\gls{fovea}}, de abajo hacia arriba y empezando en
+      un cuarto de la altura de la imagen (esto evita fallos
+      provocados por una zona negra generada durante la corrección de
+      la inclinación), el primer punto negro. Este será el punto
+      superior de la \emph{\gls{coroides}}.
     \end{enumerate}
   \item \textbf{Luego se determina la posición del punto inferior de
       la \emph{\gls{coroides}}} de la siguiente manera:
@@ -346,11 +328,11 @@ nuevos problemas.
       bordes, descartando los bordes más pequeños (ruido no eliminado
       por el \emph{Median Blur}).
     \item Una vez eliminado el ruido y detectados los bordes, se busca
-      sobre la vertical que pasa por la \emph{\gls{fovea}}, de abajo hacia
-      arriba y empezando en los $6/7$ de la altura de la imagen, el
-      primer punto blanco, que se corresponde con el borde inferior de
-      la \emph{\gls{coroides}} y señala el segundo punto que se necesita
-      para medir su espesor.
+      sobre la vertical que pasa por la \emph{\gls{fovea}}, de abajo
+      hacia arriba y empezando en los $6/7$ de la altura de la imagen,
+      el primer punto blanco, que se corresponde con el borde inferior
+      de la \emph{\gls{coroides}} y señala el segundo punto que se
+      necesita para medir su espesor.
     \end{enumerate}
   \item \textbf{Una vez determinados los dos puntos que delimitan la
       \gls{coroides} se puede determinar la medida de la misma}.
@@ -363,10 +345,11 @@ nuevos problemas.
       necesario calcular la relación entre micras y píxeles. Para ello
       se ha usado la proporción indicada en la parte inferior
       izquierda de la imagen original. Se obtuvieron dos proporciones
-      diferentes debido a que se encontraron dos imágenes con diferente
-      resolución: 1 píxel = 4 micras, y 1 píxel = 6 micras.
-    \item Sabiendo la resolución de la imagen, calcular la distancia en
-      micras entre los dos puntos es realizar una sencilla multiplicación.
+      diferentes debido a que se encontraron dos imágenes con
+      diferente resolución: 1 píxel = 4 micras, y 1 píxel = 6 micras.
+    \item Sabiendo la resolución de la imagen, calcular la distancia
+      en micras entre los dos puntos es realizar una sencilla
+      multiplicación.
     \end{enumerate}
   \end{enumerate}
 \end{enumerate}
@@ -384,8 +367,8 @@ del historial individual de cualquier paciente.\\
 \begin{center}
   $70$ imágenes procesadas $\approx$ $43$ segundos
   \\[0.5cm]
-  $\frac{43 \text{ segundos}}{70 \text{ imágenes}} \approx 0,614
-  \text{ segundos de media por cada imagen}$
+  $\frac{43 \text{ segundos}}{70 \text{ imágenes}} \approx 0,614 \text{
+    segundos de media por cada imagen}$
 \end{center}
 Con el resultado calculado de $0,614$ segundos por imagen, sí puede
 pensar en aplicar el algoritmo en tiempo real y vídeo. Aunque por
