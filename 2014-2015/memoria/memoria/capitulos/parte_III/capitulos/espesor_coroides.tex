@@ -492,8 +492,10 @@ del historial individual de cualquier paciente.\\
   $\frac{43 \text{ segundos}}{70 \text{ imágenes}} \approx 0,614 \text{
     segundos de media por cada imagen}$
 \end{center}
-Con el resultado calculado de $0,614$ segundos por imagen, sí puede
-pensar en aplicar el algoritmo en tiempo real y vídeo. Aunque por
+Con el resultado calculado de $0,614$ segundos por imagen no se puede
+pensar en aplicar el algoritmo en tiempo real y vídeo, ya que para procesar
+un mínimo de 20 frames por segundos el tiempo de procesamiento de cada uno
+no puede superar los $0,05$ segundos. Aunque por
 defecto todas las técnicas de las bibliotecas se realizan con
 optimizaciones, si se realizase un análisis minucioso del código y su
 tiempo de ejecución de las operaciones con menor rendimiento se podría

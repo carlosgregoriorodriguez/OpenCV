@@ -292,7 +292,8 @@ técnicas siguientes. En ambas, el área a realizar el \emph{threshold}
 depende del tamaño del \emph{kernel} usado.
 
 \subsubsection{cv2.ADAPTIVE\_THRESH\_MEAN\_C}
-El valor de cada píxel se establece por la media de sus vecinos.
+El valor de cada píxel se establece por la media de sus vecinos restándole
+una constante C.
 
 \begin{figure}[H]
   \caption{Original}
@@ -308,7 +309,7 @@ El valor de cada píxel se establece por la media de sus vecinos.
 
 \subsubsection{cv2.ADAPTIVE\_THRESH\_GAUSSIAN\_C}\label{tecnica:threshold-adaptativo-gauss}
 El valor de cada píxel se establece por el resultado de una función
-Gaussiana a partir de sus vecinos.
+Gaussiana a partir de sus vecinos y restándole una constante C.
 
 \begin{figure}[H]
   \caption{Original}
