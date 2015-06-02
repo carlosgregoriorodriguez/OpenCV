@@ -237,7 +237,23 @@ nuevos problemas.
     referencia. Todas las líneas detectadas están almacenadas de forma
     paramétrica en una matriz de pares $\left(\rho, \theta \right)$.
     La primera línea de la matriz que no sea vertical
-    ($\theta \neq 0º$) es la recta buscada sobre la membrana.
+    ($\theta \neq 0º$) es la recta buscada sobre la membrana. Para aplicar
+    esta técnica es necesario aplicar primero un filtro para detectar
+    los bordes:
+
+      \begin{figure}[H]
+        \caption{Canny para aplicar Transformada de Hough}
+        \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+        \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_18_horizontal_Canny_Hough.png}}
+      \end{figure}
+
+      \begin{figure}[H]
+        \caption{Línea detectada}
+        \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+        \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_19_horizontal_Canny_Hough_recta.png}}
+      \end{figure}
+
+
   \item \textbf{Una vez obtenida la $\theta$ de la pendiente a corregir
       respecto la horizontal} $\left( \theta = 90º \right)$ hay que
     calcular la diferencia de inclinación. Para ello se calcula la
@@ -251,7 +267,15 @@ nuevos problemas.
   \item \textbf{Finalmente} se procede a \textbf{rotar la imagen} con
     la $\theta_{\text{Corrección}}$, usando como centro de rotación el
     punto central de la imagen.
+
+      \begin{figure}[H]
+        \caption{Imagen rotada}
+        \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+        \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_22_horizontal_Horizontal_recta.png}}
+      \end{figure}
+
   \end{enumerate}
+
 \item Teniendo la imagen horizontal para evitar fallos debidos a la
   inclinación, se procedió a desarrollar un algoritmo para
   \textbf{encontrar el punto de referencia, la \emph{\gls{fovea}}}.
@@ -260,9 +284,23 @@ nuevos problemas.
     alterar la original) \textbf{a un \emph{median
         Blur\deftecnica{tecnica:blur-median}}} con un \emph{kernel} de
     tamaño $7$ \textbf{para eliminar el ruido granulado}.
+
+      \begin{figure}[H]
+        \caption{Resultado del Blur}
+        \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+        \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_26_fovea_blur.png}}
+      \end{figure}
+
   \item Sobre esta copia transformada, \textbf{se aplica un
       \emph{threshold binario}} con valor umbral de $30$. Con esto se
     pretende binarizar la imagen para facilitar el siguiente paso.
+
+      \begin{figure}[H]
+        \caption{Resultado del Threshold}
+        \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+        \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_27_fovea_threshold.png}}
+      \end{figure}
+
   \item \textbf{Una vez binarizada la imagen, se procede a hacer un
       ``barrido'' vertical}, de arriba hacia abajo y de izquierda a
     derecha. Para reducir el tiempo de computación, se decidió
@@ -274,6 +312,13 @@ nuevos problemas.
     la línea en la que está \textbf{la \emph{\gls{fovea}}}. Además,
     mientras itera sobre el eje horizontal, busca la posición en el
     que este punto blanco está más abajo.
+
+      \begin{figure}[H]
+        \caption{Zona en la que se realiza el barrido}
+        \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+        \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_28_fovea_lines.png}}
+      \end{figure}
+
   \item En más de una ocasión surge un pequeño inconveniente que
     proviene de someter la imagen al \emph{threshold binario}: no hay
     un ``punto más bajo'', sino que aparece una línea horizontal en su
@@ -284,12 +329,27 @@ nuevos problemas.
     pasa por la \emph{\gls{fovea}}, en lugar de un único punto, se
     calcularon dos: El primero, el punto de la línea más a la
     izquierda; el segundo, el punto de la línea más a la
-    derecha. Haciendo la media de dichos
+    derecha. 
+
+      \begin{figure}[H]
+        \caption{Puntos encontrados}
+        \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+        \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_30_fovea_points.png}}
+      \end{figure}
+
+  \item Haciendo la media de dichos
     puntos, se encuentra el punto medio: la \emph{\gls{fovea}}. \\
     Nótese que en los casos en que esta línea no se genera y hay un
     único punto ``más bajo'', este algoritmo sigue siendo válido, pues
     el punto más a la derecha y el punto más a la izquierda coinciden,
     y la media de un elemento repetido es el mismo elemento.
+
+      \begin{figure}[H]
+        \caption{Punto de la \emph{fóvea}}
+        \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+        \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_31_fovea_point.png}}
+      \end{figure}
+
   \end{enumerate}
 \item \textbf{La última fase se divide en} tres grandes pasos:
   encontrar el punto superior de la \emph{\gls{coroides}} por el que
