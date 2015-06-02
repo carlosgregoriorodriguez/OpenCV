@@ -84,7 +84,7 @@ se muestra la más simple y sobre el eje de abscisas:
 \section{Operaciones básicas}
 \subsection{Acceso a píxeles}
 El acceso a los píxeles de una imagen se realiza a través de
-\emph{Numpy} como una matriz de dimensiones [\emph{y}, \emph{x}],
+\emph{Numpy} como una matriz de dimensiones $y \times x$,
 siendo \emph{y} la altura y \emph{x} el ancho.
 \begin{minted}{Python}
   pixel = imagen[y, x]
@@ -100,8 +100,8 @@ anchura.  Se pueden obtener con la función \emph{shape}.
 \subsection{Región de interés}\label{tecnica:roi}
 La región de interés (ROI) de una imagen es la zona que estamos
 interesados en procesar. Se expresa mediante los vértices opuestos de
-un rectángulo o cuadrado definidos como los píxeles [$y_1$, $x_1$] y
-[$y_2$,$x_2$] de la imagen
+un rectángulo o cuadrado definidos con el par de píxeles
+$\left(y_1,x_1\right)\left(y_2,x_2\right)$ de la imagen
 \begin{minted}{Python}
   roi = imagen[y1:y2, x1:x2]
 \end{minted}
@@ -115,8 +115,8 @@ superposición y transparencia. La función sería:
 \begin{equation*}
   g(n) = (1 - \alpha)f_0(n) + \alpha f_1(n)
 \end{equation*}
-Donde \emph{n} representa un punto de la imagen, \emph{$\alpha$} es
-una constante entre 0 y 1, y \emph{$f_0$} y \emph{$f_1$} las imágenes.
+Donde \emph{n} representa un punto de la imagen, \emph{$\alpha$} es una
+constante entre 0 y 1, y \emph{$f_0$} y \emph{$f_1$} las imágenes.
 Expresado en forma de coordenadas:
 \begin{equation*}
   g(x, y) = (1 - \alpha)f_0(x, y) + \alpha f_1(x, y)
@@ -147,9 +147,9 @@ grises.
 
 \section{Operaciones de \emph{threshold}}
 Las operaciones de \emph{threshold} convierten los píxeles de una
-imagen (en escala de grises [0 --- 255]) superiores a un valor,
-conocido como valor de umbral, a blanco [255] o a negro [0], según el
-\emph{threshold} aplicado.
+imagen (en escala de grises $\left[0 \dots 255\right]$) superiores a
+un valor, conocido como valor de umbral, a blanco 255 o a negro 0,
+según el \emph{threshold} aplicado.
 \subsection{Simples}
 \subsubsection{cv2.THRESH\_BINARY o
   \emph{Binarización}}\label{tecnica:threshold-binario}
@@ -168,17 +168,13 @@ resultado obtenido tras aplicar el filtro):
 
 \begin{figure}[H]
   \caption{Original}
-  \centering
-    \setlength\fboxsep{0pt}
-    \setlength\fboxrule{0.5pt}
-    \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdOriginal.png}}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdOriginal.png}}
 \end{figure}
 
 \begin{figure}[H]
-  \centering
-    \setlength\fboxsep{0pt}
-    \setlength\fboxrule{0.5pt}
-    \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdBinary_127.png}}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdBinary_127.png}}
   \caption{Treshold Binario}
 \end{figure}
 
@@ -197,18 +193,14 @@ Ejemplo para un valor de umbral de 127 (Arriba original y abajo el
 resultado obtenido tras aplicar el filtro):
 
 \begin{figure}[H]
-\caption{Original}
-  \centering
-    \setlength\fboxsep{0pt}
-    \setlength\fboxrule{0.5pt}
-    \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdOriginal.png}}
+  \caption{Original}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdOriginal.png}}
 \end{figure}
 
 \begin{figure}[H]
-  \centering
-    \setlength\fboxsep{0pt}
-    \setlength\fboxrule{0.5pt}
-    \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdBinaryInv_127.png}}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdBinaryInv_127.png}}
   \caption{Threshold Binario Inverso}
 \end{figure}
 
@@ -229,17 +221,13 @@ resultado obtenido tras aplicar el filtro):
 
 \begin{figure}[H]
   \caption{Original}
-  \centering
-    \setlength\fboxsep{0pt}
-    \setlength\fboxrule{0.5pt}
-    \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdOriginal.png}}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdOriginal.png}}
 \end{figure}
 
 \begin{figure}[H]
-  \centering
-    \setlength\fboxsep{0pt}
-    \setlength\fboxrule{0.5pt}
-    \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdTrunc_127.png}}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdTrunc_127.png}}
   \caption{Threshold de Truncado}
 \end{figure}
 
@@ -260,17 +248,13 @@ resultado obtenido tras aplicar el filtro):
 
 \begin{figure}[H]
   \caption{Original}
-  \centering
-    \setlength\fboxsep{0pt}
-    \setlength\fboxrule{0.5pt}
-    \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdOriginal.png}}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdOriginal.png}}
 \end{figure}
 
 \begin{figure}[H]
-  \centering
-    \setlength\fboxsep{0pt}
-    \setlength\fboxrule{0.5pt}
-    \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdTo0_127.png}}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdTo0_127.png}}
   \caption{Threshold to Zero}
 \end{figure}
 
@@ -290,17 +274,13 @@ resultado obtenido tras aplicar el filtro):
 
 \begin{figure}[H]
   \caption{Original}
-  \centering
-    \setlength\fboxsep{0pt}
-    \setlength\fboxrule{0.5pt}
-    \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdOriginal.png}}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdOriginal.png}}
 \end{figure}
 
 \begin{figure}[H]
-  \centering
-    \setlength\fboxsep{0pt}
-    \setlength\fboxrule{0.5pt}
-    \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdTo0Inv_127.png}}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdTo0Inv_127.png}}
   \caption{Threshold to Zero Inverso}
 \end{figure}
 
@@ -316,17 +296,13 @@ El valor de cada píxel se establece por la media de sus vecinos.
 
 \begin{figure}[H]
   \caption{Original}
-  \centering
-    \setlength\fboxsep{0pt}
-    \setlength\fboxrule{0.5pt}
-    \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdOriginal.png}}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdOriginal.png}}
 \end{figure}
 
 \begin{figure}[H]
-  \centering
-    \setlength\fboxsep{0pt}
-    \setlength\fboxrule{0.5pt}
-    \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdAdaptiveMeanKernel11Constant2.png}}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdAdaptiveMeanKernel11Constant2.png}}
   \caption{Mean Adaptive Threshold}
 \end{figure}
 
@@ -336,17 +312,13 @@ Gaussiana a partir de sus vecinos.
 
 \begin{figure}[H]
   \caption{Original}
-  \centering
-    \setlength\fboxsep{0pt}
-    \setlength\fboxrule{0.5pt}
-    \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdOriginal.png}}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdOriginal.png}}
 \end{figure}
 
 \begin{figure}[H]
-  \centering
-    \setlength\fboxsep{0pt}
-    \setlength\fboxrule{0.5pt}
-    \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdAdaptiveGaussianKernel11Constant2.png}}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdAdaptiveGaussianKernel11Constant2.png}}
   \caption{Gaussian Adaptive Threshold}
 \end{figure}
 
@@ -358,17 +330,13 @@ columnas.
 
 \begin{figure}[H]
   \caption{Original}
-  \centering
-    \setlength\fboxsep{0pt}
-    \setlength\fboxrule{0.5pt}
-    \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdOriginal.png}}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdOriginal.png}}
 \end{figure}
 
 \begin{figure}[H]
-  \centering
-    \setlength\fboxsep{0pt}
-    \setlength\fboxrule{0.5pt}
-    \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdOtsu.png}}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/EjemploTecnicasThresholdOtsu.png}}
   \caption{Otsu Threshold}
 \end{figure}
 
@@ -377,8 +345,8 @@ Las transformaciones geométricas son aquellas técnicas en las que se
 aplica una matriz o \emph{kernel} de transformación a la imagen
 original.
 \subsection{Rotación}
-Para rotar una imagen desde un ángulo $\theta$ se opera con la
-siguiente matriz de transformación.
+Para rotar una imagen desde un ángulo $\theta$ se opera con la siguiente
+matriz de transformación.
 \begin{equation*}
   M =
   \begin{bmatrix}
@@ -390,8 +358,7 @@ centro ajustable para el punto que se prefiera.
 \begin{equation*}
   \begin{bmatrix}
     \alpha & \beta & (1 - \alpha) \cdot centro_x - \beta \cdot centro_y \\
-    - \beta & \alpha & \beta \cdot centro_x + (1 - \alpha) \cdot
-    centro_y
+    - \beta & \alpha & \beta \cdot centro_x + (1 - \alpha) \cdot centro_y
   \end{bmatrix}
 \end{equation*}
 donde:
@@ -453,9 +420,9 @@ original. Este \emph{Blur} es el menos eficiente de todos pero
 predeterminadas de los \emph{kernels} de $3\times3$, $5\times5$ y
 $7\times7$. Debido a esto, sólo mostraremos como se
 generan estas sigmas predeterminas y un ejemplo con ellas.\\
-\emph{OpenCV} obliga a introducir $\sigma_x$ y en el caso de que este
-sea 0, se determinan ambos sigmas a partir del tamaño del
-\emph{kernel} introducido mediante las fórmulas siguientes:
+\emph{OpenCV} obliga a introducir $\sigma_x$ y en el caso de que este sea 0,
+se determinan ambos sigmas a partir del tamaño del \emph{kernel}
+introducido mediante las fórmulas siguientes:
 \begin{equation*}
   \hspace{0.25cm}\sigma_x = \left(\frac{n_x}{2} - 1 \right) \cdot 0,30 + 0,80 \hspace{0.5cm} n_x = \text{anchura del \emph{kernel}}
 \end{equation*}

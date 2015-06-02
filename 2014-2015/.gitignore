@@ -31,6 +31,7 @@ memoria/**/*.bbl
 memoria/**/*.blg
 memoria/**/*fdb_latexmk
 memoria/**/*.fls
+memoria/**/*.lof
 memoria/_minted-memoria
 memoria/memoria.pdf
 
