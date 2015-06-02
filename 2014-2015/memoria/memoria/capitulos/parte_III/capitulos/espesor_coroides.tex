@@ -5,9 +5,9 @@ Los estudios demuestran que hay una relación entre el grosor de la
 necesario, por tanto, medir el espesor de la \emph{\gls{coroides}}
 para valorar el impacto de esta enfermedad y para seguir su evolución
 en el tiempo.\\
-La \emph{\gls{coroides}} o \emph{úvea} es una membrana por la que
-pasan gran cantidad de vasos sanguíneos, cuya función es mantener la
-temperatura
+La \emph{\gls{coroides}} o \emph{\gls{uvea}} es una membrana por la
+que pasan gran cantidad de vasos sanguíneos, cuya función es mantener
+la temperatura
 constante y nutrir ciertas estructuras del globo ocular. \\
 Gracias a las \gls{tco} es posible medir el grosor de la membrana. Sin
 embargo, el software de la máquina no realiza la medición de forma
@@ -36,12 +36,13 @@ completa del seguimiento, pudiendo realizar las medidas de todo el
 historial de un paciente en pocos segundos. Lo más importante no es el
 tiempo ahorrado sino la erradicación de errores de precisión manuales
 y resultados distintos de una misma imagen.\\
-En la siguiente imagen se muestra un ejemplo de medición hecha por los médicos
-    \begin{figure}[H]
-      \caption{Medición hecha por los médicos}
-      \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
-      \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/EjemploImagenMedida.png}}
-    \end{figure}
+En la siguiente imagen se muestra un ejemplo de medición hecha por los
+médicos
+\begin{figure}[H]
+  \caption{Medición hecha por los médicos}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/EjemploImagenMedida.png}}
+\end{figure}
 
 \section{Estudio}
 El estudio se ha realizado en distintas fases, todas ellas de manera
@@ -243,27 +244,27 @@ nuevos problemas.
     referencia. Todas las líneas detectadas están almacenadas de forma
     paramétrica en una matriz de pares $\left(\rho, \theta \right)$.
     La primera línea de la matriz que no sea vertical
-    ($\theta \neq 0º$) es la recta buscada sobre la membrana. Para aplicar
-    esta técnica es necesario aplicar primero un filtro para detectar
-    los bordes:
+    ($\theta \neq 0º$) es la recta buscada sobre la membrana. Para
+    aplicar esta técnica es necesario aplicar primero un filtro para
+    detectar los bordes:
 
-      \begin{figure}[H]
-        \caption{Canny para aplicar Transformada de Hough}
-        \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
-        \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_18_horizontal_Canny_Hough.png}}
-      \end{figure}
+    \begin{figure}[H]
+      \caption{Canny para aplicar Transformada de Hough}
+      \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+      \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_18_horizontal_Canny_Hough.png}}
+    \end{figure}
 
-      \begin{figure}[H]
-        \caption{Línea detectada}
-        \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
-        \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_19_horizontal_Canny_Hough_recta.png}}
-      \end{figure}
+    \begin{figure}[H]
+      \caption{Línea detectada}
+      \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+      \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_19_horizontal_Canny_Hough_recta.png}}
+    \end{figure}
 
 
-  \item \textbf{Una vez obtenida la $\theta$ de la pendiente a corregir
-      respecto la horizontal} $\left( \theta = 90º \right)$ hay que
-    calcular la diferencia de inclinación. Para ello se calcula la
-    diferencia con la siguiente fórmula:
+  \item \textbf{Una vez obtenida la $\theta$ de la pendiente a
+      corregir respecto la horizontal} $\left( \theta = 90º \right)$
+    hay que calcular la diferencia de inclinación. Para ello se
+    calcula la diferencia con la siguiente fórmula:
     \begin{equation*}
       \theta_\text{Corrección} = \theta_{Bruch} - \theta_{horizontal}
     \end{equation*}
@@ -274,11 +275,11 @@ nuevos problemas.
     la $\theta_{\text{Corrección}}$, usando como centro de rotación el
     punto central de la imagen.
 
-      \begin{figure}[H]
-        \caption{Imagen rotada}
-        \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
-        \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_22_horizontal_Horizontal_recta.png}}
-      \end{figure}
+    \begin{figure}[H]
+      \caption{Imagen rotada}
+      \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+      \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_22_horizontal_Horizontal_recta.png}}
+    \end{figure}
 
   \end{enumerate}
 
@@ -291,21 +292,21 @@ nuevos problemas.
         Blur\deftecnica{tecnica:blur-median}}} con un \emph{kernel} de
     tamaño $7$ \textbf{para eliminar el ruido granulado}.
 
-      \begin{figure}[H]
-        \caption{Resultado del Blur}
-        \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
-        \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_26_fovea_blur.png}}
-      \end{figure}
+    \begin{figure}[H]
+      \caption{Resultado del Blur}
+      \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+      \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_26_fovea_blur.png}}
+    \end{figure}
 
   \item Sobre esta copia transformada, \textbf{se aplica un
       \emph{threshold binario}} con valor umbral de $30$. Con esto se
     pretende binarizar la imagen para facilitar el siguiente paso.
 
-      \begin{figure}[H]
-        \caption{Resultado del Threshold}
-        \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
-        \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_27_fovea_threshold.png}}
-      \end{figure}
+    \begin{figure}[H]
+      \caption{Resultado del Threshold}
+      \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+      \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_27_fovea_threshold.png}}
+    \end{figure}
 
   \item \textbf{Una vez binarizada la imagen, se procede a hacer un
       ``barrido'' vertical}, de arriba hacia abajo y de izquierda a
@@ -319,11 +320,11 @@ nuevos problemas.
     mientras itera sobre el eje horizontal, busca la posición en el
     que este punto blanco está más abajo.
 
-      \begin{figure}[H]
-        \caption{Zona en la que se realiza el barrido}
-        \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
-        \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_28_fovea_lines.png}}
-      \end{figure}
+    \begin{figure}[H]
+      \caption{Zona en la que se realiza el barrido}
+      \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+      \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_28_fovea_lines.png}}
+    \end{figure}
 
   \item En más de una ocasión surge un pequeño inconveniente que
     proviene de someter la imagen al \emph{threshold binario}: no hay
@@ -334,14 +335,13 @@ nuevos problemas.
     comprobar la simetría de esta línea con respecto a la vertical que
     pasa por la \emph{\gls{fovea}}, en lugar de un único punto, se
     calcularon dos: El primero, el punto de la línea más a la
-    izquierda; el segundo, el punto de la línea más a la
-    derecha. 
+    izquierda; el segundo, el punto de la línea más a la derecha.
 
-      \begin{figure}[H]
-        \caption{Puntos encontrados}
-        \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
-        \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_30_fovea_points.png}}
-      \end{figure}
+    \begin{figure}[H]
+      \caption{Puntos encontrados}
+      \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+      \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_30_fovea_points.png}}
+    \end{figure}
 
   \item Haciendo la media de dichos
     puntos, se encuentra el punto medio: la \emph{\gls{fovea}}. \\
@@ -350,11 +350,11 @@ nuevos problemas.
     el punto más a la derecha y el punto más a la izquierda coinciden,
     y la media de un elemento repetido es el mismo elemento.
 
-      \begin{figure}[H]
-        \caption{Punto de la \emph{fóvea}}
-        \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
-        \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_31_fovea_point.png}}
-      \end{figure}
+    \begin{figure}[H]
+      \caption{Punto de la \emph{fóvea}}
+      \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+      \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_31_fovea_point.png}}
+    \end{figure}
 
   \end{enumerate}
 \item \textbf{La última fase se divide en} tres grandes pasos:
@@ -372,7 +372,8 @@ nuevos problemas.
       un \emph{Canny} para obtener los bordes.
 
       \begin{figure}[H]
-        \caption{Resultado tras aplicar \emph{Threshold} y \emph{Canny}}
+        \caption{Resultado tras aplicar \emph{Threshold} y
+          \emph{Canny}}
         \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
         \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/Algoritmo_32_espesor_Canny_primer_punto.png}}
       \end{figure}
