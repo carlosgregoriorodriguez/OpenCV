@@ -19,10 +19,36 @@ conocimiento técnico del área e imágenes de estudio.
 
 \section{Conclusiones sobre la detección de poros en la papila}
 
-\section{Conclusiones sobre la medición de la coroides}
+\section{Conclusiones sobre la medición del espesor de la coroides}
 En cuanto al uso de algoritmos de Visión Computerizada para la 
 medición del espesor de la \emph{coroides} los resultados no
 podrían ser mejores: se ha alcanzado una precisión de la medición
 exacta para la gran mayoría de las imágenes y diferencias 
 imperceptibles en los peores casos, cuando el ruido o la calidad
-de la imagen complican la detección de los puntos.
+de la imagen complican la detección de los puntos. También se
+ha reducido el tiempo de procesamiento, que hasta ahora se hacía
+a mano, a menos de un segundo y sin necesidad de intervención
+por parte de los oftalmólogos. Esto hace que se eliminen imprecisiones
+debido a fallos humanos, como se puede apreciar en el siguiente ejemplo:
+
+    \begin{figure}[H]
+      \caption{Medición realizada a mano}
+      \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+      \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/EjemploConclusionMedicos.png}}
+    \end{figure}
+
+Si utilizamos nuestro algoritmo y combinamos las imágenes para poder
+comparar:
+
+    \begin{figure}[H]
+      \caption{Medición realizada con nuestro algoritmo}
+      \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+      \fbox{\includegraphics[width=\textwidth]{imagenes/espesor_coroides/EjemploConclusionCombinada.png}}
+    \end{figure}
+
+Se puede apreciar como la recta trazada a mano (en amarillo) se desvía 
+hacia la derecha, debido a que al cerebro le cuesta trazar una línea
+perpendicular cuando la imagen está girada.\\
+También se elimina de la medición el halo generado por el reflejo de la luz
+incidente sobre el tejido que puede llevar a equívocos.
+
