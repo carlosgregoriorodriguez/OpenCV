@@ -5,9 +5,9 @@ relacionar la técnica con el resultado visual.\\
 Toda la información presente en este capítulo ha sido redactada acorde
 a las siguientes fuentes:
 \begin{description}
-\item[Learning OpenCV]\cite{opencv_book-bib}
-\item[Tutorial de OpenCV para Python]\cite{opencv_tutorial-bib}
-\item[API de OpenCV]\cite{opencv_api-bib}
+\item[Learning OpenCV]~\citep*{opencv_book-bib}
+\item[Tutorial de OpenCV para Python]~\citep*{opencv_tutorial-bib}
+\item[API de OpenCV]~\citep*{opencv_api-bib}
 \end{description}
 
 \section{Conocimientos previos necesarios}
@@ -108,10 +108,12 @@ $\left(y_1,x_1\right)\left(y_2,x_2\right)$ de la imagen
 
 \section{Operaciones aritméticas}
 \subsection{Superposición}
-La superposición de dos imágenes (del mismo tipo, profundidad o una
-que sea un valor escalar) es la suma matricial de sus píxeles,
-asignando a cada imagen un peso diferente para dar la sensación de
-superposición y transparencia. La función sería:
+La superposición\emph{~\citep[3.1.1 Pixel transforms, 3.1.3
+  Compositing and matting]{szeliski2010computer}} de dos imágenes (del
+mismo tipo, profundidad o una que sea un valor escalar) es la suma
+matricial de sus píxeles, asignando a cada imagen un peso diferente
+para dar la sensación de superposición y transparencia. La función
+sería:
 \begin{equation*}
   g(n) = (1 - \alpha)f_0(n) + \alpha f_1(n)
 \end{equation*}

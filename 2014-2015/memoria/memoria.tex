@@ -53,10 +53,9 @@
 % Añadir los acrónimos y términos del  glosario
 \input{memoria/glosario/glosario}
 
-% Traducir bibtex con babel
-% https://www.ctan.org/pkg/bibtex
-\usepackage{babelbib}
-\usepackage{cite}
+% Paquete para citar la bibliografía
+% https://www.ctan.org/pkg/natbib
+\usepackage[square]{natbib}
 
 % Paquete para resaltar la sintaxis del código escrito en Python
 % https://www.ctan.org/pkg/minted
@@ -225,6 +224,6 @@
 % Añadir la bibliografía
 \bibliography{memoria/bibliografia/bibliografia}
 % Traducir bibliografía
-\bibliographystyle{babplain}
+\bibliographystyle{plainnat}
 
 \end{document}
