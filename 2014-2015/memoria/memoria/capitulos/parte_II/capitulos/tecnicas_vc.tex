@@ -6,6 +6,8 @@ Toda la información presente en este capítulo ha sido redactada acorde
 a las siguientes fuentes:
 \begin{description}
 \item[Learning OpenCV]~\citep*{opencv_book-bib}
+\item[Computer Vision: Algorithms and
+  Applications]~\citep*{szeliski2010computer}
 \item[Tutorial de OpenCV para Python]~\citep*{opencv_tutorial-bib}
 \item[API de OpenCV]~\citep*{opencv_api-bib}
 \end{description}
@@ -13,10 +15,11 @@ a las siguientes fuentes:
 \section{Conocimientos previos necesarios}
 
 \subsection{Histogramas}\label{tecnica:histogramas}
-Un histograma es un gráfico con la distribución de color o
-intensidades de la imagen. Por simplificación, supondremos siempre una
-imagen en escala de grises. Es tan importante su estudio dentro de la
-visión computerizada que se podría definir informalmente como el
+Un histograma~\citep*[Chapter 7. Histograms and
+Matching]{opencv_book-bib} es un gráfico con la distribución de color
+o intensidades de la imagen. Por simplificación, supondremos siempre
+una imagen en escala de grises. Es tan importante su estudio dentro de
+la visión computerizada que se podría definir informalmente como el
 gráfico que contiene la naturaleza de la imagen.
 \begin{description}
 \item[Columnas:] representan intensidades. Cada columna tiene una
@@ -42,19 +45,20 @@ que, para poder dibujarla, tiene que usarse \emph{Matplotlib} o
 transformar la matriz en una imagen de \emph{OpenCV}.
 
 \subsubsection{Ecualización}
-La ecualización de un histograma consiste en distribuir los píxeles
-por todo el rango. Esta acción aumenta el contraste en aquellas
-imágenes que tienen la mayoría confinados en una zona pequeña del
-rango.
+La ecualización~\citep*[3.1.4 Histogram
+equalization]{szeliski2010computer} de un histograma consiste en
+distribuir los píxeles por todo el rango. Esta acción aumenta el
+contraste en aquellas imágenes que tienen la mayoría confinados en una
+zona pequeña del rango.
 
 \subsection{Convolución de matrices}
-La \emph{convolución} de una matriz sobre una imagen, que al fin y al
-cabo es otra matriz, es la principal base de la mayoría de las
-técnicas aquí descritas. \\
+La \emph{convolución}~\citep*[3.2 Linear
+filtering]{szeliski2010computer} de una matriz sobre una imagen, que
+al fin y al cabo es otra matriz, es la principal base de la mayoría de
+las técnicas aquí descritas. \\
 Un \emph{kernel} es una matriz fija de coeficientes numéricos y
 dimensión \textbf{impar} que se usa en todas las técnicas de este
-capítulo
-para tener un elemento como el elemento central. \\
+capítulo para tener un elemento como el elemento central. \\
 Para calcular la convolución de un píxel concreto se sitúa éste en el
 centro del \emph{kernel} y se calcula su valor con respecto a los
 píxeles de alrededor, multiplicando su valor por el valor del
@@ -84,8 +88,8 @@ se muestra la más simple y sobre el eje de abscisas:
 \section{Operaciones básicas}
 \subsection{Acceso a píxeles}
 El acceso a los píxeles de una imagen se realiza a través de
-\emph{Numpy} como una matriz de dimensiones $y \times x$,
-siendo \emph{y} la altura y \emph{x} el ancho.
+\emph{Numpy} como una matriz de dimensiones $y \times x$, siendo
+\emph{y} la altura y \emph{x} el ancho.
 \begin{minted}{Python}
   pixel = imagen[y, x]
 \end{minted}
@@ -117,8 +121,8 @@ sería:
 \begin{equation*}
   g(n) = (1 - \alpha)f_0(n) + \alpha f_1(n)
 \end{equation*}
-Donde \emph{n} representa un punto de la imagen, \emph{$\alpha$} es una
-constante entre 0 y 1, y \emph{$f_0$} y \emph{$f_1$} las imágenes.
+Donde \emph{n} representa un punto de la imagen, \emph{$\alpha$} es
+una constante entre 0 y 1, y \emph{$f_0$} y \emph{$f_1$} las imágenes.
 Expresado en forma de coordenadas:
 \begin{equation*}
   g(x, y) = (1 - \alpha)f_0(x, y) + \alpha f_1(x, y)
@@ -294,8 +298,8 @@ técnicas siguientes. En ambas, el área a realizar el \emph{threshold}
 depende del tamaño del \emph{kernel} usado.
 
 \subsubsection{cv2.ADAPTIVE\_THRESH\_MEAN\_C}
-El valor de cada píxel se establece por la media de sus vecinos restándole
-una constante C.
+El valor de cada píxel se establece por la media de sus vecinos
+restándole una constante C.
 
 \begin{figure}[H]
   \caption{Original}
@@ -348,8 +352,8 @@ Las transformaciones geométricas son aquellas técnicas en las que se
 aplica una matriz o \emph{kernel} de transformación a la imagen
 original.
 \subsection{Rotación}
-Para rotar una imagen desde un ángulo $\theta$ se opera con la siguiente
-matriz de transformación.
+Para rotar una imagen desde un ángulo $\theta$ se opera con la
+siguiente matriz de transformación.
 \begin{equation*}
   M =
   \begin{bmatrix}
@@ -361,7 +365,8 @@ centro ajustable para el punto que se prefiera.
 \begin{equation*}
   \begin{bmatrix}
     \alpha & \beta & (1 - \alpha) \cdot centro_x - \beta \cdot centro_y \\
-    - \beta & \alpha & \beta \cdot centro_x + (1 - \alpha) \cdot centro_y
+    - \beta & \alpha & \beta \cdot centro_x + (1 - \alpha) \cdot
+    centro_y
   \end{bmatrix}
 \end{equation*}
 donde:
@@ -423,9 +428,9 @@ original. Este \emph{Blur} es el menos eficiente de todos pero
 predeterminadas de los \emph{kernels} de $3\times3$, $5\times5$ y
 $7\times7$. Debido a esto, sólo mostraremos como se
 generan estas sigmas predeterminas y un ejemplo con ellas.\\
-\emph{OpenCV} obliga a introducir $\sigma_x$ y en el caso de que este sea 0,
-se determinan ambos sigmas a partir del tamaño del \emph{kernel}
-introducido mediante las fórmulas siguientes:
+\emph{OpenCV} obliga a introducir $\sigma_x$ y en el caso de que este
+sea 0, se determinan ambos sigmas a partir del tamaño del
+\emph{kernel} introducido mediante las fórmulas siguientes:
 \begin{equation*}
   \hspace{0.25cm}\sigma_x = \left(\frac{n_x}{2} - 1 \right) \cdot 0,30 + 0,80 \hspace{0.5cm} n_x = \text{anchura del \emph{kernel}}
 \end{equation*}
@@ -676,8 +681,8 @@ punto lo más sencillo es limitar a un rango de ángulos.
 \begin{equation*}
   \rho = x \cos \theta + y \sin \theta
 \end{equation*}
-donde $\rho$ es la distancia perpendicular a la recta desde el origen y
-$\theta$ el ángulo que forman la recta de la distancia con el
+donde $\rho$ es la distancia perpendicular a la recta desde el origen
+y $\theta$ el ángulo que forman la recta de la distancia con el
 origen. En \emph{OpenCV} el origen está situado en la parte superior
 izquierda. Si la recta a dibujar corta al eje de abcisas con un valor
 positivo el ángulo $\theta$ es menor que $180º$ y el valor de $\rho$
@@ -726,8 +731,8 @@ La detección de \emph{Blobs} es el siguiente paso de abstracción
 después de la detección de contornos. Un \emph{Blob} es una región
 blanca en una imagen previamente \emph{binarizada}. \\
 \emph{OpenCV} carece de esta abstracción, siendo necesario usar la
-biblioteca \emph{SimpleCV}. Explicar su funcionamiento requiere
-la descripción de su código en los siguientes pasos:
+biblioteca \emph{SimpleCV}. Explicar su funcionamiento requiere la
+descripción de su código en los siguientes pasos:
 \begin{enumerate}
 \item Se realiza una \emph{binarización} a la imagen mediante un
   \emph{threshold}, que puede ser con un valor umbral fijo o, por el
