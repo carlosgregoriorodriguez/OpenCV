@@ -169,7 +169,7 @@ nuevos problemas.
     \end{figure}
 
     \begin{enumerate}[label*=\arabic*.]
-    \item \textbf{Para eliminar dicha zona} y como la imagen no tiene
+    \item\label{algoritmo_coroides:recortar_sobrante} \textbf{Para eliminar dicha zona} y como la imagen no tiene
       por qué estar en posición horizontal, \textbf{se procede a
         buscar dos puntos auxiliares}: uno empieza con la $x$ igual a
       $2/4$ de la anchura de la imagen, y el otro con la $x$ igual a
@@ -273,7 +273,10 @@ nuevos problemas.
     \end{center}
   \item \textbf{Finalmente} se procede a \textbf{rotar la imagen} con
     la $\theta_{\text{Corrección}}$, usando como centro de rotación el
-    punto central de la imagen.
+    punto central de la imagen. Además, se reduce la zona negra
+    sobrante generada durante este proceso de manera similar al
+    paso~\ref{algoritmo_coroides:recortar_sobrante} para evitar
+    errores de detección durante las siguientes fases.
 
     \begin{figure}[H]
       \caption{Imagen rotada}
