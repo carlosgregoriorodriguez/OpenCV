@@ -169,12 +169,13 @@ nuevos problemas.
     \end{figure}
 
     \begin{enumerate}[label*=\arabic*.]
-    \item\label{algoritmo_coroides:recortar_sobrante} \textbf{Para eliminar dicha zona} y como la imagen no tiene
-      por qué estar en posición horizontal, \textbf{se procede a
-        buscar dos puntos auxiliares}: uno empieza con la $x$ igual a
-      $2/4$ de la anchura de la imagen, y el otro con la $x$ igual a
-      $3/4$ de la anchura. Ambos empiezan con $y$ igual al borde
-      inferior provisional hacia arriba, ignorando toda el área negra.
+    \item\label{algoritmo_coroides:recortar_sobrante} \textbf{Para
+        eliminar dicha zona} y como la imagen no tiene por qué estar
+      en posición horizontal, \textbf{se procede a buscar dos puntos
+        auxiliares}: uno empieza con la $x$ igual a $2/4$ de la
+      anchura de la imagen, y el otro con la $x$ igual a $3/4$ de la
+      anchura. Ambos empiezan con $y$ igual al borde inferior
+      provisional hacia arriba, ignorando toda el área negra.
 
       \begin{figure}[H]
         \caption{Puntos auxiliares}
@@ -261,10 +262,10 @@ nuevos problemas.
     \end{figure}
 
 
-  \item \textbf{Una vez obtenida la $\theta$ de la pendiente a
-      corregir respecto la horizontal} $\left( \theta = 90º \right)$
-    hay que calcular la diferencia de inclinación. Para ello se
-    calcula la diferencia con la siguiente fórmula:
+  \item \textbf{Una vez obtenida la $\theta$ de la pendiente a corregir
+      respecto la horizontal} $\left( \theta = 90º \right)$ hay que
+    calcular la diferencia de inclinación. Para ello se calcula la
+    diferencia con la siguiente fórmula:
     \begin{equation*}
       \theta_\text{Corrección} = \theta_{Bruch} - \theta_{horizontal}
     \end{equation*}
@@ -371,6 +372,8 @@ nuevos problemas.
       la \emph{\gls{coroides}}} de la siguiente manera:
     \begin{enumerate}[label*=\arabic*.]
     \item Se somete una copia de la imagen horizontal a un
+      \emph{median Blur} con el \emph{kernel} de tamaño $9$ para
+      reducir el ruido granulado cercano a la \emph{\gls{mBruch}}
       \emph{threshold binario} con un valor umbral de $179$ y se usa
       un \emph{Canny} para obtener los bordes.
 
@@ -423,8 +426,12 @@ nuevos problemas.
     \item Usando la función
       \emph{findContours\deftecnica{tecnica:contornos}} se genera un
       \emph{Canny\deftecnica{tecnica:canny}} para encontrar los
-      bordes, descartando los bordes más pequeños (ruido no eliminado
-      por el \emph{Median Blur}).
+      bordes, descartando los contornos más pequeños (ruido no
+      eliminado por el \emph{Median Blur}). Si la tolerancia es
+      demasiado alta, es muy posible que el contorno inferior de la
+      \gls{coroides} se descarte y no se haye el segundo punto. Sin
+      embargo, el algoritmo al no detectar dicho punto procede a
+      reducir de manera iterativa la tolerancia hasta detectarlo.
 
       \begin{figure}[H]
         \caption{Resultado de aplicar la detección de bordes}
