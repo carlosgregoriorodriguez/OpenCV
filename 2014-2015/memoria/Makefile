@@ -63,6 +63,11 @@ clean:
 
 	@echo Eliminando archivos de salida...
 	@rm -f *.dvi
+	@rm -f *.fls
+	@rm -f *.lof
+	@rm -f *.pyg
+	@rm -f *.fdb_latexmk
+	@rm -f *.synctex.gz
 
 	@echo Orden clean terminada
 
