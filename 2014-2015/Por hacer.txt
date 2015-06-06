@@ -5,6 +5,7 @@ Cosas por hacer de la memoria:
 [ ] Muchas más referencias bibliográficas especialmente en técnicas y parte de investigación
 [ ] Añadir al anexo resto de imágenes
 [ ] Añadir capítulo Futuro
+[ ] Revisar estado del arte
 [ ] Añadir Agradecimientos
 [ ] Añadir Dedicatorias
 [ ] Añadir aportación de dos páginas mínimo de cada miembro
