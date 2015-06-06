@@ -18,6 +18,45 @@ personal médico que ha colaborado en el proyecto, proporcionando
 conocimiento técnico del área e imágenes de estudio.
 
 \section{Conclusiones sobre la detección de poros en la papila}
+La detección de poros en la papila óptica ha sido un éxito gracias,
+en parte, a la biblioteca SimpleCV y sus funcionalidades para 
+detectar \emph{blobs}. Se ha logrado un tiempo de procesamiento ínfimo 
+comparado con el tiempo empleado por personal médico en marcarlos.
+Además, su medición es mucho más precisa que la estimación, hecha
+a ojo, que se usaba hasta ahora. \\
+A continuación se muestra un ejemplo:
+
+    \begin{figure}[H]
+      \caption{Imagen original}
+      \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+      \fbox{\includegraphics[width=\textwidth]{imagenes/conclusiones/PorosOriginal.png}}
+    \end{figure}
+
+Con el método que se usaba hasta ahora se obtenía lo siguiente:
+
+    \begin{figure}[H]
+      \caption{Imagen marcada por personal médico}
+      \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+      \fbox{\includegraphics[width=\textwidth]{imagenes/conclusiones/PorosMedicos.png}}
+    \end{figure}
+
+Nuestros algoritmos detectan más poros como se muestra en las siguientes imágenes. Además
+su medición es más precisa. \\
+Algoritmo en OpenCV:
+
+    \begin{figure}[H]
+      \caption{Algoritmo OpenCV}
+      \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+      \fbox{\includegraphics[width=\textwidth]{imagenes/conclusiones/PorosOpenCV.png}}
+    \end{figure}
+
+Algoritmo usando SimpleCV (en rojo el centro de los poros):
+
+    \begin{figure}[H]
+      \caption{Algoritmo SimpleCV}
+      \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+      \fbox{\includegraphics[width=\textwidth]{imagenes/conclusiones/PorosSimpleCV.png}}
+    \end{figure}
 
 \section{Conclusiones sobre la medición del espesor de la coroides}
 En cuanto al uso de algoritmos de Visión Computerizada para la 
