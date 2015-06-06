@@ -5,22 +5,25 @@ relacionar la técnica con el resultado visual.\\
 Toda la información presente en este capítulo ha sido redactada acorde
 a las siguientes fuentes:
 \begin{description}
-\item[Learning OpenCV]~\citep*{opencv_book-bib}
+\item[Hypermedia image processing
+  reference]~\emph{\citep*{fisher1996hypermedia}}
 \item[Computer Vision: Algorithms and
-  Applications]~\citep*{szeliski2010computer}
-\item[Tutorial de OpenCV para Python]~\citep*{opencv_tutorial-bib}
-\item[API de OpenCV]~\citep*{opencv_api-bib}
+  Applications]~\emph{\citep*{szeliski2010computer}}
+\item[Learning OpenCV]~\emph{\citep*{opencv_book-bib}}
+\item[Tutorial de OpenCV para
+  Python]~\emph{\citep*{opencv_tutorial-bib}}
+\item[API de OpenCV]~\emph{\citep*{opencv_api-bib}}
 \end{description}
 
 \section{Conocimientos previos necesarios}
 
 \subsection{Histogramas}\label{tecnica:histogramas}
-Un histograma~\citep*[Chapter 7. Histograms and
-Matching]{opencv_book-bib} es un gráfico con la distribución de color
-o intensidades de la imagen. Por simplificación, supondremos siempre
-una imagen en escala de grises. Es tan importante su estudio dentro de
-la visión computerizada que se podría definir informalmente como el
-gráfico que contiene la naturaleza de la imagen.
+Un histograma~\emph{\citep*[Chapter 7. Histograms and
+  Matching]{opencv_book-bib}} es un gráfico con la distribución de
+color o intensidades de la imagen. Por simplificación, supondremos
+siempre una imagen en escala de grises. Es tan importante su estudio
+dentro de la visión computerizada que se podría definir informalmente
+como el gráfico que contiene la naturaleza de la imagen.
 \begin{description}
 \item[Columnas:] representan intensidades. Cada columna tiene una
   altura que corresponde proporcionalmente a la cantidad de píxeles
@@ -45,17 +48,17 @@ que, para poder dibujarla, tiene que usarse \emph{Matplotlib} o
 transformar la matriz en una imagen de \emph{OpenCV}.
 
 \subsubsection{Ecualización}
-La ecualización~\citep*[3.1.4 Histogram
-equalization]{szeliski2010computer} de un histograma consiste en
+La ecualización~\emph{\citep*[3.1.4 Histogram
+  equalization]{szeliski2010computer}} de un histograma consiste en
 distribuir los píxeles por todo el rango. Esta acción aumenta el
 contraste en aquellas imágenes que tienen la mayoría confinados en una
 zona pequeña del rango.
 
 \subsection{Convolución de matrices}
-La \emph{convolución}~\citep*[3.2 Linear
-filtering]{szeliski2010computer} de una matriz sobre una imagen, que
-al fin y al cabo es otra matriz, es la principal base de la mayoría de
-las técnicas aquí descritas. \\
+La \emph{convolución}\emph{~\citep*[3.2 Linear
+  filtering]{szeliski2010computer}} de una matriz sobre una imagen,
+que al fin y al cabo es otra matriz, es la principal base de la
+mayoría de las técnicas aquí descritas. \\
 Un \emph{kernel} es una matriz fija de coeficientes numéricos y
 dimensión \textbf{impar} que se usa en todas las técnicas de este
 capítulo para tener un elemento como el elemento central. \\
@@ -132,8 +135,10 @@ vertical respectivamente).
 
 
 \section{Cambio de espacio de color}\label{tecnica:cambio-color}
-Un espacio de color es un modelo matemático abstracto que describe la
-forma en la que los colores pueden representarse como tuplas de
+Un espacio de color~\emph{\citep*[Changing
+  Colorspaces]{opencv_tutorial-bib}} es un modelo matemático abstracto
+que describe la forma en la que los colores pueden representarse como
+tuplas de
 números. RGB, HSV o escala de grises son ejemplos de espacios de color. \\
 El espacio de color de una imagen se puede cambiar con la función
 \emph{cvtColor}. Esta función permite las siguientes conversiones en
@@ -152,10 +157,12 @@ Para este proyecto se han usado las que implican RGB y escala de
 grises.
 
 \section{Operaciones de \emph{threshold}}
-Las operaciones de \emph{threshold} convierten los píxeles de una
-imagen (en escala de grises $\left[0 \dots 255\right]$) superiores a
-un valor, conocido como valor de umbral, a blanco 255 o a negro 0,
-según el \emph{threshold} aplicado.
+Las operaciones de \emph{threshold}~\emph{\citep*[Image
+  Thresholding]{opencv_tutorial-bib}}~\emph{\citep*[Threshold]{opencv_book-bib}}
+convierten los píxeles de una imagen (en escala de grises
+$\left[0 \dots 255\right]$) superiores a un valor, conocido como valor
+de umbral, a blanco 255 o a negro 0, según el \emph{threshold}
+aplicado.
 \subsection{Simples}
 \subsubsection{cv2.THRESH\_BINARY o
   \emph{Binarización}}\label{tecnica:threshold-binario}
@@ -294,8 +301,10 @@ resultado obtenido tras aplicar el filtro):
 En imágenes uniformes aplicar valores umbral globales y fijos suele
 ser una buena opción pero para imágenes no uniformes hay que adaptar
 dicho valor a cada área de la imagen. Por ello, se aplican las
-técnicas siguientes. En ambas, el área a realizar el \emph{threshold}
-depende del tamaño del \emph{kernel} usado.
+técnicas siguientes. En ambas, el área a realizar el
+\emph{threshold}~\emph{\citep*[6.2 Adaptive
+  Thresholding]{fisher1996hypermedia}} depende del tamaño del
+\emph{kernel} usado.
 
 \subsubsection{cv2.ADAPTIVE\_THRESH\_MEAN\_C}
 El valor de cada píxel se establece por la media de sus vecinos
@@ -330,10 +339,11 @@ Gaussiana a partir de sus vecinos y restándole una constante C.
 \end{figure}
 
 \subsection{Otsu}\label{tecnica:threshold-otsu}
-Este \emph{threshold} calcula el valor umbral a partir del histograma
-de la imagen. La precisión de esta técnica depende de que el
-histograma sea lo más bimodal posible, en los que predomina dos
-columnas.
+Este \emph{threshold}\emph{~\citep*[A threshold selection method from
+  gray-level histograms]{otsu1975threshold}} calcula el valor umbral a
+partir del histograma de la imagen. La precisión de esta técnica
+depende de que el histograma sea lo más bimodal posible, en los que
+predomina dos columnas.
 
 \begin{figure}[H]
   \caption{Original}
@@ -348,7 +358,8 @@ columnas.
 \end{figure}
 
 \section{Transformaciones geométricas}
-Las transformaciones geométricas son aquellas técnicas en las que se
+Las transformaciones geométricas~\emph{\citep*[Stretch, Shrink, Warp,
+  and Rotate]{opencv_book-bib}} son aquellas técnicas en las que se
 aplica una matriz o \emph{kernel} de transformación a la imagen
 original.
 \subsection{Rotación}
@@ -390,10 +401,12 @@ Posteriormente hay que aplicar la función de afinidad con la matriz de transfor
 \end{center}
 
 \section{\emph{Blur}}
-\emph{Blur} o suavizado es una técnica usada con el objetivo principal
-de reducir el ruido y los artefactos (contenido de alta frecuencia) de
-la imagen, aunque también se usa para disminuir la resolución. Se basa
-en aplicar a la imagen un \emph{kernel} de convolución.
+\emph{Blur}~\emph{\citep*[Smoothing]{opencv_book-bib}~\citep*[3.3.1
+  Non-linear filtering]{szeliski2010computer}} o suavizado es una
+técnica usada con el objetivo principal de reducir el ruido y los
+artefactos (contenido de alta frecuencia) de la imagen, aunque también
+se usa para disminuir la resolución. Se basa en aplicar a la imagen un
+\emph{kernel} de convolución.
 \subsection{Basado en la media}
 En el caso de un \emph{blur}, se suman todos los valores de los
 píxeles contenidos en la matriz y se divide entre el número de
@@ -450,9 +463,11 @@ del píxel central mediante la mediana de los píxeles colindantes. \\
 Esta técnica es muy útil para reducir el ruido granulado de la imagen.
 
 \section{Transformaciones morfológicas}
-Las operaciones de transformación morfológicas se aplican sobre la
-forma de la imagen. Se suelen usar para reducir el ruido, aislar o
-juntar elementos. El \emph{kernel} aplicado a la imagen define el
+Las operaciones de transformación morfológicas~\emph{\citep*[9
+  Morphology]{fisher1996hypermedia}}~\emph{\citep*[Image
+  Morphology]{opencv_book-bib}} se aplican sobre la forma de la
+imagen. Se suelen usar para reducir el ruido, aislar o juntar
+elementos. El \emph{kernel} aplicado a la imagen define el
 resultado de la operación. \\
 Normalmente, este tipo de operaciones se realizan posteriormente a una
 operación de \emph{threshold} por lo que para entender mejor la
@@ -606,9 +621,9 @@ El operador \emph{Scharr} se utiliza como el sustituto del operador
 \emph{Sobel} cuando es necesario aplicar \emph{kernels} pequeños,
 especialmente de tamaño $3 \times 3$, en los cuales al tener tan pocos
 píxeles, los bordes no suelen estar posicionados sobre los ejes $x$ e
-$y$ como en la superficie de los \emph{kernel} de gran tamaño. siendo
-la aproximación de \emph{Sobel} bastante inexacta con los gradientes
-en forma de ángulo.
+$y$ como en la superficie de los \emph{kernel} de gran tamaño por lo
+que la aproximación de \emph{Sobel} es bastante inexacta con los
+gradientes en forma de ángulo.
 \begin{center}
   $ G_x = \begin{bmatrix}
     +3 & 0 & -3 \\
