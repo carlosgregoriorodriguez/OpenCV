@@ -1,6 +1,6 @@
 Cosas por hacer de la memoria:
 
-[ ] Medición del área de los poros de la lámina cribosa: imágenes, conclusión
+[ ] Medición del área de los poros de la lámina cribosa: imágenes, conclusión (inglés y español)
 [ ] Propuesta software: Añadir todo el código y manual de uso
 [ ] Muchas más referencias bibliográficas especialmente en técnicas y parte de investigación
 [ ] Añadir al anexo resto de imágenes
@@ -9,6 +9,9 @@ Cosas por hacer de la memoria:
 [ ] Añadir Dedicatorias
 [ ] Añadir aportación de dos páginas mínimo de cada miembro
 [ ] Añadir más términos al glosario: esclera
+[ ] Añadir imágenes restantes a Técnicas
+[ ] Añadir ejemplos a Técnicas auxiliares
 
 [ ] Formato adecuado para la impresión
+[ ] Encontrar cómo y cuándo se puede encuadernar, y cuánto tiempo tardan
 [ ] Preparar presentación para la defensa ante el tribunal
