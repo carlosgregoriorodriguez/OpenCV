@@ -4,7 +4,7 @@ Cosas por hacer de la memoria:
 [ ] Propuesta software: Añadir todo el código y manual de uso
 [ ] Muchas más referencias bibliográficas especialmente en técnicas y parte de investigación
 [ ] Añadir al anexo resto de imágenes
-[ ] Añadir capítulo Futuro
+[X] Añadir capítulo Futuro
 [X] Revisar estado del arte
 [ ] Añadir Agradecimientos
 [ ] Añadir Dedicatorias
