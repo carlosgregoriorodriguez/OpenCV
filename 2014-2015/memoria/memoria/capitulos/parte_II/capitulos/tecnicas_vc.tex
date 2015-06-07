@@ -47,6 +47,18 @@ El resultado de un histograma es una matriz de \emph{Numpy} por lo
 que, para poder dibujarla, tiene que usarse \emph{Matplotlib} o
 transformar la matriz en una imagen de \emph{OpenCV}.
 
+\begin{figure}[H]
+  \caption{Original}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/histogramas/original_histogram.png}}
+\end{figure}
+
+\begin{figure}[H]
+  \caption{Histograma}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[scale=0.4]{imagenes/histogramas/histogram.png}}
+\end{figure}
+
 \subsubsection{Ecualización}
 La ecualización~\emph{\citep*[3.1.4 Histogram
   equalization]{szeliski2010computer}} de un histograma consiste en
@@ -54,9 +66,29 @@ distribuir los píxeles por todo el rango. Esta acción aumenta el
 contraste en aquellas imágenes que tienen la mayoría confinados en una
 zona pequeña del rango.
 
+\begin{figure}[H]
+  \caption{Original}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/histogramas/original_histogram.png}}
+\end{figure}
+
+\begin{figure}[H]
+  \caption{Histograma ecualizado}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[scale=0.4]{imagenes/histogramas/equalization.png}}
+\end{figure}
+
+\begin{figure}[H]
+  \caption{Original ecualizada}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/histogramas/equalization_histogram.png}}
+\end{figure}
+
+
 \subsection{Convolución de matrices}
 La \emph{convolución}\emph{~\citep*[3.2 Linear
-  filtering]{szeliski2010computer}} de una matriz sobre una imagen,
+  filtering]{szeliski2010computer}}\emph{~\citep*[A.6
+  Convolution]{fisher1996hypermedia}} de una matriz sobre una imagen,
 que al fin y al cabo es otra matriz, es la principal base de la
 mayoría de las técnicas aquí descritas. \\
 Un \emph{kernel} es una matriz fija de coeficientes numéricos y
@@ -561,8 +593,10 @@ del artefacto. La expresión es:
 \end{equation*}
 
 \section{Gradientes}
-El cálculo de gradientes o bordes se realiza mediante la convolución
-de derivadas parciales del estilo:
+El cálculo de gradientes o bordes \emph{\citep*[11. Feature
+  Detectors]{fisher1996hypermedia}} \emph{\citep*[Gradients and Sobel
+  Derivatives]{opencv_book-bib}} se realiza mediante la convolución de
+derivadas parciales del estilo:
 \begin{equation*}
   \frac{\delta^{2}}{\delta x \delta y}
 \end{equation*}
@@ -630,11 +664,12 @@ Y al \emph{kernel} $\begin{bmatrix} 1 & -2 & 1 \end{bmatrix}$ que si
 se expande en dos direcciones del espacio se obtiene el \emph{kernel}
 siguiente.
 \subsection{Sobel}
-Como el operador \emph{Sobel} está definido en un espacio discreto no
-es exactamente una derivada, representa un polinomio y la segunda
-derivada, una función parabólica. Por esta razón, cuanto más grande y
-más píxeles abarque el \emph{kernel} mejor aproximación se obtiene y
-más tolerancia al ruido.
+Como el operador \emph{Sobel} \emph{\citep*[History and definition of
+  the sobel operator]{sobel2014history}} está definido en un espacio
+discreto no es exactamente una derivada, representa un polinomio y la
+segunda derivada, una función parabólica. Por esta razón, cuanto más
+grande y más píxeles abarque el \emph{kernel} mejor aproximación se
+obtiene y más tolerancia al ruido.
 \begin{center}
   $ G_x = \begin{bmatrix}
     -1 & 0 & +1 \\
@@ -696,9 +731,11 @@ Por motivos de eficiencia, se aproxima con el \emph{kernel} siguiente
 \end{center}
 
 \section{Algoritmo \emph{Canny}}\label{tecnica:canny}
-El \emph{Canny} es un algoritmo de detección de bordes conocido como
-el \emph{detector óptimo} con la función de satisfacer tres criterios
-principales:
+El \emph{Canny} \emph{\citep*[A computational approach to edge
+  detection]{canny1986computational}}
+\emph{\citep*[Canny]{opencv_book-bib}} es un algoritmo de detección de
+bordes conocido como el \emph{detector óptimo} con la función de
+satisfacer tres criterios principales:
 \begin{itemize}
 \item Bajo índice de error.
 \item Minimización de la distancia entre los bordes detectados y los
@@ -710,7 +747,7 @@ Gaussiano.
 El \emph{kernel} usado para este filtro no es fijo.\\
 Luego encuentra la intensidad del gradiente de la imagen con
 procedimiento similar al Sobel con las mismas máscaras de convolución,
-fuerza del gradiente y dirección:\\
+fuerza del gradiente y dirección.\\
 Posteriormente, se suprimen los píxeles que no se consideran parte del
 borde de forma que solo queden unas finas líneas. Estas líneas son los posibles bordes.\\
 Por último, se usan dos \emph{thresholds}, uno alto y uno bajo: Si el
@@ -721,12 +758,14 @@ esté entre ambos \emph{thresholds} se considerará solo si está
 contiguo a un píxel cuyo gradiente sea superior al threshold alto.
 
 \section{Transformada de \emph{Hough}}\label{tecnica:hough}
-La transformada de \emph{Hough} es una técnica que se aplica para
-encontrar formas en una imagen \emph{binarizada} o tras haber aplicado
-un algoritmo de detetcción de bordes o contornos como el \emph{Canny},
-incluso aunque haya ruido, siempre que se puedan expresar
-matemáticamente como líneas rectas y curvas. Nos centraremos sólo en
-explicar las primeras.
+La transformada de \emph{Hough} \emph{\citep*[Use of the hough
+  trasformtion to detect lines and curves in pictures]{hart1971use}}
+\emph{\citep*[4.3.2 Hough transforms]{szeliski2010computer}} es una
+técnica que se aplica para encontrar formas en una imagen
+\emph{binarizada} o tras haber aplicado un algoritmo de detección de
+bordes y contornos como el \emph{Canny}, incluso aunque haya ruido,
+siempre que se puedan expresar matemáticamente como líneas rectas y
+curvas. Nos centraremos sólo en explicar con rectas.
 \subsection{Rectas}
 Cualquier punto obtenido de una imagen puede formar parte de una línea
 recta. Representamos una recta de manera simplificada como
@@ -738,8 +777,8 @@ punto lo más sencillo es limitar a un rango de ángulos.
 \begin{equation*}
   \rho = x \cos \theta + y \sin \theta
 \end{equation*}
-donde $\rho$ es la distancia perpendicular a la recta desde el origen
-y $\theta$ el ángulo que forman la recta de la distancia con el
+donde $\rho$ es la distancia perpendicular a la recta desde el origen y
+$\theta$ el ángulo que forman la recta de la distancia con el
 origen. En \emph{OpenCV} el origen está situado en la parte superior
 izquierda. Si la recta a dibujar corta al eje de abcisas con un valor
 positivo el ángulo $\theta$ es menor que $180º$ y el valor de $\rho$
@@ -760,8 +799,9 @@ devuelve el máximo local.
 
 \section{Contornos}\label{tecnica:contornos}
 Un contorno es una línea curva formada por la únión de puntos que
-tienen el mismo color o intensidad. La detección de contornos se usa
-para estudiar la forma de los artefactos de la imagen. \emph{OpenCV}
+tienen el mismo color o intensidad. La detección de contornos
+\emph{\citep*[Contours in OpenCV]{opencv_tutorial-bib}} se usa para
+estudiar la forma de los artefactos de la imagen. \emph{OpenCV}
 entiende detectar contornos como la búsqueda de artefactos blancos
 sobre un fondo negro por lo que la imagen, tiene que ser previamente
 \emph{binarizada}. Normalmente, se preprocesa con la aplicación de un
@@ -783,7 +823,8 @@ Estos algoritmos están divididos en dos partes:
 Las bibliotecas de visión computerizada proporcionan numerosas
 técnicas de detección de gradientes, contornos y algoritmos de tipo
 \emph{Canny}. Además, traen abstracciones de alto nivel para la
-detección de \emph{Blobs} o puntos de interés. \\
+detección de \emph{Blobs} o puntos de interés \emph{\citep*[1.7 Blob
+  Detection]{simplecv_book-bib}}.\\
 La detección de \emph{Blobs} es el siguiente paso de abstracción
 después de la detección de contornos. Un \emph{Blob} es una región
 blanca en una imagen previamente \emph{binarizada}. \\
@@ -808,13 +849,14 @@ descripción de su código en los siguientes pasos:
     \item[Contorno]
     \item[Contorno convexo]
     \item[Rectángulo rellenado]
-    \item[Los 7 momentos de \emph{Hu}:] los momentos son varios
-      cálculos distintos de alta complejidad para determinar de manera
-      inequívoca al \emph{Blob} como si de un invariante se tratase
-      ante cambios de escala, rotación o ambos.\footnote{Los momentos
-        de una imagen se han dejado sin explicar en profundidad porque
-        su descripción no es relevante para el entendimiento del
-        algoritmo.}
+    \item[Los 7 momentos de \emph{Hu}:] los momentos
+      \emph{\citep*[Visual pattern recognition by moment
+        invariants]{hu1962visual}} son varios cálculos distintos de
+      alta complejidad para determinar de manera inequívoca al
+      \emph{Blob} como si de un invariante se tratase ante cambios de
+      escala, rotación o ambos.\footnote{Los momentos de una imagen se
+        han dejado sin explicar en profundidad porque su descripción
+        no es relevante para el entendimiento del algoritmo.}
     \end{description}
   \item Si hay un contorno interno, se almacena para procesarlo
     posteriormente.
