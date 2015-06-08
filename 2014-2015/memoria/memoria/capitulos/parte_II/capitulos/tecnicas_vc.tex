@@ -208,7 +208,7 @@ adquieren el valor mínimo.  La expresión es
     0 & \text{cualquier otro caso}
   \end{cases}
 \end{equation*}
-Ejemplo para un valor de umbral de 127 (Arriba original y abajo el
+Ejemplo para un valor de umbral de $127$ (Arriba original y abajo el
 resultado obtenido tras aplicar el filtro):
 
 \begin{figure}[H]
@@ -234,7 +234,7 @@ que los demás adquieren el valor máximo. La expresión es
     255 & \text{cualquier otro caso}
   \end{cases}
 \end{equation*}
-Ejemplo para un valor de umbral de 127 (Arriba original y abajo el
+Ejemplo para un valor de umbral de $127$ (Arriba original y abajo el
 resultado obtenido tras aplicar el filtro):
 
 \begin{figure}[H]
@@ -288,7 +288,7 @@ contrario se les aplica el valor mínimo. La expresión es
     0 & \text{cualquier otro caso}
   \end{cases}
 \end{equation*}
-Ejemplo para un valor de umbral de 127 (Arriba original y abajo el
+Ejemplo para un valor de umbral de $127$ (Arriba original y abajo el
 resultado obtenido tras aplicar el filtro):
 
 \begin{figure}[H]
@@ -314,7 +314,7 @@ expresión es
     entrada(x, y) & \text{cualquier otro caso}
   \end{cases}
 \end{equation*}
-Ejemplo para un valor de umbral de 127 (Arriba original y abajo el
+Ejemplo para un valor de umbral de $127$ (Arriba original y abajo el
 resultado obtenido tras aplicar el filtro):
 
 \begin{figure}[H]
@@ -340,7 +340,7 @@ técnicas siguientes. En ambas, el área a realizar el
 
 \subsubsection{cv2.ADAPTIVE\_THRESH\_MEAN\_C}
 El valor de cada píxel se establece por la media de sus vecinos
-restándole una constante C.
+restándole una constante $C$.
 
 \begin{figure}[H]
   \caption{Original}
@@ -356,7 +356,7 @@ restándole una constante C.
 
 \subsubsection{cv2.ADAPTIVE\_THRESH\_GAUSSIAN\_C}\label{tecnica:threshold-adaptativo-gauss}
 El valor de cada píxel se establece por el resultado de una función
-Gaussiana a partir de sus vecinos y restándole una constante C.
+Gaussiana a partir de sus vecinos y restándole una constante $C$.
 
 \begin{figure}[H]
   \caption{Original}
@@ -509,7 +509,7 @@ que se basa en la media, el \emph{median Blur} calcula el valor
 del píxel central mediante la mediana de los píxeles colindantes. \\
 Esta técnica es muy útil para reducir el ruido granulado de la imagen.\\
 En el siguiente ejemplo se muestra un ejemplo aplicando un
-\emph{kernel} de tamaño 23:
+\emph{kernel} de tamaño $23$:
 
 \begin{figure}[H]
   \caption{Original}
@@ -547,7 +547,7 @@ convertirá en negro. El nombre procede del efecto que produce en una
 imagen un artefacto blanco sobre fondo negro dando la sensación de
 reducción del artefacto y reduciendo sus salientes. La fórmula es:
 \begin{equation*}
-  erode(x, y) = \min_{\substack{(x', y' \in kernel)}} imagen(x + x', y + y')
+  erode(x, y) = \min_{\substack{(x', y' \in \; kernel)}} imagen(x + x', y + y')
 \end{equation*}
 El siguiente ejemplo muestra el efecto de someter una imagen a una
 operación de \emph{Erosion} con un \emph{kernel} de $5 \times 5$ todo
@@ -575,7 +575,7 @@ procede del efecto que produce en una imagen con un artefacto blanco
 sobre fondo negro dando la sensación de la dilatación del artefacto y
 reduciendo sus concavidades. La fórmula es:
 \begin{equation*}
-  dilate(x, y) = \max_{\substack{(x', y' \in kernel)}} imagen(x + x', y + y')
+  dilate(x, y) = \max_{\substack{(x', y' \in \;kernel)}} imagen(x + x', y + y')
 \end{equation*}
 El siguiente ejemplo muestra el efecto de someter una imagen a una
 operación de \emph{Dilation} con un \emph{kernel} de $5 \times 5$ todo
