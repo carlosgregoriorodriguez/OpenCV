@@ -40,8 +40,7 @@ Con el método que se usaba hasta ahora se obtenía lo siguiente:
       \fbox{\includegraphics[width=\textwidth]{imagenes/conclusiones/PorosMedicos.png}}
     \end{figure}
 
-Nuestros algoritmos detectan más poros como se muestra en las siguientes imágenes. Además
-su medición es más precisa. \\
+Nuestros algoritmos detectan más poros como se muestra en las siguientes imágenes. \\
 Algoritmo en OpenCV:
 
     \begin{figure}[H]
@@ -57,6 +56,10 @@ Algoritmo usando SimpleCV (en rojo el centro de los poros):
       \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
       \fbox{\includegraphics[width=\textwidth]{imagenes/conclusiones/PorosSimpleCV.png}}
     \end{figure}
+
+Además de una detección más rápida y fiable, se devuelven los valores exactos del
+tamaño de los poros. De esta forma no es necesario estimar la proporción de poros
+sobre la superficie de la papila.
 
 \section{Conclusiones sobre la medición del espesor de la coroides}
 En cuanto al uso de algoritmos de Visión Computerizada para la 
@@ -88,6 +91,6 @@ comparar:
 Se puede apreciar como la recta trazada a mano (en amarillo) se desvía 
 hacia la derecha, debido a que al cerebro le cuesta trazar una línea
 perpendicular cuando la imagen está girada.\\
-También se elimina de la medición el halo generado por el reflejo de la luz
-incidente sobre el tejido que puede llevar a equívocos.
+También se deja de tener en cuenta el halo generado por el reflejo de la luz
+incidente sobre el tejido que puede llevar a fallos en la medición.
 
