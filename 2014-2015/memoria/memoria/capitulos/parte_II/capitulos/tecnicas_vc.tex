@@ -123,8 +123,8 @@ se muestra la más simple y sobre el eje de abscisas:
 \section{Operaciones básicas}
 \subsection{Acceso a píxeles}
 El acceso a los píxeles de una imagen se realiza a través de
-\emph{Numpy} como una matriz de dimensiones $y \times x$, siendo
-\emph{y} la altura y \emph{x} el ancho.
+\emph{Numpy} como una matriz de dimensiones $y \times x$, siendo $y$
+la altura y $x$ el ancho.
 \begin{minted}{Python}
   pixel = imagen[y, x]
 \end{minted}
@@ -156,14 +156,14 @@ sería:
 \begin{equation*}
   g(n) = (1 - \alpha)f_0(n) + \alpha f_1(n)
 \end{equation*}
-Donde \emph{n} representa un punto de la imagen, \emph{$\alpha$} es
-una constante entre 0 y 1, y \emph{$f_0$} y \emph{$f_1$} las imágenes.
+Donde \emph{n} representa un punto de la imagen, \emph{$\alpha$} es una
+constante entre $0$ y $1$, y \emph{$f_0$} y \emph{$f_1$} las imágenes.
 Expresado en forma de coordenadas:
 \begin{equation*}
   g(x, y) = (1 - \alpha)f_0(x, y) + \alpha f_1(x, y)
 \end{equation*}
-Donde \emph{x} e \emph{y} representan las coordenadas (horizontal y
-vertical respectivamente).
+Donde $x$ e $y$ representan las coordenadas (horizontal y vertical
+respectivamente).
 
 
 \section{Cambio de espacio de color}\label{tecnica:cambio-color}
@@ -190,11 +190,11 @@ grises.
 
 \section{Operaciones de \emph{threshold}}
 Las operaciones de \emph{threshold}~\emph{\citep*[Image
-  Thresholding]{opencv_tutorial-bib}}~\emph{\citep*[Threshold]{opencv_book-bib}}
-convierten los píxeles de una imagen (en escala de grises
-$\left[0 \dots 255\right]$) superiores a un valor, conocido como valor
-de umbral, a blanco 255 o a negro 0, según el \emph{threshold}
-aplicado.
+  Thresholding]{opencv_tutorial-bib}}~\emph{\citep*[Threshold]{opencv_book-bib}}~\emph{\citep*[6.5
+  Thresholding]{toennies2012guide}} convierten los píxeles de una
+imagen (en escala de grises $\left[0 \dots 255\right]$) superiores a
+un valor, conocido como valor de umbral, a blanco $255$ o a negro $0$,
+según el \emph{threshold} aplicado.
 \subsection{Simples}
 \subsubsection{cv2.THRESH\_BINARY o
   \emph{Binarización}}\label{tecnica:threshold-binario}
@@ -261,7 +261,7 @@ conserva el valor original. La expresión es
     entrada(x, y) & \text{cualquier otro caso}
   \end{cases}
 \end{equation*}
-Ejemplo para un valor de umbral de 127 (Arriba original y abajo el
+Ejemplo para un valor de umbral de $127$ (Arriba original y abajo el
 resultado obtenido tras aplicar el filtro):
 
 \begin{figure}[H]
@@ -395,8 +395,8 @@ Las transformaciones geométricas~\emph{\citep*[Stretch, Shrink, Warp,
 aplica una matriz o \emph{kernel} de transformación a la imagen
 original.
 \subsection{Rotación}
-Para rotar una imagen desde un ángulo $\theta$ se opera con la
-siguiente matriz de transformación.
+Para rotar una imagen desde un ángulo $\theta$ se opera con la siguiente
+matriz de transformación.
 \begin{equation*}
   M =
   \begin{bmatrix}
@@ -408,8 +408,7 @@ centro ajustable para el punto que se prefiera.
 \begin{equation*}
   \begin{bmatrix}
     \alpha & \beta & (1 - \alpha) \cdot centro_x - \beta \cdot centro_y \\
-    - \beta & \alpha & \beta \cdot centro_x + (1 - \alpha) \cdot
-    centro_y
+    - \beta & \alpha & \beta \cdot centro_x + (1 - \alpha) \cdot centro_y
   \end{bmatrix}
 \end{equation*}
 donde:
@@ -433,12 +432,13 @@ Posteriormente hay que aplicar la función de afinidad con la matriz de transfor
 \end{center}
 
 \section{\emph{Blur}}
-\emph{Blur}~\emph{\citep*[Smoothing]{opencv_book-bib}~\citep*[3.3.1
-  Non-linear filtering]{szeliski2010computer}} o suavizado es una
-técnica usada con el objetivo principal de reducir el ruido y los
-artefactos (contenido de alta frecuencia) de la imagen, aunque también
-se usa para disminuir la resolución. Se basa en aplicar a la imagen un
-\emph{kernel} de convolución.
+\emph{Blur}~\emph{\citep*[Smoothing]{opencv_book-bib}}~\emph{\citep*[3.3.1
+  Non-linear filtering]{szeliski2010computer}}~\emph{\citep*[4.3 Noise
+  Reduction]{toennies2012guide}} o suavizado es una técnica usada con
+el objetivo principal de reducir el ruido y los artefactos (contenido
+de alta frecuencia) de la imagen, aunque también se usa para disminuir
+la resolución. Se basa en aplicar a la imagen un \emph{kernel} de
+convolución.
 \subsection{Basado en la media}
 En el caso de un \emph{blur}, se suman todos los valores de los
 píxeles contenidos en la matriz y se divide entre el número de
@@ -473,9 +473,9 @@ original. Este \emph{Blur} es el menos eficiente de todos pero
 predeterminadas de los \emph{kernels} de $3\times3$, $5\times5$ y
 $7\times7$. Debido a esto, sólo mostraremos como se
 generan estas sigmas predeterminas y un ejemplo con ellas.\\
-\emph{OpenCV} obliga a introducir $\sigma_x$ y en el caso de que este
-sea 0, se determinan ambos sigmas a partir del tamaño del
-\emph{kernel} introducido mediante las fórmulas siguientes:
+\emph{OpenCV} obliga a introducir $\sigma_x$ y en el caso de que este sea
+$0$, se determinan ambos sigmas a partir del tamaño del \emph{kernel}
+introducido mediante las fórmulas siguientes:
 \begin{equation*}
   \hspace{0.25cm}\sigma_x = \left(\frac{n_x}{2} - 1 \right) \cdot 0,30 + 0,80 \hspace{0.5cm} n_x = \text{anchura del \emph{kernel}}
 \end{equation*}
@@ -486,8 +486,9 @@ Y la función \emph{Gaussiana} en la que se aplican:
 \begin{equation*}
   Gaussiana(x, y) = \frac{1}{\sqrt{2 \pi \sigma^{2}}}e^{- \frac{x^{2}+y^{2}}{2\sigma^{2}}}
 \end{equation*}
-En el siguiente ejemplo se aplica un Blur basado en una función Gaussiana con \emph{kernel}
-de 23 x 23, a partir del cual se calculan las \emph{sigmas}:
+En el siguiente ejemplo se aplica un Blur basado en una función
+Gaussiana con \emph{kernel} de $23 \times 23$, a partir del cual se
+calculan las \emph{sigmas}:
 
 \begin{figure}[H]
   \caption{Original}
@@ -507,8 +508,8 @@ En el caso de un \emph{median Blur} y como oposición al \emph{Blur},
 que se basa en la media, el \emph{median Blur} calcula el valor
 del píxel central mediante la mediana de los píxeles colindantes. \\
 Esta técnica es muy útil para reducir el ruido granulado de la imagen.\\
-En el siguiente ejemplo se muestra un ejemplo aplicando un \emph{kernel}
-de tamaño 23:
+En el siguiente ejemplo se muestra un ejemplo aplicando un
+\emph{kernel} de tamaño 23:
 
 \begin{figure}[H]
   \caption{Original}
@@ -548,8 +549,9 @@ reducción del artefacto y reduciendo sus salientes. La fórmula es:
 \begin{equation*}
   erode(x, y) = \min_{\substack{(x', y' \in kernel)}} imagen(x + x', y + y')
 \end{equation*}
-El siguiente ejemplo muestra el efecto de someter una imagen a una operación
-de \emph{Erosion} con un \emph{kernel} de 5 x 5 todo de unos:
+El siguiente ejemplo muestra el efecto de someter una imagen a una
+operación de \emph{Erosion} con un \emph{kernel} de $5 \times 5$ todo
+de unos:
 
 \begin{figure}[H]
   \caption{Original}
@@ -575,8 +577,9 @@ reduciendo sus concavidades. La fórmula es:
 \begin{equation*}
   dilate(x, y) = \max_{\substack{(x', y' \in kernel)}} imagen(x + x', y + y')
 \end{equation*}
-El siguiente ejemplo muestra el efecto de someter una imagen a una operación
-de \emph{Dilation} con un \emph{kernel} de 5 x 5 todo de unos:
+El siguiente ejemplo muestra el efecto de someter una imagen a una
+operación de \emph{Dilation} con un \emph{kernel} de $5 \times 5$ todo
+de unos:
 
 \begin{figure}[H]
   \caption{Original}
@@ -594,8 +597,8 @@ de \emph{Dilation} con un \emph{kernel} de 5 x 5 todo de unos:
 La técnica de \emph{Opening} consiste en la realización de un
 \emph{Erode} seguido de un \emph{Dilate}. Se utiliza para la
 eliminación de ruido granulado alrededor del artefacto.\\
-En el siguiente ejemplo se somete a la imagen a un \emph{Opening}
-con \emph{kernel} de tamaño 3:
+En el siguiente ejemplo se somete a la imagen a un \emph{Opening} con
+\emph{kernel} de tamaño 3:
 
 \begin{figure}[H]
   \caption{Original}
@@ -625,7 +628,8 @@ del artefacto. La expresión es:
 \section{Gradientes}
 El cálculo de gradientes o bordes \emph{\citep*[11. Feature
   Detectors]{fisher1996hypermedia}} \emph{\citep*[Gradients and Sobel
-  Derivatives]{opencv_book-bib}} se realiza mediante la convolución de
+  Derivatives]{opencv_book-bib}} \emph{\citep*[5.1 Edge
+  Tracking]{toennies2012guide}} se realiza mediante la convolución de
 derivadas parciales del estilo:
 \begin{equation*}
   \frac{\delta^{2}}{\delta x \delta y}
@@ -763,9 +767,10 @@ Por motivos de eficiencia, se aproxima con el \emph{kernel} siguiente
 \section{Algoritmo \emph{Canny}}\label{tecnica:canny}
 El \emph{Canny} \emph{\citep*[A computational approach to edge
   detection]{canny1986computational}}
-\emph{\citep*[Canny]{opencv_book-bib}} es un algoritmo de detección de
-bordes conocido como el \emph{detector óptimo} con la función de
-satisfacer tres criterios principales:
+\emph{\citep*[Canny]{opencv_book-bib}} \emph{\citep*[5.1 Edge
+  Tracking]{toennies2012guide}} es un algoritmo de detección de bordes
+conocido como el \emph{detector óptimo} con la función de satisfacer
+tres criterios principales:
 \begin{itemize}
 \item Bajo índice de error.
 \item Minimización de la distancia entre los bordes detectados y los
@@ -786,7 +791,8 @@ parte del borde; si el gradiente del píxel es menor que el threshold
 bajo, no se tendrá en cuenta; en caso de que el gradiente del píxel
 esté entre ambos \emph{thresholds} se considerará solo si está
 contiguo a un píxel cuyo gradiente sea superior al threshold alto.\\
-El siguiente ejemplo muestra el resultado de aplicar \emph{Canny} a una imagen:
+El siguiente ejemplo muestra el resultado de aplicar \emph{Canny} a
+una imagen:
 
 \begin{figure}[H]
   \caption{Original}
@@ -803,12 +809,13 @@ El siguiente ejemplo muestra el resultado de aplicar \emph{Canny} a una imagen:
 \section{Transformada de \emph{Hough}}\label{tecnica:hough}
 La transformada de \emph{Hough} \emph{\citep*[Use of the hough
   trasformtion to detect lines and curves in pictures]{hart1971use}}
-\emph{\citep*[4.3.2 Hough transforms]{szeliski2010computer}} es una
-técnica que se aplica para encontrar formas en una imagen
-\emph{binarizada} o tras haber aplicado un algoritmo de detección de
-bordes y contornos como el \emph{Canny}, incluso aunque haya ruido,
-siempre que se puedan expresar matemáticamente como líneas rectas y
-curvas. Nos centraremos sólo en explicar con rectas.
+\emph{\citep*[4.3.2 Hough transforms]{szeliski2010computer}}
+\emph{\citep*[5.2 Hough Transform]{toennies2012guide}} es una técnica
+que se aplica para encontrar formas en una imagen \emph{binarizada} o
+tras haber aplicado un algoritmo de detección de bordes y contornos
+como el \emph{Canny}, incluso aunque haya ruido, siempre que se puedan
+expresar matemáticamente como líneas rectas y curvas. Nos centraremos
+sólo en explicar con rectas.
 \subsection{Rectas}
 Cualquier punto obtenido de una imagen puede formar parte de una línea
 recta. Representamos una recta de manera simplificada como
@@ -843,7 +850,8 @@ devuelve el máximo local.
 \section{Contornos}\label{tecnica:contornos}
 Un contorno es una línea curva formada por la únión de puntos que
 tienen el mismo color o intensidad. La detección de contornos
-\emph{\citep*[Contours in OpenCV]{opencv_tutorial-bib}} se usa para
+\emph{\citep*[Contours in OpenCV]{opencv_tutorial-bib}}
+\emph{\citep*[5.1 Edge Tracking]{toennies2012guide}}se usa para
 estudiar la forma de los artefactos de la imagen. \emph{OpenCV}
 entiende detectar contornos como la búsqueda de artefactos blancos
 sobre un fondo negro por lo que la imagen, tiene que ser previamente
@@ -867,7 +875,8 @@ Las bibliotecas de visión computerizada proporcionan numerosas
 técnicas de detección de gradientes, contornos y algoritmos de tipo
 \emph{Canny}. Además, traen abstracciones de alto nivel para la
 detección de \emph{Blobs} o puntos de interés \emph{\citep*[1.7 Blob
-  Detection]{simplecv_book-bib}}.\\
+  Detection]{simplecv_book-bib}} \emph{\citep*[5.4
+  Blobs]{toennies2012guide}}.\\
 La detección de \emph{Blobs} es el siguiente paso de abstracción
 después de la detección de contornos. Un \emph{Blob} es una región
 blanca en una imagen previamente \emph{binarizada}. \\
