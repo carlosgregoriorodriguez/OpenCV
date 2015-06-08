@@ -537,6 +537,7 @@ A diferencia de los \emph{kernel} de convolución, los \emph{kernel}
 morfológicos no necesitan ser de dimensión cuadrada ni contener
 valores numéricos porque se utilizan como referencia para indicar las
 posiciones de los píxeles.
+
 \subsection{\emph{Erosion}}
 Es una técnica que usa un \emph{kernel} a modo de máscara, sustituye
 el píxel central por el \emph{mínimo local} de sus vecinos. Si algún
@@ -547,6 +548,21 @@ reducción del artefacto y reduciendo sus salientes. La fórmula es:
 \begin{equation*}
   erode(x, y) = \min_{\substack{(x', y' \in kernel)}} imagen(x + x', y + y')
 \end{equation*}
+El siguiente ejemplo muestra el efecto de someter una imagen a una operación
+de \emph{Erosion} con un \emph{kernel} de 5 x 5 todo de unos:
+
+\begin{figure}[H]
+  \caption{Original}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/tecnicas/EjemploTecnicasThresholdOriginal.png}}
+\end{figure}
+
+\begin{figure}[H]
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/tecnicas/EjemploTecnicasErosion.png}}
+  \caption{Erosion}
+\end{figure}
+
 
 \subsection{\emph{Dilation}}\label{tecnica:dilation}
 Es la técnica inversa a \emph{Erosion}, de la misma manera un
@@ -559,6 +575,20 @@ reduciendo sus concavidades. La fórmula es:
 \begin{equation*}
   dilate(x, y) = \max_{\substack{(x', y' \in kernel)}} imagen(x + x', y + y')
 \end{equation*}
+El siguiente ejemplo muestra el efecto de someter una imagen a una operación
+de \emph{Dilation} con un \emph{kernel} de 5 x 5 todo de unos:
+
+\begin{figure}[H]
+  \caption{Original}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/tecnicas/EjemploTecnicasThresholdOriginal.png}}
+\end{figure}
+
+\begin{figure}[H]
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/tecnicas/EjemploTecnicasDilation.png}}
+  \caption{Dilation}
+\end{figure}
 
 \subsection{\emph{Opening}}
 La técnica de \emph{Opening} consiste en la realización de un
@@ -755,7 +785,20 @@ gradiente del píxel es mayor que el threshold alto, el píxel formará
 parte del borde; si el gradiente del píxel es menor que el threshold
 bajo, no se tendrá en cuenta; en caso de que el gradiente del píxel
 esté entre ambos \emph{thresholds} se considerará solo si está
-contiguo a un píxel cuyo gradiente sea superior al threshold alto.
+contiguo a un píxel cuyo gradiente sea superior al threshold alto.\\
+El siguiente ejemplo muestra el resultado de aplicar \emph{Canny} a una imagen:
+
+\begin{figure}[H]
+  \caption{Original}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/tecnicas/EjemploTecnicasThresholdOriginal.png}}
+\end{figure}
+
+\begin{figure}[H]
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/tecnicas/EjemploTecnicasCanny.png}}
+  \caption{Canny}
+\end{figure}
 
 \section{Transformada de \emph{Hough}}\label{tecnica:hough}
 La transformada de \emph{Hough} \emph{\citep*[Use of the hough
