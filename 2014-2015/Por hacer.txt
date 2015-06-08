@@ -9,7 +9,7 @@ Cosas por hacer de la memoria:
 [ ] Añadir Agradecimientos
 [ ] Añadir Dedicatorias
 [ ] Añadir aportación de dos páginas mínimo de cada miembro
-[ ] Añadir más términos al glosario: esclera
+[X] Añadir más términos al glosario: esclera
 [ ] Añadir imágenes restantes a Técnicas
 [ ] Añadir ejemplos a Técnicas auxiliares
 
