@@ -1,14 +1,58 @@
 \chapter{Código del algoritmo de detección del espesor de la coroides}
 \section{Manual de uso}
+Debido a la necesidad de uso del algoritmo por parte de los
+oftalmólogos, se les ha proporcionado junto al programa para la
+medición del espesor de la \emph{\gls{coroides}} el siguiente manual de uso:\\
+El programa no requiere de intervención externa desde que se ejecuta
+hasta que termina de realizar la medición, sin embargo, para facilitar
+su uso, se han implementado los siguientes parámetros de ejecución con
+su correspondiente ayuda.
+\begin{minted}{text}
+  usage: algorithm.py [-h] [-p] (-a ARCHIVOS [ARCHIVOS ...] | -c
+  CARPETAS [CARPETAS ...])  algorithm.py: error: one of the arguments
+  -a/--archivos -c/--carpetas is required
+\end{minted}
+
+Al programa se tiene que especificar obligatoriamente si se
+quiere procesar un archivo, varios o una carpeta entera.
+\begin{description}
+\item[Procesar archivos:] el programa puede procesar tanto un archivo
+  como varios archivos uno detrás de otro. Para ello, introducir el
+  parámetro \emph{-a} seguido de uno o varios archivos.
+ \begin{minted}{bash}
+   $ python2 algorithm.py -a tomografia1.png tomografia2.png
+  \end{minted}
+\item[Procesar carpetas:] de la misma manera que se procesan los
+  archivos, se procesan las carpetas. Para ello, introducir el
+  parámetro \emph{-c} seguido de una o varias carpetas.
+ \begin{minted}{bash}
+    $ python2 algorithm.py -c carpeta
+  \end{minted}
+\end{description}
+
+Además, existen dos modos de procesamiento:
+\begin{description}
+\item[Con pasos:] para generar una imagen por cada técnica aplicada
+  por el algoritmo sobre la imagen. Para ello, introducir el parámetro
+  \emph{-p}.
+  \begin{minted}{bash}
+    $ python2 algorithm.py -p -a tomografia.png
+  \end{minted}
+\item[Sin pasos:] únicamente genera la imagen resultante con la medida
+  del espesor. Opción predeterminada.
+  \begin{minted}{bash}
+    $ python2 algorithm.py -p -a tomografia.png
+  \end{minted}
+\end{description}
 
 \section{Código}
 
 \begin{codigo_python}
   \caption{Código de args\_processor.py}
-  \inputminted[fontsize=\tiny,linenos]{python}{../OpenCV/args_processor.py}
+  \inputminted[fontsize=\scriptsize, linenos, breaklines]{python}{../OpenCV/args_processor.py}
 \end{codigo_python}
 
 \begin{codigo_python}
   \caption{Código de algorithm.py}
-  \inputminted[fontsize=\tiny,linenos]{python}{../OpenCV/algorithm.py}
+  \inputminted[fontsize=\scriptsize, linenos, breaklines]{python}{../OpenCV/algorithm.py}
 \end{codigo_python}

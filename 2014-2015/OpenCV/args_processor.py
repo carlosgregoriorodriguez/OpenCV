@@ -41,6 +41,7 @@ def crear_carpeta(carpeta_procesada):
     if not os.path.exists(carpeta_procesada):
         os.mkdir(carpeta_procesada)
 
+
 def procesar_archivo(img_name, carpeta_procesada, debug_mode, run_algorithm):
     crear_carpeta(carpeta_procesada)
     shutil.copy(img_name, carpeta_procesada + os.sep + img_name)
@@ -55,9 +56,10 @@ def procesar_carpeta(carpeta_procesada, debug_mode, run_algorithm):
     img_types = ('*.bmp', '*.tif', '*.png')
     crear_carpeta(carpeta_procesada)
     for img_type in img_types:
-            img_names.extend(glob.glob(img_type))
-            for img_name in img_names:
-                procesar_archivo(img_name, carpeta_procesada, debug_mode, run_algorithm)
+        img_names.extend(glob.glob(img_type))
+        for img_name in img_names:
+            procesar_archivo(img_name, carpeta_procesada, debug_mode, run_algorithm)
+
 
 parser = argparse.ArgumentParser(description='Programa para la medición automática de la coroides')
 parser.add_argument('-p', '--pasos', action='store_true', help='guardar todos los pasos intermedios del procesamiento')
