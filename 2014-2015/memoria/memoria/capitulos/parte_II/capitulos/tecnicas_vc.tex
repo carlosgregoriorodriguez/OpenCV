@@ -171,7 +171,7 @@ Un espacio de color~\emph{\citep*[Changing
   Colorspaces]{opencv_tutorial-bib}} es un modelo matemático abstracto
 que describe la forma en la que los colores pueden representarse como
 tuplas de
-números. RGB, HSV o escala de grises son ejemplos de espacios de color. \\
+números. \emph{RGB}, \emph{HSV} o escala de grises son ejemplos de espacios de color. \\
 El espacio de color de una imagen se puede cambiar con la función
 \emph{cvtColor}. Esta función permite las siguientes conversiones en
 las dos direcciones:
@@ -185,8 +185,9 @@ las dos direcciones:
 \end{itemize}
 Estas transformaciones permiten la detección rápida y sencilla de
 características de interés. \\
-Para este proyecto se han usado las que implican RGB y escala de
-grises.
+Para este proyecto se han usado las que implican \emph{RGB} y escala
+de grises porque a pesar de la elección de generar con la máquina las
+\gls{tco} en escala de grises, las almacena como \emph{RGB}
 
 \section{Operaciones de \emph{threshold}}
 Las operaciones de \emph{threshold}~\emph{\citep*[Image
@@ -395,8 +396,8 @@ Las transformaciones geométricas~\emph{\citep*[Stretch, Shrink, Warp,
 aplica una matriz o \emph{kernel} de transformación a la imagen
 original.
 \subsection{Rotación}
-Para rotar una imagen desde un ángulo $\theta$ se opera con la siguiente
-matriz de transformación.
+Para rotar una imagen desde un ángulo $\theta$ se opera con la
+siguiente matriz de transformación.
 \begin{equation*}
   M =
   \begin{bmatrix}
@@ -408,7 +409,8 @@ centro ajustable para el punto que se prefiera.
 \begin{equation*}
   \begin{bmatrix}
     \alpha & \beta & (1 - \alpha) \cdot centro_x - \beta \cdot centro_y \\
-    - \beta & \alpha & \beta \cdot centro_x + (1 - \alpha) \cdot centro_y
+    - \beta & \alpha & \beta \cdot centro_x + (1 - \alpha) \cdot
+    centro_y
   \end{bmatrix}
 \end{equation*}
 donde:
@@ -463,6 +465,22 @@ A modo de ejemplo, el \emph{kernel} de dimensión $3\times3$ es
     1 & 1 & 1 \\
   \end{bmatrix}
 \end{equation*}
+
+Y a continuación y para mayor énfasis, la aplicación de un
+\emph{kernel} de tamaño $7 \times 7$
+
+\begin{figure}[H]
+  \caption{Original}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/tecnicas/EjemploTecnicasThresholdOriginal.png}}
+\end{figure}
+
+\begin{figure}[H]
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/tecnicas/EjemploTecnicasBlur7.png}}
+  \caption{Blur}
+\end{figure}
+
 \subsection{Basado en una función Gaussiana}
 Esta técnica es la que mejor resultados suele dar, especialmente si se
 utiliza para reducir el ruido generado por un \emph{kernel
@@ -473,9 +491,9 @@ original. Este \emph{Blur} es el menos eficiente de todos pero
 predeterminadas de los \emph{kernels} de $3\times3$, $5\times5$ y
 $7\times7$. Debido a esto, sólo mostraremos como se
 generan estas sigmas predeterminas y un ejemplo con ellas.\\
-\emph{OpenCV} obliga a introducir $\sigma_x$ y en el caso de que este sea
-$0$, se determinan ambos sigmas a partir del tamaño del \emph{kernel}
-introducido mediante las fórmulas siguientes:
+\emph{OpenCV} obliga a introducir $\sigma_x$ y en el caso de que este
+sea $0$, se determinan ambos sigmas a partir del tamaño del
+\emph{kernel} introducido mediante las fórmulas siguientes:
 \begin{equation*}
   \hspace{0.25cm}\sigma_x = \left(\frac{n_x}{2} - 1 \right) \cdot 0,30 + 0,80 \hspace{0.5cm} n_x = \text{anchura del \emph{kernel}}
 \end{equation*}
