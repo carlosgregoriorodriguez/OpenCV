@@ -56,15 +56,23 @@ clean:
 	@rm -f *.acr
 	@rm -f *.alg
 
+	@echo Eliminando lista de figuras
+	@rm -f *.lof
+
+	@echo Eliminando índice de código
+	@rm -f *.lol
+	@rm -f *.locodigo
+
 	@echo Eliminando los archivos de generación de la bibliografía
 	@rm -f *.bbl
 	@rm -f *.blg
 
+	@echo Eliminando código Python generado por el paquete minted
+	@if [ -a _minted-memoria ]; then rm -r _minted-memoria; fi;
 
 	@echo Eliminando archivos de salida...
 	@rm -f *.dvi
 	@rm -f *.fls
-	@rm -f *.lof
 	@rm -f *.pyg
 	@rm -f *.fdb_latexmk
 	@rm -f *.synctex.gz
