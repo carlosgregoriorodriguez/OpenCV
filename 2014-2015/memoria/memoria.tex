@@ -61,6 +61,15 @@
 % https://www.ctan.org/pkg/minted
 \usepackage{minted}
 
+% Paquete para añadir caption a los bloques de código
+% https://www.ctan.org/pkg/caption
+\usepackage{caption}
+
+% Entorno código con su propio caption, no float
+% http://tex.stackexchange.com/a/7338
+\DeclareCaptionType{codigo}[Código][Índice de código]
+\newenvironment{codigo_python}{\captionsetup{type=codigo}}{}
+
 % Paquete para tener subitems dentro de un enumerado
 % https://www.ctan.org/pkg/enumitem
 \usepackage{enumitem}
@@ -68,19 +77,6 @@
 % Paquete para situar los figure en el sitio indicado con [H]
 % https://www.ctan.org/pkg/float
 \usepackage{float}
-
-% Paquete para situar figures al lado del texto
-% https://www.ctan.org/pkg/wrapfig
-\usepackage{wrapfig}
-
-% Paquete para situar figures rodeado de texto (por defecto siempre
-% las figures a la derecha)
-% https://www.ctan.org/pkg/floatflt
-\usepackage[rflt]{floatflt}
-
-% Paquete para visualizar conjuntos de figures
-% https://www.ctan.org/pkg/subfig
-\usepackage{subfig}
 
 \begin{document}
 % http://stackoverflow.com/a/22155949
@@ -152,6 +148,9 @@
 
 % Índice de figuras
 \listoffigures
+
+% Índice de código
+\listofcodigos
 
 % Índice
 % Parte 1 Antecedentes
