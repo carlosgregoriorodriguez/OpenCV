@@ -727,6 +727,18 @@ La aproximación con el \emph{kernel} se hace de la siguiente manera:
     y^{orden_y}} \text{ siendo el orden de derivación } orden_y \text{ y } orden_y > 0
 \end{equation*}
 
+\begin{figure}[H]
+  \caption{Original}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/tecnicas/EjemploTecnicasThresholdOriginal.png}}
+\end{figure}
+
+\begin{figure}[H]
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/tecnicas/EjemploTecnicasSobel.png}}
+  \caption{Sobel}
+\end{figure}
+
 \subsection{Scharr}
 El operador \emph{Scharr} se utiliza como el sustituto del operador
 \emph{Sobel} cuando es necesario aplicar \emph{kernels} pequeños,
@@ -748,6 +760,19 @@ gradientes en forma de ángulo.
   \end{bmatrix}
   $
 \end{center}
+
+\begin{figure}[H]
+  \caption{Original}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/tecnicas/EjemploTecnicasThresholdOriginal.png}}
+\end{figure}
+
+\begin{figure}[H]
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/tecnicas/EjemploTecnicasScharr.png}}
+  \caption{Scharr}
+\end{figure}
+
 \subsection{Laplaciano}
 El operador \emph{Laplaciano} se define como la segunda derivada del
 operador \emph{Sobel} de la siguiente manera:
@@ -763,6 +788,18 @@ Por motivos de eficiencia, se aproxima con el \emph{kernel} siguiente
   \end{bmatrix}
   $
 \end{center}
+
+\begin{figure}[H]
+  \caption{Original}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/tecnicas/EjemploTecnicasThresholdOriginal.png}}
+\end{figure}
+
+\begin{figure}[H]
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/tecnicas/EjemploTecnicasLaplacian.png}}
+  \caption{Laplaciano}
+\end{figure}
 
 \section{Algoritmo \emph{Canny}}\label{tecnica:canny}
 El \emph{Canny} \emph{\citep*[A computational approach to edge
