@@ -10,6 +10,8 @@ a las siguientes fuentes:
 \item[Computer Vision: Algorithms and
   Applications]~\emph{\citep*{szeliski2010computer}}
 \item[Learning OpenCV]~\emph{\citep*{opencv_book-bib}}
+\item[Guide to medical image analysis: methods and
+  algorithms]~\emph{\citep*{toennies2012guide}}
 \item[Tutorial de OpenCV para
   Python]~\emph{\citep*{opencv_tutorial-bib}}
 \item[API de OpenCV]~\emph{\citep*{opencv_api-bib}}
@@ -156,9 +158,9 @@ sería:
 \begin{equation*}
   g(n) = (1 - \alpha)f_0(n) + \alpha f_1(n)
 \end{equation*}
-Donde \emph{n} representa un punto de la imagen, \emph{$\alpha$} es una
-constante entre $0$ y $1$, y \emph{$f_0$} y \emph{$f_1$} las imágenes.
-Expresado en forma de coordenadas:
+Donde \emph{n} representa un punto de la imagen, \emph{$\alpha$} es
+una constante entre $0$ y $1$, y \emph{$f_0$} y \emph{$f_1$} las
+imágenes.  Expresado en forma de coordenadas:
 \begin{equation*}
   g(x, y) = (1 - \alpha)f_0(x, y) + \alpha f_1(x, y)
 \end{equation*}
@@ -657,6 +659,18 @@ del artefacto. La expresión es:
 \begin{equation*}
   gradiente(imagen) = dilate(imagen) - erode(imagen)
 \end{equation*}
+
+\begin{figure}[H]
+  \caption{Original}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/tecnicas/EjemploTecnicasThresholdOriginal.png}}
+\end{figure}
+
+\begin{figure}[H]
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/tecnicas/EjemploTecnicasGradient.png}}
+  \caption{Gradiente morfológico}
+\end{figure}
 
 \section{Gradientes}
 El cálculo de gradientes o bordes \emph{\citep*[11. Feature
