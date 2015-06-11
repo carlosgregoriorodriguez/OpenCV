@@ -508,9 +508,9 @@ original. Este \emph{Blur} es el menos eficiente de todos pero
 predeterminadas de los \emph{kernels} de $3\times3$, $5\times5$ y
 $7\times7$. Debido a esto, sólo mostraremos como se
 generan estas sigmas predeterminas y un ejemplo con ellas.\\
-\emph{OpenCV} obliga a introducir $\sigma_x$ y en el caso de que este
-sea $0$, se determinan ambos sigmas a partir del tamaño del
-\emph{kernel} introducido mediante las fórmulas siguientes:
+\emph{OpenCV} obliga a introducir $\sigma_x$ y en el caso de que este sea
+$0$, se determinan ambos sigmas a partir del tamaño del \emph{kernel}
+introducido mediante las fórmulas siguientes:
 \begin{equation*}
   \hspace{0.25cm}\sigma_x = \left(\frac{n_x}{2} - 1 \right) \cdot 0,30 + 0,80 \hspace{0.5cm} n_x = \text{anchura del \emph{kernel}}
 \end{equation*}
@@ -935,16 +935,43 @@ es positivo. Por el contrario, si corta al eje de abcisas por un valor
 negativo, el ángulo $\theta$ es mayor de $180º$ y $\rho$ es
 negativo. Los casos extremos son las líneas verticales $0º$ y
 horizontales $90º$.\\
-Por claridad, imaginemos sólo dos puntos por los que queremos trazar
-una recta. Para ello, trazaremos tantas rectas como $\theta$
-determinemos por cada punto, almacenando de cada uno su $\theta$ y su
-$\rho$. Con estos pares, se construye una gráfica donde el eje $y$ de
-ordenadas sea $\rho$ y el eje $x$ de abcisas sea $\theta$. Cada punto
-genera una curva y en el punto de intersección de las dos encontramos
-la $\theta$ y $\rho$ de la recta que pasa por los dos puntos. Por
-supuesto, \emph{OpenCV} no calcula la gráfica sino que guarda los
-pares y acumula el número de apariciones de cada uno y finalmente
-devuelve el máximo local.
+Por claridad, imaginemos sólo dos puntos [\emph{figura~\ref{fig:hough}
+  a)}] por los que queremos trazar una recta. Para ello, trazaremos
+tantas rectas como $\theta$ determinemos por cada punto
+[\emph{figura~\ref{fig:hough} b)}], almacenando de cada uno su
+$\theta$ y su $\rho$. Con estos pares, se construye una gráfica donde el eje
+$y$ de ordenadas sea $\rho$ y el eje $x$ de abcisas sea $\theta$. Cada punto
+genera una curva [\emph{figura~\ref{fig:hough} c)}] y en el punto de
+intersección de las dos encontramos la $\theta$ y $\rho$ de la recta que pasa
+por los dos puntos. Por supuesto, \emph{OpenCV} no calcula la gráfica
+sino que guarda los pares y acumula el número de apariciones de cada
+uno y finalmente devuelve el máximo local.
+
+\begin{figure}[H]
+  \caption{Transformada de Hough}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/tecnicas/houghTransform.png}}\label{fig:hough}
+\end{figure}
+
+Imagen extraída de \emph{\citep{opencv_book-bib}}~\footnote{Derecho de
+  cita e ilustración de la enseñanza\\
+  \url{http://www.riate.org/version/v1/recursos/cursolicenciasnavegable/derecho_de_cita_e_ilustracin_de_la_enseanza.html}\\
+  \url{http://www.boe.es/boe/dias/2006/07/08/pdfs/A25561-25572.pdf}}
+
+Ejemplo de una recta de \emph{Hough} obtenida tras la aplicación de un
+\emph{Canny}.
+
+\begin{figure}[H]
+  \caption{Original}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/tecnicas/EjemploTecnicasThresholdOriginal.png}}
+\end{figure}
+
+\begin{figure}[H]
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/tecnicas/EjemploTecnicasHough.png}}
+  \caption{Recta de Hough}
+\end{figure}
 
 \section{Contornos}\label{tecnica:contornos}
 Un contorno es una línea curva formada por la únión de puntos que
