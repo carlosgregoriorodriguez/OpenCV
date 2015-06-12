@@ -36,6 +36,15 @@ import os
 
 import SimpleCV
 
+# https://github.com/sightmachine/SimpleCV/blob/6c4d61b6d1d9d856b471910107cad0838954d2b2/SimpleCV
+# /ImageClass.py#L3422
+# https://github.com/sightmachine/SimpleCV/blob/6c4d61b6d1d9d856b471910107cad0838954d2b2/SimpleCV/Features
+# /BlobMaker.py#L58
+# https://github.com/sightmachine/SimpleCV/blob/6c4d61b6d1d9d856b471910107cad0838954d2b2/SimpleCV/Features
+# /BlobMaker.py#L139
+# https://github.com/sightmachine/SimpleCV/blob/6c4d61b6d1d9d856b471910107cad0838954d2b2/SimpleCV/Features
+# /BlobMaker.py#L139
+
 if __name__ == '__main__':
 
     if len(sys.argv) != 2:
