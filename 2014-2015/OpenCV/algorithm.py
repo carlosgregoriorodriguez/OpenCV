@@ -32,10 +32,8 @@
 # SOFTWARE.
 
 import os
-
 import cv2
 import numpy
-
 import args_processor
 
 '''
@@ -467,6 +465,3 @@ if __name__ == "__main__":
     end = cv2.getTickCount()
     seconds = (end - start) / cv2.getTickFrequency()
     print 'seconds elapsed: ', seconds
-
-    cv2.waitKey(0) & 0xFF  # 64 bits
-    cv2.destroyAllWindows()
