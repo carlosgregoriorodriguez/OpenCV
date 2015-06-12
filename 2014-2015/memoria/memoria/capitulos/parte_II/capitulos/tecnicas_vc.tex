@@ -398,8 +398,8 @@ Las transformaciones geométricas~\emph{\citep*[Stretch, Shrink, Warp,
 aplica una matriz o \emph{kernel} de transformación a la imagen
 original.
 \subsection{Rotación}
-Para rotar una imagen desde un ángulo $\theta$ se opera con la
-siguiente matriz de transformación.
+Para rotar una imagen desde un ángulo $\theta$ se opera con la siguiente
+matriz de transformación.
 \begin{equation*}
   M =
   \begin{bmatrix}
@@ -411,8 +411,7 @@ centro ajustable para el punto que se prefiera.
 \begin{equation*}
   \begin{bmatrix}
     \alpha & \beta & (1 - \alpha) \cdot centro_x - \beta \cdot centro_y \\
-    - \beta & \alpha & \beta \cdot centro_x + (1 - \alpha) \cdot
-    centro_y
+    - \beta & \alpha & \beta \cdot centro_x + (1 - \alpha) \cdot centro_y
   \end{bmatrix}
 \end{equation*}
 donde:
@@ -435,8 +434,19 @@ Posteriormente hay que aplicar la función de afinidad con la matriz de transfor
   imagen destino
 \end{center}
 
-Ejemplo de rotación de $-5º$ de una imagen con el eje de coordenadas
-en la parte superior izquierda con respecto a su centro.
+Ejemplo de rotación de $-5º$ de una imagen. \emph{OpenCV} tiene el eje
+de coordenadas en la parte superior izquierda con respecto a su
+centro. A continuación se muestra una imagen ilustrativa extraída
+de~\citep*{opencv_tutorial-bib}~\footnote{Derecho de
+  cita e ilustración de la enseñanza\\
+  \url{http://www.riate.org/version/v1/recursos/cursolicenciasnavegable/derecho_de_cita_e_ilustracin_de_la_enseanza.html}\\
+  \url{http://www.boe.es/boe/dias/2006/07/08/pdfs/A25561-25572.pdf}}.
+
+\begin{figure}[H]
+  \caption{Eje de coordenadas en \emph{OpenCV}}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[scale=0.5]{imagenes/tecnicas/houghReference.png}}
+\end{figure}
 
 \begin{figure}[H]
   \caption{Original}
@@ -544,7 +554,7 @@ que se basa en la media, el \emph{median Blur} calcula el valor
 del píxel central mediante la mediana de los píxeles colindantes. \\
 Esta técnica es muy útil para reducir el ruido granulado de la imagen.\\
 En el siguiente ejemplo se muestra un ejemplo aplicando un
-\emph{kernel} de tamaño $23$:
+\emph{kernel} de tamaño $23 \times 23$:
 
 \begin{figure}[H]
   \caption{Original}
@@ -633,7 +643,7 @@ La técnica de \emph{Opening} consiste en la realización de un
 \emph{Erode} seguido de un \emph{Dilate}. Se utiliza para la
 eliminación de ruido granulado alrededor del artefacto.\\
 En el siguiente ejemplo se somete a la imagen a un \emph{Opening} con
-\emph{kernel} de tamaño $9$:
+\emph{kernel} de tamaño $9 \times 9$:
 
 \begin{figure}[H]
   \caption{Original}
@@ -653,7 +663,7 @@ La técnica de \emph{Closing} consiste en la realización de un
 eliminación de ruido granulado situado en el interior del
 artefacto. \\
 En el siguiente ejemplo se somete a la imagen a un \emph{Closing} con
-\emph{kernel} de tamaño $9$:
+\emph{kernel} de tamaño $9 \times 9$:
 
 \begin{figure}[H]
   \caption{Original}
@@ -926,8 +936,8 @@ punto lo más sencillo es limitar a un rango de ángulos.
 \begin{equation*}
   \rho = x \cos \theta + y \sin \theta
 \end{equation*}
-donde $\rho$ es la distancia perpendicular a la recta desde el origen y
-$\theta$ el ángulo que forman la recta de la distancia con el
+donde $\rho$ es la distancia perpendicular a la recta desde el origen
+y $\theta$ el ángulo que forman la recta de la distancia con el
 origen. En \emph{OpenCV} el origen está situado en la parte superior
 izquierda. Si la recta a dibujar corta al eje de abcisas con un valor
 positivo el ángulo $\theta$ es menor que $180º$ y el valor de $\rho$
@@ -939,13 +949,14 @@ Por claridad, imaginemos sólo dos puntos [\emph{figura~\ref{fig:hough}
   a)}] por los que queremos trazar una recta. Para ello, trazaremos
 tantas rectas como $\theta$ determinemos por cada punto
 [\emph{figura~\ref{fig:hough} b)}], almacenando de cada uno su
-$\theta$ y su $\rho$. Con estos pares, se construye una gráfica donde el eje
-$y$ de ordenadas sea $\rho$ y el eje $x$ de abcisas sea $\theta$. Cada punto
-genera una curva [\emph{figura~\ref{fig:hough} c)}] y en el punto de
-intersección de las dos encontramos la $\theta$ y $\rho$ de la recta que pasa
-por los dos puntos. Por supuesto, \emph{OpenCV} no calcula la gráfica
-sino que guarda los pares y acumula el número de apariciones de cada
-uno y finalmente devuelve el máximo local.
+$\theta$ y su $\rho$. Con estos pares, se construye una gráfica donde
+el eje $y$ de ordenadas sea $\rho$ y el eje $x$ de abcisas sea
+$\theta$. Cada punto genera una curva [\emph{figura~\ref{fig:hough}
+  c)}] y en el punto de intersección de las dos encontramos la
+$\theta$ y $\rho$ de la recta que pasa por los dos puntos. Por
+supuesto, \emph{OpenCV} no calcula la gráfica sino que guarda los
+pares y acumula el número de apariciones de cada uno y finalmente
+devuelve el máximo local.
 
 \begin{figure}[H]
   \caption{Transformada de Hough}
@@ -1064,8 +1075,8 @@ descripción de su código en los siguientes pasos:
   internos).
 \end{enumerate}
 
-Ejemplo detección de \emph{blobs} con área máxima de $20.000$ píxeles y
-negros por lo que, previamente, se realizó una \emph{binarización
+Ejemplo detección de \emph{blobs} con área máxima de $20.000$ píxeles
+y negros por lo que, previamente, se realizó una \emph{binarización
   inversa}.
 
 \begin{figure}[H]
