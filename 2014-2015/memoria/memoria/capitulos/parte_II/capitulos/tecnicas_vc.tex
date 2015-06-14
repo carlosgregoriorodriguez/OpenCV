@@ -423,13 +423,13 @@ donde:
 Para facilitar todavía más la rotación, \emph{OpenCV} proporciona la
 función
 \begin{center}
-  \textbf{cv2.getRotationMatrix2D}(centro, ángulo, escala) \\
+  \textbf{cv2.getRotationMatrix2D}(centro, ángulo, escala)\footnote{\url{http://docs.opencv.org/modules/imgproc/doc/geometric\_transformations.html?highlight=getrotation\#cv2.getRotationMatrix2D}} \\
   $\downarrow$ \\
   matriz de transformación
 \end{center}
 Posteriormente hay que aplicar la función de afinidad con la matriz de transformación anterior \\
 \begin{center}
-  \textbf{cv2.warpAffine}(imagen, matriz, tamaño)\\
+  \textbf{cv2.warpAffine}(imagen, matriz, tamaño)\footnote{\url{http://docs.opencv.org/modules/imgproc/doc/geometric\_transformations.html?highlight=warpaffine\#cv2.warpAffine}}\\
   $\downarrow$ \\
   imagen destino
 \end{center}
@@ -767,8 +767,22 @@ Dando como resultado:
   I''(x) \approx I(x) - 2I(x + 1) + I(x + 2)
 \end{equation*}
 Y al \emph{kernel} $\begin{bmatrix} 1 & -2 & 1 \end{bmatrix}$ que si
-se expande en dos direcciones del espacio se obtiene el \emph{kernel}
-siguiente.
+se expande en dos direcciones del espacio se obtiene el \emph{kernel
+  Sobel} explicado en el apartado siguiente.\\
+Imagen extraída de \emph{\citep*{opencv_book-bib}}~\footnote{Derecho
+  de
+  cita e ilustración de la enseñanza\\
+  \url{http://www.riate.org/version/v1/recursos/cursolicenciasnavegable/derecho_de_cita_e_ilustracin_de_la_enseanza.html}\\
+  \url{http://www.boe.es/boe/dias/2006/07/08/pdfs/A25561-25572.pdf}} a
+modo de ejemplo para ilustrar primera y segunda derivada de un
+gradiente.
+
+\begin{figure}[H]
+  \caption{Derivadas de un gradiente}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/tecnicas/derivatives.png}}
+\end{figure}
+
 \subsection{Sobel}
 Como el operador \emph{Sobel} \emph{\citep*[History and definition of
   the sobel operator]{sobel2014history}} está definido en un espacio
@@ -964,7 +978,7 @@ devuelve el máximo local.
   \fbox{\includegraphics[width=\textwidth]{imagenes/tecnicas/houghTransform.png}}\label{fig:hough}
 \end{figure}
 
-Imagen extraída de \emph{\citep{opencv_book-bib}}~\footnote{Derecho de
+Imagen extraída de \emph{\citep*{opencv_book-bib}}~\footnote{Derecho de
   cita e ilustración de la enseñanza\\
   \url{http://www.riate.org/version/v1/recursos/cursolicenciasnavegable/derecho_de_cita_e_ilustracin_de_la_enseanza.html}\\
   \url{http://www.boe.es/boe/dias/2006/07/08/pdfs/A25561-25572.pdf}}
