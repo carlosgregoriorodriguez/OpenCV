@@ -11,12 +11,12 @@ diagnóstico de enfermedades, especialmente, de difícil identificación
 oftalmológica.
 
 \section{Máquina de TCO}
-Una máquina de \gls{tco} se utiliza para la exploración en tiempo real,
-sin ser invasiva ni dolorosa, para obtener con resolución micrométrica
-imágenes de estructuras de tejidos vivos. Con el paso del tiempo se ha
-hecho insustituible en el diagnóstico y seguimiento de numerosas
-patologías oculares, así como también por la mejora de su rapidez y
-precisión.
+Una máquina de \gls{tco} se utiliza para la exploración en tiempo
+real, sin ser invasiva ni dolorosa, para obtener con resolución
+micrométrica imágenes de estructuras de tejidos vivos. Con el paso del
+tiempo se ha hecho insustituible en el diagnóstico y seguimiento de
+numerosas patologías oculares, así como también por la mejora de su
+rapidez y precisión.
 
 \subsection{Propiedades ópticas de los tejidos}
 La máquina de \gls{tco} es capaz de medir y representar los distintos
@@ -50,7 +50,7 @@ usando el haz que atraviesa el medio conocido como patrón para
 registrar la interferencia entre ambos y medir la intensidad y el
 retardo del haz que recorrió el medio desconocido.
 
-\subsection{Historia}
+\subsection{Historia}\label{tco:historia}
 Estas primeras máquinas operaban sobre el \emph{dominio temporal}. Es
 decir, el haz se reflejaba sobre un espejo que se movía para para
 recorrer todo el espacio a estudiar. La velocidad de traslación del
@@ -92,8 +92,8 @@ superficiales como el vítreo, como de las más profundas, como la
 
 \subsection{Tipo, resolución y densidad de muestreo}
 \subsubsection{Tipo}
-Para la reconstrucción de la imagen de un tejido, la máquina de \gls{tco}
-explora el medio con un haz de luz en un punto o
+Para la reconstrucción de la imagen de un tejido, la máquina de
+\gls{tco} explora el medio con un haz de luz en un punto o
 \emph{\textbf{A-scan}}. La repetición de puntos sobre una misma línea
 genera un plano denominado \emph{\textbf{B-scan}}. La repetición de
 estos planos construye un cubo.
@@ -155,19 +155,20 @@ un mismo tejido en máquinas de \gls{tco} distintas proporciona medidas
 diferentes.
 
 \subsection{Seguimiento}
-Las máquinas de \gls{tco} más modernas son capaces de reconocer la zona
-que está siendo explorada a partir de características distintivas como
-los bordes de la papila o vasos sanguíneos. Permite asegurar así con
-exploraciones sucesivas a lo largo del tiempo de una misma zona que
-los cambios detectados en un punto son reales y no artefactos de
+Las máquinas de \gls{tco} más modernas son capaces de reconocer la
+zona que está siendo explorada a partir de características distintivas
+como los bordes de la papila o vasos sanguíneos. Permite asegurar así
+con exploraciones sucesivas a lo largo del tiempo de una misma zona
+que los cambios detectados en un punto son reales y no artefactos de
 puntos próximos y distintos.\\
 Este seguimiento permite, además, medir la distancia entre los dos
 mismos puntos en exploraciones sucesivas,lo cual permite cuantificar
 los cambios que puedan producirse.
 
 \subsection{Otras características}
-La mayoría de las máquinas de \gls{tco} tienen por objetivo el segmento
-anterior o el posterior, pero no los dos simultáneamente, ya que
+La mayoría de las máquinas de \gls{tco} tienen por objetivo el
+segmento anterior o el posterior, pero no los dos simultáneamente, ya
+que
 las longitudes de onda idóneas para cada uno son diferentes.\\
 Sin embargo, si se aleja la máquina del ojo, las ondas dirigidas al
 segmento posterior también pueden usarse para explorar el segmento
@@ -191,3 +192,35 @@ correctamente y es fiable.
 \item Visualización de alteraciones estructurales.
 \item Medición de ángulos.
 \end{itemize}
+
+\section{Modelo utilizado}
+El modelo de máquina de \gls{tco} utilizada durante todo este trabajo
+es la \emph{Spectralis, Heidelberg Engeneering, GmgH}, es de
+\emph{dominio espectral} o \emph{Fourier}
+(ver~\ref{tco:historia}~\nameref{tco:historia} para más información) y
+almacena las imágenes en formato \emph{jpeg},
+\emph{tif} y \emph{bmp}.\\
+Dispone un \emph{láser confocal} de diodo superluminiscente con una
+longitud de onda de $870nm$, permite así, explorar medios
+relativamente opacos. Capacidad necesaria para pacientes con cierto
+grado de catarata.\\
+La \gls{tco} se puede realizar con diversos patrones lineales y en
+forma de cubos tridimensionales con una separación mínima entre cortes
+de $11\;micras$. El número de repeticiones o \emph{frames} de cada
+barrido oscila entre $1$ y $100$ según se configure manualmente.\\
+Una característica muy importante de este equipo es el seguimiento de
+la imagen para evitar el desalineamiento durante la exploración a
+causa de los movimientos oculares. Se compone de dos haces de láser,
+uno de los cuales realiza el registro de la imagen mientras que el
+otro actúa como guía de la \gls{tco} para asegurar que las tomografías
+correspondan a la imagen del fondo de ojo, y por tanto, la zona
+seleccionada para la exploración.\\
+El equipo incorpora los protocolos de exploración más habituales para
+\emph{mácula} y \emph{\gls{glaucoma}} pero las características
+concretas de exploración (patrón, resolución, \emph{frames}), se
+pueden seleccionar manualmente, y una vez diseñada la configuración
+deseada, almacenarse y seleccionarse para que todos los pacientes de
+un mismo estudio sean explorados con el mismo protocolo, y por tanto,
+poder comparar los resultados.
+
+\subsection{Origen de las imágenes estudiadas}
