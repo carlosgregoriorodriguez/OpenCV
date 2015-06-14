@@ -90,7 +90,7 @@ exploración) imágenes de gran calidad tanto de estructuras
 superficiales como el vítreo, como de las más profundas, como la
 \emph{\gls{coroides}} e incluso la \emph{\gls{esclera}}.
 
-\subsection{Tipo, resolución y densidad de muestreo}
+\subsection{Tipo, resolución y densidad de muestreo}\label{tco:trd}
 \subsubsection{Tipo}
 Para la reconstrucción de la imagen de un tejido, la máquina de
 \gls{tco} explora el medio con un haz de luz en un punto o
@@ -113,7 +113,7 @@ La densidad de muestreo se define como la cantidad de
 directamente proporcional al tiempo de exploración.
 
 \subsection{Número de muestreos en el mismo punto o \emph{frame
-    averaging}}
+    averaging}}\label{tco:frame}
 Para incrementar la calidad de una imagen es recomendable aumentar el
 número de muestreos puesto que las máquinas de \gls{tco} usan luz
 parcialmente coherente y las reflexiones adyacentes producen
@@ -133,7 +133,7 @@ La estimación de calidad-ruido se basa en la recomendación de
 \emph{\textbf{100 muestreos de tipo B-scan}}, explicados
 anteriormente.
 
-\subsection{Tipos de exploración}
+\subsection{Tipos de exploración}\label{tco:exploracion}
 Lo habitual es la \emph{exploración lineal} porque son las más rápidas
 de realizar y tolerables hasta para los ojos con
 fatiga, habitual en las personas a partir de cierta edad.\\
@@ -154,7 +154,7 @@ cuenta que al tener cada máquina su propia estrategia de exploración,
 un mismo tejido en máquinas de \gls{tco} distintas proporciona medidas
 diferentes.
 
-\subsection{Seguimiento}
+\subsection{Seguimiento}\label{tco:seguimiento}
 Las máquinas de \gls{tco} más modernas son capaces de reconocer la
 zona que está siendo explorada a partir de características distintivas
 como los bordes de la papila o vasos sanguíneos. Permite asegurar así
@@ -168,8 +168,7 @@ los cambios que puedan producirse.
 \subsection{Otras características}
 La mayoría de las máquinas de \gls{tco} tienen por objetivo el
 segmento anterior o el posterior, pero no los dos simultáneamente, ya
-que
-las longitudes de onda idóneas para cada uno son diferentes.\\
+que las longitudes de onda idóneas para cada uno son diferentes.\\
 Sin embargo, si se aleja la máquina del ojo, las ondas dirigidas al
 segmento posterior también pueden usarse para explorar el segmento
 anterior.
@@ -197,30 +196,35 @@ correctamente y es fiable.
 El modelo de máquina de \gls{tco} utilizada durante todo este trabajo
 es la \emph{Spectralis, Heidelberg Engeneering, GmgH}, es de
 \emph{dominio espectral} o \emph{Fourier}
-(ver~\ref{tco:historia}~\nameref{tco:historia} para más información) y
-almacena las imágenes en formato \emph{jpeg},
+(ver\emph{~\ref{tco:historia}~\nameref{tco:historia}}) y almacena las
+imágenes en formato \emph{jpeg},
 \emph{tif} y \emph{bmp}.\\
 Dispone un \emph{láser confocal} de diodo superluminiscente con una
 longitud de onda de $870nm$, permite así, explorar medios
 relativamente opacos. Capacidad necesaria para pacientes con cierto
 grado de catarata.\\
 La \gls{tco} se puede realizar con diversos patrones lineales y en
-forma de cubos tridimensionales con una separación mínima entre cortes
-de $11\;micras$. El número de repeticiones o \emph{frames} de cada
-barrido oscila entre $1$ y $100$ según se configure manualmente.\\
+forma de cubos tridimensionales
+(ver\emph{~\ref{tco:exploracion}~\nameref{tco:exploracion}}) con una
+separación mínima entre cortes de $11\;micras$. El número de
+repeticiones o \emph{frames} de cada
+barrido oscila entre $1$ y $100$ según se configure manualmente\emph{\ref{tco:frame}~\nameref{tco:frame}}.\\
 Una característica muy importante de este equipo es el seguimiento de
 la imagen para evitar el desalineamiento durante la exploración a
-causa de los movimientos oculares. Se compone de dos haces de láser,
-uno de los cuales realiza el registro de la imagen mientras que el
-otro actúa como guía de la \gls{tco} para asegurar que las tomografías
-correspondan a la imagen del fondo de ojo, y por tanto, la zona
-seleccionada para la exploración.\\
+causa de los movimientos oculares
+(ver~\emph{\ref{tco:seguimiento}~\nameref{tco:seguimiento}}). Se
+compone de dos haces de láser, uno de los cuales realiza el registro
+de la imagen mientras que el otro actúa como guía de la \gls{tco} para
+asegurar que las tomografías correspondan a la imagen del fondo de
+ojo, y por
+tanto, la zona seleccionada para la exploración.\\
 El equipo incorpora los protocolos de exploración más habituales para
 \emph{mácula} y \emph{\gls{glaucoma}} pero las características
-concretas de exploración (patrón, resolución, \emph{frames}), se
-pueden seleccionar manualmente, y una vez diseñada la configuración
-deseada, almacenarse y seleccionarse para que todos los pacientes de
-un mismo estudio sean explorados con el mismo protocolo, y por tanto,
-poder comparar los resultados.
+concretas de exploración (patrón, resolución, \emph{frames})
+(ver\emph{~\ref{tco:trd}~\nameref{tco:trd}}), se pueden seleccionar
+manualmente, y una vez diseñada la configuración deseada, almacenarse
+y seleccionarse para que todos los pacientes de un mismo estudio sean
+explorados con el mismo protocolo, y por tanto, poder comparar los
+resultados.
 
 \subsection{Origen de las imágenes estudiadas}
