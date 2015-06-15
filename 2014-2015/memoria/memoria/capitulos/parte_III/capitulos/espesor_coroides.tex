@@ -110,9 +110,10 @@ nuevos problemas.
 
   \item Duplica la imagen, en una aplica un \emph{threshold
       Otsu\deftecnica{tecnica:threshold-otsu}} con
-    \emph{dilation\deftecnica{tecnica:dilation}} y en otra un
-    \emph{threshold binario\deftecnica{tecnica:threshold-binario}}
-    para \emph{binarizar} la imagen.
+    \emph{dilation\deftecnica{tecnica:dilation}} con un \emph{kernel}
+    de $15 \times 15$ y en otra un \emph{threshold
+      binario\deftecnica{tecnica:threshold-binario}} para
+    \emph{binarizar} la imagen.
  
     \begin{figure}[H]
       \caption{Duplicado Threshold Otsu}
@@ -127,10 +128,11 @@ nuevos problemas.
     \end{figure}
 
   \item Se recorre la imagen del \emph{threshold Otsu} con una
-    horizontal de derecha a izquierda, desde la esquina superior
-    derecha con las coordenadas, $0$ como $x$ y ancho de la imagen
-    como $y$ encontrar el borde de separación entre las dos imágenes.
-    Este borde está ligeramente desplazado a la derecha para ignorar
+    horizontal de derecha a izquierda con la coordenada fija $y$ de
+    valor $50$ para evitar huecos en negro de la parte superior y
+    ancho de la imagen como $x$ los primeros $\frac{1,25}{3}$. Así se
+    encuentra el borde de separación entre las dos imágenes.  Este
+    borde está ligeramente desplazado a la derecha para ignorar
     espacios en negro.
 
     \begin{figure}[H]
