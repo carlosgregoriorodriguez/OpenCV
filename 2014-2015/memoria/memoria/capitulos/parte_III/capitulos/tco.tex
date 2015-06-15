@@ -207,8 +207,9 @@ La \gls{tco} se puede realizar con diversos patrones lineales y en
 forma de cubos tridimensionales
 (ver\emph{~\ref{tco:exploracion}~\nameref{tco:exploracion}}) con una
 separación mínima entre cortes de $11\;micras$. El número de
-repeticiones o \emph{frames} de cada
-barrido oscila entre $1$ y $100$ según se configure manualmente\emph{\ref{tco:frame}~\nameref{tco:frame}}.\\
+repeticiones o \emph{frames} de cada barrido oscila entre $1$ y $100$
+según se configure manualmente
+\emph{\ref{tco:frame}~\nameref{tco:frame}}.\\
 Una característica muy importante de este equipo es el seguimiento de
 la imagen para evitar el desalineamiento durante la exploración a
 causa de los movimientos oculares
@@ -228,3 +229,75 @@ explorados con el mismo protocolo, y por tanto, poder comparar los
 resultados.
 
 \subsection{Origen de las imágenes estudiadas}
+Las imágenes seleccionadas y posteriormente utilizadas en este
+proyecto provienen de dos estudios de investigación que se están
+desarrollando por el \emph{Servicio de Oftalmología del Hospital 12 de
+  Octubre}.\\
+El primero, ya aprobado por la \emph{Comisión de ética e
+  investigaciones clínicas} del hospital y en ejecución. Tiene como
+objetivo el estudio del grosor de la \gls{coroides} en pacientes con
+\emph{\gls{uveitis}}. La \emph{coroides} es la capa que nutre las
+estructuras de la parte posterior del globo ocular y se han detectado
+cambios en su grosor en numerosa enfermedades, ya sea por
+engrosamiento, relacionado con enfermedades inflamatorias
+(\emph{\gls{uveitis}}, coroidopatía serosa centra, etc.) o por
+adelgazamiento, relacionado con enfermedades de tipo atrófico
+(degeneración macular asocida a la edad, miopía, etc).\\
+Este es un estudio perspectivo, en el que se ha realizado una
+exploración basal en pacientes con \emph{\gls{uveitis}} en actividad,
+y se repite a los 3 meses, cuando la inflamación ya ha
+desaparecido. La hipótesis del estudio afirma que en las
+\emph{\gls{uveitis}} existe un engrosamiento de la
+\emph{\gls{coroides}} en el momento del episodio de inflamación, que
+desaparecerá cuando la situación se normalice. También se pretende ver
+si aparecen diferencias según el tipo de \emph{\gls{uveitis}} y el
+grado de inflamación.\\
+Dado que el objetivo del trabajo es medir el espesor de una capa
+concreta, que está situada de forma perpendicular a la trayectoria del
+haz de coherencia óptica, el patrón de exploración seleccionado
+corresponde a un \emph{barrido lineal}
+(ver\emph{~\ref{tco:exploracion}~\nameref{tco:exploracion}}) centrado
+en la \emph{\gls{fovea}}, lugar donde se mide el grosor de esta capa,
+y compuesto por $100$ \emph{frames}
+(ver\emph{~\ref{tco:trd}~\nameref{tco:trd}}), de forma que se obtengan
+las imágenes de alta calidad que permitan una adecuada identificación
+y segmentación de la capa a
+estudiar, en este caso la \emph{\gls{coroides}}.\\
+El segundo proyecto de investigación está aún en fase de
+planificación, y pretende analizar las características de los
+\emph{poros} de la \emph{\gls{lamina-cribosa}} en pacientes con
+diferentes estadios evolutivos de \emph{\gls{glaucoma}}, con el
+objetivo de investigar si el número y tamaño de estos poros guardan
+alguna relación o no con el daño producido por el
+\emph{\gls{glaucoma}}. La \emph{\gls{lamina-cribosa}} es una
+estructura atravesada por los axones de las células ganglionares, que
+degeneran y mueren en el \emph{\gls{glaucoma}}. Ya se han descrito
+defectos focales de la \emph{\gls{lamina-cribosa}} en pacientes con
+daño glaucomatoso. La hipótesis de trabajo afirma que la muerte de las
+células, que conlleva la degeneración y desaparición de los acxones,
+daría lugar a un aumento de los \emph{poros}, que serían los espacios
+vacíos que previamente ocupaban los axones, y que estos poros
+serían más gandes cuanto mayor fuera el daño. \\
+En cuanto al protocolo de exploración, se ha de tener en cuenta que la
+\emph{\gls{lamina-cribosa}} está situada perpendicularmente al haz de
+exploración, y que se necesita explorar la superficie de la lámina
+completa, por o que el protocolo de exploración ha de ser un cubo
+tridimensional
+(ver\emph{~\ref{tco:exploracion}~\nameref{tco:exploracion}}), en el
+que podamos seleccionar el plano horizontal correspondiente a los
+\emph{poros}. Esto supone la obtención de una imagen resconstruida
+coompuesta por los puntos concretos de cada barrido que están situados
+en un plano determinado. El problema encontrado aparece con la
+realización de de un cubo con alta resolución (con poca distancia enre
+los barridos o \emph{scans} individuales que forman el cubo) para
+poder detectar todos los poros y que estos no queden ``perdidos'' en
+los espacios entre los barridos, el tiempo de exploración aumenta en
+exceso, por lo que se debe disminuir el número de \emph{frames}
+(repetición del mismo barrido), con lo que aumenta el ruido y la
+calidad de la imagen baja
+(ver\emph{~\ref{tco:trd}~\nameref{tco:trd}}). Es necesario encontrar
+un equilirio entre la resolución (separación entre barridos) y el
+número de \emph{frames} (repetición de cada barrido), que permita
+exploraciones con suficiente calidad pero con una duración razonable,
+y que nos permita explorar todo tipo de pacientes, y no sólo los muy
+colaboradores.
