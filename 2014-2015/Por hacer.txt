@@ -1,18 +1,25 @@
 Cosas por hacer de la memoria:
 
-[ ] Medición del área de los poros de la lámina cribosa: imágenes, conclusión (inglés y español)
-[ ] Propuesta software: Añadir todo el código y manual de uso
-[X] Muchas más referencias bibliográficas especialmente en técnicas y parte de investigación
-[ ] Añadir al anexo resto de imágenes
-[X] Añadir capítulo Futuro
-[X] Revisar estado del arte
-[ ] Añadir Agradecimientos
-[ ] Añadir Dedicatorias
-[ ] Añadir aportación de dos páginas mínimo de cada miembro
-[X] Añadir más términos al glosario: esclera
-[ ] Añadir imágenes restantes a Técnicas
-[ ] Añadir ejemplos a Técnicas auxiliares
-
+[ ] Revisar portada acorde a la normativa
 [ ] Formato adecuado para la impresión
 [ ] Encontrar cómo y cuándo se puede encuadernar, y cuánto tiempo tardan
 [ ] Preparar presentación para la defensa ante el tribunal
+[ ] Añadir Agradecimientos
+[ ] Añadir Dedicatorias
+[ ] Añadir aportación de dos páginas mínimo de cada miembro
+[ ] Añadir al anexo resto de imágenes
+[ ] Revisar que todo el contenido esté acorde a la normativa http://web.fdi.ucm.es/si/2014-15/NormativaTFG1415.pdf
+[ ] Añadir imágenes explicativas del ojo
+[ ] Añadir lista de palabras clave
+[ ] Retirar o añadir API al capítulo de técnicas
+[ ] Hacer CD (portada, imágenes, algoritmos, técnicas auxiliares, tomografías)
+
+
+[X] Medición del área de los poros de la lámina cribosa: imágenes, conclusión (inglés y español)
+[X] Propuesta software: Añadir todo el código y manual de uso
+[X] Muchas más referencias bibliográficas especialmente en técnicas y parte de investigación
+[X] Añadir capítulo Futuro
+[X] Revisar estado del arte
+[X] Añadir más términos al glosario: esclera
+[X] Añadir imágenes restantes a Técnicas
+[X] Añadir ejemplos a Técnicas auxiliares
