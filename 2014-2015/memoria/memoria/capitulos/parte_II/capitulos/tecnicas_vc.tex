@@ -86,6 +86,18 @@ zona pequeña del rango.
   \fbox{\includegraphics[width=\textwidth]{imagenes/tecnicas/histogramas/equalization_histogram.png}}
 \end{figure}
 
+Normalmente y como se puede apreciar, la aplicación de una
+\emph{ecualización} a la imagen puede provoca que las zonas intensas
+lo sean todavía más, lo que aumenta la luminosidad de la imagen. Para
+evitar esto, se utilizan \emph{ecualizaciones adaptativas} más
+conocidas por las siglas \emph{AHE} \emph{\citep*[Image enhancement
+  techniques for cockpit displays]{ketcham1974image}} bastante
+complejas tanto para mejorar el contraste de las zonas más intensas
+como el posible ruido generado con técnicas de \emph{contraste
+  limitado} (\emph{CLAHE}). Técnicas muy especialmente utilizadas en
+imágenes médicas como demuestran las imágenes de ejemplo usadas en
+\emph{\citep*[Adaptive histogram equalization and its
+  variations]{pizer1987adaptive}}.
 
 \subsection{Convolución de matrices}
 La \emph{convolución}\emph{~\citep*[3.2 Linear
@@ -158,9 +170,9 @@ sería:
 \begin{equation*}
   g(n) = (1 - \alpha)f_0(n) + \alpha f_1(n)
 \end{equation*}
-Donde \emph{n} representa un punto de la imagen, \emph{$\alpha$} es
-una constante entre $0$ y $1$, y \emph{$f_0$} y \emph{$f_1$} las
-imágenes.  Expresado en forma de coordenadas:
+Donde \emph{n} representa un punto de la imagen, \emph{$\alpha$} es una
+constante entre $0$ y $1$, y \emph{$f_0$} y \emph{$f_1$} las imágenes.
+Expresado en forma de coordenadas:
 \begin{equation*}
   g(x, y) = (1 - \alpha)f_0(x, y) + \alpha f_1(x, y)
 \end{equation*}
@@ -950,8 +962,8 @@ punto lo más sencillo es limitar a un rango de ángulos.
 \begin{equation*}
   \rho = x \cos \theta + y \sin \theta
 \end{equation*}
-donde $\rho$ es la distancia perpendicular a la recta desde el origen
-y $\theta$ el ángulo que forman la recta de la distancia con el
+donde $\rho$ es la distancia perpendicular a la recta desde el origen y
+$\theta$ el ángulo que forman la recta de la distancia con el
 origen. En \emph{OpenCV} el origen está situado en la parte superior
 izquierda. Si la recta a dibujar corta al eje de abcisas con un valor
 positivo el ángulo $\theta$ es menor que $180º$ y el valor de $\rho$
@@ -978,7 +990,8 @@ devuelve el máximo local.
   \fbox{\includegraphics[width=\textwidth]{imagenes/tecnicas/houghTransform.png}}\label{fig:hough}
 \end{figure}
 
-Imagen extraída de \emph{\citep*{opencv_book-bib}}~\footnote{Derecho de
+Imagen extraída de \emph{\citep*{opencv_book-bib}}~\footnote{Derecho
+  de
   cita e ilustración de la enseñanza\\
   \url{http://www.riate.org/version/v1/recursos/cursolicenciasnavegable/derecho_de_cita_e_ilustracin_de_la_enseanza.html}\\
   \url{http://www.boe.es/boe/dias/2006/07/08/pdfs/A25561-25572.pdf}}
