@@ -1,4 +1,8 @@
-\documentclass[11pt,a4paper,twoside]{book}
+\documentclass[11pt, a4paper, twoside]{book}
+
+% Para mostrar la estructura de la página
+%
+%\usepackage{layout}
 % Codificación de la tipografía
 % https://www.ctan.org/pkg/fontenc
 \usepackage[T1]{fontenc}
@@ -78,29 +82,19 @@
 % https://www.ctan.org/pkg/float
 \usepackage{float}
 
-\begin{document}
-% http://stackoverflow.com/a/22155949
-% Eliminar todas las páginas vacías
-\let\cleardoublepage\clearpage
+% Intercambiar los márgenes de los extremos para tener un margen
+% centra mucho más grande en vez de tres iguales
+% http://stackoverflow.com/a/12142525
+\let\tmp\oddsidemargin
+\let\oddsidemargin\evensidemargin
+\let\evensidemargin\tmp
+\reversemarginpar
 
+\begin{document}
+%\layout
 % Numerar también las subsubsecciones
 % http://tex.stackexchange.com/a/130797
 \setcounter{secnumdepth}{4}
-
-% Eliminar todas las páginas generadas automáticamente después de cada
-% parte
-% http://stackoverflow.com/a/2007143
-\makeatletter
-\renewcommand\@endpart{\vfil
-              \if@twoside
-                \null
-                \thispagestyle{empty}%
-                \newpage
-              \fi
-              \if@tempswa
-                \twocolumn
-              \fi}
-\makeatother
 
 % Añadir orden para introducir notas a pie de página sin numerar
 % http://en.wikibooks.org/wiki/LaTeX/Footnotes_and_Margin_Notes
