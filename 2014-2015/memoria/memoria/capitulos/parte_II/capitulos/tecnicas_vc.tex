@@ -42,12 +42,15 @@ como el gráfico que contiene la naturaleza de la imagen.
 Para realizar el cálculo de un histograma y por simplificación se usa
 una biblioteca. Tanto \emph{Numpy} como \emph{OpenCV} son capaces de
 realizar los cálculos necesarios pero por eficiencia se usa
-\emph{OpenCV}.
+\emph{OpenCV} mediante
+\mintinline{python}{cv2.equalizeHist()}\footnote{\url{http://docs.opencv.org/modules/imgproc/doc/histograms.html\#cv2.equalizeHist}}.
 
 \subsubsection{Dibujado}
 El resultado de un histograma es una matriz de \emph{Numpy} por lo
 que, para poder dibujarla, tiene que usarse \emph{Matplotlib} o
-transformar la matriz en una imagen de \emph{OpenCV}.
+transformar la matriz en una imagen de \emph{OpenCV}. Lo más simple es
+usar
+\mintinline{python}{matplotlib.pyplot.hist()}\footnote{\url{http://matplotlib.org/1.4.3/api/pyplot_api.html\#matplotlib.pyplot.hist}}.
 
 \begin{figure}[H]
   \caption{Original}
@@ -196,8 +199,9 @@ Expresado en forma de coordenadas:
 \begin{equation*}
   g(x, y) = (1 - \alpha)f_0(x, y) + \alpha f_1(x, y)
 \end{equation*}
-Donde $x$ e $y$ representan las coordenadas (horizontal y vertical
-respectivamente).
+$x$ e $y$ representan las coordenadas (horizontal y vertical
+respectivamente). \emph{OpenCV} proporciona para realizar esta técnica
+\mintinline{python}{cv2.addWeighted}\footnote{\url{http://docs.opencv.org/modules/core/doc/operations_on_arrays.html\#cv2.addWeighted}}
 
 
 \section{Cambio de espacio de color}\label{tecnica:cambio-color}
@@ -206,9 +210,9 @@ Un espacio de color~\emph{\citep*[Changing
 que describe la forma en la que los colores pueden representarse como
 tuplas de
 números. \emph{RGB}, \emph{HSV} o escala de grises son ejemplos de espacios de color. \\
-El espacio de color de una imagen se puede cambiar con la función
-\emph{cvtColor}. Esta función permite las siguientes conversiones en
-las dos direcciones:
+El espacio de color de una imagen se puede cambiar con
+\mintinline{python}{cv2.cvtColor()}\footnote{\url{http://docs.opencv.org/modules/imgproc/doc/miscellaneous\_transformations.html\#cv2.cvtColor}}. Esta
+que permite las siguientes conversiones en las dos direcciones:
 \begin{itemize}
 \item \textbf{RGB} --- \textbf{escala de grises}.
 \item \textbf{RGB} --- \textbf{CIE XYZ}.
@@ -221,7 +225,7 @@ Estas transformaciones permiten la detección rápida y sencilla de
 características de interés. \\
 Para este proyecto se han usado las que implican \emph{RGB} y escala
 de grises porque a pesar de la elección de generar con la máquina las
-\gls{tco} en escala de grises, las almacena como \emph{RGB}
+\gls{tco} en escala de grises, realmente las almacena como \emph{RGB}.
 
 \section{Operaciones de \emph{threshold}}
 Las operaciones de \emph{threshold}~\emph{\citep*[Image
@@ -452,19 +456,10 @@ donde:
   \\
   $ \beta = escala \cdot \sin \theta $
 \end{center}
-Para facilitar todavía más la rotación, \emph{OpenCV} proporciona la
-función
-\begin{center}
-  \textbf{cv2.getRotationMatrix2D}(centro, ángulo, escala)\footnote{\url{http://docs.opencv.org/modules/imgproc/doc/geometric\_transformations.html?highlight=getrotation\#cv2.getRotationMatrix2D}} \\
-  $\downarrow$ \\
-  matriz de transformación
-\end{center}
-Posteriormente hay que aplicar la función de afinidad con la matriz de transformación anterior \\
-\begin{center}
-  \textbf{cv2.warpAffine}(imagen, matriz, tamaño)\footnote{\url{http://docs.opencv.org/modules/imgproc/doc/geometric\_transformations.html?highlight=warpaffine\#cv2.warpAffine}}\\
-  $\downarrow$ \\
-  imagen destino
-\end{center}
+Para facilitar todavía más la rotación, \emph{OpenCV} proporciona
+\mintinline{python}{cv2.getRotationMatrix2D}\footnote{\url{http://docs.opencv.org/modules/imgproc/doc/geometric\_transformations.html\#cv2.getRotationMatrix2D}}
+para posteriormente aplicar la afinidad con
+\mintinline{python}{cv2.warpAffine}\footnote{\url{http://docs.opencv.org/modules/imgproc/doc/geometric\_transformations.html\#cv2.warpAffine}}.\\
 
 Ejemplo de rotación de $-5º$ de una imagen. \emph{OpenCV} tiene el eje
 de coordenadas en la parte superior izquierda con respecto a su
