@@ -95,9 +95,29 @@ conocidas por las siglas \emph{AHE} \emph{\citep*[Image enhancement
 complejas tanto para mejorar el contraste de las zonas más intensas
 como el posible ruido generado con técnicas de \emph{contraste
   limitado} (\emph{CLAHE}). Técnicas muy especialmente utilizadas en
-imágenes médicas como demuestran las imágenes de ejemplo usadas en
+imágenes médicas como demuestran las de ejemplo usadas en
 \emph{\citep*[Adaptive histogram equalization and its
-  variations]{pizer1987adaptive}}.
+  variations]{pizer1987adaptive}}. \emph{OpenCV} proporciona
+\mintinline{python}{cv2.createCLAHE()}\footnote{\url{https://opencv-python-tutroals.readthedocs.org/en/latest/py\_tutorials/py_imgproc/py\_histograms/py\_histogram_equalization/py\_histogram_equalization.html\#clahe-contrast-limited-adaptive-histogram-equalization}}.
+
+\begin{figure}[H]
+  \caption{Original}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/tecnicas/histogramas/original_histogram.png}}
+\end{figure}
+
+\begin{figure}[H]
+  \caption{Histograma ecualizado con CLAHE}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[scale=0.4]{imagenes/tecnicas/histogramas/clahe_equalization.png}}
+\end{figure}
+
+\begin{figure}[H]
+  \caption{Original ecualizada con CLAHE}
+  \centering \setlength\fboxsep{0pt} \setlength\fboxrule{0.5pt}
+  \fbox{\includegraphics[width=\textwidth]{imagenes/tecnicas/histogramas/clahe.png}}
+\end{figure}
+
 
 \subsection{Convolución de matrices}
 La \emph{convolución}\emph{~\citep*[3.2 Linear
