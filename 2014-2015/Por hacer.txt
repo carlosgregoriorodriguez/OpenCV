@@ -1,6 +1,6 @@
 Cosas por hacer de la memoria:
 
-[ ] Revisar portada acorde a la normativa
+[X] Revisar portada acorde a la normativa
 [ ] Formato adecuado para la impresión
 [ ] Encontrar cómo y cuándo se puede encuadernar, y cuánto tiempo tardan
 [ ] Preparar presentación para la defensa ante el tribunal
