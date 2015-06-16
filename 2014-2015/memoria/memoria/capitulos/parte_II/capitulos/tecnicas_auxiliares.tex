@@ -27,7 +27,11 @@ podrían haber hecho. \\
 A continuación se muestra una serie de imágenes de ejemplo acerca del
 uso de barras de interacción en tiempo real para reducir el tiempo de
 estudio, facilitar la presentación de las técnicas y generar así una
-mejor retroalimentación con los oftalmólogos.
+mejor retroalimentación con los oftalmólogos.\\
+Para generarlas y obtener sus valores se usaron
+\mintinline{python}{cv2.createTrackbar()}\footnote{\url{http://docs.opencv.org/modules/highgui/doc/user_interface.html\#cv.CreateTrackbar}}
+y
+\mintinline{python}{cv2.getTrackbarPos()}\footnote{\url{http://docs.opencv.org/modules/highgui/doc/user_interface.html\#cv2.getTrackbarPos}}.
 
 \begin{figure}[H]
   \caption{Barras de interacción con \emph{thresholds}}
