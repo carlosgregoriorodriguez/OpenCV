@@ -10,8 +10,8 @@ Cosas por hacer de la memoria:
 [ ] Añadir al anexo resto de imágenes
 [ ] Revisar que todo el contenido esté acorde a la normativa http://web.fdi.ucm.es/si/2014-15/NormativaTFG1415.pdf
 [ ] Añadir imágenes explicativas del ojo
-[ ] Añadir lista de palabras clave
-[ ] Retirar o añadir API al capítulo de técnicas
+[X] Añadir lista de palabras clave
+[X] Añadir API al capítulo de técnicas
 [ ] Hacer CD (portada, imágenes, algoritmos, técnicas auxiliares, tomografías)
 
 

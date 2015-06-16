@@ -233,7 +233,8 @@ Las operaciones de \emph{threshold}~\emph{\citep*[Image
   Thresholding]{toennies2012guide}} convierten los píxeles de una
 imagen (en escala de grises $\left[0 \dots 255\right]$) superiores a
 un valor, conocido como valor de umbral, a blanco $255$ o a negro $0$,
-según el \emph{threshold} aplicado.
+según el \emph{threshold} aplicado. Para aplicarlos, se utiliza
+\mintinline{python}{cv2.threshold()}\footnote{\url{http://docs.opencv.org/modules/imgproc/doc/miscellaneous_transformations.html\#cv2.threshold}}.
 \subsection{Simples}
 \subsubsection{cv2.THRESH\_BINARY o
   \emph{Binarización}}\label{tecnica:threshold-binario}
@@ -375,7 +376,8 @@ dicho valor a cada área de la imagen. Por ello, se aplican las
 técnicas siguientes. En ambas, el área a realizar el
 \emph{threshold}~\emph{\citep*[6.2 Adaptive
   Thresholding]{fisher1996hypermedia}} depende del tamaño del
-\emph{kernel} usado.
+\emph{kernel} usado mediante
+\mintinline{python}{cv2.adaptiveThreshold()}\footnote{\url{http://docs.opencv.org/modules/imgproc/doc/miscellaneous\_transformations.html\#cv2.adaptiveThreshold}}.
 
 \subsubsection{cv2.ADAPTIVE\_THRESH\_MEAN\_C}
 El valor de cada píxel se establece por la media de sus vecinos
@@ -414,7 +416,8 @@ Este \emph{threshold}\emph{~\citep*[A threshold selection method from
   gray-level histograms]{otsu1975threshold}} calcula el valor umbral a
 partir del histograma de la imagen. La precisión de esta técnica
 depende de que el histograma sea lo más bimodal posible, en los que
-predomina dos columnas.
+predomina dos columnas. Para ello, se utiliza
+\mintinline{python}{cv2.threshold()}\footnote{\url{http://docs.opencv.org/modules/imgproc/doc/miscellaneous\_transformations.html\#cv2.threshold}}.
 
 \begin{figure}[H]
   \caption{Original}
@@ -457,9 +460,9 @@ donde:
   $ \beta = escala \cdot \sin \theta $
 \end{center}
 Para facilitar todavía más la rotación, \emph{OpenCV} proporciona
-\mintinline{python}{cv2.getRotationMatrix2D}\footnote{\url{http://docs.opencv.org/modules/imgproc/doc/geometric\_transformations.html\#cv2.getRotationMatrix2D}}
+\mintinline{python}{cv2.getRotationMatrix2D()}\footnote{\url{http://docs.opencv.org/modules/imgproc/doc/geometric\_transformations.html\#cv2.getRotationMatrix2D}}
 para posteriormente aplicar la afinidad con
-\mintinline{python}{cv2.warpAffine}\footnote{\url{http://docs.opencv.org/modules/imgproc/doc/geometric\_transformations.html\#cv2.warpAffine}}.\\
+\mintinline{python}{cv2.warpAffine()}\footnote{\url{http://docs.opencv.org/modules/imgproc/doc/geometric\_transformations.html\#cv2.warpAffine}}.\\
 
 Ejemplo de rotación de $-5º$ de una imagen. \emph{OpenCV} tiene el eje
 de coordenadas en la parte superior izquierda con respecto a su
@@ -521,7 +524,9 @@ A modo de ejemplo, el \emph{kernel} de dimensión $3\times3$ es
 \end{equation*}
 
 Y a continuación y para mayor énfasis, la aplicación de un
-\emph{kernel} de tamaño $7 \times 7$
+\emph{kernel} de tamaño $7 \times 7$. Para ello, se utiliza
+\mintinline{python}{cv2.blur()}\footnote{\url{http://docs.opencv.org/modules/imgproc/doc/filtering.html\#cv2.blur}}.\\
+
 
 \begin{figure}[H]
   \caption{Original}
@@ -541,9 +546,11 @@ utiliza para reducir el ruido generado por un \emph{kernel
   Gaussiano}. Cabe destacar que al aplicar este método puede dar como
 resultado valores de píxeles que no estuvieran en la imagen
 original. Este \emph{Blur} es el menos eficiente de todos pero
-\emph{OpenCV} lo optimiza para las sigmas $\sigma_x$ y $\sigma_y$
-predeterminadas de los \emph{kernels} de $3\times3$, $5\times5$ y
-$7\times7$. Debido a esto, sólo mostraremos como se
+\emph{OpenCV} mediante
+\mintinline{python}{cv2.GaussianBlur()}\footnote{\url{http://docs.opencv.org/modules/imgproc/doc/filtering.html\#cv2.GaussianBlur}}
+lo optimiza para las sigmas $\sigma_x$ y $\sigma_y$ predeterminadas de
+los \emph{kernels} de $3\times3$, $5\times5$ y $7\times7$. Debido a
+esto, sólo mostraremos como se
 generan estas sigmas predeterminas y un ejemplo con ellas.\\
 \emph{OpenCV} obliga a introducir $\sigma_x$ y en el caso de que este sea
 $0$, se determinan ambos sigmas a partir del tamaño del \emph{kernel}
@@ -558,7 +565,7 @@ Y la función \emph{Gaussiana} en la que se aplican:
 \begin{equation*}
   Gaussiana(x, y) = \frac{1}{\sqrt{2 \pi \sigma^{2}}}e^{- \frac{x^{2}+y^{2}}{2\sigma^{2}}}
 \end{equation*}
-En el siguiente ejemplo se aplica un Blur basado en una función
+En el siguiente ejemplo se aplica un \emph{Blur} con basado en una función
 Gaussiana con \emph{kernel} de $23 \times 23$, a partir del cual se
 calculan las \emph{sigmas}:
 
@@ -581,7 +588,8 @@ que se basa en la media, el \emph{median Blur} calcula el valor
 del píxel central mediante la mediana de los píxeles colindantes. \\
 Esta técnica es muy útil para reducir el ruido granulado de la imagen.\\
 En el siguiente ejemplo se muestra un ejemplo aplicando un
-\emph{kernel} de tamaño $23 \times 23$:
+\emph{kernel} de tamaño $23 \times 23$ mediante
+\mintinline{python}{cv2.medianBlur()}\footnote{\url{http://docs.opencv.org/modules/imgproc/doc/filtering.html\#cv2.medianBlur}}:
 
 \begin{figure}[H]
   \caption{Original}
@@ -623,7 +631,7 @@ reducción del artefacto y reduciendo sus salientes. La fórmula es:
 \end{equation*}
 El siguiente ejemplo muestra el efecto de someter una imagen a una
 operación de \emph{Erosion} con un \emph{kernel} de $5 \times 5$ todo
-de unos:
+de unos mediante \mintinline{python}{cv2.erode()}\footnote{\url{http://docs.opencv.org/modules/imgproc/doc/filtering.html\#cv2.erode}}.
 
 \begin{figure}[H]
   \caption{Original}
@@ -651,7 +659,8 @@ reduciendo sus concavidades. La fórmula es:
 \end{equation*}
 El siguiente ejemplo muestra el efecto de someter una imagen a una
 operación de \emph{Dilation} con un \emph{kernel} de $5 \times 5$ todo
-de unos:
+de unos mediante
+\mintinline{python}{cv2.dilate()}\footnote{http://docs.opencv.org/modules/imgproc/doc/filtering.html\#cv2.dilate}.
 
 \begin{figure}[H]
   \caption{Original}
@@ -670,7 +679,8 @@ La técnica de \emph{Opening} consiste en la realización de un
 \emph{Erode} seguido de un \emph{Dilate}. Se utiliza para la
 eliminación de ruido granulado alrededor del artefacto.\\
 En el siguiente ejemplo se somete a la imagen a un \emph{Opening} con
-\emph{kernel} de tamaño $9 \times 9$:
+\emph{kernel} de tamaño $9 \times 9$ mediante
+\mintinline{python}{cv2.morphologyEx()}\footnote{\url{http://docs.opencv.org/modules/imgproc/doc/filtering.html\#cv2.morphologyEx}}.
 
 \begin{figure}[H]
   \caption{Original}
@@ -690,7 +700,8 @@ La técnica de \emph{Closing} consiste en la realización de un
 eliminación de ruido granulado situado en el interior del
 artefacto. \\
 En el siguiente ejemplo se somete a la imagen a un \emph{Closing} con
-\emph{kernel} de tamaño $9 \times 9$:
+\emph{kernel} de tamaño $9 \times 9$ mediante
+\mintinline{python}{cv2.morphologyEx()}\footnote{\url{http://docs.opencv.org/modules/imgproc/doc/filtering.html\#cv2.morphologyEx}}.
 
 \begin{figure}[H]
   \caption{Original}
@@ -816,7 +827,8 @@ Como el operador \emph{Sobel} \emph{\citep*[History and definition of
 discreto no es exactamente una derivada, representa un polinomio y la
 segunda derivada, una función parabólica. Por esta razón, cuanto más
 grande y más píxeles abarque el \emph{kernel} mejor aproximación se
-obtiene y más tolerancia al ruido.
+obtiene y más tolerancia al ruido. Se aplica con
+\mintinline{python}{cv2.Sobel()}\footnote{\url{http://docs.opencv.org/modules/imgproc/doc/filtering.html\#cv2.Sobel}}.
 \begin{center}
   $ G_x = \begin{bmatrix}
     -1 & 0 & +1 \\
@@ -859,7 +871,8 @@ especialmente de tamaño $3 \times 3$, en los cuales al tener tan pocos
 píxeles, los bordes no suelen estar posicionados sobre los ejes $x$ e
 $y$ como en la superficie de los \emph{kernel} de gran tamaño por lo
 que la aproximación de \emph{Sobel} es bastante inexacta con los
-gradientes en forma de ángulo.
+gradientes en forma de ángulo. Se aplica con
+\mintinline{python}{cv2.Scharr}\footnote{\url{http://docs.opencv.org/modules/imgproc/doc/filtering.html\#cv2.Scharr}}.
 \begin{center}
   $ G_x = \begin{bmatrix}
     +3 & 0 & -3 \\
@@ -888,7 +901,8 @@ gradientes en forma de ángulo.
 
 \subsection{Laplaciano}
 El operador \emph{Laplaciano} se define como la segunda derivada del
-operador \emph{Sobel} de la siguiente manera:
+operador \emph{Sobel} de la siguiente manera usando
+\mintinline{python}{cv2.Laplacian()}\footnote{\url{http://docs.opencv.org/modules/imgproc/doc/filtering.html\#cv2.Laplacian}}
 \begin{equation*}
   Laplaciana(imagen) = \frac{\delta^{2} imagen}{\delta x^{2}} + \frac{\delta^{2} imagen}{\delta y^{2}}
 \end{equation*}
@@ -942,7 +956,8 @@ bajo, no se tendrá en cuenta; en caso de que el gradiente del píxel
 esté entre ambos \emph{thresholds} se considerará solo si está
 contiguo a un píxel cuyo gradiente sea superior al threshold alto.\\
 El siguiente ejemplo muestra el resultado de aplicar \emph{Canny} a
-una imagen:
+una imagen mediante
+\mintinline{python}{cv2.Canny()}\footnote{\url{http://docs.opencv.org/modules/imgproc/doc/feature\_detection.html\#cv2.Canny}}.
 
 \begin{figure}[H]
   \caption{Original}
@@ -1011,8 +1026,9 @@ Imagen extraída de \emph{\citep*{opencv_book-bib}}~\footnote{Derecho
   \url{http://www.riate.org/version/v1/recursos/cursolicenciasnavegable/derecho_de_cita_e_ilustracin_de_la_enseanza.html}\\
   \url{http://www.boe.es/boe/dias/2006/07/08/pdfs/A25561-25572.pdf}}
 
-Ejemplo de una recta de \emph{Hough} obtenida tras la aplicación de un
-\emph{Canny}.
+Ejemplo de una recta de \emph{Hough} obtenida con
+\mintinline{python}{cv2.HoughLines()}\footnote{\url{http://docs.opencv.org/modules/imgproc/doc/feature\_detection.html\#cv2.HoughLines}}
+tras la aplicación de un \emph{Canny}.
 
 \begin{figure}[H]
   \caption{Original}
@@ -1049,7 +1065,11 @@ Estos algoritmos están divididos en dos partes:
 \item[Dibujado:] parte encargada del coloreado y grosor de las líneas.
 \end{description}
 
-Ejemplo obtenido tras aplicar esta técnica.
+Ejemplo obtenido tras aplicar esta técnica con
+\mintinline{python}{cv2.findContours()}\footnote{\url{http://docs.opencv.org/modules/imgproc/doc/structural\_analysis\_and\_shape\_descriptors.html\#cv2.findContours}}
+y
+\mintinline{python}{cv2.drawContours()}\footnote{\url{http://docs.opencv.org/modules/imgproc/doc/structural\_analysis\_and\_shape\_descriptors.html\#cv2.drawContours}}
+para su visualización.
 
 \begin{figure}[H]
   \caption{Original}
@@ -1119,7 +1139,9 @@ descripción de su código en los siguientes pasos:
 
 Ejemplo detección de \emph{blobs} con área máxima de $20.000$ píxeles
 y negros por lo que, previamente, se realizó una \emph{binarización
-  inversa}.
+  inversa} y finalmente
+\mintinline{python}{findBlobs()}\footnote{\url{https://github.com/sightmachine/SimpleCV/blob/6c4d61b6d1d9d856b471910107cad0838954d2b2/SimpleCV/ImageClass.py\#L3422}}
+para detectarlos.
 
 \begin{figure}[H]
   \caption{Original}
