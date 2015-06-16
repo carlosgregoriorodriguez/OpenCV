@@ -22,19 +22,23 @@
 \usepackage[pdftex, hidelinks=true]{hyperref}
 
 % Comando para enlazar técnica como pie de nota
-\makeatletter
 \newcommand{\deftecnica}[1]{
 \footnote{\autoref{#1}~\nameref{#1},
         página~\pageref{#1}}}
-\makeatother
 
 % Paquetes para mostrar símbolos y operaciones matemáticas
 % https://www.ctan.org/pkg/amsmath
 \usepackage{amsmath}
 \usepackage{amssymb}
+
+% Usar tipografía iwona
+% https://www.ctan.org/tex-archive/fonts/iwona/
+\usepackage[math]{iwona}
+
 % Para personalizar los case
 % https://www.ctan.org/pkg/mathtools
 % \usepackage{mathtools}
+
 
 % Paquete para mostrar imágenes
 \usepackage{graphicx}
