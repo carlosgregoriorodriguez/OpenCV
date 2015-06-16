@@ -1,1 +1,48 @@
 \section{Aportes de  Daniel Arnao Rodríguez}
+Debido a mi incorporación al proyecto con un mes de retraso, lo primero 
+que tuve que hacer fue ponerme al día con el trabajo que había avanzado 
+Miguel en el área del reconocimiento de poros, así como en el uso de 
+OpenCV, SimpleCV y Python.
+
+\subsection{Preparación}
+Antes de abordar los problemas planteados por el proyecto era necesario
+familiarizarse con las técnicas que brindan OpenCV y SimpleCV. \\
+SimpleCV no dio demasiado trabajo debido a la potencia de la función
+\emph{findBlobs}, capaz de detectar por sí sola los poros de la papila. \\
+OpenCV, en cambio, proveía una gran cantidad de técnicas útiles para el
+trabajo que se iba a realizar. Es por ello que, entre Miguel y yo,
+desarrollamos una serie de programas auxiliares que nos permitieran
+estudiar, de forma rápida y sencilla, el comportamiento de dichas 
+técnicas cuando se aplican con diferentes parámetros y el resultado
+de sus combinaciones. Estos programas son los descritos en el capítulo 7.
+
+\subsection{Concreción de los objetivos}
+A pesar de mi incorporación tardía al proyecto, los objetivos no estaban
+definidos con suficiente nivel de detalle, especialmente los referentes
+a parte de medir el espesor de la coroides. Fue más adelante, durante 
+una reunión con los oftalmólogos en el \emph{Hospital 12 de Octubre},
+cuando tuve la oportunidad de preguntarles directamente lo que esperaban
+de nuestro trabajo. De esta forma los objetivos quedaron perfectamente
+claros y matizados.
+
+\subsection{Desarrollo}
+Durante la fase de desarrollo tomé una posición principalmente teórica,
+en el sentido de definir la estructura del algoritmo y los pasos a seguir
+para alcanzar los objetivos, mientras que Miguel se ocupó de la
+mayor parte de la transformación a código. \\
+También me ocupé de realizar las pruebas necesarias para concretar las 
+técnicas a emplear, así como de definir los parámetros exactos que 
+permitieran marcar la zona a estudiar en cada caso. Esta tarea no fue
+sencilla debido a que cada imagen era diferente y la técnica que 
+funcionaba con una, fallaba con otras. Finalmente, la solución final
+propuesta resultó ser válida para todas ellas.\\
+En cuanto a la implementación, mi tarea principal consistió
+en asistir a Miguel cuando se atascaba en algún paso. Aún así también
+hice aportaciones propias al código, como el cálculo del punto de 
+la \emph{fóvea}.
+
+\subsection{Elaboración de la memoria}
+Todos los apartados de la memoria han sido redactados colaborativamente, 
+de modo que no puedo adjudicarme la autoría total de ninguno de ellos.\\
+La adaptación de todo el texto de la memoria a un lenguaje propio de 
+este tipo de trabajos (TFG) ha sido tarea mía.
