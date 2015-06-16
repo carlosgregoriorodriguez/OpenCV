@@ -1,24 +1,21 @@
 Cosas por hacer de la memoria:
 
 [ ] Formato adecuado para la impresión
-[ ] Añadir imágenes explicativas del ojo
 [ ] Añadir aportación de dos páginas mínimo de cada miembro
 [ ] Añadir al anexo resto de imágenes
-[ ] Encontrar cómo y cuándo se puede encuadernar, y cuánto tiempo tardan
-[ ] Preparar presentación para la defensa ante el tribunal
 [ ] Añadir Agradecimientos
 [ ] Añadir Dedicatorias
 [ ] Hacer CD (portada, imágenes, algoritmos, técnicas auxiliares, tomografías)
 
 
+[ ] Preparar presentación para la defensa ante el tribunal
 
+[X] Encontrar cómo y cuándo se puede encuadernar, y cuánto tiempo tardan
+[X] Añadir imágenes explicativas del ojo
 [X] Revisar portada acorde a la normativa
 [X] Revisar que todo el contenido esté acorde a la normativa http://web.fdi.ucm.es/si/2014-15/NormativaTFG1415.pdf
 [X] Añadir lista de palabras clave
 [X] Añadir API al capítulo de técnicas
-
-
-
 
 [X] Medición del área de los poros de la lámina cribosa: imágenes, conclusión (inglés y español)
 [X] Propuesta software: Añadir todo el código y manual de uso
