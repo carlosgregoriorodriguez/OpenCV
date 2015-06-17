@@ -1,13 +1,14 @@
 Cosas por hacer de la memoria:
 
-[X] Formato adecuado para la impresión
-[ ] Añadir al anexo resto de imágenes
+
 [ ] Añadir Dedicatorias
 [ ] Hacer CD (portada, imágenes, algoritmos, técnicas auxiliares, tomografías)
 
-
 [ ] Preparar presentación para la defensa ante el tribunal
 
+
+[X] Formato adecuado para la impresión
+[X] Añadir al anexo resto de imágenes
 [X] Encontrar cómo y cuándo se puede encuadernar, y cuánto tiempo tardan
 [X] Añadir imágenes explicativas del ojo
 [X] Revisar portada acorde a la normativa
