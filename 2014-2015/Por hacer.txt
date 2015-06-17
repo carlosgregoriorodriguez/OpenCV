@@ -1,9 +1,7 @@
 Cosas por hacer de la memoria:
 
 [ ] Formato adecuado para la impresión
-[ ] Añadir aportación de dos páginas mínimo de cada miembro
 [ ] Añadir al anexo resto de imágenes
-[ ] Añadir Agradecimientos
 [ ] Añadir Dedicatorias
 [ ] Hacer CD (portada, imágenes, algoritmos, técnicas auxiliares, tomografías)
 
@@ -25,3 +23,5 @@ Cosas por hacer de la memoria:
 [X] Añadir más términos al glosario: esclera
 [X] Añadir imágenes restantes a Técnicas
 [X] Añadir ejemplos a Técnicas auxiliares
+[X] Añadir Agradecimientos
+[X] Añadir aportación de dos páginas mínimo de cada miembro
