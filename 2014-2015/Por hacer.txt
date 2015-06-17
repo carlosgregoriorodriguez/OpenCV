@@ -1,6 +1,6 @@
 Cosas por hacer de la memoria:
 
-[ ] Formato adecuado para la impresión
+[X] Formato adecuado para la impresión
 [ ] Añadir al anexo resto de imágenes
 [ ] Añadir Dedicatorias
 [ ] Hacer CD (portada, imágenes, algoritmos, técnicas auxiliares, tomografías)

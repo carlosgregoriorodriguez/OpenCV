@@ -1,1 +1,86 @@
 \section{Aportes de Miguel Madrid Mencía}
+Mis aportes se distribuyen a lo largo de todo el proyecto, desde la
+definición de los primeros esbozos del trabajo hasta los últimos
+detalles de la memoria.\\
+He separado mis aportaciones en dos apartados, uno para todo lo
+relacionado con los algoritmos realizados y otro referente al
+desarrollo de la memoria. Además un apartado más para los
+conocimientos adquiridos durante todo este tiempo.
+
+\subsection{Código}
+Para poder realizar los algoritmos propuestos, primero me tuve que
+familiarizar no sólo con el lenguaje propuesto, en nuestro caso,
+\emph{Python}. Tomamos la decisión de usarlo, para poder realizar
+junto a los oftalmólogos, pruebas y ajustes en tiempo real según sus
+indicaciones de la manera más rápida posible.\\
+Una aprendido lo básico mediante los tutoriales de la página oficial,
+dediqué mi tiempo de estudio a la bibliotecas \emph{SimpleCV} primero,
+y posteriormente \emph{OpenCV}. Aunque tienen muy buena documentación
+y están muy bien diseñadas, es necesario dedicarlas muchas horas para
+comprender en profundidad todas las técnicas que posteriormente
+tuvimos que aplicar además de generar nuestros propios algoritmos y
+técnicas auxiliares (como la extracción de parte de la tomografía y su
+posterior corrección de inclinación del corte con respecto a la
+horizontal) para conseguir nuestros objetivos.\\
+De los dos algoritmos propuesto, me centré en realizar su
+implementación y preprocesado previo más que en la teoría de con qué
+parámetros aplicar que estudió previamente mi compañero Daniel. Una
+vez que estuvieron ambos algoritmos estuvieron correctamente
+desarrollados, me centré en reducir al máximo posible todos los
+errores de precisión al igual que por otra parte aumentar la
+tolerancia al ruido en las tomografías con peor calidad.\\
+Finalmente para mejorar la comunicación con los algoritmos, realicé
+una envoltura del módulo \emph{argparse} de la biblioteca estándar de
+\emph{Python} para por una parte hacer lo más simple para los
+oftalmólogos el procesado de archivos y carpetas y por otra parte
+añadir un modo de generación de una imagen por cada paso realizado
+para poder depurar más rápido y eficientemente los algoritmos y sus
+imprecisiones.
+
+\subsection{Memoria}
+Otra parte muy importante del trabajo, fue la realización de la
+memorial. La cual, por decisión unánime debido a la envergadura del
+documento, índices, partes, fórmulas, imágenes y código a incluir, se
+decidió escribir en \LaTeX.\\
+Para ello, me encargué tanto de la generación desde $0$ de este
+documento además su formato, tanto para su uso digital como su
+adaptación para impresión.\\
+Gran parte del tiempo que he dedicado en la elaboración de la memoria,
+lo destiné a la búsqueda y uso de paquetes del repositorio
+\emph{CTAN}.\\
+Por una parte, para hacer el trabajo de la generación del documento
+más simple y cómoda, añadí además de numerosos paquetes e
+instrucciones personalizadas (para reducir el código a escribir) y
+otras para realizar ciertas acciones que \LaTeX\ no proporciona de
+manera predeterminada (bloques de código Python, términos en
+\emph{Siglas} y \emph{Glosario} simultáneamente o aumentar la
+profundidad de enumeración de apartados entre otras muchas
+elaboraciones). Además un archivo \emph{Makefile} para automatizar con
+\emph{latexmk} por completo todo el proceso de compilación.\\
+Por otra parte, para hacer que fuera lo más visual y atractiva posible
+mediante, referencias (paquete \emph{hyperref}), coloreado del código
+(paquete \emph{minted}), cambio del tipo de letra, etc.\\
+Finalmente, me centré en escribir los capítulos más técnicos de la
+memoria así como de describir y dibujar todas las fórmulas
+matemáticas.
+
+\subsection{Conocimientos adquiridos}
+Los conocimientos adquiridos han sido muy variados. Nunca antes había
+participado en una investigación, por lo que tuve que aprender a
+desenvolverme con los oftalmólogos en un entorno hospitalario. Ni
+tampoco había realizado un documento tan técnico, extenso y con tantos
+enlaces bibliográficos.\\
+Además, tuve que cambiar mi manera de pensar, primero, adaptarme a
+todas las fórmulas y abstracciones matemáticas de las técnicas de
+\emph{Visión computarizada} para posteriormente centrarme en los
+resultados visuales obtenidos tras aplicarse así como también poder
+discernir los pasos siguientes o cambios para obtener mejores
+resultados.\\
+Como conclusión, se puede apreciar a simple vista que todo el tiempo
+dedicado a este trabajo por mi parte ha sido muy satisfactorio y
+fructífero. Me ha proporcionado una visión y manera de trabajar con
+problemas complejos e interdisciplinares. Proponer y elaborar
+objetivos a partir de reuniones y estudios previo de viabilidad así
+como también sugerir y llevar a cabo soluciones mediante una primera
+aproximación abstracta y matemática a su desarrollo e implementación
+concreta mediante código preciso y eficiente.
