@@ -201,7 +201,7 @@ Expresado en forma de coordenadas:
 \end{equation*}
 $x$ e $y$ representan las coordenadas (horizontal y vertical
 respectivamente). \emph{OpenCV} proporciona para realizar esta técnica
-\mintinline{python}{cv2.addWeighted}\footnote{\url{http://docs.opencv.org/modules/core/doc/operations_on_arrays.html\#cv2.addWeighted}}
+\mintinline{python}{cv2.addWeighted()}\footnote{\url{http://docs.opencv.org/modules/core/doc/operations_on_arrays.html\#cv2.addWeighted}}
 
 
 \section{Cambio de espacio de color}\label{tecnica:cambio-color}
@@ -872,7 +872,7 @@ píxeles, los bordes no suelen estar posicionados sobre los ejes $x$ e
 $y$ como en la superficie de los \emph{kernel} de gran tamaño por lo
 que la aproximación de \emph{Sobel} es bastante inexacta con los
 gradientes en forma de ángulo. Se aplica con
-\mintinline{python}{cv2.Scharr}\footnote{\url{http://docs.opencv.org/modules/imgproc/doc/filtering.html\#cv2.Scharr}}.
+\mintinline{python}{cv2.Scharr()}\footnote{\url{http://docs.opencv.org/modules/imgproc/doc/filtering.html\#cv2.Scharr}}.
 \begin{center}
   $ G_x = \begin{bmatrix}
     +3 & 0 & -3 \\
@@ -1137,7 +1137,7 @@ descripción de su código en los siguientes pasos:
   internos).
 \end{enumerate}
 
-Ejemplo detección de \emph{blobs} con área máxima de $20.000$ píxeles
+Ejemplo detección de \emph{blobs} con área máxima de \emph{20.000} píxeles
 y negros por lo que, previamente, se realizó una \emph{binarización
   inversa} y finalmente
 \mintinline{python}{findBlobs()}\footnote{\url{https://github.com/sightmachine/SimpleCV/blob/6c4d61b6d1d9d856b471910107cad0838954d2b2/SimpleCV/ImageClass.py\#L3422}}
