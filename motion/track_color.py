@@ -6,8 +6,9 @@ import cv2
 import sys
           
 def filter_color(img):
-    # img = cv2.inRange(img,lowerb=(0,0,125),upperb=(100,100,255))
-    img = cv2.inRange(img,lowerb=(120,100,60),upperb=(160,140,100))
+    img = cv2.inRange(img,lowerb=(40,40,120),upperb=(65,65,165))
+    #img = cv2.inRange(img,lowerb=(120,100,60),upperb=(160,140,100))
+    img  = cv2.dilate(img,kernel=None,iterations=5) 
     return img
 
 if __name__ == "__main__":
@@ -21,6 +22,7 @@ if __name__ == "__main__":
     else:
         name = "data/treme.avi"
     
+    name = 1
     camera =  cv2.VideoCapture(name)
     f, img = camera.read()		
     while f:	
