@@ -5,6 +5,7 @@
 import sys
 import cv2
 import math
+import matplotlib.pyplot as plt
 
 gl_S = 169
 gl_V = 114
@@ -13,6 +14,7 @@ gl_G= 94
 gl_B = 0
 frame_pos = 930
 angles = []
+seconds = []
 cont_angles = 0
 def onTrackbarSlideS(img,pos):
         global gl_S
@@ -67,26 +69,29 @@ def angle(u, v):
     return 180*ang / math.pi
     
 def show_contours(contours):
-    cv2.rectangle(img,(50,115),(600,65),(0,64,0),cv2.cv.CV_FILLED)
-    if len(contours)==3:
-        p = []
-        colors = [(255,0,0),(0,255,0), (0,0,255)]
-        i = 0
-        for c in contours:
-            m = cv2.moments(c)
-            x = int(roi[0][0] + m["m10"]/m["m00"])
-            y = int(roi[0][1] +m["m01"]/m["m00"])
-            cv2.circle(img, (x,y), 10, colors[i], 2) 
-            i += 1
-            p.append((x,y))
+        global time, angles, seconds
         
-        cv2.line(img, p[0], p[1], (255,0,0), 1,cv2.cv.CV_AA)
-        cv2.line(img, p[1], p[2], (255,0,0), 1,cv2.cv.CV_AA)
-        v = (p[1][0]-p[0][0], p[1][1]-p[0][1]) 
-        u = (p[2][0]-p[1][0], p[2][1]-p[1][1]) 
-        alpha = angle(u,v)
-        angles.append(alpha)
-        cv2.putText(img,"{0:.2f}".format(alpha),(50,100),cv2.FONT_HERSHEY_SIMPLEX,1,(255,0,0))
+        cv2.rectangle(img,(50,115),(600,65),(0,64,0),cv2.cv.CV_FILLED)
+        if len(contours)==3:
+                p = []
+                colors = [(255,0,0),(0,255,0), (0,0,255)]
+                i = 0
+                for c in contours:
+                        m = cv2.moments(c)
+                        x = int(roi[0][0] + m["m10"]/m["m00"])
+                        y = int(roi[0][1] +m["m01"]/m["m00"])
+                        cv2.circle(img, (x,y), 10, colors[i], 2) 
+                        i += 1
+                        p.append((x,y))
+        
+                cv2.line(img, p[0], p[1], (255,0,0), 1,cv2.cv.CV_AA)
+                cv2.line(img, p[1], p[2], (255,0,0), 1,cv2.cv.CV_AA)
+                v = (p[1][0]-p[0][0], p[1][1]-p[0][1]) 
+                u = (p[2][0]-p[1][0], p[2][1]-p[1][1]) 
+                alpha = angle(u,v)
+                angles.append(alpha)
+                seconds.append(time)
+                cv2.putText(img,"{0:.2f}".format(alpha),(50,100),cv2.FONT_HERSHEY_SIMPLEX,1,(255,0,0))
      
     
 def process(imgroi):
@@ -137,33 +142,42 @@ def on_mouse(event, x, y, flags, param):
     
     
 def main():
-        global vid,roi, img
+        global vid,roi, img, time, seconds, angle
         
-        vid = cv2.VideoCapture(sys.argv[1])
+        vid = cv2.VideoCapture(sys.argv[1]+".mov")
+        fourcc = cv2.cv.CV_FOURCC('M','J','P','G')
+        writer = cv2.VideoWriter(sys.argv[1]+".mjpg",fourcc,600.0,(1280,720))
         cv2.namedWindow("ori")
+        fps = 600
+        print fps
         #frame_count = int(vid.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT))
         #cv2.createTrackbar("pos","ori",930,frame_count,onTrackbarSlidePos)
         #vid.set(cv2.cv.CV_CAP_PROP_POS_FRAMES, frame_count)
         cv2.setMouseCallback("ori",on_mouse)
         f,img = vid.read()
 
+        time = 0
         while f:
                 if roi==None:
                         roi=[[0,0],img.shape[:2]]
                 imroi = img[roi[0][1]:roi[1][1], roi[0][0]:roi[1][0]]
                 process(imroi)
+                writer.write(img)
                 k = cv2.waitKey (1)
                 if k == 27:
                         break
                 f,img = vid.read()
-                        
+                time = time + 1.0/fps
+                #print fps, time
+        
+        writer.release()                
         cv2.destroyAllWindows()
 
-        i = 0
-        while i<len(angles):
-                print i, "{0:,}".format(angles[i])
-                i+=1
-                
+        
+        plt.plot(seconds, angles)
+        plt.xlabel("seconds")
+        plt.ylabel("angles")
+        plt.show()
                 
 if __name__ == "__main__": 
     main()
