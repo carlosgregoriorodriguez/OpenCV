@@ -7,12 +7,21 @@ import cv2
 import sys
 import numpy as np
 
-fitsFileI="frame-i-004264-4-0259.fits"#"frame-i-006073-4-0063.fits"#"HorseHead.fits"
-fitsFileU="frame-u-004264-4-0259.fits"#"frame-i-006073-4-0063.fits"#"HorseHead.fits"
-fitsFileR="frame-r-004264-4-0259.fits"#"frame-i-006073-4-0063.fits"#"HorseHead.fits"
-fitsFileG="frame-g-004264-4-0259.fits"#"frame-i-006073-4-0063.fits"#"HorseHead.fits"
+fitsFileI="frame-i-004264-4-0259.fits" #m81
+fitsFileU="frame-u-004264-4-0259.fits" #m81
+fitsFileR="frame-r-004264-4-0259.fits" #m81 
+fitsFileG="frame-g-004264-4-0259.fits" #m81
 f1="f1.jpg"
-dataset={'i':fitsFileI,'u':fitsFileU,'r':fitsFileR,'g':fitsFileG,'1':f1}
+fitsFileI2="frame-i-003804-6-0084.fits" #m66
+fitsFileU2="frame-u-003804-6-0084.fits" #m66
+fitsFileR2="frame-r-003804-6-0084.fits" #m66
+fitsFileG2="frame-g-003804-6-0084.fits" #m66
+fitsFileI3='frame-i-004381-2-0120.fits' #m91
+fitsFileI4='frame-i-002830-6-0398.fits' #m109
+fitsFileI5='frame-i-003805-2-0023.fits' #m59
+fitsFileI6='frame-i-008112-2-0074.fits' #m33
+fitsFileI7='frame-i-007845-2-0104.fits' #m74
+dataset={'i':fitsFileI,'u':fitsFileU,'r':fitsFileR,'g':fitsFileG,'1':f1,'i2':fitsFileI2,'u2':fitsFileU2,'r2':fitsFileR2,'g2':fitsFileG2,'i3':fitsFileI3,'i4':fitsFileI4,'i5':fitsFileI5,'i6':fitsFileI6,'i7':fitsFileI7}
 
 if len(sys.argv)<3:
 	data = fits.getdata(dataset[sys.argv[1]])
@@ -22,7 +31,7 @@ if len(sys.argv)<3:
 	img = hdu_list[0].data
 	Min=np.amin(img)
 	Max=np.amax(img)
-	img = 255*(img+abs(Min))/Max
+	img = (img+abs(Min))/Max*255
 else:
 	img=255*cv2.imread(dataset[sys.argv[1]],0)
 

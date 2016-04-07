@@ -6,7 +6,14 @@ import sys
 import numpy as np
 
 
-fitsFileI="frame-i-004264-4-0259.fits"
+fitsFileI="frame-i-004264-4-0259.fits" #m81
+fitsFileI2="frame-i-003804-6-0084.fits" #m66
+fitsFileI3='frame-i-004381-2-0120.fits' #m91
+fitsFileI4='frame-i-004381-2-0120.fits' #m91
+fitsFileI5='frame-i-002830-6-0398.fits' #m109
+fitsFileI6='frame-i-003805-2-0023.fits' #m59
+fitsFileI7='frame-i-008112-2-0074.fits' #m33
+fitsFileI8='frame-i-007845-2-0104.fits' #m74
 data = fits.getdata(fitsFileI)
 hdu_list = fits.open(fitsFileI)
 img = hdu_list[0].data
@@ -36,7 +43,7 @@ while True:
 	operation=cv2.getTrackbarPos('operation', 'img processed')
 	kernel_size=cv2.getTrackbarPos('kernel size', 'img processed')+1
 	number_of_iterations=cv2.getTrackbarPos('iterations', 'img processed')
-	imgProcessed=cv2.morphologyEx(imgBase, operation, (3,3),iterations=number_of_iterations)
+	imgProcessed=cv2.morphologyEx(imgBase, operations[operation], (3,3),iterations=number_of_iterations)
 	cv2.imshow('img processed',imgProcessed)
 	k = cv2.waitKey(1) & 0xFF
 	if k == 27:
