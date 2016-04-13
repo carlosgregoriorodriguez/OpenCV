@@ -6,14 +6,14 @@ import sys
 import numpy as np
 
 
-fitsFileI="frame-i-004264-4-0259.fits" #m81
-fitsFileI2="frame-i-003804-6-0084.fits" #m66
-fitsFileI3='frame-i-004381-2-0120.fits' #m91
-fitsFileI4='frame-i-004381-2-0120.fits' #m91
-fitsFileI5='frame-i-002830-6-0398.fits' #m109
-fitsFileI6='frame-i-003805-2-0023.fits' #m59
-fitsFileI7='frame-i-008112-2-0074.fits' #m33
-fitsFileI8='frame-i-007845-2-0104.fits' #m74
+fitsFileI1="frame-i-004264-4-0259.fits" #m81 http://mirror.sdss3.org/fields/name?name=m81
+fitsFileI2="frame-i-003804-6-0084.fits" #m66 http://mirror.sdss3.org/fields/name?name=m66
+fitsFileI3='frame-i-004381-2-0120.fits' #m91 http://mirror.sdss3.org/fields/name?name=m91
+fitsFileI5='frame-i-002830-6-0398.fits' #m109 http://mirror.sdss3.org/fields/name?name=m109
+fitsFileI6='frame-i-003805-2-0023.fits' #m59 http://mirror.sdss3.org/fields/name?name=m59
+fitsFileI7='frame-i-008112-2-0074.fits' #m33 http://mirror.sdss3.org/fields/name?name=m33
+fitsFileI8='frame-i-007845-2-0104.fits' #m74 http://mirror.sdss3.org/fields/name?name=m74
+fitsFileI='frame-i-003836-4-0084.fits' #m95 http://mirror.sdss3.org/fields/name?name=m95
 data = fits.getdata(fitsFileI)
 hdu_list = fits.open(fitsFileI)
 img = hdu_list[0].data

@@ -7,21 +7,22 @@ import cv2
 import sys
 import numpy as np
 
-fitsFileI="frame-i-004264-4-0259.fits" #m81
+fitsFileI="frame-i-004264-4-0259.fits" #m81 http://mirror.sdss3.org/fields/name?name=m81
 fitsFileU="frame-u-004264-4-0259.fits" #m81
 fitsFileR="frame-r-004264-4-0259.fits" #m81 
 fitsFileG="frame-g-004264-4-0259.fits" #m81
 f1="f1.jpg"
-fitsFileI2="frame-i-003804-6-0084.fits" #m66
+fitsFileI2="frame-i-003804-6-0084.fits" #m66 http://mirror.sdss3.org/fields/name?name=m66
 fitsFileU2="frame-u-003804-6-0084.fits" #m66
 fitsFileR2="frame-r-003804-6-0084.fits" #m66
 fitsFileG2="frame-g-003804-6-0084.fits" #m66
-fitsFileI3='frame-i-004381-2-0120.fits' #m91
-fitsFileI4='frame-i-002830-6-0398.fits' #m109
-fitsFileI5='frame-i-003805-2-0023.fits' #m59
-fitsFileI6='frame-i-008112-2-0074.fits' #m33
-fitsFileI7='frame-i-007845-2-0104.fits' #m74
-dataset={'i':fitsFileI,'u':fitsFileU,'r':fitsFileR,'g':fitsFileG,'1':f1,'i2':fitsFileI2,'u2':fitsFileU2,'r2':fitsFileR2,'g2':fitsFileG2,'i3':fitsFileI3,'i4':fitsFileI4,'i5':fitsFileI5,'i6':fitsFileI6,'i7':fitsFileI7}
+fitsFileI3='frame-i-004381-2-0120.fits' #m91 http://mirror.sdss3.org/fields/name?name=m91
+fitsFileI4='frame-i-002830-6-0398.fits' #m109 http://mirror.sdss3.org/fields/name?name=m109
+fitsFileI5='frame-i-003805-2-0023.fits' #m59 http://mirror.sdss3.org/fields/name?name=m59
+fitsFileI6='frame-i-008112-2-0074.fits' #m33 http://mirror.sdss3.org/fields/name?name=m33
+fitsFileI7='frame-i-007845-2-0104.fits' #m74 http://mirror.sdss3.org/fields/name?name=m74
+fitsFileI8='frame-i-003836-4-0084.fits' #m95 http://mirror.sdss3.org/fields/name?name=m95
+dataset={'i':fitsFileI,'u':fitsFileU,'r':fitsFileR,'g':fitsFileG,'1':f1,'i2':fitsFileI2,'u2':fitsFileU2,'r2':fitsFileR2,'g2':fitsFileG2,'i3':fitsFileI3,'i4':fitsFileI4,'i5':fitsFileI5,'i6':fitsFileI6,'i7':fitsFileI7,'i8':fitsFileI8}
 
 if len(sys.argv)<3:
 	data = fits.getdata(dataset[sys.argv[1]])
@@ -31,7 +32,7 @@ if len(sys.argv)<3:
 	img = hdu_list[0].data
 	Min=np.amin(img)
 	Max=np.amax(img)
-	img = (img+abs(Min))/Max*255
+	img = 255*(img+abs(Min))/Max
 else:
 	img=255*cv2.imread(dataset[sys.argv[1]],0)
 
