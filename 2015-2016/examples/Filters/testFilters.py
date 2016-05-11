@@ -177,7 +177,7 @@ while True:
 	#print "BINARY:", binary.shape,type(binary),np.amax(binary),np.amin(binary)
 	cv2.namedWindow("binary", cv2.WINDOW_NORMAL)
 	cv2.imshow("binary",binary)
-	cv2.imwrite('a.png',255* binary)
+	#cv2.imwrite('a.png',255* binary)
 	k = cv2.waitKey(1) & 0xFF
 	if k == 27:
 		break
