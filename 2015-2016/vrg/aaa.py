@@ -99,7 +99,7 @@ class MatPlotHistogram:
 		print self.array.size
 		for n in range(0,int(self.array.size)):
 			val = self.array.item(n)
-			print str(n)+" : "+str(val)
+			#print str(n)+" : "+str(val)
 			self.p.plot([n,n], [1,val], lw=1, color = (0.6,0.6,0.6))
 	
 '''AstroImage class stores the astronomical images'''
@@ -457,7 +457,7 @@ class AstroCanvas:
 		self.filePath = tkFileDialog.askopenfilename(filetypes=[("All","*.*"),("Jpg","*.jpg"),("PNG","*.png"), ("GIF","*.gif"),("Fits","*.fits")])
 		self.internalAstroImg.openImage(self.filePath)
 		self.setCanvas(self.internalAstroImg)
-		self.buttonPickDiffuse.config(state="disabled")
+		#self.buttonPickDiffuse.config(state="disabled")
 		print self.filePath
 		
 	def signalInvertImg(self):
@@ -537,12 +537,15 @@ class AstroCanvas:
 		cv2.imwrite('output/cvMainImage.png',self.internalAstroImg.imageCV)
 		#Dark image
 		print self.matPlotHistogram.getLines()[0]
+		#dark = cvSpace.erode(self.internalAstroImg.generateDarkImage(self.matPlotHistogram.getLines()[0]))
 		dark = self.internalAstroImg.generateDarkImage(self.matPlotHistogram.getLines()[0])
-		print type(dark)
 		cv2.imwrite('output/cvDarkImage.png',dark)
 		#halo or difusse image
 		diffuse = self.internalAstroImg.generateDiffuseImage(self.matPlotHistogram.getLines()[0],100)
-		cv2.imwrite('output/cvDiffuseImage.png',diffuse)
+		cv2.imwrite('output/CUTcvDiffuseImage.png',diffuse)
+		diffuseEroded = cvSpace.dilate(diffuse,2)
+		diffuseEroded = cvSpace.erode(diffuseEroded,10)
+		cv2.imwrite('output/cvDiffuseImage.png',diffuseEroded)
 		#save 4 images
 		#save file with histogram dark, diffuse and peak lines. In this file, store star and galaxies with categorization.
 		

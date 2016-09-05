@@ -17,13 +17,17 @@ def segment(img, thresholdStart, thresholdEnd):
 				img.itemset(h, w,255)
 	return img
 
-def binarice(img, threshold):
+def binarice(img, threshold, inverse = False):
 	height, width = img.shape
 	print "binarice threshold: "+str(threshold)
 	for w in range (width):
 		for h in range (height):
-			if ((img.item(h, w)>threshold)):
-				img.itemset(h, w,255)
+			if (inverse == True):
+				if ((img.item(h, w)<threshold)):
+					img.itemset(h, w,0)			
+			else:
+				if ((img.item(h, w)>threshold)):
+					img.itemset(h, w,255)
 	return img
 	
 def medianize(img, posX, posY):
@@ -344,6 +348,28 @@ def sky_mean_sig_clip(input_arr, sig_fract, percent_fract, max_iter=100, low_cut
 		new_sky = np.mean(work_arr)
 	return (new_sky, iteration)	
 	
+def erode(img, kernelSize=5):
+		kernel = np.ones((kernelSize,kernelSize),np.uint8)
+		erosion = cv2.erode(img,kernel,iterations = 1)
+		return erosion
+
+def dilate(img, kernelSize=5):
+		kernel = np.ones((kernelSize,kernelSize),np.uint8)
+		dilateResult = cv2.dilate(img,kernel,iterations = 1)
+		return dilateResult
+
+
+def closeContour(img, kernelSize=5):
+		kernel = np.ones((kernelSize,kernelSize),np.uint8)
+		closeResult = cv2.morphologyEx(img,cv2.MORPH_OPEN, kernel)
+		return closeResult
+
+
+def openContour(img, kernelSize=5):
+		kernel = np.ones((kernelSize,kernelSize),np.uint8)
+		closeResult = cv2.morphologyEx(img,cv2.MORPH_CLOSE, kernel)
+		return closeResult
+		
 if __name__ == "__main__":
 	'''
 	img = cv2.imread('tests/hubble-galaxy_1743872i.jpg',0)
