@@ -276,6 +276,7 @@ def sky_median_sig_clip(input_arr, sig_fract, percent_fract, max_iter=100, low_c
 	@return: (sky value, number of iterations)
 
 	"""
+	
 	work_arr = np.ravel(input_arr)
 	old_sky = np.median(work_arr)
 	oldStaDesviation = work_arr.std()

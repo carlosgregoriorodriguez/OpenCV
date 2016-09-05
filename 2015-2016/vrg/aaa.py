@@ -116,14 +116,17 @@ class AstroImage:
 			print "Opening FISTS file"
 			self.fitsFile = fits.open(self.path)
 			print self.fitsFile.info()
-			#self.imageCV = cvSpace.preEqualizaFits(self.fitsFile[0].data)
+			self.imageCV = cvSpace.preEqualizaFits(self.fitsFile[0].data)
 			#self.imageCV = cvSpace.linear(self.fitsFile[0].data)
-			#self.imageCV = cvSpace.sqrt(self.fitsFile[0].data)
-			self.imageCV = cvSpace.log(self.fitsFile[0].data)
+			#self.imageCV = cvSpace.asinh(self.fitsFile[0].data,0.1)
+			self.imageCV = cvSpace.sqrt(self.fitsFile[0].data)
+			#self.imageCV = cvSpace.log(self.fitsFile[0].data)
 			NaNs = np.isnan(self.imageCV)
 			self.imageCV[NaNs] = 0
+			inf = np.isinf(self.imageCV)
+			self.imageCV[inf] = 0
 			#self.imageCV = cvSpace.power(self.fitsFile[0].data, power_index=3)
-			#self.imageCV = cvSpace.asinh(self.fitsFile[0].data,0.1)
+
 			#self.imageCV = cvSpace.histeq(self.fitsFile[0].data)
 			#self.imageCV = self.fitsFile[0].data
 			'''
@@ -475,7 +478,9 @@ class AstroCanvas:
 			text = "X:%(xCoord) 2s    Y:%(yCoord) 2s    Flux:%(f) 2s"%{"xCoord":"--","yCoord":"--","f":"--"}
 		else:
 			flux = self.internalAstroImg.imageCVOriginal[int(y),int(x)]
-			text = "X:%(xCoord) 2d    Y:%(yCoord) 2d    Flux:%(f) 2d"%{"xCoord":x,"yCoord":y,"f":flux}
+			if np.isinf(flux):
+				flux = 0
+			text = "X:%(xCoord) 2d    Y:%(yCoord) 2d    Flux:%(f) 2d"%{"xCoord":int(x),"yCoord":int(y),"f":float(flux)}
 		text = text+"\n__________________________________________\n"+"Image Size:              "+str(xSource)+" x "+str(ySource)+"\nImage Scale Factor:                "+str(self.internalAstroImg.scaleFactor)+"\n"
 		self.stringVarxCoords.set(text+scaleText+"ImageName: "+self.internalAstroImg.name)
 		#self.matPlotHistogram.setLine(rtLine = flux)
