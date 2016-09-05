@@ -69,7 +69,10 @@ class MatPlotHistogram:
 		self.p.plot([self.difusseLine,self.difusseLine],[1,self.maxYval], lw=5, color = (0,1,0))
 		self.p.plot([self.peakLine,self.peakLine],[1,self.maxYval], lw=5, color = (0.94,0.92,0.3))
 		self.canvas.draw()
-	
+
+	def getLines():
+		return self.blackLine, self.difusseLine, self.peakLine
+			
 	def setUpCanvas(self):
 		self.canvas = FigureCanvasTkAgg(self.fig,master=self.master)
 		
@@ -189,7 +192,7 @@ class AstroImage:
 		elif (thumb=="DIFUSSE"):
 			print "Difusse"
 			temp = self.imageCVOriginal.copy()
-			#temp = cv2.resize(temp, (100,100))
+			temp = cv2.resize(temp, (100,100))
 			temp = cvSpace.segment(temp, value, value2)
 			temp = Image.fromarray(cv2.resize(temp, (100, 100)))
 		elif (thumb=="PEAK"):
@@ -202,9 +205,20 @@ class AstroImage:
 			temp = Image.fromarray(cv2.resize(temp, (100, 100)))
 		return ImageTk.PhotoImage(temp)
 		
+	def generateDarkImage(self, value=-1):
+		temp = self.imageCVOriginal.copy()
+		temp = cvSpace.binarice(temp, value)
+		return temp
+		
+	def generateDiffuseImage(self, vMin, vMax):
+		print "Binarizando"
+		temp = self.imageCVOriginal.copy()
+		temp = cvSpace.segment(temp, vMin, vMax)
+		return temp
 		
 	def getImageCV (self):
 		return self.imageCV
+		temp = cvSpace.binarice(temp, value)
 		
 	def getImagePil (self):
 		return self.imagePil
@@ -250,7 +264,7 @@ class AstroCanvas:
 		self.menubar = tk.Menu(root)
 		filemenu = tk.Menu(self.menubar, tearoff=0)
 		filemenu.add_command(label="Open File", command= self.signalOpenImage)
-		filemenu.add_command(label="Save Project")
+		filemenu.add_command(label="Save Project", command = self.signalSaveProject)
 		filemenu.add_command(label="Save Image")
 		filemenu.add_separator()
 		filemenu.add_command(label="Options")
@@ -311,7 +325,7 @@ class AstroCanvas:
 		self.buttonPickDark.img = imgDarkPicker
 		self.buttonPickDark.grid( column=0, row=4, padx=10)
 		imgDiffusePicker = tk.PhotoImage(file="img/difussePicker.gif")
-		self.buttonPickDiffuse = tk.Button(toolsFrame, text = 'Move', image=imgDiffusePicker, state='disabled', cursor="circle",command = self.signalDifussePick)
+		self.buttonPickDiffuse = tk.Button(toolsFrame, text = 'Move', image=imgDiffusePicker, cursor="circle",command = self.signalDifussePick)#state='disabled'
 		self.buttonPickDiffuse.img = imgDiffusePicker
 		self.buttonPickDiffuse.grid( column=0, row=5, padx=10)
 		imgPeackPicker = tk.PhotoImage(file="img/peackPicker.gif")
@@ -403,6 +417,8 @@ class AstroCanvas:
 			self.miniCanBlack.itemconfigure(self.thumbDarkImage, image=self.thumbDarkAstro)
 			#Draw line on histogram
 			self.matPlotHistogram.setLine(blackLine = int(blackMedian))
+			#Calculate halo or diffuse image:
+			
 		#self.internalHistogram.setLine(blackLine = blackMedian)
 	def getMainImageCoords(self):
 		print self.canvas.coords(self.canvasImg)	
@@ -513,7 +529,23 @@ class AstroCanvas:
 			self.thumbPeakAstro = self.internalAstroImg.modifyThumb(thumb= "PEAK", value = int(pickedFlux*.75))
 			self.miniCanPeak.itemconfigure(self.thumbPeakImage, image=self.thumbPeakAstro)
 			self.canvas.config(cursor="crosshair")
-			
+	
+	def signalSaveProject(self):
+		#todo: open modal dialog window to ask project name....
+		print "Saving project"
+		#Equalized image
+		cv2.imwrite('output/cvMainImage.png',self.internalAstroImg.imageCV)
+		#Dark image
+		print self.matPlotHistogram.getLines()[0]
+		dark = self.internalAstroImg.generateDarkImage(self.matPlotHistogram.getLines()[0])
+		print type(dark)
+		cv2.imwrite('output/cvDarkImage.png',dark)
+		#halo or difusse image
+		diffuse = self.internalAstroImg.generateDiffuseImage(self.matPlotHistogram.getLines()[0],100)
+		cv2.imwrite('output/cvDiffuseImage.png',diffuse)
+		#save 4 images
+		#save file with histogram dark, diffuse and peak lines. In this file, store star and galaxies with categorization.
+		
 if __name__ == "__main__":		
 	root = tk.Tk()
 	root.resizable(width=False, height=False)
