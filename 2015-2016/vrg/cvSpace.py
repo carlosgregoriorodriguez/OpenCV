@@ -257,13 +257,65 @@ def range_from_percentile(input_arr, low_cut=0.25, high_cut=0.25):
 
 	return (z1, z2)
 
+def sky_median_sig_clip(input_arr, sig_fract, percent_fract, max_iter=100, low_cut=True, high_cut=True):
+	"""Estimating a sky value for a given number of iterations
+
+	@type input_arr: numpy array
+	@param input_arr: image data array
+	@type sig_fract: float
+	@param sig_fract: fraction of sigma clipping
+	@type percent_fract: float
+	@param percent_fract: convergence fraction
+	@type max_iter: integer
+	@param max_iter: max. of iterations
+	@type low_cut: boolean
+	@param low_cut: cut out only low values
+	@type high_cut: boolean
+	@param high_cut: cut out only high values
+	@rtype: tuple
+	@return: (sky value, number of iterations)
+
+	"""
+	work_arr = np.ravel(input_arr)
+	old_sky = np.median(work_arr)
+	oldStaDesviation = work_arr.std()
+	upper_limit = old_sky + sig_fract * oldStaDesviation
+	lower_limit = old_sky - sig_fract * oldStaDesviation
+	if low_cut and high_cut:
+		indices = np.where((work_arr < upper_limit) & (work_arr > lower_limit))
+	else:
+		if low_cut:
+			indices = np.where((work_arr > lower_limit))
+		else:
+			indices = np.where((work_arr < upper_limit))
+	work_arr = work_arr[indices]
+	new_sky = np.median(work_arr)
+	iteration = 0
+	while ((math.fabs(old_sky - new_sky)/new_sky) > percent_fract) and (iteration < max_iter) :
+		iteration += 1
+		old_sky = new_sky
+		oldStaDesviation = work_arr.std()
+		upper_limit = old_sky + sig_fract * oldStaDesviation
+		lower_limit = old_sky - sig_fract * oldStaDesviation
+		if low_cut and high_cut:
+			indices = np.where((work_arr < upper_limit) & (work_arr > lower_limit))
+		else:
+			if low_cut:
+				indices = np.where((work_arr > lower_limit))
+			else:
+				indices = np.where((work_arr < upper_limit))
+		work_arr = work_arr[indices]
+		new_sky = np.median(work_arr)
+	return (new_sky, iteration)
+
+	
 def sky_mean_sig_clip(input_arr, sig_fract, percent_fract, max_iter=100, low_cut=True, high_cut=True):
 	print "[cvSpace]::sky_mean_sig_clip"
 	work_arr = np.ravel(input_arr)
 	old_sky = np.mean(work_arr)
-	sig = work_arr.std()
-	upper_limit = old_sky + sig_fract * sig
-	lower_limit = old_sky - sig_fract * sig
+	oldStaDesviation = work_arr.std()
+	upper_limit = old_sky + sig_fract * oldStaDesviation
+	lower_limit = old_sky - sig_fract * oldStaDesviation
 	if low_cut and high_cut:
 		indices = np.where((work_arr < upper_limit) & (work_arr > lower_limit))
 	else:
@@ -277,19 +329,20 @@ def sky_mean_sig_clip(input_arr, sig_fract, percent_fract, max_iter=100, low_cut
 	while ((math.fabs(old_sky - new_sky)/new_sky) > percent_fract) and (iteration < max_iter) :
 		iteration += 1
 		old_sky = new_sky
-		sig = work_arr.std()
-		upper_limit = old_sky + sig_fract * sig
-		lower_limit = old_sky - sig_fract * sig
+		oldStaDesviation = work_arr.std()
+		upper_limit = old_sky + sig_fract * oldStaDesviation
+		lower_limit = old_sky - sig_fract * oldStaDesviation
 		if low_cut and high_cut:
-			indices = numpy.where((work_arr < upper_limit) & (work_arr > lower_limit))
+			indices = np.where((work_arr < upper_limit) & (work_arr > lower_limit))
 		else:
 			if low_cut:
-				indices = numpy.where((work_arr > lower_limit))
+				indices = np.where((work_arr > lower_limit))
 			else:
-				indices = numpy.where((work_arr < upper_limit))
+				indices = np.where((work_arr < upper_limit))
 		work_arr = work_arr[indices]
-		new_sky = numpy.mean(work_arr)
+		new_sky = np.mean(work_arr)
 	return (new_sky, iteration)	
+	
 if __name__ == "__main__":
 	'''
 	img = cv2.imread('tests/hubble-galaxy_1743872i.jpg',0)

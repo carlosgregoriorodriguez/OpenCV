@@ -18,6 +18,12 @@ def getIntersetObjectList(img, minThreshold = 10, maxThreshold=255):
 
 if __name__ == "__main__":
 	print "Ejecutando getIntersetObjectList sobre una serie de 6 imagenes"
+
+	im = cv2.imread("miniSetEstrellayGalaxia.png", cv2.IMREAD_GRAYSCALE)
+	keyPoints = getIntersetObjectList(im)
+	resultado = cv2.drawKeypoints(im, keyPoints, np.array([]), (255,255,0), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+	cv2.imshow("Imagen Resultado", resultado)
+	cv2.waitKey(0)
 	
 	im = cv2.imread("image_3417_1e-LEDA-1852.jpg", cv2.IMREAD_GRAYSCALE)
 	keyPoints = getIntersetObjectList(im)

@@ -120,6 +120,8 @@ class AstroImage:
 			#self.imageCV = cvSpace.linear(self.fitsFile[0].data)
 			#self.imageCV = cvSpace.sqrt(self.fitsFile[0].data)
 			self.imageCV = cvSpace.log(self.fitsFile[0].data)
+			NaNs = np.isnan(self.imageCV)
+			self.imageCV[NaNs] = 0
 			#self.imageCV = cvSpace.power(self.fitsFile[0].data, power_index=3)
 			#self.imageCV = cvSpace.asinh(self.fitsFile[0].data,0.1)
 			#self.imageCV = cvSpace.histeq(self.fitsFile[0].data)
@@ -129,7 +131,9 @@ class AstroImage:
 			self.imageCV = cv2.equalizeHist(self.imageCV)
 			'''
 		else:	
-			self.imageCV = cv2.imread(path,0)
+			#self.imageCV = cv2.imread(self.path,cv2.IMREAD_GRAYSCALE)
+			print "Cargando imagen noReal.jpg"
+			self.imageCV = cv2.imread(self.path, cv2.IMREAD_GRAYSCALE)
 		print "Image type "+str(type(self.imageCV))
 		print "Flux (max, min) = ("+str(self.imageCV.min())+", "+str(self.imageCV.max())+")"
 		self.imageCVOriginal = self.imageCV.copy()
@@ -389,7 +393,14 @@ class AstroCanvas:
 
 			self.thumbPeakAstro = self.internalAstroImg.getThumb("peak")
 			self.thumbPeakImage = self.miniCanPeak.create_image(50,50,  image=self.thumbDarkAstro)
-	
+		#Calculate background:
+		blackMedian, nIter = cvSpace.sky_median_sig_clip(self.internalAstroImg.imageCVOriginal, 5, 0.1, max_iter=20)
+		print "blackMedian: "+str(blackMedian)+" nIter: "+str(nIter)
+		self.thumbDarkAstro = self.internalAstroImg.modifyThumb(thumb= "DARK", value = blackMedian)
+		self.miniCanBlack.itemconfigure(self.thumbDarkImage, image=self.thumbDarkAstro)
+		#Draw line on histogram
+		self.matPlotHistogram.setLine(blackLine = int(blackMedian))
+		#self.internalHistogram.setLine(blackLine = blackMedian)
 	def getMainImageCoords(self):
 		print self.canvas.coords(self.canvasImg)	
 	
@@ -505,7 +516,7 @@ if __name__ == "__main__":
 	root.title("Simple Space Object Cataloger")
 
 	astroImage = AstroImage()
-	astroImage.openImage('tests/noReal.jpg')
+	astroImage.openImage("test.png")
 
 	astroCanvas = AstroCanvas()
 	astroCanvas.setCanvas(astroImage)
