@@ -396,13 +396,13 @@ class AstroCanvas:
 
 			self.thumbPeakAstro = self.internalAstroImg.getThumb("peak")
 			self.thumbPeakImage = self.miniCanPeak.create_image(50,50,  image=self.thumbDarkAstro)
-		#Calculate background:
-		blackMedian, nIter = cvSpace.sky_median_sig_clip(self.internalAstroImg.imageCVOriginal, 5, 0.1, max_iter=20)
-		print "blackMedian: "+str(blackMedian)+" nIter: "+str(nIter)
-		self.thumbDarkAstro = self.internalAstroImg.modifyThumb(thumb= "DARK", value = blackMedian)
-		self.miniCanBlack.itemconfigure(self.thumbDarkImage, image=self.thumbDarkAstro)
-		#Draw line on histogram
-		self.matPlotHistogram.setLine(blackLine = int(blackMedian))
+			#Calculate background:
+			blackMedian, nIter = cvSpace.sky_median_sig_clip(self.internalAstroImg.imageCVOriginal, 5, 0.1, max_iter=20)
+			print "blackMedian: "+str(blackMedian)+" nIter: "+str(nIter)
+			self.thumbDarkAstro = self.internalAstroImg.modifyThumb(thumb= "DARK", value = blackMedian)
+			self.miniCanBlack.itemconfigure(self.thumbDarkImage, image=self.thumbDarkAstro)
+			#Draw line on histogram
+			self.matPlotHistogram.setLine(blackLine = int(blackMedian))
 		#self.internalHistogram.setLine(blackLine = blackMedian)
 	def getMainImageCoords(self):
 		print self.canvas.coords(self.canvasImg)	
