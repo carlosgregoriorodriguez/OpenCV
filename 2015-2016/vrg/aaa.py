@@ -524,6 +524,7 @@ class AstroCanvas:
 			self.thumbDifusseAstro = self.internalAstroImg.modifyThumb(thumb= "DIFUSSE", value = blackLine, value2=pickedFlux)
 			self.miniCanDifusse.itemconfigure(self.thumbDifusseImage, image=self.thumbDifusseAstro)
 			self.canvas.config(cursor="circle")
+			self.fluxDifusseIndex.config(text = str(pickedFlux))
 			
 		if (self.picker == "PEAK"):
 			self.matPlotHistogram.setLine(peakLine=pickedFlux)
@@ -531,6 +532,7 @@ class AstroCanvas:
 			self.thumbPeakAstro = self.internalAstroImg.modifyThumb(thumb= "PEAK", value = int(pickedFlux*.75))
 			self.miniCanPeak.itemconfigure(self.thumbPeakImage, image=self.thumbPeakAstro)
 			self.canvas.config(cursor="crosshair")
+			self.fluxPeakIndex.config(text = str(pickedFlux))
 	
 	def signalSaveProject(self):
 		#todo: open modal dialog window to ask project name....
