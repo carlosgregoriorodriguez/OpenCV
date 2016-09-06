@@ -129,15 +129,12 @@ class AstroImage:
 			inf = np.isinf(self.imageCV)
 			self.imageCV[inf] = 0
 			#self.imageCV = cvSpace.power(self.fitsFile[0].data, power_index=3)
-
 			#self.imageCV = cvSpace.histeq(self.fitsFile[0].data)
 			#self.imageCV = self.fitsFile[0].data
 			'''
 			self.imageCV = self.imageCV.astype(np.uint8)
 			self.imageCV = cv2.equalizeHist(self.imageCV)
 			'''
-
-
 		else:	
 			#self.imageCV = cv2.imread(self.path,cv2.IMREAD_GRAYSCALE)
 			print "Cargando imagen noReal.jpg"
@@ -148,7 +145,8 @@ class AstroImage:
 		self.thumb = ImageTk.PhotoImage(Image.fromarray(cv2.resize(self.imageCV, (100, 100))))
 		self.thumbDark = ImageTk.PhotoImage(Image.fromarray(cv2.resize(self.imageCV, (100, 100))))
 		self.thumbDifusse = ImageTk.PhotoImage(Image.fromarray(cv2.resize(self.imageCV, (100, 100))))
-		self.thumbPeak = ImageTk.PhotoImage(Image.fromarray(cv2.resize(self.imageCV, (100, 100))))
+		self.peakThreshold, self.lCandidates, self.peakCVImage = cvSpace.getObjectList(self.imageCV)
+		self.thumbPeak = ImageTk.PhotoImage(Image.fromarray(cv2.resize(self.peakCVImage, (100, 100))))
 		self.updateImage()
 	
 	def statisticalInfo():
@@ -409,15 +407,17 @@ class AstroCanvas:
 			self.thumbDifusseImage = self.miniCanDifusse.create_image(50,50,  image=self.thumbDifusseAstro)
 
 			self.thumbPeakAstro = self.internalAstroImg.getThumb("peak")
-			self.thumbPeakImage = self.miniCanPeak.create_image(50,50,  image=self.thumbDarkAstro)
+			self.thumbPeakImage = self.miniCanPeak.create_image(50,50,  image=self.thumbPeakAstro)
 			#Calculate background:
 			blackMedian, nIter = cvSpace.sky_median_sig_clip(self.internalAstroImg.imageCVOriginal, 5, 0.1, max_iter=20)
 			self.fluxDarkIndex.config(text = str(blackMedian))
+			self.fluxPeakIndex.config(text = str(int(self.internalAstroImg.peakThreshold)))
 			print "blackMedian: "+str(blackMedian)+" nIter: "+str(nIter)
 			self.thumbDarkAstro = self.internalAstroImg.modifyThumb(thumb= "DARK", value = blackMedian)
 			self.miniCanBlack.itemconfigure(self.thumbDarkImage, image=self.thumbDarkAstro)
 			#Draw line on histogram
 			self.matPlotHistogram.setLine(blackLine = int(blackMedian))
+			self.matPlotHistogram.setLine(peakLine = int(self.internalAstroImg.peakThreshold))
 			#Calculate halo or diffuse image:
 			
 		#self.internalHistogram.setLine(blackLine = blackMedian)

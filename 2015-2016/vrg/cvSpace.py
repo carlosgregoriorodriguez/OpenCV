@@ -369,7 +369,54 @@ def openContour(img, kernelSize=5):
 		kernel = np.ones((kernelSize,kernelSize),np.uint8)
 		closeResult = cv2.morphologyEx(img,cv2.MORPH_CLOSE, kernel)
 		return closeResult
-		
+
+
+def getObjectList(img, minThreshold = 10, maxThreshold=255, debug=False):
+	img = cv2.bitwise_not(img)
+	params = cv2.SimpleBlobDetector_Params()
+	params.minThreshold = minThreshold;
+	params.maxThreshold = maxThreshold;
+	params.filterByArea = 1
+	params.minArea  = 3
+	detector = cv2.SimpleBlobDetector_create(params)
+	keyPoints = detector.detect(img)
+	print "[getIntersetObjectList] hay un total de "+str(len(keyPoints))+" candidatos"
+	index=0
+	flux = np.zeros([len(keyPoints)])
+	size = np.zeros([len(keyPoints)])
+	for k in keyPoints:
+		flux[index] = img.item(int(k.pt[1]), int(k.pt[0]))
+		size[index] = k.size
+		index = index + 1
+	peakThreshold = (np.mean(flux)-np.amin(flux))/np.e
+	maxPeakThreshold = 0
+	boxSize = (np.median(size))*np.pi
+	print "Median (mediana) box size "+str(boxSize)
+	index=0
+	lCandidatos = np.zeros(0)
+	height, width = img.shape
+	blank_image = np.zeros((height, width, 1), np.uint8)
+	for k in keyPoints:
+		if (img.item(int(k.pt[1]), int(k.pt[0]))>maxPeakThreshold):
+			maxPeakThreshold = img.item(int(k.pt[1]), int(k.pt[0]))
+		if img.item(int(k.pt[1]), int(k.pt[0]))>=peakThreshold:
+			if debug:
+				print "Punto: "+str(index)+" ("+str(int(k.pt[0]))+", "+str(int(k.pt[1]))+") with size :"+str(k.size)+ "and intensity: "+str(img.item(int(k.pt[1]), int(k.pt[0])))
+			cv2.circle(blank_image, (int(k.pt[0]),int(k.pt[1])), int(k.size), (255,0,0),-1)
+			np.append( lCandidatos, [k.pt[0],k.pt[1], "Star"] )
+		elif k.size>boxSize:
+			if debug:
+				print "\tPunto: "+str(index)+" ("+str(int(k.pt[0]))+", "+str(int(k.pt[1]))+") with size :"+str(k.size)+ "and intensity: "+str(img.item(int(k.pt[1]), int(k.pt[0])))+" descartado como estrella, quizas galaxia"
+			np.append( lCandidatos, [k.pt[0],k.pt[1], "Galaxy or reject"] )
+			resta = k.size/2.0
+			cv2.rectangle(blank_image, (int(k.pt[0]-resta),int(k.pt[1]-resta)), (int(k.pt[0]+resta),int(k.pt[1]+resta)), 190,-1)
+		else:
+			np.append( lCandidatos, [k.pt[0],k.pt[1], "Galaxy or reject"] )
+			resta = k.size/2.0
+			cv2.rectangle(blank_image, (int(k.pt[0]-resta),int(k.pt[1]-resta)), (int(k.pt[0]+resta),int(k.pt[1]+resta)), 100,-1)
+	maxPeakThreshold = maxPeakThreshold - peakThreshold/5
+	return maxPeakThreshold, lCandidatos, blank_image
+	
 if __name__ == "__main__":
 	'''
 	img = cv2.imread('tests/hubble-galaxy_1743872i.jpg',0)
