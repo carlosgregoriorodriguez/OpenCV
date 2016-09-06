@@ -136,6 +136,8 @@ class AstroImage:
 			self.imageCV = self.imageCV.astype(np.uint8)
 			self.imageCV = cv2.equalizeHist(self.imageCV)
 			'''
+
+
 		else:	
 			#self.imageCV = cv2.imread(self.path,cv2.IMREAD_GRAYSCALE)
 			print "Cargando imagen noReal.jpg"
@@ -350,21 +352,19 @@ class AstroCanvas:
 		self.segmentationFrame = tk.LabelFrame(self.infoFrame, text="Segmentation Information")
 		self.segmentationFrame.grid(column=1,row=1, padx=5)
 		fluxLabel = tk.Label(self.segmentationFrame, 	text="   Dark Flux Line:")
-		self.darkSpinner = tk.Spinbox(self.segmentationFrame, from_=0, to=255)
 		fluxLabel.grid(column =0, row=0, padx=10)
-		self.darkSpinner.grid(column = 1, row = 0, padx=10)
-		self.darkSpinner.config(width=4)
+		self.fluxDarkIndex = tk.Label(self.segmentationFrame, 	text="--")
+		self.fluxDarkIndex.grid(column = 1, row = 0, padx=10)
+
 		difusseLabel = tk.Label(self.segmentationFrame, 	text="   Difusse Flux Line:")
-		#self.difusseSpinLabel = tk.StringVar()
-		self.difusseSpinner = tk.Spinbox(self.segmentationFrame, from_=0, to=255)
-		self.difusseSpinner.config(width=4)
 		difusseLabel.grid(column =0, row=1, padx=10)
-		self.difusseSpinner.grid(column = 1, row = 1, padx=10)
+		self.fluxDifusseIndex = tk.Label(self.segmentationFrame, 	text="--")
+		self.fluxDifusseIndex.grid(column = 1, row = 1, padx=10)
+
 		starLabel = tk.Label(self.segmentationFrame, 	text="   Star Flux Line:")
-		self.starSpinner = tk.Spinbox(self.segmentationFrame, from_=0, to=255)
-		self.starSpinner.config(width=4)
 		starLabel.grid(column =0, row=2, padx=10)
-		self.starSpinner.grid(column = 1, row = 2, padx=10)
+		self.fluxPeakIndex = tk.Label(self.segmentationFrame, 	text="--")
+		self.fluxPeakIndex.grid(column = 1, row = 2, padx=10)
 		
 		self.statisticsFrame = tk.LabelFrame(self.infoFrame, text="Image Statistics")
 		self.statisticsFrame.grid(column=1,row=2, padx=5)
@@ -412,6 +412,7 @@ class AstroCanvas:
 			self.thumbPeakImage = self.miniCanPeak.create_image(50,50,  image=self.thumbDarkAstro)
 			#Calculate background:
 			blackMedian, nIter = cvSpace.sky_median_sig_clip(self.internalAstroImg.imageCVOriginal, 5, 0.1, max_iter=20)
+			self.fluxDarkIndex.config(text = str(blackMedian))
 			print "blackMedian: "+str(blackMedian)+" nIter: "+str(nIter)
 			self.thumbDarkAstro = self.internalAstroImg.modifyThumb(thumb= "DARK", value = blackMedian)
 			self.miniCanBlack.itemconfigure(self.thumbDarkImage, image=self.thumbDarkAstro)
@@ -515,6 +516,7 @@ class AstroCanvas:
 			self.thumbDarkAstro = self.internalAstroImg.modifyThumb(thumb= "DARK", value = pickedFlux)
 			self.miniCanBlack.itemconfigure(self.thumbDarkImage, image=self.thumbDarkAstro)
 			self.canvas.config(cursor="dotbox")
+			self.fluxDarkIndex.config(text = str(pickedFlux))
 
 		if (self.picker == "DIFUSSE"):
 			self.matPlotHistogram.setLine(difusseLine=pickedFlux)
