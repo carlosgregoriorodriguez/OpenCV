@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9) (preloaded format=pdflatex 2016.8.29)  5 SEP 2016 19:40
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9) (preloaded format=pdflatex 2016.8.29)  6 SEP 2016 11:08
 entering extended mode
 **./tfgVM.tex
 (tfgVM.tex
@@ -697,12 +697,12 @@ Package pdftex.def Info: images/EsquemaHubble.jpg used on input line 286.
  [8] [9 <./images/PSF-explicada.jpg> <./images/twoGalaxyHalo.jpg>] [10 <./image
 s/star.jpg> <./images/EsquemaHubble.jpg>]
 [11] [12]
-Underfull \hbox (badness 10000) in paragraph at lines 364--367
+Underfull \hbox (badness 10000) in paragraph at lines 365--368
 
  []
 
 [13]
-Underfull \hbox (badness 10000) in paragraph at lines 376--379
+Underfull \hbox (badness 10000) in paragraph at lines 377--380
 
  []
 
@@ -710,29 +710,29 @@ Underfull \hbox (badness 10000) in paragraph at lines 376--379
 File: images/HDREQ/chandraLineal.PNG Graphic file (type png)
 
 <use images/HDREQ/chandraLineal.PNG>
-Package pdftex.def Info: images/HDREQ/chandraLineal.PNG used on input line 383.
+Package pdftex.def Info: images/HDREQ/chandraLineal.PNG used on input line 384.
 
 (pdftex.def)             Requested size: 195.0pt x 171.40984pt.
-
-<images/HDREQ/chandraSqrt.PNG, id=74, 466.74374pt x 410.2828pt>
+ [14]
+<images/HDREQ/chandraSqrt.PNG, id=77, 466.74374pt x 410.2828pt>
 File: images/HDREQ/chandraSqrt.PNG Graphic file (type png)
 
 <use images/HDREQ/chandraSqrt.PNG>
-Package pdftex.def Info: images/HDREQ/chandraSqrt.PNG used on input line 393.
+Package pdftex.def Info: images/HDREQ/chandraSqrt.PNG used on input line 394.
 (pdftex.def)             Requested size: 195.0pt x 171.40984pt.
- [14]
-<images/HDREQ/chandraLog.PNG, id=80, 468.24937pt x 411.78844pt>
+ [15 <./images/HDREQ/chandraLineal.PNG> <./images/HDREQ/chandraSqrt.PNG>]
+<images/HDREQ/chandraLog.PNG, id=85, 468.24937pt x 411.78844pt>
 File: images/HDREQ/chandraLog.PNG Graphic file (type png)
 
 <use images/HDREQ/chandraLog.PNG>
-Package pdftex.def Info: images/HDREQ/chandraLog.PNG used on input line 404.
+Package pdftex.def Info: images/HDREQ/chandraLog.PNG used on input line 405.
 (pdftex.def)             Requested size: 195.0pt x 171.48593pt.
- [15 <./images/HDREQ/chandraLineal.PNG> <./images/HDREQ/chandraSqrt.PNG>]
+
 <images/HDREQ/chandraPow1_5.PNG, id=86, 465.99094pt x 411.03563pt>
 File: images/HDREQ/chandraPow1_5.PNG Graphic file (type png)
 
 <use images/HDREQ/chandraPow1_5.PNG>
-Package pdftex.def Info: images/HDREQ/chandraPow1_5.PNG used on input line 417.
+Package pdftex.def Info: images/HDREQ/chandraPow1_5.PNG used on input line 418.
 
 (pdftex.def)             Requested size: 136.50238pt x 120.40147pt.
 
@@ -741,49 +741,49 @@ File: images/HDREQ/chandraaSinH_0_5.jpg Graphic file (type jpg)
 
 <use images/HDREQ/chandraaSinH_0_5.jpg>
 Package pdftex.def Info: images/HDREQ/chandraaSinH_0_5.jpg used on input line 4
-29.
+30.
 (pdftex.def)             Requested size: 195.0pt x 170.82037pt.
 
 <images/HDREQ/chandraaSinH_5.PNG, id=88, 467.49657pt x 411.03563pt>
 File: images/HDREQ/chandraaSinH_5.PNG Graphic file (type png)
 
 <use images/HDREQ/chandraaSinH_5.PNG>
-Package pdftex.def Info: images/HDREQ/chandraaSinH_5.PNG used on input line 434
+Package pdftex.def Info: images/HDREQ/chandraaSinH_5.PNG used on input line 435
 .
 (pdftex.def)             Requested size: 195.0pt x 171.4484pt.
-
-<images/HDREQ/chandraaHistEq.PNG, id=89, 465.99094pt x 409.53pt>
+ [16 <./images/HDREQ/chandraLog.PNG> <./images/HDREQ/chandraPow1_5.PNG>]
+<images/HDREQ/chandraaHistEq.PNG, id=94, 465.99094pt x 409.53pt>
 File: images/HDREQ/chandraaHistEq.PNG Graphic file (type png)
 
 <use images/HDREQ/chandraaHistEq.PNG>
-Package pdftex.def Info: images/HDREQ/chandraaHistEq.PNG used on input line 442
+Package pdftex.def Info: images/HDREQ/chandraaHistEq.PNG used on input line 443
 .
 (pdftex.def)             Requested size: 155.99762pt x 137.09497pt.
- [16 <./images/HDREQ/chandraLog.PNG> <./images/HDREQ/chandraPow1_5.PNG>] [17 <.
-/images/HDREQ/chandraaSinH_0_5.jpg> <./images/HDREQ/chandraaSinH_5.PNG>]
+ [17 <./images/HDREQ/chandraaSinH_0_5.jpg> <./images/HDREQ/chandraaSinH_5.PNG>]
+
 <images/tfg2016pipeline1.jpg, id=100, 1299.85625pt x 625.33624pt>
 File: images/tfg2016pipeline1.jpg Graphic file (type jpg)
 
 <use images/tfg2016pipeline1.jpg>
-Package pdftex.def Info: images/tfg2016pipeline1.jpg used on input line 460.
+Package pdftex.def Info: images/tfg2016pipeline1.jpg used on input line 461.
 (pdftex.def)             Requested size: 390.0pt x 187.6214pt.
-
-<images/tfg2016algoritmos_de_catalogaci_n.jpg, id=101, 1279.78125pt x 1164.35pt
+ [18 <./images/HDREQ/chandraaHistEq.PNG>]
+<images/tfg2016algoritmos_de_catalogaci_n.jpg, id=106, 1279.78125pt x 1164.35pt
 >
 File: images/tfg2016algoritmos_de_catalogaci_n.jpg Graphic file (type jpg)
  <use images/tfg2016algoritmos_de_catalogaci_n.jpg>
 Package pdftex.def Info: images/tfg2016algoritmos_de_catalogaci_n.jpg used on i
-nput line 469.
+nput line 470.
 (pdftex.def)             Requested size: 390.0pt x 354.81532pt.
- [18 <./images/HDREQ/chandraaHistEq.PNG>] <images/GUI.jpg, id=107, 1006.76125pt
- x 783.92876pt>
-File: images/GUI.jpg Graphic file (type jpg)
 
-<use images/GUI.jpg>
-Package pdftex.def Info: images/GUI.jpg used on input line 483.
+<images/GUI.jpg, id=107, 1006.76125pt x 783.92876pt>
+File: images/GUI.jpg Graphic file (type jpg)
+ <use images/GUI.jpg>
+Package pdftex.def Info: images/GUI.jpg used on input line 484.
 (pdftex.def)             Requested size: 390.0pt x 303.67355pt.
- [19 <./images/tfg2016pipeline1.jpg>] [20 <./images/tfg2016algoritmos_de_catalo
-gaci_n.jpg>] [21 <./images/GUI.jpg>] [22] (tfgVM.aux
+
+[19 <./images/tfg2016pipeline1.jpg>] [20 <./images/tfg2016algoritmos_de_catalog
+aci_n.jpg>] [21 <./images/GUI.jpg>] [22] (tfgVM.aux
 LaTeX Info: Redefining \. on input line 6.
 LaTeX Info: Redefining \% on input line 6.
 LaTeX Info: Redefining \. on input line 14.
@@ -812,7 +812,7 @@ KTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Program Files (x86)/MiKTe
 X 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files (x86)/MiKTeX 2
 .9/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Program Files (x86)/MiKTeX 2.9
 /fonts/type1/public/amsfonts/euler/eufm10.pfb>
-Output written on tfgVM.pdf (23 pages, 2576030 bytes).
+Output written on tfgVM.pdf (23 pages, 2576533 bytes).
 PDF statistics:
  167 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
