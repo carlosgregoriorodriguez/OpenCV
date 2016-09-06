@@ -565,7 +565,7 @@ if __name__ == "__main__":
 	astroCanvas = AstroCanvas()
 	astroCanvas.setCanvas(astroImage)
 	
-	root.iconbitmap('img/appIcon.ico')
+	#root.iconbitmap('img/appIcon.ico')
 	root.config(menu=astroCanvas.menubar)
 
 	root.mainloop()
