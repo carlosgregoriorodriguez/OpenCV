@@ -145,7 +145,8 @@ class AstroImage:
 		self.thumb = ImageTk.PhotoImage(Image.fromarray(cv2.resize(self.imageCV, (100, 100))))
 		self.thumbDark = ImageTk.PhotoImage(Image.fromarray(cv2.resize(self.imageCV, (100, 100))))
 		self.thumbDifusse = ImageTk.PhotoImage(Image.fromarray(cv2.resize(self.imageCV, (100, 100))))
-		self.peakThreshold, self.lCandidates, self.peakCVImage = cvSpace.getObjectList(self.imageCV)
+		temp8bit = cv2.convertScaleAbs(self.imageCV)
+		self.peakThreshold, self.lCandidates, self.peakCVImage = cvSpace.getObjectList(temp8bit)#self.imageCV)
 		self.thumbPeak = ImageTk.PhotoImage(Image.fromarray(cv2.resize(self.peakCVImage, (100, 100))))
 		self.updateImage()
 	
