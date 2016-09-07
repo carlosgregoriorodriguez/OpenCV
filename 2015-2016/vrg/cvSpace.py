@@ -402,7 +402,8 @@ def getObjectList(img, minThreshold = 10, maxThreshold=255, debug=False):
 		if img.item(int(k.pt[1]), int(k.pt[0]))>=peakThreshold:
 			if debug:
 				print "Punto: "+str(index)+" ("+str(int(k.pt[0]))+", "+str(int(k.pt[1]))+") with size :"+str(k.size)+ "and intensity: "+str(img.item(int(k.pt[1]), int(k.pt[0])))
-			cv2.circle(blank_image, (int(k.pt[0]),int(k.pt[1])), int(k.size), (255,0,0),-1)
+			#cv2.circle(blank_image, (int(k.pt[0]),int(k.pt[1])), int(k.size), (255,0,0),-1)
+			cv2.circle(blank_image, (int(k.pt[0]),int(k.pt[1])), 3, (255,0,0),-1)
 			np.append( lCandidatos, [k.pt[0],k.pt[1], "Star"] )
 		elif k.size>boxSize:
 			if debug:
@@ -410,22 +411,29 @@ def getObjectList(img, minThreshold = 10, maxThreshold=255, debug=False):
 			np.append( lCandidatos, [k.pt[0],k.pt[1], "Galaxy or reject"] )
 			resta = k.size/2.0
 			cv2.rectangle(blank_image, (int(k.pt[0]-resta),int(k.pt[1]-resta)), (int(k.pt[0]+resta),int(k.pt[1]+resta)), 190,-1)
+			cv2.circle(blank_image, (int(k.pt[0]),int(k.pt[1])), 5, 190,-1)
 		else:
-			np.append( lCandidatos, [k.pt[0],k.pt[1], "Galaxy or reject"] )
+			np.append( lCandidatos, [k.pt[0],k.pt[1], "Uknown"] )
 			resta = k.size/2.0
-			cv2.rectangle(blank_image, (int(k.pt[0]-resta),int(k.pt[1]-resta)), (int(k.pt[0]+resta),int(k.pt[1]+resta)), 100,-1)
+			#cv2.rectangle(blank_image, (int(k.pt[0]-resta),int(k.pt[1]-resta)), (int(k.pt[0]+resta),int(k.pt[1]+resta)), 100,-1)
+			cv2.circle(blank_image, (int(k.pt[0]),int(k.pt[1])), 9, 100,-1)
 	maxPeakThreshold = maxPeakThreshold - peakThreshold/5
 	return maxPeakThreshold, lCandidatos, blank_image
 	
 def getMedianIndex(array):
-    if len(array) % 2 == 1:
-        return np.where( array == np.median(array) )[0][0]
-    else:
-        l,r = len(array)/2 -1, len(array)/2
-        left = np.partition(array, l)[l]
-        right = np.partition(array, r)[r]
-        return [np.where(array == left)[0][0], np.where(array==right)[0][0]]
-		
+	if len(array) % 2 == 1:
+		print "Par"
+		return np.where( array == np.median(array) )[0][0]
+	else:
+		try:
+			print "Impar"
+			l,r = len(array)/2 -1, len(array)/2
+			left = np.partition(array, l)[l]
+			right = np.partition(array, r)[r]
+			return [np.where(array == left)[0][0], np.where(array==right)[0][0]]
+		except:
+			print "Warning: Valor de la mediana incorrecto############## -> "+str(len(array))
+			return (len(array)/(np.e*2))
 if __name__ == "__main__":
 	'''
 	img = cv2.imread('tests/hubble-galaxy_1743872i.jpg',0)

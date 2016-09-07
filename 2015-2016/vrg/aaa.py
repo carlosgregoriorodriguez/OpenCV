@@ -104,11 +104,10 @@ class MatPlotHistogram:
 			self.p.plot([n,n], [1,val], lw=1, color = (0.6,0.6,0.6))
 	
 	def getArrayHistogram(self, min = 0, max = 255):
-		print "getArrayHistogram"
-		#print self.array[min:max]
 		return self.array[int(min):int(max)]
 		
 	def getMedianOfSubset(self, min = 0, max =255):
+		print "getMedianOfSubset min = "+str(min)+" max = "+str(max)
 		tempMedian = cvSpace.getMedianIndex(self.getArrayHistogram(min, max))
 		print "GetMedianOfSubset: "+str(tempMedian)
 		return int(tempMedian)
