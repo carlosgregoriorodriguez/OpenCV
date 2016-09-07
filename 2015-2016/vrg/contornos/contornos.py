@@ -15,7 +15,7 @@ def dilate(img, kernelSize=5):
 		dilateResult = cv2.dilate(img,kernel,iterations = 1)
 		return dilateResult
 
-imOrig = cv2.imread('test7.png')
+imOrig = cv2.imread('test8.png')
 numControl = 10
 nContour = 0
 lastContours = 0
@@ -40,9 +40,12 @@ for cnt in contours:
 	index=index+1
 meanArea = np.mean(area)
 print "Area media: "+str(meanArea)
-#eliminamos los que estan por debajo de 0.5 veces el area media (quitamos ruido)
-toDelete = np.where(area<=.5* meanArea)
-goodContours = np.delete(contours, toDelete)
+#eliminamos los que estan por debajo de 0.5 veces el area media (quitamos ruido) si hay demasiados contornos
+if (len(contours)>1000):#el valor ha de estar relacionado con las dimensiones de la imagen, ajustar
+	toDelete = np.where(area<=.5* meanArea)
+	goodContours = np.delete(contours, toDelete)
+else:
+	goodContours = contours
 #calculamos ajuste a elipse:
 
 cv2.drawContours(im, goodContours, -1, (0,0,255), 1) 
