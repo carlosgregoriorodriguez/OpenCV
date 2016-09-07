@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 import cvSpace
 from astropy.io import fits
 import os
+import platform
 
 '''MatPlotLib comunication'''
 class MatPlotHistogram:
@@ -102,6 +103,17 @@ class MatPlotHistogram:
 			#print str(n)+" : "+str(val)
 			self.p.plot([n,n], [1,val], lw=1, color = (0.6,0.6,0.6))
 	
+	def getArrayHistogram(self, min = 0, max = 255):
+		print "getArrayHistogram"
+		#print self.array[min:max]
+		return self.array[int(min):int(max)]
+		
+	def getMedianOfSubset(self, min = 0, max =255):
+		tempMedian = cvSpace.getMedianIndex(self.getArrayHistogram(min, max))
+		print "GetMedianOfSubset: "+str(tempMedian)
+		return int(tempMedian)
+		
+		
 '''AstroImage class stores the astronomical images'''
 class AstroImage:
 	def __init__(self):
@@ -409,6 +421,7 @@ class AstroCanvas:
 
 			self.thumbPeakAstro = self.internalAstroImg.getThumb("peak")
 			self.thumbPeakImage = self.miniCanPeak.create_image(50,50,  image=self.thumbPeakAstro)
+
 			#Calculate background:
 			blackMedian, nIter = cvSpace.sky_median_sig_clip(self.internalAstroImg.imageCVOriginal, 5, 0.1, max_iter=20)
 			self.fluxDarkIndex.config(text = str(blackMedian))
@@ -418,6 +431,13 @@ class AstroCanvas:
 			self.miniCanBlack.itemconfigure(self.thumbDarkImage, image=self.thumbDarkAstro)
 			#Draw line on histogram
 			self.matPlotHistogram.setLine(blackLine = int(blackMedian))
+			#TODO: change for the median of the subHistogram from blackMedian to self.internalAstroImg.peakThreshold
+			tempDiffuseLine = int(blackMedian+self.internalAstroImg.peakThreshold/2)
+			if (tempDiffuseLine>self.internalAstroImg.peakThreshold*0.9):
+				tempDiffuseLine = tempDiffuseLine * 0.85
+			tempDiffuseLine = self.matPlotHistogram.getMedianOfSubset(blackMedian, self.internalAstroImg.peakThreshold)
+			self.matPlotHistogram.setLine(difusseLine = tempDiffuseLine)
+			self.fluxDifusseIndex.config(text = str(tempDiffuseLine))
 			self.matPlotHistogram.setLine(peakLine = int(self.internalAstroImg.peakThreshold))
 			#Calculate halo or diffuse image:
 			
@@ -566,7 +586,8 @@ if __name__ == "__main__":
 	astroCanvas = AstroCanvas()
 	astroCanvas.setCanvas(astroImage)
 	
-	#root.iconbitmap('img/appIcon.ico')
+	if (platform.system()=='Windows'):
+		root.iconbitmap('img/appIcon.ico')
 	root.config(menu=astroCanvas.menubar)
 
 	root.mainloop()

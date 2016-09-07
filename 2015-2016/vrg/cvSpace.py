@@ -417,6 +417,15 @@ def getObjectList(img, minThreshold = 10, maxThreshold=255, debug=False):
 	maxPeakThreshold = maxPeakThreshold - peakThreshold/5
 	return maxPeakThreshold, lCandidatos, blank_image
 	
+def getMedianIndex(array):
+    if len(array) % 2 == 1:
+        return np.where( array == np.median(array) )[0][0]
+    else:
+        l,r = len(array)/2 -1, len(array)/2
+        left = np.partition(array, l)[l]
+        right = np.partition(array, r)[r]
+        return [np.where(array == left)[0][0], np.where(array==right)[0][0]]
+		
 if __name__ == "__main__":
 	'''
 	img = cv2.imread('tests/hubble-galaxy_1743872i.jpg',0)
