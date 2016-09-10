@@ -378,7 +378,8 @@ def getObjectList(img, minThreshold = 10, maxThreshold=255, debug=False):
 	params.maxThreshold = maxThreshold;
 	params.filterByArea = 1
 	params.minArea  = 3
-	detector = cv2.SimpleBlobDetector_create(params)
+	#detector = cv2.SimpleBlobDetector_create(params)
+        detector = cv2.SimpleBlobDetector(params)
 	keyPoints = detector.detect(img)
 	print "[getIntersetObjectList] hay un total de "+str(len(keyPoints))+" candidatos"
 	index=0
