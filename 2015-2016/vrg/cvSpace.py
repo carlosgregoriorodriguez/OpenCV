@@ -7,7 +7,13 @@ from astropy.io import fits#no necesario, cvSpace solo trabaja con arrays de ima
 		Preparing Red-Green-Blue Images from CCD Data Lupton et all
 			http://adsabs.harvard.edu/abs/2004PASP..116..133L
 '''
-print "Loaded cvSpace"
+print "Loading cvSpace"
+
+def detectOpenCv2():
+	(ocVersion, ocSubVersion, _) = cv2.__version__.split(".")
+	return ocVersion==2
+	
+
 def segment(img, thresholdStart, thresholdEnd):
 	height, width = img.shape
 	print "[cvSpace]::segment: "+str(height)
@@ -378,8 +384,10 @@ def getObjectList(img, minThreshold = 10, maxThreshold=255, debug=False):
 	params.maxThreshold = maxThreshold;
 	params.filterByArea = 1
 	params.minArea  = 3
-	#detector = cv2.SimpleBlobDetector_create(params)
-        detector = cv2.SimpleBlobDetector(params)
+	if (detectOpenCv2()):
+		detector = cv2.SimpleBlobDetector(params)
+	else:
+		detector = cv2.SimpleBlobDetector_create(params)
 	keyPoints = detector.detect(img)
 	print "[getIntersetObjectList] hay un total de "+str(len(keyPoints))+" candidatos"
 	index=0
@@ -433,8 +441,47 @@ def getMedianIndex(array):
 			right = np.partition(array, r)[r]
 			return [np.where(array == left)[0][0], np.where(array==right)[0][0]]
 		except:
-			print "Warning: Valor de la mediana incorrecto############## -> "+str(len(array))
+			print "Warning: excepction controlled in median : "+str(len(array))
 			return (len(array)/(np.e*2))
+
+def getContours(imOrig, maxContours=10):
+	print "[cvSpace]: getContours Stars"
+	numControl = maxContours
+	nContour = 0
+	lastContours = 0
+	contours = []
+	while ((2*lastContours>=nContour) and numControl>0):
+		im = dilate(closeContour(imOrig, numControl-1),(numControl+1)/2)
+		imgray = im#cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
+		ret,thresh = cv2.threshold(imgray,200,255,0)
+		if (detectOpenCv2()):
+			contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+		else:
+			_, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+		lastContours = nContour		
+		nContour = len(contours)
+		if (lastContours == 0):#caso 0
+			lastContours = nContour	
+		numControl=numControl-1
+		print "numControl = "+str(numControl)+" lastContours = "+str(lastContours)+" nContours = "+str(nContour)
+
+	area = np.zeros(len(contours))
+	index = 0
+	for cnt in contours:
+		area[index] = cv2.contourArea(cnt)
+		#print area[index]
+		index=index+1
+	meanArea = np.mean(area)
+	print "Area media: "+str(meanArea)
+	#eliminamos los que estan por debajo de 0.5 veces el area media (quitamos ruido) si hay demasiados contornos
+	if (len(contours)>1000):#el valor ha de estar relacionado con las dimensiones de la imagen, ajustar
+		toDelete = np.where(area<=.5* meanArea)
+		goodContours = np.delete(contours, toDelete)
+	else:
+		goodContours = contours
+	print "[cvSpace]: getContours ends"
+	return goodContours
+	
 if __name__ == "__main__":
 	'''
 	img = cv2.imread('tests/hubble-galaxy_1743872i.jpg',0)
