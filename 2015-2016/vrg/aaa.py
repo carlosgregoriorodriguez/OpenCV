@@ -158,7 +158,6 @@ class AstroImage:
 		self.thumbDifusse = ImageTk.PhotoImage(Image.fromarray(cv2.resize(self.imageCV, (100, 100))))
 		temp8bit = cv2.convertScaleAbs(self.imageCV)
 		self.peakThreshold, self.lCandidates, self.peakCVImage = cvSpace.getObjectList(temp8bit)#self.imageCV)
-		self.nContours = cvSpace.getContours(cv2.convertScaleAbs(self.imageCV))
 		self.thumbPeak = ImageTk.PhotoImage(Image.fromarray(cv2.resize(self.peakCVImage, (100, 100))))
 		self.updateImage()
 	
@@ -170,6 +169,16 @@ class AstroImage:
 		self.imagePil = Image.fromarray(self.imageCV)
 		self.imageTK = ImageTk.PhotoImage(image=self.imagePil)
 		self.histogram = self.updateHistogram()
+		################################IMPORTANTE####################################
+		###########################El Input de getContours ###########################
+		###################### ha de ser el procesado de Dark!! ######################
+		blackMedian, nIter = cvSpace.sky_median_sig_clip(self.imageCVOriginal, 5, 0.1, max_iter=20)
+		self.darkImage = self.generateDarkImage(blackMedian)
+		print "Linea de Espacio Vacio: "+str(blackMedian)
+		self.nContours = cvSpace.getContours(cv2.convertScaleAbs(self.darkImage))
+		self.contourImage = cv2.convertScaleAbs(self.darkImage).copy()
+		cv2.drawContours(self.contourImage, self.nContours, -1, (0,0,255), 3) 
+		print "N Contornos: "+str(len(self.nContours))+" ##############"
 		
 	def invertImage(self):
 		self.imageCV = cv2.bitwise_not(self.imageCV)
@@ -186,7 +195,11 @@ class AstroImage:
 	
 	def getImageTK (self):
 		return self.imageTK
-
+		
+	def getVectorImage(self):
+		self.imageContour = Image.fromarray(cv2.resize(self.contourImage, (670,670)))
+		return ImageTk.PhotoImage(image= self.imageContour)
+		
 	def getThumb (self, t):
 		if (t=="dark"):
 			return self.thumbDark
@@ -310,6 +323,15 @@ class AstroCanvas:
 		self.tabVector = note.add_tab(text = "Vector")
 		self.tabOutput = note.add_tab(text = "Output")
 		
+		#Vector Tab#################
+		self.vectorCanvas =  tk.Canvas(self.tabVector, width=670, height=600, bg = 'black', cursor="rtl_logo")
+		self.vectorCanvas.pack()
+		'''
+		temp1 = tk.LabelFrame(self.tabVector, text="tools")
+		temp1.grid(column=0,row=0)
+		left5 = tk.Label(temp1, text="                                                                                  ")
+		left5.pack()
+		'''
 		###Set of tools in processing tab###
 		toolsFrame = tk.LabelFrame(self.tabProcessing, text="tools")
 		toolsFrame.grid(column=0,row=0)
@@ -410,6 +432,13 @@ class AstroCanvas:
 		self.histogramFrame = tk.LabelFrame(self.tabProcessing, text="Histogram")
 		self.histogramFrame.grid(column=1,row=2, padx=5, columnspan=5)
 
+		#Vector
+		self.imageVector = self.internalAstroImg.getVectorImage()
+		self.vectorImage = self.vectorCanvas.create_image(335,335, image = self.imageVector)
+		print "\n\n##################"
+		print self.vectorCanvas
+		print self.internalAstroImg.contourImage
+		print "##################\n\n"
 		if (update==False):
 			self.matPlotHistogram = MatPlotHistogram(self.histogramFrame, self.internalAstroImg.getHistogram())
 			#Raster thumbnails
