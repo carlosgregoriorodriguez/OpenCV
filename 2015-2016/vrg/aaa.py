@@ -176,7 +176,7 @@ class AstroImage:
 		self.darkImage = self.generateDarkImage(blackMedian)
 		print "Linea de Espacio Vacio: "+str(blackMedian)
 		self.nContours = cvSpace.getContours(cv2.convertScaleAbs(self.darkImage))
-		self.contourImage = cv2.convertScaleAbs(self.darkImage).copy()
+		self.contourImage = cv2.cvtColor(cv2.convertScaleAbs(self.darkImage).copy(), cv2.COLOR_GRAY2RGB)
 		cv2.drawContours(self.contourImage, self.nContours, -1, (0,0,255), 3) 
 		print "N Contornos: "+str(len(self.nContours))+" ##############"
 		
@@ -324,7 +324,7 @@ class AstroCanvas:
 		self.tabOutput = note.add_tab(text = "Output")
 		
 		#Vector Tab#################
-		self.vectorCanvas =  tk.Canvas(self.tabVector, width=670, height=600, bg = 'black', cursor="rtl_logo")
+		self.vectorCanvas =  tk.Canvas(self.tabVector, width=672, height=672, bg = 'white')#, cursor="X_cursor")
 		self.vectorCanvas.pack()
 		'''
 		temp1 = tk.LabelFrame(self.tabVector, text="tools")
@@ -434,7 +434,7 @@ class AstroCanvas:
 
 		#Vector
 		self.imageVector = self.internalAstroImg.getVectorImage()
-		self.vectorImage = self.vectorCanvas.create_image(335,335, image = self.imageVector)
+		self.vectorImage = self.vectorCanvas.create_image(336,336, image = self.imageVector)
 		print "\n\n##################"
 		print self.vectorCanvas
 		print self.internalAstroImg.contourImage
