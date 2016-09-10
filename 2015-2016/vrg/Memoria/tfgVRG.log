@@ -1,7 +1,7 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9) (preloaded format=pdflatex 2016.8.29)  10 SEP 2016 13:29
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9) (preloaded format=pdflatex 2016.8.29)  10 SEP 2016 13:38
 entering extended mode
-**./tfgVM.tex
-(tfgVM.tex
+**./tfgVRG.tex
+(tfgVRG.tex
 LaTeX2e <2016/03/31> patch level 1
 Babel <3.9r> and hyphenation patterns for 75 language(s) loaded.
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\article.cls"
@@ -502,13 +502,13 @@ LaTeX Info: Redefining \addtolength on input line 81.
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\placeins\placeins.sty"
 Package: placeins 2005/04/18  v 2.2
 )
-(tfgVM.aux
+(tfgVRG.aux
 LaTeX Info: Redefining \. on input line 6.
 LaTeX Info: Redefining \% on input line 6.
 LaTeX Info: Redefining \. on input line 14.
 LaTeX Info: Redefining \% on input line 14.
 )
-\openout1 = `tfgVM.aux'.
+\openout1 = `tfgVRG.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 44.
 LaTeX Font Info:    ... okay on input line 44.
@@ -820,7 +820,7 @@ Package pdftex.def Info: images/GUI.jpg used on input line 492.
 [20 <./images/tfg2016pipeline1.jpg>] [21 <./images/tfg2016algoritmos_de_catalog
 aci_n.jpg>] [22 <./images/GUI.jpg>] [23
 
-] (tfgVM.aux
+] (tfgVRG.aux
 LaTeX Info: Redefining \. on input line 6.
 LaTeX Info: Redefining \% on input line 6.
 LaTeX Info: Redefining \. on input line 14.
@@ -828,12 +828,12 @@ LaTeX Info: Redefining \% on input line 14.
 ) ) 
 Here is how much of TeX's memory you used:
  14323 strings out of 493335
- 276370 string characters out of 3136683
+ 276380 string characters out of 3136683
  323148 words of memory out of 3000000
  17524 multiletter control sequences out of 15000+200000
  13856 words of font info for 52 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 62i,7n,56p,672b,590s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 62i,7n,56p,673b,590s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 ><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><
 C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><C
@@ -851,7 +851,7 @@ TeX 2.9/fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Program Files (x86)/MiKTeX
  2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files (x86)/MiKTeX 2.
 9/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Program Files (x86)/MiKTeX 2.9/
 fonts/type1/public/amsfonts/euler/eufm10.pfb>
-Output written on tfgVM.pdf (24 pages, 2603680 bytes).
+Output written on tfgVRG.pdf (24 pages, 2603680 bytes).
 PDF statistics:
  178 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
