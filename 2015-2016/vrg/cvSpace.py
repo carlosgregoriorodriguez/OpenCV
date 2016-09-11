@@ -402,9 +402,10 @@ def getObjectList(img, minThreshold = 10, maxThreshold=255, debug=False):
 	boxSize = (np.median(size))*np.pi
 	print "Median (mediana) box size "+str(boxSize)
 	index=0
-	lCandidatos = np.zeros(0)
+	lCandidatos = np.array([[-1,-1,-1]])
 	height, width = img.shape
 	blank_image = np.zeros((height, width, 1), np.uint8)
+	#TODO: store size in lCandidatos
 	for k in keyPoints:
 		if (img.item(int(k.pt[1]), int(k.pt[0]))>maxPeakThreshold):
 			maxPeakThreshold = img.item(int(k.pt[1]), int(k.pt[0]))
@@ -413,20 +414,26 @@ def getObjectList(img, minThreshold = 10, maxThreshold=255, debug=False):
 				print "Punto: "+str(index)+" ("+str(int(k.pt[0]))+", "+str(int(k.pt[1]))+") with size :"+str(k.size)+ "and intensity: "+str(img.item(int(k.pt[1]), int(k.pt[0])))
 			#cv2.circle(blank_image, (int(k.pt[0]),int(k.pt[1])), int(k.size), (255,0,0),-1)
 			cv2.circle(blank_image, (int(k.pt[0]),int(k.pt[1])), 3, (255,0,0),-1)
-			np.append( lCandidatos, [k.pt[0],k.pt[1], "Star"] )
+			#lCandidatos = np.append( lCandidatos, [[int(k.pt[0]),int(k.pt[1]), "Star"]], axis=0 )
+			lCandidatos = np.append( lCandidatos, [[int(k.pt[0]),int(k.pt[1]), 0]], axis=0 )
 		elif k.size>boxSize:
 			if debug:
 				print "\tPunto: "+str(index)+" ("+str(int(k.pt[0]))+", "+str(int(k.pt[1]))+") with size :"+str(k.size)+ "and intensity: "+str(img.item(int(k.pt[1]), int(k.pt[0])))+" descartado como estrella, quizas galaxia"
-			np.append( lCandidatos, [k.pt[0],k.pt[1], "Galaxy or reject"] )
+			#lCandidatos = np.append( lCandidatos, [[int(k.pt[0]),int(k.pt[1]), "Galaxy or reject"]], axis=0 )
+			lCandidatos = np.append( lCandidatos, [[int(k.pt[0]),int(k.pt[1]), 1]], axis=0 )
 			resta = k.size/2.0
 			cv2.rectangle(blank_image, (int(k.pt[0]-resta),int(k.pt[1]-resta)), (int(k.pt[0]+resta),int(k.pt[1]+resta)), 190,-1)
 			cv2.circle(blank_image, (int(k.pt[0]),int(k.pt[1])), 5, 190,-1)
 		else:
-			np.append( lCandidatos, [k.pt[0],k.pt[1], "Uknown"] )
+			#lCandidatos = np.append( lCandidatos, [[int(k.pt[0]),int(k.pt[1]), "Uknown"]], axis=0 )
+			lCandidatos = np.append( lCandidatos, [[int(k.pt[0]),int(k.pt[1]), 2]], axis=0 )
 			resta = k.size/2.0
 			#cv2.rectangle(blank_image, (int(k.pt[0]-resta),int(k.pt[1]-resta)), (int(k.pt[0]+resta),int(k.pt[1]+resta)), 100,-1)
 			cv2.circle(blank_image, (int(k.pt[0]),int(k.pt[1])), 9, 100,-1)
+		index = index + 1
 	maxPeakThreshold = maxPeakThreshold - peakThreshold/5
+	lCandidatos = np.delete(lCandidatos, 0, axis = 0)
+	print "\n\n!!!!!!!!!!!!!!!!!!!!!"+str(len(lCandidatos))+"!!!!!!!!!!!!!!!!!!!!!\n\n"
 	return maxPeakThreshold, lCandidatos, blank_image
 	
 def getMedianIndex(array):

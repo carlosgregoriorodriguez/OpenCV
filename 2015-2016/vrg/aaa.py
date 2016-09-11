@@ -156,8 +156,12 @@ class AstroImage:
 		self.thumb = ImageTk.PhotoImage(Image.fromarray(cv2.resize(self.imageCV, (100, 100))))
 		self.thumbDark = ImageTk.PhotoImage(Image.fromarray(cv2.resize(self.imageCV, (100, 100))))
 		self.thumbDifusse = ImageTk.PhotoImage(Image.fromarray(cv2.resize(self.imageCV, (100, 100))))
+		#################################OBTENCION####################################
+		###############################getObjectList##################################
+		################# obtencion de candidatos ptos Luminosos #####################
 		temp8bit = cv2.convertScaleAbs(self.imageCV)
-		self.peakThreshold, self.lCandidates, self.peakCVImage = cvSpace.getObjectList(temp8bit)#self.imageCV)
+		self.peakThreshold, self.lCandidates, self.peakCVImage = cvSpace.getObjectList(temp8bit)#, debug = True)#self.imageCV)
+		
 		self.thumbPeak = ImageTk.PhotoImage(Image.fromarray(cv2.resize(self.peakCVImage, (100, 100))))
 		self.updateImage()
 	
@@ -169,15 +173,44 @@ class AstroImage:
 		self.imagePil = Image.fromarray(self.imageCV)
 		self.imageTK = ImageTk.PhotoImage(image=self.imagePil)
 		self.histogram = self.updateHistogram()
-		################################IMPORTANTE####################################
-		###########################El Input de getContours ###########################
-		###################### ha de ser el procesado de Dark!! ######################
+		#################################OBTENCION####################################
+		############################## getContours ###################################
+		#################### obtencion de candidatos contornos #######################
 		blackMedian, nIter = cvSpace.sky_median_sig_clip(self.imageCVOriginal, 5, 0.1, max_iter=20)
 		self.darkImage = self.generateDarkImage(blackMedian)
 		print "Linea de Espacio Vacio: "+str(blackMedian)
 		self.nContours = cvSpace.getContours(cv2.convertScaleAbs(self.darkImage))
-		self.contourImage = cv2.cvtColor(cv2.convertScaleAbs(self.darkImage).copy(), cv2.COLOR_GRAY2RGB)
-		cv2.drawContours(self.contourImage, self.nContours, -1, (0,0,255), 3) 
+		#########################DRAW INTEREST POINTS AND CONTOURS####################
+		#self.contourImage = cv2.cvtColor(cv2.convertScaleAbs(self.darkImage).copy(), cv2.COLOR_GRAY2RGB)
+		self.contourImage = cv2.cvtColor(cv2.convertScaleAbs(self.imageCV).copy(), cv2.COLOR_GRAY2RGBA)
+		
+		print "\n\n-------------------------"+str(len(self.lCandidates))+"---------------------------\n"
+		for k in self.lCandidates:
+			#print "Punto: "+str(index)+" ("+str((k[0]))+", "+str((k[1]))+")"
+			#print "Punto: "+str(index)+" ("+str(int(k[0]))+", "+str(int(k[1]))+") with size :"+str(k.size)+ "and intensity: "+str(self.imageCV.item(int(k.pt[1]), int(k.pt[0])))
+			#print type(k[0])
+			cv2.circle(self.contourImage, (int(k[0]),int(k[1])), 3, (255,255,0,50),-1)
+			
+		cv2.drawContours(self.contourImage, self.nContours, -1, (0,0,255,255), 3)
+
+
+		'''
+		if self.imageCV.item(int(k.pt[1]), int(k.pt[0]))>=self.peakThreshold:
+				if debug:
+					print "Punto: "+str(index)+" ("+str(int(k.pt[0]))+", "+str(int(k.pt[1]))+") with size :"+str(k.size)+ "and intensity: "+str(img.item(int(k.pt[1]), int(k.pt[0])))
+				cv2.circle(self.contourImage, (int(k.pt[0]),int(k.pt[1])), int(k.size), (255,0,0),-1)
+			elif k.size>boxSize:
+				if debug:
+					print "\tPunto: "+str(index)+" ("+str(int(k.pt[0]))+", "+str(int(k.pt[1]))+") with size :"+str(k.size)+ "and intensity: "+str(img.item(int(k.pt[1]), int(k.pt[0])))+" descartado como estrella, quizas galaxia"
+				np.append( lCandidatos, [k.pt[0],k.pt[1], "Galaxy or reject"] )
+				resta = k.size/2.0
+				cv2.rectangle(blank_image, (int(k.pt[0]-resta),int(k.pt[1]-resta)), (int(k.pt[0]+resta),int(k.pt[1]+resta)), 190,-1)
+			else:
+				np.append( lCandidatos, [k.pt[0],k.pt[1], "Galaxy or reject"] )
+				resta = k.size/2.0
+				cv2.rectangle(blank_image, (int(k.pt[0]-resta),int(k.pt[1]-resta)), (int(k.pt[0]+resta),int(k.pt[1]+resta)), 100,-1)
+		'''		
+				
 		print "N Contornos: "+str(len(self.nContours))+" ##############"
 		
 	def invertImage(self):
