@@ -57,7 +57,7 @@
 		%   LOGO SECTION
 		%----------------------------------------------------------------------------------------
 		
-		\includegraphics{images/ucmLogo.png}\\[0.02cm] % Include a department/university logo - this will require the graphicx package
+		\includegraphics{images/ucmLogo.png}\\[1cm] % Include a department/university logo - this will require the graphicx package
 		
 		%----------------------------------------------------------------------------------------
 		\textsc{\Large Trabajo fin de grado}\\[0.5cm] 
@@ -67,7 +67,7 @@
 		%----------------------------------------------------------------------------------------
 		
 		\HRule \\[0.2cm]
-		{ \huge \bfseries Visión artificial, reconocimiento automático de galaxias y estrellas en imágenes astronómicas}[0.4cm] % Title of your document
+		{ \huge \bfseries Visión artificial: Reconocimiento automático de galaxias y estrellas en imágenes astronómicas.} % Title of your document
 		\HRule \\[0.4cm]
 		
 		%----------------------------------------------------------------------------------------
@@ -99,13 +99,14 @@
 		
 	\end{titlepage}
 	%Fin Portada
-	
+
 	\begin{abstract}
 		Con la irrupción de la tecnología digital de captura de imágenes, el mundo de la astronomía incrementó notablemente el número de imágenes que se obtiene del espacio, no solo aumentó la calidad sino que se vio beneficiada de la facilidad de copia y difusión de las mismas.\\
 		Este basto conocimiento en formato digital requiere de sistemas automatizados de tratamiento e interpretación de las mismas.\\
 		El proyecto se centra en la detección y clasificación de elementos luminosos tales como estrellas y galaxias, tomando como fuente ficheros astronómicos FITS o imágenes raster genéricas y mediante técnicas de visión artificial, obtener una lista de fuentes luminosas, su posición relativa a la imagen y características descriptivas de las mismas.\\
 		El proyecto se acompaña de una simple interfaz gráfica que permita a los posibles usuarios un manejo sencillo y en cierta medida un uso didáctico.\\
 	\end{abstract}
+	
 	
 	\begin{otherlanguage}{english}
 	\begin{abstract}
@@ -117,6 +118,9 @@
 	\end{otherlanguage}
 	\vfill % Fill the rest of the page with whitespace
 	
+	
+	\tableofcontents
+	\newpage
 	
 	\section{Introduction}
 	
@@ -502,14 +506,23 @@
 	[Por hacer al finalizar el desarrollo]
 	\subsection{Cumplimiento de objetivos}
 	\subsection{Trabajo futuro}
+	El trabajo, aun siendo plenamente funcional presenta aspectos abiertos a mejoras.
+	\begin{itemize} 
+	\item Los ajustes de histograma no funcionan correctamente en todos los casos, sería necesario aumentar el pre-análisis de los datos crudos para detectar cual sería el algoritmo más apropiado.
+	\item Los ajustes heurísticos requieren afinamiento, no se descarta tomar nuevas estrategias.
+	\item Optimizar, el codigo puede ser mucho más óptimo. Un claro ejemplo es la detección de estrellas y galaxias que se pueden unificar en una única función, o la gestión de las imágenes internas, en algunos casos se duplican innecesariamente imágenes (thumbnails).
+	\end{itemize} 
+	
 	%Agradecimientos#######################################################
 	\section{Agradecimientos}
 	
-	Quiero agradecer a Carlos Gregorio Rodríguez la oportunidad de realizar este trabajo fin de grado, agradecer de forma especial la ayuda y guía que me ha brindado en todo momento así como el apoyo en la búsqueda de soluciones. 
-	\\ A Miguel Angel Valero Espada por darme un enfoque distinto al campo de la programación.
-	\\ Ana Inés Gomez de Castro por sus enseñanzas en Astronomía.
-	\\ Especialmente a Rocío por animarme en todo momento y a mi familia por su apoyo.
+	Quiero agradecer a Carlos Gregorio Rodríguez la oportunidad de realizar este trabajo fin de grado, agradecer de forma especial la ayuda y guía que me ha brindado en todo momento así como el apoyo en la búsqueda de soluciones y la adquisición de nuevos conocimientos.\\ 
+	\\ A Miguel Angel Valero Espada por darme un enfoque distinto al campo de la programación.\\
+	\\ Ana Inés Gomez de Castro por sus enseñanzas en Astronomía.\\
+	\\ Especialmente a Rocío por animarme en todo momento y a mi familia por su apoyo.\\
 	\\ Sin estos apoyos no hubiese sido posible completar este trabajo.
+	\\
+	\\Este trabajo está dedicado especialmente a mi Yaya Mercedes y a mi Yeyo Modesto, por todos los valores que me supieron dar.
 %Referencias bibiográficas#############################################
 	\section{Referencias bibiográficas}
 \end{document}

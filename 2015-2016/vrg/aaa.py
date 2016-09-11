@@ -188,11 +188,25 @@ class AstroImage:
 		for k in self.lCandidates:
 			#print "Punto: "+str(index)+" ("+str((k[0]))+", "+str((k[1]))+")"
 			#print "Punto: "+str(index)+" ("+str(int(k[0]))+", "+str(int(k[1]))+") with size :"+str(k.size)+ "and intensity: "+str(self.imageCV.item(int(k.pt[1]), int(k.pt[0])))
-			#print type(k[0])
-			cv2.circle(self.contourImage, (int(k[0]),int(k[1])), 3, (255,255,0,50),-1)
-			
-		cv2.drawContours(self.contourImage, self.nContours, -1, (0,0,255,255), 3)
-
+			print "Tipo de punto: "+str(k[3])
+			if (True):#descartamos puntos si caen sobre negro
+				if k[3] == 0:#Estimated Galaxi point
+					cv2.circle(self.contourImage, (int(k[0]),int(k[1])), k[2], (255,255,0,50),-1)
+				if k[3] == 1:#Extimated Star point
+					cv2.circle(self.contourImage, (int(k[0]),int(k[1])), k[2], (0,255,0,50),-1)
+				if k[3] == 0:#Uknown Point
+					cv2.circle(self.contourImage, (int(k[0]),int(k[1])), k[2], (0,0,255,50),-1)
+					
+		index = 0
+		#TODO: crear funcion en cvSpace que haga crop (http://stackoverflow.com/questions/28759253/how-to-crop-the-internal-area-of-a-contour)
+		# y calcule el maximo 'spot' (http://www.pyimagesearch.com/2014/09/29/finding-brightest-spot-image-using-python-opencv/)
+		for c in self.nContours:
+			cR = np.random.randint(0,255)
+			cB = np.random.randint(100,255)
+			cG = np.random.randint(150,255)
+			color = (cR, cB, cG, 255)
+			cv2.drawContours(self.contourImage, self.nContours, index, color, 3)
+			index = index + 1
 
 		'''
 		if self.imageCV.item(int(k.pt[1]), int(k.pt[0]))>=self.peakThreshold:

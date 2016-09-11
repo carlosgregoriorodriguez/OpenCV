@@ -391,8 +391,8 @@
 		\item Logaritmo\\
 		Conocidos el máximo $M$ y el mínimo $m$ valor en la matriz, realiza
 		la siguiente transformación (Ver figura \ref{fig:HDRLOG}):
-		
-			$Factor=log_{10}(M-m)$
+		\\
+			$Factor=log_{10}(M-m)$\\
 			$Pixel[x,y]=\frac{log_{10}(Pixel[x,y])}{Factor}$
 			\begin{figure}[!htb]
 				\centering
@@ -403,9 +403,9 @@
 		\item Potencia\\
 		Conocidos el máximo $M$ y el mínimo $m$ valor en la matríz y dado
 		un exponente n, realiza la siguiente transformación (Ver figura \ref{fig:HDRPOW}):
-		
+		\\
 			$Factor=\frac{1}{(M-n)^{n}}$
-			
+			\\
 			$Pixel[x,y]=(Pixel[x,y]-m)^{n}*Factor$
 			\begin{figure}[!htb]
 				\centering
@@ -418,7 +418,9 @@
 		Conocidos el máximo $M$ y el mínimo $m$ valor en la matríz y dado
 		un factor de no linealidad nL, realiza la siguiente transformación  (Ver figuras \ref{fig:HDRasinh1_5} para nL=1.5 y \ref{fig:HDRasinh5} para nL=5):\\
 			$Factor=\frac{arcSinH((M-m)}{nL}$
+			\\
 			$Pixel[x,y]=\frac{\frac{arcSinH(Pixel[x,y]-m)}{nL}}{Factor}$
+			\\
 			\begin{figure}[!htb]
 				\centering
 				\includegraphics[width=0.5\textwidth]{images/HDREQ/chandraaSinH_0_5.jpg}
@@ -505,12 +507,23 @@
 	\section{Conclusiones}
 	[Por hacer al finalizar el desarrollo]
 	\subsection{Cumplimiento de objetivos}
+	[Completar]
+	Los objetivos iniciales no se han alcanzado al completo, los motivos son:\\
+	\begin{itemize}
+		\item Durante el desarrollo se han tenido que descartar propiedades tales como la clasificación detallada de la morfología de las galaxias, la complejidad es superior a la estimada incialmente.
+		\item Las peculiaridades de la imagen astronómica hacen difícil estimar ciertas características.
+	\end{itemize}
 	\subsection{Trabajo futuro}
 	El trabajo, aun siendo plenamente funcional presenta aspectos abiertos a mejoras.
 	\begin{itemize} 
 	\item Los ajustes de histograma no funcionan correctamente en todos los casos, sería necesario aumentar el pre-análisis de los datos crudos para detectar cual sería el algoritmo más apropiado.
-	\item Los ajustes heurísticos requieren afinamiento, no se descarta tomar nuevas estrategias.
-	\item Optimizar, el codigo puede ser mucho más óptimo. Un claro ejemplo es la detección de estrellas y galaxias que se pueden unificar en una única función, o la gestión de las imágenes internas, en algunos casos se duplican innecesariamente imágenes (thumbnails).
+	\item Los ajustes heurísticos requieren afinamiento, no se descarta tomar nuevas estrategias, por ejemplo en la obtención de los contornos de los candidatos a galaxias establecer una relación entre el área y el perímetro para de este modo detectar estructuras que presenten crestas o pliegues (ver en figura \ref{fig:MembraneNebulae}, página \pageref{fig:MembraneNebulae})
+		\begin{figure}[!htb]
+			\centering
+			\includegraphics[width=0.9\textwidth]{images/nebulaMembrana2.jpg}
+			\caption{\label{fig:MembraneNebulae}El comportamiento de los contornos presenta excesivos pliegues en la imagen de la derecha (tono azul) en comparación con el comportamiento de la imagen de la izquierda (tono violeta).El contorno de la derecha es un claro ejemplo de contorno erróneo.}
+		\end{figure}
+	\item Optimizar, el codigo puede ser mucho más óptimo. Un claro ejemplo es la detección de estrellas y galaxias que se pueden unificar en una única función, o la gestión de las imágenes internas, en algunos (thumbnails) casos se duplican innecesariamente imágenes.
 	\end{itemize} 
 	
 	%Agradecimientos#######################################################

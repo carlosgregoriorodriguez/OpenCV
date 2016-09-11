@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9) (preloaded format=pdflatex 2016.8.29)  10 SEP 2016 13:38
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9) (preloaded format=pdflatex 2016.8.29)  11 SEP 2016 20:04
 entering extended mode
 **./tfgVRG.tex
 (tfgVRG.tex
@@ -612,225 +612,270 @@ Underfull \hbox (badness 10000) in paragraph at lines 104--108
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 112--116
+Underfull \hbox (badness 10000) in paragraph at lines 113--117
 
  []
 
-LaTeX Info: Redefining \. on input line 117.
-LaTeX Info: Redefining \% on input line 117.
-[1] [2] [3]
-<images/ccd_and_cmos_sensors_210w.png, id=26, 421.575pt x 161.60374pt>
+LaTeX Info: Redefining \. on input line 118.
+LaTeX Info: Redefining \% on input line 118.
+(tfgVRG.toc
+LaTeX Info: Redefining \. on input line 1.
+LaTeX Info: Redefining \% on input line 1.
+LaTeX Info: Redefining \. on input line 3.
+LaTeX Info: Redefining \% on input line 3.
+ [1] [2])
+\tf@toc=\write4
+\openout4 = `tfgVRG.toc'.
+
+ [3] [4] [5]
+<images/ccd_and_cmos_sensors_210w.png, id=32, 421.575pt x 161.60374pt>
 File: images/ccd_and_cmos_sensors_210w.png Graphic file (type png)
 
 <use images/ccd_and_cmos_sensors_210w.png>
 Package pdftex.def Info: images/ccd_and_cmos_sensors_210w.png used on input lin
-e 161.
+e 165.
 (pdftex.def)             Requested size: 195.0pt x 74.75041pt.
 
-<images/irfiltwheel_Hubble.jpg, id=27, 496.85625pt x 393.47pt>
+<images/irfiltwheel_Hubble.jpg, id=33, 496.85625pt x 393.47pt>
 File: images/irfiltwheel_Hubble.jpg Graphic file (type jpg)
 
 <use images/irfiltwheel_Hubble.jpg>
-Package pdftex.def Info: images/irfiltwheel_Hubble.jpg used on input line 170.
+Package pdftex.def Info: images/irfiltwheel_Hubble.jpg used on input line 174.
 (pdftex.def)             Requested size: 97.5pt x 77.20964pt.
 
-<images/Chandra-Compo-Images.jpg, id=28, 1541.76pt x 552.0625pt>
+<images/Chandra-Compo-Images.jpg, id=34, 1541.76pt x 552.0625pt>
 File: images/Chandra-Compo-Images.jpg Graphic file (type jpg)
 
 <use images/Chandra-Compo-Images.jpg>
-Package pdftex.def Info: images/Chandra-Compo-Images.jpg used on input line 175
+Package pdftex.def Info: images/Chandra-Compo-Images.jpg used on input line 179
 .
 (pdftex.def)             Requested size: 195.0pt x 69.81631pt.
 
-<images/Chandra-Composed-Images.jpg, id=29, 514.92375pt x 516.93124pt>
+<images/Chandra-Composed-Images.jpg, id=35, 514.92375pt x 516.93124pt>
 File: images/Chandra-Composed-Images.jpg Graphic file (type jpg)
 
 <use images/Chandra-Composed-Images.jpg>
 Package pdftex.def Info: images/Chandra-Composed-Images.jpg used on input line 
-180.
+184.
 (pdftex.def)             Requested size: 97.5pt x 97.87878pt.
- [4 <./images/ccd_and_cmos_sensors_210w.png (PNG copy)>] [5 <./images/irfiltwhe
+ [6 <./images/ccd_and_cmos_sensors_210w.png (PNG copy)>] [7 <./images/irfiltwhe
 el_Hubble.jpg> <./images/Chandra-Compo-Images.jpg> <./images/Chandra-Composed-I
 mages.jpg>]
-<images/amateur_transit_detection_Schmidt_Cassegrain_765_510pixCCD.jpg, id=36, 
+<images/amateur_transit_detection_Schmidt_Cassegrain_765_510pixCCD.jpg, id=43, 
 373.58928pt x 279.75484pt>
 File: images/amateur_transit_detection_Schmidt_Cassegrain_765_510pixCCD.jpg Gra
 phic file (type jpg)
 
 <use images/amateur_transit_detection_Schmidt_Cassegrain_765_510pixCCD.jpg>
 Package pdftex.def Info: images/amateur_transit_detection_Schmidt_Cassegrain_76
-5_510pixCCD.jpg used on input line 195.
+5_510pixCCD.jpg used on input line 199.
 (pdftex.def)             Requested size: 253.49762pt x 189.82951pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[6] [7 <./images/amateur_transit_detection_Schmidt_Cassegrain_765_510pixCCD.jpg
+[8] [9 <./images/amateur_transit_detection_Schmidt_Cassegrain_765_510pixCCD.jpg
 >]
-LaTeX Font Info:    Try loading font information for U+euf on input line 220.
+LaTeX Font Info:    Try loading font information for U+euf on input line 224.
  ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\ueuf.fd"
 File: ueuf.fd 2013/01/14 v3.01 Euler Fraktur
 )
-<images/PSF-explicada.jpg, id=45, 401.5pt x 228.855pt>
+<images/PSF-explicada.jpg, id=51, 401.5pt x 228.855pt>
 File: images/PSF-explicada.jpg Graphic file (type jpg)
 
 <use images/PSF-explicada.jpg>
-Package pdftex.def Info: images/PSF-explicada.jpg used on input line 250.
+Package pdftex.def Info: images/PSF-explicada.jpg used on input line 254.
 (pdftex.def)             Requested size: 312.00119pt x 177.85316pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 254--261
+Underfull \hbox (badness 10000) in paragraph at lines 258--265
 
  []
 
-[8] <images/twoGalaxyHalo.jpg, id=53, 256.96pt x 230.8625pt>
+[10] <images/twoGalaxyHalo.jpg, id=59, 256.96pt x 230.8625pt>
 File: images/twoGalaxyHalo.jpg Graphic file (type jpg)
 
 <use images/twoGalaxyHalo.jpg>
-Package pdftex.def Info: images/twoGalaxyHalo.jpg used on input line 270.
+Package pdftex.def Info: images/twoGalaxyHalo.jpg used on input line 274.
 (pdftex.def)             Requested size: 155.99762pt x 140.1566pt.
- <images/star.jpg, id=54, 321.2pt x 285.065pt>
+ <images/star.jpg, id=60, 321.2pt x 285.065pt>
 File: images/star.jpg Graphic file (type jpg)
 
 <use images/star.jpg>
-Package pdftex.def Info: images/star.jpg used on input line 280.
+Package pdftex.def Info: images/star.jpg used on input line 284.
 (pdftex.def)             Requested size: 155.99762pt x 138.45209pt.
 
-<images/EsquemaHubble.jpg, id=55, 376.40625pt x 311.1625pt>
+<images/EsquemaHubble.jpg, id=61, 376.40625pt x 311.1625pt>
 File: images/EsquemaHubble.jpg Graphic file (type jpg)
 
 <use images/EsquemaHubble.jpg>
-Package pdftex.def Info: images/EsquemaHubble.jpg used on input line 290.
+Package pdftex.def Info: images/EsquemaHubble.jpg used on input line 294.
 (pdftex.def)             Requested size: 272.99881pt x 225.69386pt.
- [9 <./images/PSF-explicada.jpg>] [10 <./images/twoGalaxyHalo.jpg> <./images/st
-ar.jpg>]
-Underfull \hbox (badness 10000) in paragraph at lines 310--312
+ [11 <./images/PSF-explicada.jpg>] [12 <./images/twoGalaxyHalo.jpg> <./images/s
+tar.jpg>]
+Underfull \hbox (badness 10000) in paragraph at lines 314--316
 
  []
 
-[11 <./images/EsquemaHubble.jpg>]
-Underfull \hbox (badness 10000) in paragraph at lines 329--330
+[13 <./images/EsquemaHubble.jpg>]
+Underfull \hbox (badness 10000) in paragraph at lines 333--334
 
  []
 
-[12] [13]
-Underfull \hbox (badness 10000) in paragraph at lines 355--358
+[14] [15]
+Underfull \hbox (badness 10000) in paragraph at lines 359--362
 
  []
 
-[14]
-Underfull \hbox (badness 10000) in paragraph at lines 367--370
+[16]
+Underfull \hbox (badness 10000) in paragraph at lines 371--374
 
  []
 
-<images/HDREQ/chandraLineal.PNG, id=75, 466.74374pt x 410.2828pt>
+<images/HDREQ/chandraLineal.PNG, id=81, 466.74374pt x 410.2828pt>
 File: images/HDREQ/chandraLineal.PNG Graphic file (type png)
 
 <use images/HDREQ/chandraLineal.PNG>
-Package pdftex.def Info: images/HDREQ/chandraLineal.PNG used on input line 374.
+Package pdftex.def Info: images/HDREQ/chandraLineal.PNG used on input line 378.
 
 (pdftex.def)             Requested size: 195.0pt x 171.40984pt.
 
-<images/HDREQ/chandraSqrt.PNG, id=76, 466.74374pt x 410.2828pt>
+<images/HDREQ/chandraSqrt.PNG, id=82, 466.74374pt x 410.2828pt>
 File: images/HDREQ/chandraSqrt.PNG Graphic file (type png)
 
 <use images/HDREQ/chandraSqrt.PNG>
-Package pdftex.def Info: images/HDREQ/chandraSqrt.PNG used on input line 384.
+Package pdftex.def Info: images/HDREQ/chandraSqrt.PNG used on input line 388.
 (pdftex.def)             Requested size: 195.0pt x 171.40984pt.
 
-<images/HDREQ/chandraLog.PNG, id=77, 468.24937pt x 411.78844pt>
+<images/HDREQ/chandraLog.PNG, id=83, 468.24937pt x 411.78844pt>
 File: images/HDREQ/chandraLog.PNG Graphic file (type png)
 
 <use images/HDREQ/chandraLog.PNG>
-Package pdftex.def Info: images/HDREQ/chandraLog.PNG used on input line 395.
+Package pdftex.def Info: images/HDREQ/chandraLog.PNG used on input line 399.
 (pdftex.def)             Requested size: 195.0pt x 171.48593pt.
- [15 <./images/HDREQ/chandraLineal.PNG>]
-<images/HDREQ/chandraPow1_5.PNG, id=85, 465.99094pt x 411.03563pt>
+
+<images/HDREQ/chandraPow1_5.PNG, id=84, 465.99094pt x 411.03563pt>
 File: images/HDREQ/chandraPow1_5.PNG Graphic file (type png)
 
 <use images/HDREQ/chandraPow1_5.PNG>
-Package pdftex.def Info: images/HDREQ/chandraPow1_5.PNG used on input line 408.
+Package pdftex.def Info: images/HDREQ/chandraPow1_5.PNG used on input line 412.
 
 (pdftex.def)             Requested size: 136.50238pt x 120.40147pt.
-
-<images/HDREQ/chandraaSinH_0_5.jpg, id=86, 623.32875pt x 546.04pt>
+ [17 <./images/HDREQ/chandraLineal.PNG>]
+<images/HDREQ/chandraaSinH_0_5.jpg, id=92, 623.32875pt x 546.04pt>
 File: images/HDREQ/chandraaSinH_0_5.jpg Graphic file (type jpg)
 
 <use images/HDREQ/chandraaSinH_0_5.jpg>
 Package pdftex.def Info: images/HDREQ/chandraaSinH_0_5.jpg used on input line 4
-20.
+26.
 (pdftex.def)             Requested size: 195.0pt x 170.82037pt.
 
-<images/HDREQ/chandraaSinH_5.PNG, id=87, 467.49657pt x 411.03563pt>
+<images/HDREQ/chandraaSinH_5.PNG, id=93, 467.49657pt x 411.03563pt>
 File: images/HDREQ/chandraaSinH_5.PNG Graphic file (type png)
 
 <use images/HDREQ/chandraaSinH_5.PNG>
-Package pdftex.def Info: images/HDREQ/chandraaSinH_5.PNG used on input line 425
+Package pdftex.def Info: images/HDREQ/chandraaSinH_5.PNG used on input line 431
 .
 (pdftex.def)             Requested size: 195.0pt x 171.4484pt.
- [16 <./images/HDREQ/chandraSqrt.PNG> <./images/HDREQ/chandraLog.PNG>]
-<images/HDREQ/chandraaHistEq.PNG, id=93, 465.99094pt x 409.53pt>
+ [18 <./images/HDREQ/chandraSqrt.PNG> <./images/HDREQ/chandraLog.PNG>]
+<images/HDREQ/chandraaHistEq.PNG, id=100, 465.99094pt x 409.53pt>
 File: images/HDREQ/chandraaHistEq.PNG Graphic file (type png)
 
 <use images/HDREQ/chandraaHistEq.PNG>
-Package pdftex.def Info: images/HDREQ/chandraaHistEq.PNG used on input line 433
+Package pdftex.def Info: images/HDREQ/chandraaHistEq.PNG used on input line 439
 .
 (pdftex.def)             Requested size: 155.99762pt x 137.09497pt.
- [17 <./images/HDREQ/chandraPow1_5.PNG> <./images/HDREQ/chandraaSinH_0_5.jpg>] 
-[18 <./images/HDREQ/chandraaSinH_5.PNG> <./images/HDREQ/chandraaHistEq.PNG>]
-Underfull \hbox (badness 10000) in paragraph at lines 452--463
+ [19 <./images/HDREQ/chandraPow1_5.PNG> <./images/HDREQ/chandraaSinH_0_5.jpg>] 
+[20 <./images/HDREQ/chandraaSinH_5.PNG> <./images/HDREQ/chandraaHistEq.PNG>]
+Underfull \hbox (badness 10000) in paragraph at lines 458--469
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 452--463
+Underfull \hbox (badness 10000) in paragraph at lines 458--469
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 452--463
+Underfull \hbox (badness 10000) in paragraph at lines 458--469
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 452--463
+Underfull \hbox (badness 10000) in paragraph at lines 458--469
 
  []
 
-<images/tfg2016pipeline1.jpg, id=105, 1299.85625pt x 625.33624pt>
+<images/tfg2016pipeline1.jpg, id=111, 1299.85625pt x 625.33624pt>
 File: images/tfg2016pipeline1.jpg Graphic file (type jpg)
 
 <use images/tfg2016pipeline1.jpg>
-Package pdftex.def Info: images/tfg2016pipeline1.jpg used on input line 470.
+Package pdftex.def Info: images/tfg2016pipeline1.jpg used on input line 476.
 (pdftex.def)             Requested size: 390.0pt x 187.6214pt.
-
-<images/tfg2016algoritmos_de_catalogaci_n.jpg, id=106, 1279.78125pt x 1164.35pt
+ [21]
+<images/tfg2016algoritmos_de_catalogaci_n.jpg, id=117, 1279.78125pt x 1164.35pt
 >
 File: images/tfg2016algoritmos_de_catalogaci_n.jpg Graphic file (type jpg)
  <use images/tfg2016algoritmos_de_catalogaci_n.jpg>
 Package pdftex.def Info: images/tfg2016algoritmos_de_catalogaci_n.jpg used on i
-nput line 479.
+nput line 485.
 (pdftex.def)             Requested size: 390.0pt x 354.81532pt.
- [19]
-<images/GUI.jpg, id=112, 1006.76125pt x 783.92876pt>
+
+<images/GUI.jpg, id=118, 1006.76125pt x 783.92876pt>
 File: images/GUI.jpg Graphic file (type jpg)
  <use images/GUI.jpg>
-Package pdftex.def Info: images/GUI.jpg used on input line 492.
+Package pdftex.def Info: images/GUI.jpg used on input line 498.
 (pdftex.def)             Requested size: 390.0pt x 303.67355pt.
 
-[20 <./images/tfg2016pipeline1.jpg>] [21 <./images/tfg2016algoritmos_de_catalog
-aci_n.jpg>] [22 <./images/GUI.jpg>] [23
+[22 <./images/tfg2016pipeline1.jpg>] [23 <./images/tfg2016algoritmos_de_catalog
+aci_n.jpg>] [24 <./images/GUI.jpg>]
+Underfull \hbox (badness 10000) in paragraph at lines 510--512
 
-] (tfgVRG.aux
+ []
+
+<images/nebulaMembrana2.jpg, id=129, 1003.75pt x 473.77pt>
+File: images/nebulaMembrana2.jpg Graphic file (type jpg)
+
+<use images/nebulaMembrana2.jpg>
+Package pdftex.def Info: images/nebulaMembrana2.jpg used on input line 523.
+(pdftex.def)             Requested size: 350.99762pt x 165.67017pt.
+ [25
+
+ <./images/nebulaMembrana2.jpg>]
+Underfull \hbox (badness 10000) in paragraph at lines 533--540
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 533--540
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 533--540
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 533--540
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 533--540
+
+ []
+
+[26] [27] (tfgVRG.aux
 LaTeX Info: Redefining \. on input line 6.
 LaTeX Info: Redefining \% on input line 6.
 LaTeX Info: Redefining \. on input line 14.
 LaTeX Info: Redefining \% on input line 14.
 ) ) 
 Here is how much of TeX's memory you used:
- 14323 strings out of 493335
- 276380 string characters out of 3136683
- 323148 words of memory out of 3000000
- 17524 multiletter control sequences out of 15000+200000
+ 14333 strings out of 493335
+ 276575 string characters out of 3136683
+ 324159 words of memory out of 3000000
+ 17530 multiletter control sequences out of 15000+200000
  13856 words of font info for 52 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  62i,7n,56p,673b,590s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -851,9 +896,9 @@ TeX 2.9/fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Program Files (x86)/MiKTeX
  2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files (x86)/MiKTeX 2.
 9/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Program Files (x86)/MiKTeX 2.9/
 fonts/type1/public/amsfonts/euler/eufm10.pfb>
-Output written on tfgVRG.pdf (24 pages, 2603680 bytes).
+Output written on tfgVRG.pdf (28 pages, 2931940 bytes).
 PDF statistics:
- 178 PDF objects out of 1000 (max. 8388607)
+ 192 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 113 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 118 words of extra memory for PDF output out of 10000 (max. 10000000)
 
