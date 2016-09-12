@@ -454,7 +454,7 @@
 				\includegraphics[width=0.9\textwidth]{images/removeBadPointsComparation.PNG}
 				\caption{\label{fig:removePointsConparation}Resultado antes y despues de aplicar la detección automática de puntos erróneos.}
 			\end{figure}
-		Se descartan aquellos candidatos cuyo centro de coordenadas ha caído sobre la zona marcada como espacio vacío, conservándose el resto.\\ Ver figura \ref{fig:removePointsConparation}
+		Se descartan aquellos candidatos cuyo centro de coordenadas ha caído sobre la zona marcada como espacio vacío, conservándose el resto.\\ Ver figuras  \ref{fig:removePointsConparation} y \ref{fig:removePointsDiference}
 			\begin{figure}[!htb]
 				\centering
 				\includegraphics[width=0.45\textwidth]{images/removeBadPointsDiference.PNG}
@@ -465,7 +465,9 @@
 
 	\subsubsection{Eliminación de ruido}
 	Mediante heurística y en base al resultado del algoritmo de búsqueda de contornos, se eliminan áreas carentes de interés y producto del ruido.
-	\\El algoritmo realiza cálculos incrementales del número de contornos, estimando el ruido por el crecimiento a cada iteración. Si de una iteración a la siguiente el número de contornos crece en un factor de más del doble, se estima que se ha llegado a un umbral correcto. 
+	\\El algoritmo realiza cálculos incrementales del número de contornos, estimando el ruido por el crecimiento a cada iteración. Si de una iteración a la siguiente el número de contornos crece en un factor de más del doble, se estima que se ha llegado a un umbral correcto.
+	\\
+	La eliminación del ruido en nuestro caso es una tarea compleja, ya que la diferencia entre una región de ruido y una región que contiene una estrella es compleja hasta para un ojo entrenado.
 	\subsubsection{Eliminación de PSF}
     Aplicando operaciones morfológicas sobre la imágen, concretamente una dilatación seguida de una erosión, se eliminan los puntos detectados erróneamente como válidos.
     \\
@@ -518,12 +520,16 @@
 	%Conclusiones#########################################################
 	\section{Conclusiones}
 	[Por hacer al finalizar el desarrollo]
+
 	\subsection{Cumplimiento de objetivos}
 	[Completar]
-	Los objetivos iniciales no se han alcanzado al completo, los motivos son:\\
+	Se ha llegado a obtener un software funcional, con sus deficiencias pero que con una mayor dedicación en tiempo podría alcanzar los objetivos iniciales y presentar mejoras de la propuesta inicial por lo aprendido durante el desarrollo.\\
+	Cada una de las facetas propuestas inicialmente cumple su cometido.\\
+	Los motivos por los que no se han alcanzado los objetivos iniciales son:\\
 	\begin{itemize}
-		\item Durante el desarrollo se han tenido que descartar propiedades tales como la clasificación detallada de la morfología de las galaxias, la complejidad es superior a la estimada incialmente.
-		\item Las peculiaridades de la imagen astronómica hacen difícil estimar ciertas características.
+		\item Durante el desarrollo se han tenido que descartar propiedades tales como la clasificación detallada de la morfología de las galaxias, la complejidad es superior a la estimada incialmente, y para obtener un prototipo con las máximas funcionalidades, se han pospuesto.
+		\item Las peculiaridades de la imagen astronómica hacen difícil estimar ciertas características. Un ejemplo claro es el siguiente:\\
+			Las imágenes fuente pueden incluir, en el caso de pertenecer a alguna misión astronómica, zonas sobre-expuestas, esto es debido a que el aparato de captación fue configurado para obtener datos de un punto poco luminoso, haciendo que el resultado sea una imagen que contiene sobre-exposición en zonas más luminosa. Este es uno de los muchos inconvenientes con los que el software se encuentra a la hora de calibrar la imagen y obtener las lineas de intensidad sobre, datos con los que se realiza todo el proceso.
 	\end{itemize}
 	\subsection{Trabajo futuro}
 	El trabajo, aun siendo plenamente funcional presenta aspectos abiertos a mejoras.
@@ -543,12 +549,12 @@
 	\section{Agradecimientos}
 	
 	Quiero agradecer a Carlos Gregorio Rodríguez la oportunidad de realizar este trabajo fin de grado, agradecer de forma especial la ayuda y guía que me ha brindado en todo momento así como el apoyo en la búsqueda de soluciones y la adquisición de nuevos conocimientos.\\ 
-	\\ A Miguel Angel Valero Espada por darme un enfoque distinto al campo de la programación.\\
+	\\ A Miguel Angel Valero Espada por darme un enfoque distinto de lo que es el campo de la programación.\\
 	\\ Ana Inés Gomez de Castro por sus enseñanzas en Astronomía.\\
-	\\ Especialmente a Rocío por animarme en todo momento y a mi familia por su apoyo.\\
+	\\ Muy especialmente a Rocío por animarme en todo momento y a mi familia por su apoyo.\\
 	\\ Sin estos apoyos no hubiese sido posible completar este trabajo.
 	\\
-	\\Este trabajo está dedicado especialmente a mi Yaya Mercedes y a mi Yeyo Modesto, por todos los valores que me supieron dar.
+	\\Éste trabajo está dedicado especialmente a mi Yaya Mercedes y a mi Yeyo Modesto, por todos los valores que me supieron transmitir.
 	\newpage
 %Referencias bibiográficas#############################################
 	\section{Referencias bibiográficas}
