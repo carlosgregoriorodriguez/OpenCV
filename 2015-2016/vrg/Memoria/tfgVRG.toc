@@ -27,15 +27,15 @@
 \contentsline {subsection}{\numberline {4.3}Bibliotecas propias}{16}
 \contentsline {subsubsection}{\numberline {4.3.1}Ajuste de rango din\IeC {\'a}mico}{17}
 \contentsline {subsubsection}{\numberline {4.3.2}B\IeC {\'u}squeda de puntos de inter\IeC {\'e}s}{20}
-\contentsline {subsubsection}{\numberline {4.3.3}Eliminaci\IeC {\'o}n de ruido}{21}
-\contentsline {subsubsection}{\numberline {4.3.4}Eliminaci\IeC {\'o}n de PSF}{22}
-\contentsline {subsubsection}{\numberline {4.3.5}Determinaci\IeC {\'o}n de forma en las galaxias}{23}
-\contentsline {subsection}{\numberline {4.4}Linea de procesado de im\IeC {\'a}genes}{23}
-\contentsline {subsubsection}{\numberline {4.4.1}Pre-procesado base}{23}
-\contentsline {subsubsection}{\numberline {4.4.2}Algoritmo de clasificacci\IeC {\'o}n}{23}
-\contentsline {subsection}{\numberline {4.5}Interfaz gr\IeC {\'a}fica}{23}
-\contentsline {section}{\numberline {5}Conclusiones}{25}
-\contentsline {subsection}{\numberline {5.1}Cumplimiento de objetivos}{25}
-\contentsline {subsection}{\numberline {5.2}Trabajo futuro}{26}
-\contentsline {section}{\numberline {6}Agradecimientos}{27}
-\contentsline {section}{\numberline {7}Referencias bibiogr\IeC {\'a}ficas}{28}
+\contentsline {subsubsection}{\numberline {4.3.3}Eliminaci\IeC {\'o}n de ruido}{22}
+\contentsline {subsubsection}{\numberline {4.3.4}Eliminaci\IeC {\'o}n de PSF}{24}
+\contentsline {subsubsection}{\numberline {4.3.5}Determinaci\IeC {\'o}n de forma en las galaxias}{24}
+\contentsline {subsection}{\numberline {4.4}Linea de procesado de im\IeC {\'a}genes}{24}
+\contentsline {subsubsection}{\numberline {4.4.1}Pre-procesado base}{24}
+\contentsline {subsubsection}{\numberline {4.4.2}Algoritmo de clasificacci\IeC {\'o}n}{24}
+\contentsline {subsection}{\numberline {4.5}Interfaz gr\IeC {\'a}fica}{25}
+\contentsline {section}{\numberline {5}Conclusiones}{28}
+\contentsline {subsection}{\numberline {5.1}Cumplimiento de objetivos}{28}
+\contentsline {subsection}{\numberline {5.2}Trabajo futuro}{28}
+\contentsline {section}{\numberline {6}Agradecimientos}{29}
+\contentsline {section}{\numberline {7}Referencias bibiogr\IeC {\'a}ficas}{30}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9) (preloaded format=pdflatex 2016.8.29)  12 SEP 2016 17:49
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9) (preloaded format=pdflatex 2016.8.29)  12 SEP 2016 19:27
 entering extended mode
 **./tfgVRG.tex
 (tfgVRG.tex
@@ -784,14 +784,18 @@ File: images/HDREQ/chandraaHistEq.PNG Graphic file (type png)
 Package pdftex.def Info: images/HDREQ/chandraaHistEq.PNG used on input line 439
 .
 (pdftex.def)             Requested size: 155.99762pt x 137.09497pt.
- [19 <./images/HDREQ/chandraPow1_5.PNG> <./images/HDREQ/chandraaSinH_0_5.jpg>] 
+ [19 <./images/HDREQ/chandraPow1_5.PNG> <./images/HDREQ/chandraaSinH_0_5.jpg>]
+Underfull \hbox (badness 10000) in paragraph at lines 445--449
+
+ []
+
 [20 <./images/HDREQ/chandraaSinH_5.PNG> <./images/HDREQ/chandraaHistEq.PNG>]
 <images/removeBadPointsComparation.PNG, id=111, 1342.01375pt x 670.505pt>
 File: images/removeBadPointsComparation.PNG Graphic file (type png)
 
 <use images/removeBadPointsComparation.PNG>
 Package pdftex.def Info: images/removeBadPointsComparation.PNG used on input li
-ne 454.
+ne 456.
 (pdftex.def)             Requested size: 350.99762pt x 175.36052pt.
 
 <images/removeBadPointsDiference.PNG, id=112, 667.49374pt x 670.505pt>
@@ -799,98 +803,127 @@ File: images/removeBadPointsDiference.PNG Graphic file (type png)
 
 <use images/removeBadPointsDiference.PNG>
 Package pdftex.def Info: images/removeBadPointsDiference.PNG used on input line
- 460.
+ 462.
 (pdftex.def)             Requested size: 175.49881pt x 176.29155pt.
  [21 <./images/removeBadPointsComparation.PNG>]
-Underfull \hbox (badness 10000) in paragraph at lines 472--483
+<images/galaxiCenterFromImage_01_ERROR.png, id=117, 602.25pt x 375.65344pt>
+File: images/galaxiCenterFromImage_01_ERROR.png Graphic file (type png)
+
+<use images/galaxiCenterFromImage_01_ERROR.png>
+Package pdftex.def Info: images/galaxiCenterFromImage_01_ERROR.png used on inpu
+t line 481.
+(pdftex.def)             Requested size: 195.0pt x 121.63309pt.
+
+<images/galaxiCenterFromImage_02_Blur.png, id=118, 602.25pt x 376.40625pt>
+File: images/galaxiCenterFromImage_02_Blur.png Graphic file (type png)
+
+<use images/galaxiCenterFromImage_02_Blur.png>
+Package pdftex.def Info: images/galaxiCenterFromImage_02_Blur.png used on input
+ line 486.
+(pdftex.def)             Requested size: 195.0pt x 121.87683pt.
+
+<images/galaxiCenterFromImage_03_Correct.png, id=119, 601.4972pt x 377.15906pt>
+File: images/galaxiCenterFromImage_03_Correct.png Graphic file (type png)
+<use images/galaxiCenterFromImage_03_Correct.png>
+Package pdftex.def Info: images/galaxiCenterFromImage_03_Correct.png used on in
+put line 491.
+(pdftex.def)             Requested size: 195.0pt x 122.27022pt.
+ [22 <./images/removeBadPointsDiference.PNG>]
+
+LaTeX Warning: Text page 23 contains only floats.
+
+[23 <./images/galaxiCenterFromImage_01_ERROR.png> <./images/galaxiCenterFromIma
+ge_02_Blur.png> <./images/galaxiCenterFromImage_03_Correct.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 500--511
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 472--483
+Underfull \hbox (badness 10000) in paragraph at lines 500--511
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 472--483
+Underfull \hbox (badness 10000) in paragraph at lines 500--511
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 472--483
+Underfull \hbox (badness 10000) in paragraph at lines 500--511
 
  []
 
-<images/tfg2016pipeline1.jpg, id=117, 1299.85625pt x 625.33624pt>
+<images/tfg2016pipeline1.jpg, id=130, 1299.85625pt x 625.33624pt>
 File: images/tfg2016pipeline1.jpg Graphic file (type jpg)
 
 <use images/tfg2016pipeline1.jpg>
-Package pdftex.def Info: images/tfg2016pipeline1.jpg used on input line 490.
+Package pdftex.def Info: images/tfg2016pipeline1.jpg used on input line 518.
 (pdftex.def)             Requested size: 390.0pt x 187.6214pt.
- [22 <./images/removeBadPointsDiference.PNG>]
-<images/tfg2016algoritmos_de_catalogaci_n.jpg, id=124, 1279.78125pt x 1164.35pt
+
+<images/tfg2016algoritmos_de_catalogaci_n.jpg, id=131, 1279.78125pt x 1164.35pt
 >
 File: images/tfg2016algoritmos_de_catalogaci_n.jpg Graphic file (type jpg)
  <use images/tfg2016algoritmos_de_catalogaci_n.jpg>
 Package pdftex.def Info: images/tfg2016algoritmos_de_catalogaci_n.jpg used on i
-nput line 499.
+nput line 527.
 (pdftex.def)             Requested size: 390.0pt x 354.81532pt.
 
-<images/GUI.jpg, id=125, 1006.76125pt x 783.92876pt>
+<images/GUI.jpg, id=132, 1006.76125pt x 783.92876pt>
 File: images/GUI.jpg Graphic file (type jpg)
  <use images/GUI.jpg>
-Package pdftex.def Info: images/GUI.jpg used on input line 512.
+Package pdftex.def Info: images/GUI.jpg used on input line 540.
 (pdftex.def)             Requested size: 390.0pt x 303.67355pt.
 
-[23 <./images/tfg2016pipeline1.jpg>] [24 <./images/tfg2016algoritmos_de_catalog
-aci_n.jpg>]
-Underfull \hbox (badness 10000) in paragraph at lines 525--529
+[24] [25 <./images/tfg2016pipeline1.jpg>] [26 <./images/tfg2016algoritmos_de_ca
+talogaci_n.jpg>] [27 <./images/GUI.jpg>]
+Underfull \hbox (badness 10000) in paragraph at lines 553--557
 
  []
 
-[25 <./images/GUI.jpg>]
-<images/nebulaMembrana2.jpg, id=136, 1003.75pt x 473.77pt>
+<images/nebulaMembrana2.jpg, id=148, 1003.75pt x 473.77pt>
 File: images/nebulaMembrana2.jpg Graphic file (type jpg)
 
 <use images/nebulaMembrana2.jpg>
-Package pdftex.def Info: images/nebulaMembrana2.jpg used on input line 541.
+Package pdftex.def Info: images/nebulaMembrana2.jpg used on input line 569.
 (pdftex.def)             Requested size: 350.99762pt x 165.67017pt.
- [26 <./images/nebulaMembrana2.jpg>]
-Underfull \hbox (badness 10000) in paragraph at lines 551--558
+ [28
+
+]
+Underfull \hbox (badness 10000) in paragraph at lines 579--586
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 551--558
+Underfull \hbox (badness 10000) in paragraph at lines 579--586
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 551--558
+Underfull \hbox (badness 10000) in paragraph at lines 579--586
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 551--558
+Underfull \hbox (badness 10000) in paragraph at lines 579--586
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 551--558
+Underfull \hbox (badness 10000) in paragraph at lines 579--586
 
  []
 
-[27] [28] (tfgVRG.aux
+[29 <./images/nebulaMembrana2.jpg>] [30] (tfgVRG.aux
 LaTeX Info: Redefining \. on input line 6.
 LaTeX Info: Redefining \% on input line 6.
 LaTeX Info: Redefining \. on input line 14.
 LaTeX Info: Redefining \% on input line 14.
 ) ) 
 Here is how much of TeX's memory you used:
- 14346 strings out of 493335
- 277023 string characters out of 3136683
- 324179 words of memory out of 3000000
- 17541 multiletter control sequences out of 15000+200000
+ 14364 strings out of 493335
+ 277788 string characters out of 3136683
+ 324209 words of memory out of 3000000
+ 17556 multiletter control sequences out of 15000+200000
  13856 words of font info for 52 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  62i,7n,56p,673b,590s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -911,9 +944,9 @@ TeX 2.9/fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Program Files (x86)/MiKTeX
  2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files (x86)/MiKTeX 2.
 9/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Program Files (x86)/MiKTeX 2.9/
 fonts/type1/public/amsfonts/euler/eufm10.pfb>
-Output written on tfgVRG.pdf (29 pages, 3314092 bytes).
+Output written on tfgVRG.pdf (31 pages, 3996304 bytes).
 PDF statistics:
- 199 PDF objects out of 1000 (max. 8388607)
+ 212 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 128 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 143 words of extra memory for PDF output out of 10000 (max. 10000000)
 

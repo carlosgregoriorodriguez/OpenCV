@@ -199,7 +199,7 @@ class AstroImage:
 					
 		index = 0
 		#TODO: crear funcion en cvSpace que haga crop (http://stackoverflow.com/questions/28759253/how-to-crop-the-internal-area-of-a-contour)
-		#cambio crear un crop por pintar hacer una copia de la imagen, pintar en negro el exterior de la estructura y pasar esta imagen a la función spot.
+		#cambio crear un crop por pintar hacer una copia de la imagen, pintar en negro el exterior de la estructura y pasar esta imagen a la func. getGalaxyCenter.
 		# y calcule el maximo 'spot' (http://www.pyimagesearch.com/2014/09/29/finding-brightest-spot-image-using-python-opencv/)
 		for c in self.nContours:
 			cR = np.random.randint(0,255)
@@ -207,6 +207,11 @@ class AstroImage:
 			cG = np.random.randint(150,255)
 			color = (cR, cB, cG, 255)
 			cv2.drawContours(self.contourImage, self.nContours, index, color, 3)
+			#cut contour
+			tempIMG = self.imageCV
+			print "_______________________________________________________"
+			print "Centro de la galaxia: "+str(cvSpace.getGalaxyCenter(tempIMG))
+			print "_______________________________________________________"
 			index = index + 1
 
 		'''

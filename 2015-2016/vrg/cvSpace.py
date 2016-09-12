@@ -497,6 +497,12 @@ def getContours(imOrig, maxContours=10):
 	print "[cvSpace]: getContours ends"
 	return goodContours
 	
+def getGalaxyCenter(img, radius = 10):
+	blur = img.copy()
+	blur = cv2.blur(blur, (radius,radius), 5)
+	(minVal, maxVal, minLoc, maxLoc) = cv2.minMaxLoc(blur)
+	return maxLoc
+	
 if __name__ == "__main__":
 	'''
 	img = cv2.imread('tests/hubble-galaxy_1743872i.jpg',0)

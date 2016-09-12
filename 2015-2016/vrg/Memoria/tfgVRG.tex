@@ -442,27 +442,55 @@
 	\end{enumerate}
 
 	\subsubsection{Búsqueda de puntos de interés}
-	La función getObjectList presente en cvSpace.py hace uso de la técnica detección de blobs de openCV para localizar puntos de interés.\\
+	Se hace uso de las funciones getObjectList y getGalaxyCente.\\ \\
+	{\large getObjectList}: \\
+	La función getObjectList presente en cvSpace.py hace uso de la técnica detección de blobs de openCV para localizar puntos de interés, concretamente candidatos a estrellas.\\
 	La búsqueda mediante blobs se centra en la variación de la intensidad de cada pixel con su vecindad, el proceso, en detalle, realiza las siguientes operaciones:
 	\begin{enumerate}
 		\item Convierte la imagen a una imagen binaria.
 		\item Extrae las componentes conectadas en base a un cálculo de contornos.
 		\item En caso de blobs muy cercanos entre si, los agrupa en un único blob, esta proceso nos es de especial interés para la agrupación de estrellas que conforman una galaxia.
 		\item Se eliminan aquellos blobs que son detectados de forma errónea, para ello se hace uso de la imagen de espacio vacío generada mediante el método {\large generateDarkImage} de la clase AstroImage.\\
-			\begin{figure}[!htb]
-				\centering
-				\includegraphics[width=0.9\textwidth]{images/removeBadPointsComparation.PNG}
-				\caption{\label{fig:removePointsConparation}Resultado antes y despues de aplicar la detección automática de puntos erróneos.}
-			\end{figure}
+		\begin{figure}[!htb]
+			\centering
+			\includegraphics[width=0.9\textwidth]{images/removeBadPointsComparation.PNG}
+			\caption{\label{fig:removePointsConparation}Resultado antes y despues de aplicar la detección automática de puntos erróneos.}
+		\end{figure}
 		Se descartan aquellos candidatos cuyo centro de coordenadas ha caído sobre la zona marcada como espacio vacío, conservándose el resto.\\ Ver figuras  \ref{fig:removePointsConparation} y \ref{fig:removePointsDiference}
-			\begin{figure}[!htb]
-				\centering
-				\includegraphics[width=0.45\textwidth]{images/removeBadPointsDiference.PNG}
-				\caption{\label{fig:removePointsDiference}Esta imagen muestra los puntos descartados y complementa a la figura \ref{fig:removePointsConparation}.}
-			\end{figure}		
+		\begin{figure}[!htb]
+			\centering
+			\includegraphics[width=0.45\textwidth]{images/removeBadPointsDiference.PNG}
+			\caption{\label{fig:removePointsDiference}Esta imagen muestra los puntos descartados y complementa a la figura \ref{fig:removePointsConparation}.}
+		\end{figure}		
 		\item Para cada grupo de blobs nos devuelve tanto su centro como su área.
 	\end{enumerate}
-
+	
+	{\large getGalaxyCenter}:	\\
+	La función {\scriptsize getGalaxyCenter} se encarga de determinar el centro de las candidatas a galáxias.\\
+	El proceso que realiza se resume en los siguientes pasos:
+	\begin{enumerate}
+		\item Aplicación de blur a la región de interés.
+		\item Búsqueda del máximo local en intensidad.
+	\end{enumerate}
+	
+	Es necesario realizar un blur o difuminado sobre la imagen como se aprecia en las imágenes \ref{fig:galaxiCenterFromImage_01_ERROR} \ref{fig:galaxiCenterFromImage_02_Blur} y \ref{fig:galaxiCenterFromImage_03_Correct}.
+	\\
+	En caso de no aplicar el suavizado a la imagen el pico de mayor intensidad no tiene porque estár situado en el centro de la galaxia, al aplicar el suavizado, se pondera en media el valor de cada pixel con su vecindad, con lo que es más probable que el centro el pico de intensidad de ajuste al centro de la galaxia. Esto es debido a que el centro de la galaxia acumula el mayor área lumínica.
+	\begin{figure}[!htb]
+		\centering
+		\includegraphics[width=0.5\textwidth]{images/galaxiCenterFromImage_01_ERROR.png}
+		\caption{\label{fig:galaxiCenterFromImage_01_ERROR}Obtención errónea del centro de la galaxia (marcado con una circunferencia) al aplicar la función {\scriptsize getGalaxyCenter} sobre la imagen sin procesar con un filtro de suavizado.}
+	\end{figure}
+	\begin{figure}[!htb]
+		\centering
+		\includegraphics[width=0.5\textwidth]{images/galaxiCenterFromImage_02_Blur.png}
+		\caption{\label{fig:galaxiCenterFromImage_02_Blur}La imagen original ha sufrido el proceso de suavizado.}
+	\end{figure}
+	\begin{figure}[!htb]
+		\centering
+		\includegraphics[width=0.5\textwidth]{images/galaxiCenterFromImage_03_Correct.png}
+		\caption{\label{fig:galaxiCenterFromImage_03_Correct}Obtención correcta del centro de la galaxia (marcado con una circunferencia) al aplicar la función {\scriptsize getGalaxyCenter} sobre la imagen procesada con un filtro de suavizado.}
+	\end{figure}
 	\subsubsection{Eliminación de ruido}
 	Mediante heurística y en base al resultado del algoritmo de búsqueda de contornos, se eliminan áreas carentes de interés y producto del ruido.
 	\\El algoritmo realiza cálculos incrementales del número de contornos, estimando el ruido por el crecimiento a cada iteración. Si de una iteración a la siguiente el número de contornos crece en un factor de más del doble, se estima que se ha llegado a un umbral correcto.
