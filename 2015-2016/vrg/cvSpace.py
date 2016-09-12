@@ -440,7 +440,7 @@ def getObjectList(img, darkImg, minThreshold = 10, maxThreshold=255, debug=False
 	#remove first element
 	lCandidatos = np.delete(lCandidatos, 0, axis = 0)
 	#remove elements which are marked as validPoints[i] = 0
-	#lCandidatos = np.delete(lCandidatos, np.where( validPoints == 0)[0] , axis = 0)
+	lCandidatos = np.delete(lCandidatos, np.where( validPoints == 0)[0] , axis = 0)
 	print "\n\n!!!!!!!!!!!!!!!!!!!!!"+str(len(lCandidatos))+"!!!!!!!!!!!!!!!!!!!!!\n\n"
 	return maxPeakThreshold, lCandidatos, blank_image
 	
