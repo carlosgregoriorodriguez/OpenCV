@@ -508,9 +508,11 @@ def maskImage(img, imgMask):
 	return cv2.bitwise_and(tempImg,tempImg,mask = imgMask)
 	
 def getMaskFromContour(contour, imgWidth, imgHeight):
+	#image=cv2.CreateImage((imgWidth,imgHeight),8,1)
 	image = np.zeros((imgHeight, imgWidth, 1), np.uint8)
 	image[:] = 0
 	color = 255
+	#cv2.drawContours(image, contour, indexContour, color, 
 	cv2.fillPoly(image, pts =[contour], color=(255,255,255))
 	return image
 	
