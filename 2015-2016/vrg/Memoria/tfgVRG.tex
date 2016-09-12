@@ -448,7 +448,19 @@
 		\item Convierte la imagen a una imagen binaria.
 		\item Extrae las componentes conectadas en base a un cálculo de contornos.
 		\item En caso de blobs muy cercanos entre si, los agrupa en un único blob, esta proceso nos es de especial interés para la agrupación de estrellas que conforman una galaxia.
-		\item Finalmente para cada grupo de blobs nos devuelve tanto su centro como su área.
+		\item Se eliminan aquellos blobs que son detectados de forma errónea, para ello se hace uso de la imagen de espacio vacío generada mediante el método {\large generateDarkImage} de la clase AstroImage.\\
+			\begin{figure}[!htb]
+				\centering
+				\includegraphics[width=0.9\textwidth]{images/removeBadPointsComparation.PNG}
+				\caption{\label{fig:removePointsConparation}Resultado antes y despues de aplicar la detección automática de puntos erróneos.}
+			\end{figure}
+		Se descartan aquellos candidatos cuyo centro de coordenadas ha caído sobre la zona marcada como espacio vacío, conservándose el resto.\\ Ver figura \ref{fig:removePointsConparation}
+			\begin{figure}[!htb]
+				\centering
+				\includegraphics[width=0.45\textwidth]{images/removeBadPointsDiference.PNG}
+				\caption{\label{fig:removePointsDiference}Esta imagen muestra los puntos descartados y complementa a la figura \ref{fig:removePointsConparation}.}
+			\end{figure}		
+		\item Para cada grupo de blobs nos devuelve tanto su centro como su área.
 	\end{enumerate}
 
 	\subsubsection{Eliminación de ruido}

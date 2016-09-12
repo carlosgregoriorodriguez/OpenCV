@@ -156,13 +156,9 @@ class AstroImage:
 		self.thumb = ImageTk.PhotoImage(Image.fromarray(cv2.resize(self.imageCV, (100, 100))))
 		self.thumbDark = ImageTk.PhotoImage(Image.fromarray(cv2.resize(self.imageCV, (100, 100))))
 		self.thumbDifusse = ImageTk.PhotoImage(Image.fromarray(cv2.resize(self.imageCV, (100, 100))))
-		#################################OBTENCION####################################
-		###############################getObjectList##################################
-		################# obtencion de candidatos ptos Luminosos #####################
-		temp8bit = cv2.convertScaleAbs(self.imageCV)
-		self.peakThreshold, self.lCandidates, self.peakCVImage = cvSpace.getObjectList(temp8bit)#, debug = True)#self.imageCV)
+
 		
-		self.thumbPeak = ImageTk.PhotoImage(Image.fromarray(cv2.resize(self.peakCVImage, (100, 100))))
+		
 		self.updateImage()
 	
 	def statisticalInfo():
@@ -180,6 +176,14 @@ class AstroImage:
 		self.darkImage = self.generateDarkImage(blackMedian)
 		print "Linea de Espacio Vacio: "+str(blackMedian)
 		self.nContours = cvSpace.getContours(cv2.convertScaleAbs(self.darkImage))
+		
+		#################################OBTENCION####################################
+		###############################getObjectList##################################
+		################# obtencion de candidatos ptos Luminosos #####################
+		temp8bit = cv2.convertScaleAbs(self.imageCV)
+		self.peakThreshold, self.lCandidates, self.peakCVImage = cvSpace.getObjectList(temp8bit, self.darkImage)#, debug = True)#self.imageCV)
+		self.thumbPeak = ImageTk.PhotoImage(Image.fromarray(cv2.resize(self.peakCVImage, (100, 100))))
+		
 		#########################DRAW INTEREST POINTS AND CONTOURS####################
 		#self.contourImage = cv2.cvtColor(cv2.convertScaleAbs(self.darkImage).copy(), cv2.COLOR_GRAY2RGB)
 		self.contourImage = cv2.cvtColor(cv2.convertScaleAbs(self.imageCV).copy(), cv2.COLOR_GRAY2RGBA)
@@ -188,14 +192,14 @@ class AstroImage:
 		for k in self.lCandidates:
 			#print "Punto: "+str(index)+" ("+str((k[0]))+", "+str((k[1]))+")"
 			#print "Punto: "+str(index)+" ("+str(int(k[0]))+", "+str(int(k[1]))+") with size :"+str(k.size)+ "and intensity: "+str(self.imageCV.item(int(k.pt[1]), int(k.pt[0])))
-			print "Tipo de punto: "+str(k[3])
+			#print "Tipo de punto: "+str(k[3])
 			if (True):#descartamos puntos si caen sobre negro
 				if k[3] == 0:#Estimated Galaxi point
-					cv2.circle(self.contourImage, (int(k[0]),int(k[1])), k[2], (255,255,0,50),-1)
+					cv2.circle(self.contourImage, (int(k[0]),int(k[1])), k[2], (0,255,0,255),-1)
 				if k[3] == 1:#Extimated Star point
-					cv2.circle(self.contourImage, (int(k[0]),int(k[1])), k[2], (0,255,0,50),-1)
+					cv2.circle(self.contourImage, (int(k[0]),int(k[1])), k[2], (0,255,0,250),-1)
 				if k[3] == 0:#Uknown Point
-					cv2.circle(self.contourImage, (int(k[0]),int(k[1])), k[2], (0,0,255,50),-1)
+					cv2.circle(self.contourImage, (int(k[0]),int(k[1])), k[2], (255, 0,0,250),-1)
 					
 		index = 0
 		#TODO: crear funcion en cvSpace que haga crop (http://stackoverflow.com/questions/28759253/how-to-crop-the-internal-area-of-a-contour)

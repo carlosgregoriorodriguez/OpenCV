@@ -377,7 +377,7 @@ def openContour(img, kernelSize=5):
 		return closeResult
 
 
-def getObjectList(img, minThreshold = 10, maxThreshold=255, debug=False):
+def getObjectList(img, darkImg, minThreshold = 10, maxThreshold=255, debug=False):
 	img = cv2.bitwise_not(img)
 	params = cv2.SimpleBlobDetector_Params()
 	params.minThreshold = minThreshold;
@@ -393,10 +393,15 @@ def getObjectList(img, minThreshold = 10, maxThreshold=255, debug=False):
 	index=0
 	flux = np.zeros([len(keyPoints)])
 	size = np.zeros([len(keyPoints)])
+	validPoints = np.zeros([len(keyPoints)])
 	for k in keyPoints:
+		if (darkImg.item(int(k.pt[1]), int(k.pt[0])))>(minThreshold + maxThreshold/10):
+			validPoints[index] = 1
 		flux[index] = img.item(int(k.pt[1]), int(k.pt[0]))
 		size[index] = k.size
 		index = index + 1
+	print "\n\nValores validos: "+str(np.count_nonzero(validPoints))+"\n\n"
+	print "\n\nValores validos: "+str(np.count_nonzero(validPoints))+"\n\n"
 	peakThreshold = (np.mean(flux)-np.amin(flux))/np.e
 	maxPeakThreshold = 0
 	boxSize = (np.median(size))*np.pi
@@ -432,7 +437,10 @@ def getObjectList(img, minThreshold = 10, maxThreshold=255, debug=False):
 			cv2.circle(blank_image, (int(k.pt[0]),int(k.pt[1])), 9, 100,-1)
 		index = index + 1
 	maxPeakThreshold = maxPeakThreshold - peakThreshold/5
+	#remove first element
 	lCandidatos = np.delete(lCandidatos, 0, axis = 0)
+	#remove elements which are marked as validPoints[i] = 0
+	#lCandidatos = np.delete(lCandidatos, np.where( validPoints == 0)[0] , axis = 0)
 	print "\n\n!!!!!!!!!!!!!!!!!!!!!"+str(len(lCandidatos))+"!!!!!!!!!!!!!!!!!!!!!\n\n"
 	return maxPeakThreshold, lCandidatos, blank_image
 	
