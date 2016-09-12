@@ -190,19 +190,16 @@ class AstroImage:
 		
 		print "\n\n-------------------------"+str(len(self.lCandidates))+"---------------------------\n"
 		for k in self.lCandidates:
-			#print "Punto: "+str(index)+" ("+str((k[0]))+", "+str((k[1]))+")"
-			#print "Punto: "+str(index)+" ("+str(int(k[0]))+", "+str(int(k[1]))+") with size :"+str(k.size)+ "and intensity: "+str(self.imageCV.item(int(k.pt[1]), int(k.pt[0])))
-			#print "Tipo de punto: "+str(k[3])
-			if (True):#descartamos puntos si caen sobre negro
-				if k[3] == 0:#Estimated Galaxi point
-					cv2.circle(self.contourImage, (int(k[0]),int(k[1])), k[2], (255,0,0,255),-1)
-				if k[3] == 1:#Extimated Star or galaxy point
-					cv2.circle(self.contourImage, (int(k[0]),int(k[1])), k[2], (0,255,0,250),-1)
-				if k[3] == 0:#Start Point
-					cv2.circle(self.contourImage, (int(k[0]),int(k[1])), k[2], (255,0,0,250),-1)
+			if k[3] == 0:#Estimated Galaxi point
+				cv2.circle(self.contourImage, (int(k[0]),int(k[1])), k[2], (255,0,0,255),-1)
+			if k[3] == 1:#Extimated Star or galaxy point
+				cv2.circle(self.contourImage, (int(k[0]),int(k[1])), k[2], (0,255,0,250),-1)
+			if k[3] == 0:#Start Point
+				cv2.circle(self.contourImage, (int(k[0]),int(k[1])), k[2], (255,0,0,250),-1)
 					
 		index = 0
 		#TODO: crear funcion en cvSpace que haga crop (http://stackoverflow.com/questions/28759253/how-to-crop-the-internal-area-of-a-contour)
+		#cambio crear un crop por pintar hacer una copia de la imagen, pintar en negro el exterior de la estructura y pasar esta imagen a la función spot.
 		# y calcule el maximo 'spot' (http://www.pyimagesearch.com/2014/09/29/finding-brightest-spot-image-using-python-opencv/)
 		for c in self.nContours:
 			cR = np.random.randint(0,255)

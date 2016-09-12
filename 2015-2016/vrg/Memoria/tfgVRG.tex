@@ -474,8 +474,8 @@
     El parámetro clave para la eliminación de la PSF es el kernel aplicado tanto a la dilatación como a la erosión, es de un tamaño de 5.
     \\
     Un kernel es una matriz que se aplica a cada pixel de la imagen, expresando este procedimiento en una ecuación tenemos:\\ \newline
-    $ K(i,j) = 1 \forall x,y in (0,5)$\\ \newline
-    \scriptsize Nota: En nuestro caso $K(i,j)=1$ ya que es la matriz unidad.\\ \newline
+    $ K(i,j) = \frac{1}{25} \; \forall\; x,y \; in \; (0,5)$\\ \newline
+    \scriptsize Nota: En nuestro caso $K(i,j)=\frac{1}{25}$ ya que es la matriz unidad ponderada.\\ \newline
     $ H(x,y) = \sum_{i=0}^{M_{i}-1}\sum_{j=0}^{M_{j}-1}I(x+i-a_{i},y+j-a_{i})*K(i,j) $
 	\\
 	El resultado de aplicar un kernel sobre una imagen es una nueva imagen con las mismas dimensiones que la imagen de origen, pero con posibles valores distintos en cada pixel, estos valores dependen tanto del kernel elegido como de las características de la imagen.
