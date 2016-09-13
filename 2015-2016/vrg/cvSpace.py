@@ -2,6 +2,8 @@ import numpy as np
 import cv2
 import math
 from astropy.io import fits#no necesario, cvSpace solo trabaja con arrays de imagenes
+import scipy.spatial
+
 '''
 	Main references:
 		Preparing Red-Green-Blue Images from CCD Data Lupton et all
@@ -496,7 +498,13 @@ def getContours(imOrig, maxContours=10):
 		goodContours = contours
 	print "[cvSpace]: getContours ends"
 	return goodContours
-	
+
+#######################################################TODO#############################################	
+def removeContourInsideContour(lCont):
+	print "TODO: Remove contour inside contour, ref: http://docs.opencv.org/3.1.0/d9/d8b/tutorial_py_contours_hierarchy.html"
+	return lCont
+########################################################################################################	
+
 def getGalaxyCenter(img, radius = 10):
 	blur = img.copy()
 	blur = cv2.blur(blur, (radius,radius), 5)
@@ -513,6 +521,9 @@ def getMaskFromContour(contour, imgWidth, imgHeight):
 	color = 255
 	cv2.fillPoly(image, pts =[contour], color=(255,255,255))
 	return image
+
+def getDistanceMatrix(pointList):
+	return scipy.spatial.distance.cdist(pointList,pointList)
 	
 if __name__ == "__main__":
 	'''

@@ -169,6 +169,7 @@ class AstroImage:
 		self.imagePil = Image.fromarray(self.imageCV)
 		self.imageTK = ImageTk.PhotoImage(image=self.imagePil)
 		self.histogram = self.updateHistogram()
+		print "[AstroImage::updateImage] calling to cvSpace.getContours"
 		#################################OBTENCION####################################
 		############################## getContours ###################################
 		#################### obtencion de candidatos contornos #######################
@@ -176,7 +177,8 @@ class AstroImage:
 		self.darkImage = self.generateDarkImage(blackMedian)
 		print "Linea de Espacio Vacio: "+str(blackMedian)
 		self.nContours = cvSpace.getContours(cv2.convertScaleAbs(self.darkImage))
-		
+		self.nContours = cvSpace.removeContourInsideContour(self.nContours)
+		print "[AstroImage::updateImage] calling to cvSpace.getObjectList"
 		#################################OBTENCION####################################
 		###############################getObjectList##################################
 		################# obtencion de candidatos ptos Luminosos #####################
@@ -184,6 +186,7 @@ class AstroImage:
 		self.peakThreshold, self.lCandidates, self.peakCVImage = cvSpace.getObjectList(temp8bit, self.darkImage)#, debug = True)#self.imageCV)
 		self.thumbPeak = ImageTk.PhotoImage(Image.fromarray(cv2.resize(self.peakCVImage, (100, 100))))
 		
+		print "[AstroImage::updateImage] Preparing vector canvas"
 		#########################DRAW INTEREST POINTS AND CONTOURS####################
 		#self.contourImage = cv2.cvtColor(cv2.convertScaleAbs(self.darkImage).copy(), cv2.COLOR_GRAY2RGB)
 		self.contourImage = cv2.cvtColor(cv2.convertScaleAbs(self.imageCV).copy(), cv2.COLOR_GRAY2RGBA)
@@ -198,40 +201,27 @@ class AstroImage:
 				cv2.circle(self.contourImage, (int(k[0]),int(k[1])), k[2], (255,0,0,250),-1)
 					
 		index = 0
-		#TODO: crear funcion en cvSpace que haga crop (http://stackoverflow.com/questions/28759253/how-to-crop-the-internal-area-of-a-contour)
-		#cambio crear un crop por pintar hacer una copia de la imagen, pintar en negro el exterior de la estructura y pasar esta imagen a la func. getGalaxyCenter.
-		# y calcule el maximo 'spot' (http://www.pyimagesearch.com/2014/09/29/finding-brightest-spot-image-using-python-opencv/)
+		self.galaxiCenters = np.array([[-1,-1]])
+		print "[AstroImage::updateImage] Rasterizing vector data from contours"
 		for c in self.nContours:
 			cR = np.random.randint(0,255)
 			cB = np.random.randint(100,255)
 			cG = np.random.randint(150,255)
 			color = (cR, cB, cG, 255)
 			cv2.drawContours(self.contourImage, self.nContours, index, color, 3)
-			#cut contour
-			tempIMG = self.imageCV
+			height, width = self.imageCV.shape
+			tempMaks = cvSpace.getMaskFromContour(c, width, height)
+			tempIMG = cvSpace.maskImage(self.imageCV, tempMaks)
+			tempCenter = cvSpace.getGalaxyCenter(tempIMG)
+			cv2.rectangle(self.contourImage, (tempCenter[0]-5,tempCenter[1]-5), (tempCenter[0]+5,tempCenter[1]+5), (255,215,0,255), -1)
+			cv2.rectangle(self.contourImage, (tempCenter[0]-5,tempCenter[1]-5), (tempCenter[0]+5,tempCenter[1]+5), (0,0,0,255))
 			print "_______________________________________________________"
-			print "Centro de la galaxia: "+str(cvSpace.getGalaxyCenter(tempIMG))
+			print "Centro de la galaxia: "+str(tempCenter[0])+", "+str(tempCenter[1])
 			print "_______________________________________________________"
+			self.galaxiCenters = np.append( self.galaxiCenters, [[tempCenter[0],tempCenter[0]]], axis=0 )
 			index = index + 1
-
-		'''
-		if self.imageCV.item(int(k.pt[1]), int(k.pt[0]))>=self.peakThreshold:
-				if debug:
-					print "Punto: "+str(index)+" ("+str(int(k.pt[0]))+", "+str(int(k.pt[1]))+") with size :"+str(k.size)+ "and intensity: "+str(img.item(int(k.pt[1]), int(k.pt[0])))
-				cv2.circle(self.contourImage, (int(k.pt[0]),int(k.pt[1])), int(k.size), (255,0,0),-1)
-			elif k.size>boxSize:
-				if debug:
-					print "\tPunto: "+str(index)+" ("+str(int(k.pt[0]))+", "+str(int(k.pt[1]))+") with size :"+str(k.size)+ "and intensity: "+str(img.item(int(k.pt[1]), int(k.pt[0])))+" descartado como estrella, quizas galaxia"
-				np.append( lCandidatos, [k.pt[0],k.pt[1], "Galaxy or reject"] )
-				resta = k.size/2.0
-				cv2.rectangle(blank_image, (int(k.pt[0]-resta),int(k.pt[1]-resta)), (int(k.pt[0]+resta),int(k.pt[1]+resta)), 190,-1)
-			else:
-				np.append( lCandidatos, [k.pt[0],k.pt[1], "Galaxy or reject"] )
-				resta = k.size/2.0
-				cv2.rectangle(blank_image, (int(k.pt[0]-resta),int(k.pt[1]-resta)), (int(k.pt[0]+resta),int(k.pt[1]+resta)), 100,-1)
-		'''		
-				
-		print "N Contornos: "+str(len(self.nContours))+" ##############"
+		self.galaxiCenters = np.delete(self.galaxiCenters, 0, axis = 0)				
+		print "Number of contours: "+str(len(self.nContours))+" vs "+str(len(self.galaxiCenters))+" ##############"
 		
 	def invertImage(self):
 		self.imageCV = cv2.bitwise_not(self.imageCV)
