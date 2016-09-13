@@ -215,9 +215,9 @@ class AstroImage:
 			tempCenter = cvSpace.getGalaxyCenter(tempIMG)
 			cv2.rectangle(self.contourImage, (tempCenter[0]-5,tempCenter[1]-5), (tempCenter[0]+5,tempCenter[1]+5), (255,215,0,255), -1)
 			cv2.rectangle(self.contourImage, (tempCenter[0]-5,tempCenter[1]-5), (tempCenter[0]+5,tempCenter[1]+5), (0,0,0,255))
-			print "_______________________________________________________"
-			print "Centro de la galaxia: "+str(tempCenter[0])+", "+str(tempCenter[1])
-			print "_______________________________________________________"
+			#print "_______________________________________________________"
+			#print "Centro de la galaxia: "+str(tempCenter[0])+", "+str(tempCenter[1])
+			#print "_______________________________________________________"
 			self.galaxiCenters = np.append( self.galaxiCenters, [[tempCenter[0],tempCenter[0]]], axis=0 )
 			index = index + 1
 		self.galaxiCenters = np.delete(self.galaxiCenters, 0, axis = 0)				
