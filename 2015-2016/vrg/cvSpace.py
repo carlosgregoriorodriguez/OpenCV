@@ -12,9 +12,8 @@ from astropy.io import fits#no necesario, cvSpace solo trabaja con arrays de ima
 print "Loading cvSpace"
 
 def detectOpenCv2():
-	(ocVersion, ocSubVersion, _) = cv2.__version__.split(".")
-	#print "OC VERSION "+str(ocVersion)
-	return ocVersion=="2"
+        return cv2.__version__.split(".")[0] == "2"
+	
 	
 
 def segment(img, thresholdStart, thresholdEnd):
