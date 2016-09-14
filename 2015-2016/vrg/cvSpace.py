@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 import math
 from astropy.io import fits#no necesario, cvSpace solo trabaja con arrays de imagenes
-import scipy.spatial
+#import scipy.spatial
 
 '''
 	Main references:
@@ -13,7 +13,8 @@ print "Loading cvSpace"
 
 def detectOpenCv2():
 	(ocVersion, ocSubVersion, _) = cv2.__version__.split(".")
-	return ocVersion==2
+	#print "OC VERSION "+str(ocVersion)
+	return ocVersion=="2"
 	
 
 def segment(img, thresholdStart, thresholdEnd):
@@ -386,7 +387,7 @@ def getObjectList(img, darkImg, minThreshold = 10, maxThreshold=255, debug=False
 	params.maxThreshold = maxThreshold;
 	params.filterByArea = 1
 	params.minArea  = 3
-	if (detectOpenCv2()):
+	if (detectOpenCv2()==True):
 		detector = cv2.SimpleBlobDetector(params)
 	else:
 		detector = cv2.SimpleBlobDetector_create(params)
@@ -471,9 +472,12 @@ def getContours(imOrig, maxContours=10):
 		im = dilate(closeContour(imOrig, numControl-1),(numControl+1)/2)
 		imgray = im#cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
 		ret,thresh = cv2.threshold(imgray,200,255,0)
-		if (detectOpenCv2()):
+		#print "Valor detectOpenCv2() "+str(detectOpenCv2())
+		if (detectOpenCv2()==True):
+			print "CV2"
 			contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
 		else:
+			print "CV3"
 			_, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
 		lastContours = nContour		
 		nContour = len(contours)
@@ -522,8 +526,10 @@ def getMaskFromContour(contour, imgWidth, imgHeight):
 	cv2.fillPoly(image, pts =[contour], color=(255,255,255))
 	return image
 
+'''
 def getDistanceMatrix(pointList):
 	return scipy.spatial.distance.cdist(pointList,pointList)
+'''
 	
 if __name__ == "__main__":
 	'''
