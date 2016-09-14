@@ -485,20 +485,45 @@ def getContours(imOrig, maxContours=10):
 		numControl=numControl-1
 		print "numControl = "+str(numControl)+" lastContours = "+str(lastContours)+" nContours = "+str(nContour)
 
+	# Poli-reduption
+	#TODO: search an epsilon based in contour properties, maybe a relation between area and contour?.
+	epsilon = 10
+	contours = [cv2.approxPolyDP(contour, epsilon, True) for contour in contours]
+	
 	area = np.zeros(len(contours))
+	isParent = np.zeros(len(contours))
 	index = 0
+	print "\n\n*************************************************************************"
+	print "N contornos: "+str(len(contours))+" N jerarquias: "+str(len(hierarchy))
+	print str(hierarchy.shape)
+	print hierarchy[[0],[0],[3]]
+	#print hierarchy[1]
+	print "*************************************************************************\n\n"
 	for cnt in contours:
+		if (hierarchy[[0],[index],[3]]==-1):#isParent condition
+			isParent[index]=1
 		area[index] = cv2.contourArea(cnt)
 		#print area[index]
 		index=index+1
 	meanArea = np.mean(area)
 	print "Area media: "+str(meanArea)
+
+	isSubContour = np.where(isParent==0)
+	print isSubContour
+	#contours = np.delete(contours, isSubContour)
+
 	#eliminamos los que estan por debajo de 0.5 veces el area media (quitamos ruido) si hay demasiados contornos
 	if (len(contours)>1000):#el valor ha de estar relacionado con las dimensiones de la imagen, ajustar
+		print "Deleting contours by area/2"
 		toDelete = np.where(area<=.5* meanArea)
 		goodContours = np.delete(contours, toDelete)
 	else:
-		goodContours = contours
+		print "Deleting contours by area less than 0.05*mean(area)"
+		toDelete = np.where(area<=.05* meanArea)
+		goodContours = np.delete(contours, toDelete)
+		#goodContours = contours
+
+	print "Despues de eliminar los hijos: "+str(len(goodContours))
 	print "[cvSpace]: getContours ends"
 	return goodContours
 
