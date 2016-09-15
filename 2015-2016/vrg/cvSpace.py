@@ -391,6 +391,7 @@ def getObjectList(img, darkImg, minThreshold = 10, maxThreshold=255, debug=False
 	else:
 		detector = cv2.SimpleBlobDetector_create(params)
 	keyPoints = detector.detect(img)
+	starCandidates = len(keyPoints)
 	print "[getIntersetObjectList] hay un total de "+str(len(keyPoints))+" candidatos"
 	index=0
 	flux = np.zeros([len(keyPoints)])
@@ -444,7 +445,7 @@ def getObjectList(img, darkImg, minThreshold = 10, maxThreshold=255, debug=False
 	#remove elements which are marked as validPoints[i] = 0
 	lCandidatos = np.delete(lCandidatos, np.where( validPoints == 0)[0] , axis = 0)
 	print "\n\n!!!!!!!!!!!!!!!!!!!!!"+str(len(lCandidatos))+"!!!!!!!!!!!!!!!!!!!!!\n\n"
-	return maxPeakThreshold, lCandidatos, blank_image
+	return maxPeakThreshold, lCandidatos, blank_image, starCandidates
 	
 def getMedianIndex(array):
 	if len(array) % 2 == 1:
@@ -525,7 +526,7 @@ def getContours(imOrig, maxContours=10):
 
 	print "Despues de eliminar los hijos: "+str(len(goodContours))
 	print "[cvSpace]: getContours ends"
-	return goodContours
+	return goodContours, meanArea
 
 #######################################################TODO#############################################	
 def removeContourInsideContour(lCont):

@@ -34,6 +34,7 @@ class MatPlotHistogram:
 	def setArray(self, array):
 		self.array = array
 		self.arrayOrig=array
+	
 		
 	def iniCanvas(self, type = ''):
 		self.ax.clear()
@@ -163,14 +164,19 @@ class AstroImage:
 	def isFitsFile(self):
 		return self.isFits
 		
-	def statisticalInfo():
-		print "todo"
+	def statisticalInfo(self):
+		return self.staMean, self.staStd, len(self.nContours), self.contourMeanArea , len(self.lCandidates)
 
 	def updateImage(self, scaleFactor=1):
 		print "[AstroImage::updateImage] self.scaleFactor: "+str(self.scaleFactor)
 		self.imagePil = Image.fromarray(self.imageCV)
 		self.imageTK = ImageTk.PhotoImage(image=self.imagePil)
 		self.histogram = self.updateHistogram()
+		(self.staMean, self.staStd) = cv2.meanStdDev(self.imageCV)
+		self.staMean = self.staMean[0][0]
+		self.staStd = self.staStd[0][0]
+		print ">>>>>>>>>>Mean>>>  "+str(self.staMean)
+		print ">>>>>>>>>>Std>>>>  "+str(self.staStd)
 		print "[AstroImage::updateImage] calling to cvSpace.getContours"
 		#################################OBTENCION####################################
 		############################## getContours ###################################
@@ -178,14 +184,14 @@ class AstroImage:
 		blackMedian, nIter = cvSpace.sky_median_sig_clip(self.imageCVOriginal, 5, 0.1, max_iter=20)
 		self.darkImage = self.generateDarkImage(blackMedian)
 		print "Linea de Espacio Vacio: "+str(blackMedian)
-		self.nContours = cvSpace.getContours(cv2.convertScaleAbs(self.darkImage))
+		self.nContours, self.contourMeanArea = cvSpace.getContours(cv2.convertScaleAbs(self.darkImage))
 		self.nContours = cvSpace.removeContourInsideContour(self.nContours)
 		print "[AstroImage::updateImage] calling to cvSpace.getObjectList"
 		#################################OBTENCION####################################
 		###############################getObjectList##################################
 		################# obtencion de candidatos ptos Luminosos #####################
 		temp8bit = cv2.convertScaleAbs(self.imageCV)
-		self.peakThreshold, self.lCandidates, self.peakCVImage = cvSpace.getObjectList(temp8bit, self.darkImage)#, debug = True)#self.imageCV)
+		self.peakThreshold, self.lCandidates, self.peakCVImage, self.starCandidates = cvSpace.getObjectList(temp8bit, self.darkImage)#, debug = True)#self.imageCV)
 		self.thumbPeak = ImageTk.PhotoImage(Image.fromarray(cv2.resize(self.peakCVImage, (100, 100))))
 		
 		print "[AstroImage::updateImage] Preparing vector canvas"
@@ -419,52 +425,68 @@ class AstroCanvas:
 
 		self.imgInfoFrame = tk.LabelFrame(self.infoFrame, text="Image Info")
 		self.imgInfoFrame.grid(column=1,row=0, padx=5)
-		left = tk.Label(self.imgInfoFrame, text="                                                                                  ")
+		space = tk.Label(self.imgInfoFrame, text="                                                                                  ")
 		self.stringVarxCoords = tk.StringVar()
 		self.stringVarxCoords.set("X:   --     Y:   --     Flux:   --     \n\n\n\n\n")
 		a = tk.Label(self.imgInfoFrame, textvariable=self.stringVarxCoords)
 		a.pack()
-		left.pack()
+		space.pack()
 		
 
-		self.segmentationFrame = tk.LabelFrame(self.infoFrame, text="Segmentation Information")
+		self.segmentationFrame = tk.LabelFrame(self.infoFrame, text="Segmentation Information                                  ")
 		self.segmentationFrame.grid(column=1,row=1, padx=5)
-		fluxLabel = tk.Label(self.segmentationFrame, 	text="   Dark Flux Line:")
+		fluxLabel = tk.Label(self.segmentationFrame, 	text="   Dark Flux Line:      ")
 		fluxLabel.grid(column =0, row=0, padx=10)
+		#dark
 		self.fluxDarkIndex = tk.Label(self.segmentationFrame, 	text="--")
 		self.fluxDarkIndex.grid(column = 1, row = 0, padx=10)
-
-		difusseLabel = tk.Label(self.segmentationFrame, 	text="   Difusse Flux Line:")
+		#difuse
+		difusseLabel = tk.Label(self.segmentationFrame, 	text="   Difusse Flux Line:      ")
 		difusseLabel.grid(column =0, row=1, padx=10)
 		self.fluxDifusseIndex = tk.Label(self.segmentationFrame, 	text="--")
 		self.fluxDifusseIndex.grid(column = 1, row = 1, padx=10)
-
-		starLabel = tk.Label(self.segmentationFrame, 	text="   Star Flux Line:")
+		#peak
+		starLabel = tk.Label(self.segmentationFrame, 	text="   Star Flux Line:      ")
 		starLabel.grid(column =0, row=2, padx=10)
 		self.fluxPeakIndex = tk.Label(self.segmentationFrame, 	text="--")
 		self.fluxPeakIndex.grid(column = 1, row = 2, padx=10)
 		
-		self.statisticsFrame = tk.LabelFrame(self.infoFrame, text="Image Statistics")
+		
+		#Statistics frame
+		self.statisticsFrame = tk.LabelFrame(self.infoFrame, text="Image Statistics                                                    ")
+		self.staMeanLabel = tk.Label(self.statisticsFrame, text ="      Mean:      ")
+		self.staMeanValue = tk.Label(self.statisticsFrame, 	text="--")
+		self.staStdLabel = tk.Label(self.statisticsFrame, text ="      Standar Variance:      ")
+		self.staNCandidatesStars = tk.Label(self.statisticsFrame, text ="      Stars Candidates:      ")
+		self.staNStars = tk.Label(self.statisticsFrame, text ="      Starts detected:      ")
+		self.staNGalaxies = tk.Label(self.statisticsFrame, text ="      Galaxies detected:      ")
+		self.staAreaGalaxies = tk.Label(self.statisticsFrame, text ="      Galaxies mean area:      ")
 		self.statisticsFrame.grid(column=1,row=2, padx=5)
 		left3 = tk.Label(self.statisticsFrame, text=' '*82)
-		left3.pack()
+		self.staMeanLabel.grid(column = 0, row = 0)
+		self.staMeanValue.grid(column = 1, row = 0)
+		self.staStdLabel.grid(column = 0, row = 1)
+		self.staNStars.grid(column = 0, row = 2)
+		self.staNCandidatesStars.grid(column = 0, row = 3)
+		self.staNGalaxies.grid(column = 0, row = 4)
+		self.staAreaGalaxies.grid(column = 0, row = 5)
+		
 		
 		self.histEqFrame = tk.LabelFrame(self.infoFrame, text="Histogram equalization")
 		self.histEqFrame.grid(column=1,row=3, padx=5)
-		left4 = tk.Label(self.histEqFrame, text="                                                                                  ")
 		self.selectedHistogram = tk.StringVar()
 		self.selectedHistogram.set("sqrt") # default value
 		self.histOptions = ["linear", "sqrt", "log", "power", "asinh", "histeq"]
 		self.dropDown = tk.OptionMenu(self.histEqFrame, self.selectedHistogram, *self.histOptions, command = self.changeHistogramSignal)
 		self.dropDown.config(width=25)
 		self.setStateHistogramSelector(False)
-		self.dropDown.pack()
-		left4.pack()
+		#self.dropDown.pack()
+		self.staAreaGalaxies = tk.Label(self.histEqFrame, text ="Only valid for FITS files.")
+		self.staAreaGalaxies.grid(column = 0, row = 0)
+		self.dropDown.grid(column = 0, row = 1)
 		
 		#UCM LOGO
 		self.ucmLogoImage = tk.PhotoImage(file = "UCMlow.gif")
-		print "~~~~~~~~~~~~~~~~~~~~~~~~~??"
-		print type(self.ucmLogoImage )
 		self.panelUCM = tk.Label(self.infoFrame, image = self.ucmLogoImage)
 		self.panelUCM.grid(column=1,row=6, padx=5)
 
@@ -486,6 +508,9 @@ class AstroCanvas:
 		#Raster Main image
 		self.internalAstroImg = astroIm
 		self.imageTK = self.internalAstroImg.getImageTK()
+		print "\n\nINFO"
+		print self.internalAstroImg.statisticalInfo()
+		print "\n\n"
 		self.canvasImg = self.canvas.create_image(0,0,  image=self.imageTK)
 		self.imgConfigure()
 
