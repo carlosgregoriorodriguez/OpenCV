@@ -158,11 +158,11 @@ class AstroImage:
 		self.thumb = ImageTk.PhotoImage(Image.fromarray(cv2.resize(self.imageCV, (100, 100))))
 		self.thumbDark = ImageTk.PhotoImage(Image.fromarray(cv2.resize(self.imageCV, (100, 100))))
 		self.thumbDifusse = ImageTk.PhotoImage(Image.fromarray(cv2.resize(self.imageCV, (100, 100))))
-
-		
-		
 		self.updateImage()
 	
+	def isFitsFile(self):
+		return self.isFits
+		
 	def statisticalInfo():
 		print "todo"
 
@@ -457,8 +457,8 @@ class AstroCanvas:
 		self.histOptions = ["linear", "sqrt", "log", "power", "asinh", "histeq"]
 		self.dropDown = tk.OptionMenu(self.histEqFrame, self.selectedHistogram, *self.histOptions, command = self.changeHistogramSignal)
 		self.dropDown.config(width=25)
+		self.setStateHistogramSelector(False)
 		self.dropDown.pack()
-
 		left4.pack()
 		
 		#UCM LOGO
@@ -467,11 +467,7 @@ class AstroCanvas:
 		print type(self.ucmLogoImage )
 		self.panelUCM = tk.Label(self.infoFrame, image = self.ucmLogoImage)
 		self.panelUCM.grid(column=1,row=6, padx=5)
-		
-		#self.ucmLogoCanvas = tk.Canvas(self.infoFrame, width=256, height=256, bg = 'black')
-		#self.ucmLogoCanvas.create_rectangle(50, 25, 150, 75, fill="blue")
-		#self.logoCanvasImage = self.ucmLogoCanvas.create_image(0,0, image=self.ucmLogoImage)
-		#self.ucmLogoCanvas.grid(column=1,row=6, padx=5)
+
 		
 		
 		#Mini canvas Frame
@@ -571,6 +567,10 @@ class AstroCanvas:
 		self.internalAstroImg.openImage(self.filePath)
 		self.setCanvas(self.internalAstroImg)
 		#self.buttonPickDiffuse.config(state="disabled")
+		print "FORMATO###############"
+		print self.internalAstroImg.isFitsFile()
+		self.setStateHistogramSelector(self.internalAstroImg.isFitsFile())
+		print "FORMATO###############"
 		print self.filePath
 		
 	def changeHistogramEqu(self, hist):
@@ -587,24 +587,27 @@ class AstroCanvas:
 			self.imageCV = cvSpace.asinh(self.internalAstroImg.fitsFile[0].data)
 		if hist == "histeq":
 			self.imageCV = cvSpace.histeq(self.internalAstroImg.fitsFile[0].data)
-		
+		#this code maybe a method in astroImage
 		NaNs = np.isnan(self.imageCV)
 		self.imageCV[NaNs] = 0
 		inf = np.isinf(self.imageCV)
 		self.imageCV[inf] = 0
 		
+		self.internalAstroImg.imageCV = self.imageCV
 		self.internalAstroImg.imageCVOriginal = self.imageCV.copy()
 		self.internalAstroImg.thumb = ImageTk.PhotoImage(Image.fromarray(cv2.resize(self.imageCV, (100, 100))))
 		self.internalAstroImg.thumbDark = ImageTk.PhotoImage(Image.fromarray(cv2.resize(self.imageCV, (100, 100))))
 		self.internalAstroImg.thumbDifusse = ImageTk.PhotoImage(Image.fromarray(cv2.resize(self.imageCV, (100, 100))))
-
-		
-		
 		self.internalAstroImg.updateImage()
 		self.setCanvas(self.internalAstroImg)
-
-	def disableHIstogramSelector(self):
-		self.OptionMenu.configure(state="disabled")		
+		#END "this code maybe a method in astroImage"
+		
+	def setStateHistogramSelector(self, stat=True):
+		if stat == True:
+			self.dropDown.configure(state="active")	
+		else:
+			self.dropDown.configure(state="disabled")	
+		
 	def signalInvertImg(self):
 		self.internalAstroImg.invertImage()
 		self.setCanvas(self.internalAstroImg, update=True)
