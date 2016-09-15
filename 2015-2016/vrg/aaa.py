@@ -124,9 +124,11 @@ class AstroImage:
 		self.path = path
 		splitFilename, splitFileExtension = os.path.splitext(self.path)
 		self.name = os.path.basename(self.path)
+		self.isFits = False
 		print "###########"+self.name
 		print "Filename "+splitFilename+" FileExtension "+splitFileExtension
 		if (splitFileExtension ==".fits" or splitFileExtension ==".FITS"):
+			self.isFits = True
 			print "Opening FISTS file"
 			self.fitsFile = fits.open(self.path)
 			print self.fitsFile.info()
@@ -162,7 +164,7 @@ class AstroImage:
 		self.updateImage()
 	
 	def statisticalInfo():
-		print "Hola"
+		print "todo"
 
 	def updateImage(self, scaleFactor=1):
 		print "[AstroImage::updateImage] self.scaleFactor: "+str(self.scaleFactor)
@@ -450,9 +452,10 @@ class AstroCanvas:
 		self.histEqFrame = tk.LabelFrame(self.infoFrame, text="Histogram equalization")
 		self.histEqFrame.grid(column=1,row=3, padx=5)
 		left4 = tk.Label(self.histEqFrame, text="                                                                                  ")
-		self.variable = tk.StringVar()
-		self.variable.set("sqrt") # default value
-		self.dropDown = tk.OptionMenu(self.histEqFrame, self.variable, "linear", "sqrt", "log", "power", "asinh", "histeq")
+		self.selectedHistogram = tk.StringVar()
+		self.selectedHistogram.set("sqrt") # default value
+		self.histOptions = ["linear", "sqrt", "log", "power", "asinh", "histeq"]
+		self.dropDown = tk.OptionMenu(self.histEqFrame, self.selectedHistogram, *self.histOptions, command = self.changeHistogramSignal)
 		self.dropDown.config(width=25)
 		self.dropDown.pack()
 
@@ -570,6 +573,38 @@ class AstroCanvas:
 		#self.buttonPickDiffuse.config(state="disabled")
 		print self.filePath
 		
+	def changeHistogramEqu(self, hist):
+		"linear", "sqrt", "log", "power", "asinh", "histeq"
+		if hist == "linear":
+			self.imageCV = cvSpace.linear(self.internalAstroImg.fitsFile[0].data)
+		if hist == "sqrt":
+			self.imageCV = cvSpace.sqrt(self.internalAstroImg.fitsFile[0].data)
+		if hist == "log":
+			self.imageCV = cvSpace.log(self.internalAstroImg.fitsFile[0].data)
+		if hist == "power":
+			self.imageCV = cvSpace.power(self.internalAstroImg.fitsFile[0].data)
+		if hist == "asinh":
+			self.imageCV = cvSpace.asinh(self.internalAstroImg.fitsFile[0].data)
+		if hist == "histeq":
+			self.imageCV = cvSpace.histeq(self.internalAstroImg.fitsFile[0].data)
+		
+		NaNs = np.isnan(self.imageCV)
+		self.imageCV[NaNs] = 0
+		inf = np.isinf(self.imageCV)
+		self.imageCV[inf] = 0
+		
+		self.internalAstroImg.imageCVOriginal = self.imageCV.copy()
+		self.internalAstroImg.thumb = ImageTk.PhotoImage(Image.fromarray(cv2.resize(self.imageCV, (100, 100))))
+		self.internalAstroImg.thumbDark = ImageTk.PhotoImage(Image.fromarray(cv2.resize(self.imageCV, (100, 100))))
+		self.internalAstroImg.thumbDifusse = ImageTk.PhotoImage(Image.fromarray(cv2.resize(self.imageCV, (100, 100))))
+
+		
+		
+		self.internalAstroImg.updateImage()
+		self.setCanvas(self.internalAstroImg)
+
+	def disableHIstogramSelector(self):
+		self.OptionMenu.configure(state="disabled")		
 	def signalInvertImg(self):
 		self.internalAstroImg.invertImage()
 		self.setCanvas(self.internalAstroImg, update=True)
@@ -664,6 +699,10 @@ class AstroCanvas:
 		cv2.imwrite('output/cvDiffuseImage.png',diffuseEroded)
 		#save 4 images
 		#save file with histogram dark, diffuse and peak lines. In this file, store star and galaxies with categorization.
+	
+	def changeHistogramSignal(self, value):
+		print "Histogram change to "+str(value)
+		self.changeHistogramEqu(value)
 		
 if __name__ == "__main__":		
 	root = tk.Tk()

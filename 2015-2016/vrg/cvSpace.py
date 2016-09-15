@@ -166,7 +166,7 @@ def power(inputArray, exponente=3.0, scale_min=None, scale_max=None):
 		scale_min = img.min()
 	if scale_max == None:
 		scale_max = img.max()
-	factor = 1.0 / np.pow(scale_max, exponente)
+	factor = 1.0 / np.power(scale_max, exponente)
 	img = img + scale_min
 	print "Factor: "+str(factor)
 	indices0 = np.where(img < scale_min)
