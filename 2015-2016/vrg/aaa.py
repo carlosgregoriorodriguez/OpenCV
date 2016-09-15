@@ -421,7 +421,7 @@ class AstroCanvas:
 		
 		##GUI right column Info##
 		self.infoFrame = tk.LabelFrame(root, text="Main toolbox & info")
-		self.infoFrame.grid(column=1,row=0, padx=5)
+		self.infoFrame.grid(column=1,row=0, padx=5, pady=15)
 
 		self.imgInfoFrame = tk.LabelFrame(self.infoFrame, text="Image Info")
 		self.imgInfoFrame.grid(column=1,row=0, padx=5)
@@ -434,7 +434,7 @@ class AstroCanvas:
 		
 
 		self.segmentationFrame = tk.LabelFrame(self.infoFrame, text="Segmentation Information                                  ")
-		self.segmentationFrame.grid(column=1,row=1, padx=5)
+		self.segmentationFrame.grid(column=1,row=1, padx=5, pady=10)
 		fluxLabel = tk.Label(self.segmentationFrame, 	text="   Dark Flux Line:      ")
 		fluxLabel.grid(column =0, row=0, padx=10)
 		#dark
@@ -466,29 +466,22 @@ class AstroCanvas:
 		self.staNGalaxiesValues = tk.Label(self.statisticsFrame, 	text="--.--")
 		self.staAreaGalaxies = tk.Label(self.statisticsFrame, text ="      Galaxies mean area:      ")
 		self.staAreaGalaxiesValues = tk.Label(self.statisticsFrame, 	text="--.--")
-		self.statisticsFrame.grid(column=1,row=2, padx=5)
-		left3 = tk.Label(self.statisticsFrame, text=' '*82)
-		
+		self.statisticsFrame.grid(column=1,row=2, padx=5, pady=10)
+		left3 = tk.Label(self.statisticsFrame, text=' '*82)		
 		self.staMeanLabel.grid(column = 0, row = 0)
 		self.staMeanValue.grid(column = 1, row = 0)
-		
 		self.staStdLabel.grid(column = 0, row = 1)
 		self.staStdValue.grid(column = 1, row = 1)
-		
 		self.staNStars.grid(column = 0, row = 2)
 		self.staNStarsValues.grid(column = 1, row = 2)
-		
 		self.staNCandidatesStars.grid(column = 0, row = 3)
 		self.staNCandidatesStarsValues.grid(column = 1, row = 3)
-		
 		self.staNGalaxies.grid(column = 0, row = 4)
 		self.staNGalaxiesValues.grid(column = 1, row = 4)
-		
 		self.staAreaGalaxies.grid(column = 0, row = 5)
 		self.staAreaGalaxiesValues.grid(column = 1, row = 5)
-		
 		self.histEqFrame = tk.LabelFrame(self.infoFrame, text="Histogram equalization")
-		self.histEqFrame.grid(column=1,row=3, padx=5)
+		self.histEqFrame.grid(column=1,row=3, padx=5, pady=10)
 		self.selectedHistogram = tk.StringVar()
 		self.selectedHistogram.set("sqrt") # default value
 		self.histOptions = ["linear", "sqrt", "log", "power", "asinh", "histeq"]
@@ -499,11 +492,16 @@ class AstroCanvas:
 		self.staAreaGalaxies = tk.Label(self.histEqFrame, text ="Only valid for FITS files.")
 		self.staAreaGalaxies.grid(column = 0, row = 0)
 		self.dropDown.grid(column = 0, row = 1)
+
+		#app Logo
+		#self.appLogoImage = tk.PhotoImage(file = "img/appBanner.gif")
+		#self.panlApp = tk.Label(self.infoFrame, image = self.appLogoImage)
+		#self.panlApp.grid(column=1,row=6, padx=5, pady=5)
 		
 		#UCM LOGO
 		self.ucmLogoImage = tk.PhotoImage(file = "UCMlow.gif")
 		self.panelUCM = tk.Label(self.infoFrame, image = self.ucmLogoImage)
-		self.panelUCM.grid(column=1,row=6, padx=5)
+		self.panelUCM.grid(column=1,row=7, pady=25, padx=5)
 
 		
 		
@@ -525,6 +523,12 @@ class AstroCanvas:
 		self.imageTK = self.internalAstroImg.getImageTK()
 		print "\n\nINFO"
 		print self.internalAstroImg.statisticalInfo()
+		self.staMeanValue.config(text = str('%.2f' % self.internalAstroImg.statisticalInfo()[0]))
+		self.staStdValue.config(text = str('%.2f' % self.internalAstroImg.statisticalInfo()[1]))
+		self.staNCandidatesStarsValues.config(text = str(self.internalAstroImg.starCandidates))
+		self.staNStarsValues.config(text = str(len(self.internalAstroImg.lCandidates)))
+		self.staAreaGalaxiesValues.config(text = str('%.2f' % self.internalAstroImg.contourMeanArea))
+		self.staNGalaxiesValues.config(text = str(len(self.internalAstroImg.nContours)))
 		print "\n\n"
 		self.canvasImg = self.canvas.create_image(0,0,  image=self.imageTK)
 		self.imgConfigure()
