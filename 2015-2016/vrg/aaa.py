@@ -455,22 +455,37 @@ class AstroCanvas:
 		#Statistics frame
 		self.statisticsFrame = tk.LabelFrame(self.infoFrame, text="Image Statistics                                                    ")
 		self.staMeanLabel = tk.Label(self.statisticsFrame, text ="      Mean:      ")
-		self.staMeanValue = tk.Label(self.statisticsFrame, 	text="--")
+		self.staMeanValue = tk.Label(self.statisticsFrame, 	text="--.--")
 		self.staStdLabel = tk.Label(self.statisticsFrame, text ="      Standar Variance:      ")
+		self.staStdValue = tk.Label(self.statisticsFrame, 	text="--.--")
 		self.staNCandidatesStars = tk.Label(self.statisticsFrame, text ="      Stars Candidates:      ")
+		self.staNCandidatesStarsValues = tk.Label(self.statisticsFrame, 	text="--.--")
 		self.staNStars = tk.Label(self.statisticsFrame, text ="      Starts detected:      ")
+		self.staNStarsValues = tk.Label(self.statisticsFrame, 	text="--.--")
 		self.staNGalaxies = tk.Label(self.statisticsFrame, text ="      Galaxies detected:      ")
+		self.staNGalaxiesValues = tk.Label(self.statisticsFrame, 	text="--.--")
 		self.staAreaGalaxies = tk.Label(self.statisticsFrame, text ="      Galaxies mean area:      ")
+		self.staAreaGalaxiesValues = tk.Label(self.statisticsFrame, 	text="--.--")
 		self.statisticsFrame.grid(column=1,row=2, padx=5)
 		left3 = tk.Label(self.statisticsFrame, text=' '*82)
+		
 		self.staMeanLabel.grid(column = 0, row = 0)
 		self.staMeanValue.grid(column = 1, row = 0)
-		self.staStdLabel.grid(column = 0, row = 1)
-		self.staNStars.grid(column = 0, row = 2)
-		self.staNCandidatesStars.grid(column = 0, row = 3)
-		self.staNGalaxies.grid(column = 0, row = 4)
-		self.staAreaGalaxies.grid(column = 0, row = 5)
 		
+		self.staStdLabel.grid(column = 0, row = 1)
+		self.staStdValue.grid(column = 1, row = 1)
+		
+		self.staNStars.grid(column = 0, row = 2)
+		self.staNStarsValues.grid(column = 1, row = 2)
+		
+		self.staNCandidatesStars.grid(column = 0, row = 3)
+		self.staNCandidatesStarsValues.grid(column = 1, row = 3)
+		
+		self.staNGalaxies.grid(column = 0, row = 4)
+		self.staNGalaxiesValues.grid(column = 1, row = 4)
+		
+		self.staAreaGalaxies.grid(column = 0, row = 5)
+		self.staAreaGalaxiesValues.grid(column = 1, row = 5)
 		
 		self.histEqFrame = tk.LabelFrame(self.infoFrame, text="Histogram equalization")
 		self.histEqFrame.grid(column=1,row=3, padx=5)
