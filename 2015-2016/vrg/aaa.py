@@ -450,7 +450,26 @@ class AstroCanvas:
 		self.histEqFrame = tk.LabelFrame(self.infoFrame, text="Histogram equalization")
 		self.histEqFrame.grid(column=1,row=3, padx=5)
 		left4 = tk.Label(self.histEqFrame, text="                                                                                  ")
+		self.variable = tk.StringVar()
+		self.variable.set("sqrt") # default value
+		self.dropDown = tk.OptionMenu(self.histEqFrame, self.variable, "linear", "sqrt", "log", "power", "asinh", "histeq")
+		self.dropDown.config(width=25)
+		self.dropDown.pack()
+
 		left4.pack()
+		
+		#UCM LOGO
+		self.ucmLogoImage = tk.PhotoImage(file = "UCMlow.gif")
+		print "~~~~~~~~~~~~~~~~~~~~~~~~~??"
+		print type(self.ucmLogoImage )
+		self.panelUCM = tk.Label(self.infoFrame, image = self.ucmLogoImage)
+		self.panelUCM.grid(column=1,row=6, padx=5)
+		
+		#self.ucmLogoCanvas = tk.Canvas(self.infoFrame, width=256, height=256, bg = 'black')
+		#self.ucmLogoCanvas.create_rectangle(50, 25, 150, 75, fill="blue")
+		#self.logoCanvasImage = self.ucmLogoCanvas.create_image(0,0, image=self.ucmLogoImage)
+		#self.ucmLogoCanvas.grid(column=1,row=6, padx=5)
+		
 		
 		#Mini canvas Frame
 		self.miniCanvasFrame = tk.LabelFrame(self.tabProcessing, text="Segmentation Images")
@@ -478,10 +497,7 @@ class AstroCanvas:
 		#Vector
 		self.imageVector = self.internalAstroImg.getVectorImage()
 		self.vectorImage = self.vectorCanvas.create_image(336,336, image = self.imageVector)
-		print "\n\n##################"
-		print self.vectorCanvas
-		print self.internalAstroImg.contourImage
-		print "##################\n\n"
+
 		if (update==False):
 			self.matPlotHistogram = MatPlotHistogram(self.histogramFrame, self.internalAstroImg.getHistogram())
 			#Raster thumbnails
@@ -605,7 +621,8 @@ class AstroCanvas:
 			self.matPlotHistogram.setLine(blackLine=pickedFlux)
 			self.buttonPickDiffuse.config(state="normal")
 			#self.blackLine self.difusseLine self.rtLine
-			self.canvas.config(cursor="wait")
+			if (platform.system()=='Windows'):
+				self.canvas.config(cursor="wait")
 			self.thumbDarkAstro = self.internalAstroImg.modifyThumb(thumb= "DARK", value = pickedFlux)
 			self.miniCanBlack.itemconfigure(self.thumbDarkImage, image=self.thumbDarkAstro)
 			self.canvas.config(cursor="dotbox")
@@ -613,7 +630,8 @@ class AstroCanvas:
 
 		if (self.picker == "DIFUSSE"):
 			self.matPlotHistogram.setLine(difusseLine=pickedFlux)
-			self.canvas.config(cursor="wait")
+			if (platform.system()=='Windows'):
+				self.canvas.config(cursor="wait")
 			self.thumbDifusseAstro = self.internalAstroImg.modifyThumb(thumb= "DIFUSSE", value = blackLine, value2=pickedFlux)
 			self.miniCanDifusse.itemconfigure(self.thumbDifusseImage, image=self.thumbDifusseAstro)
 			self.canvas.config(cursor="circle")
@@ -621,7 +639,8 @@ class AstroCanvas:
 			
 		if (self.picker == "PEAK"):
 			self.matPlotHistogram.setLine(peakLine=pickedFlux)
-			self.canvas.config(cursor="wait")
+			if (platform.system()=='Windows'):
+				self.canvas.config(cursor="wait")
 			self.thumbPeakAstro = self.internalAstroImg.modifyThumb(thumb= "PEAK", value = int(pickedFlux*.75))
 			self.miniCanPeak.itemconfigure(self.thumbPeakImage, image=self.thumbPeakAstro)
 			self.canvas.config(cursor="crosshair")
