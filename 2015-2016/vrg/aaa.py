@@ -504,7 +504,7 @@ class AstroCanvas:
 		#self.panlApp.grid(column=1,row=6, padx=5, pady=5)
 		
 		#UCM LOGO
-		self.ucmLogoImage = tk.PhotoImage(file = "UCMlow.gif")
+		self.ucmLogoImage = tk.PhotoImage(file = "img/UCMlow.gif")
 		self.panelUCM = tk.Label(self.infoFrame, image = self.ucmLogoImage)
 		self.panelUCM.grid(column=1,row=7, pady=25, padx=5)
 
