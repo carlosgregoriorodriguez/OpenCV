@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
 import Tkinter as tk
+import tkMessageBox
 import notebookExample
 import PIL
 from PIL import ImageTk
@@ -126,6 +127,7 @@ class AstroImage:
 		splitFilename, splitFileExtension = os.path.splitext(self.path)
 		self.name = os.path.basename(self.path)
 		self.isFits = False
+		self.eqName = ""
 		print "###########"+self.name
 		print "Filename "+splitFilename+" FileExtension "+splitFileExtension
 		if (splitFileExtension ==".fits" or splitFileExtension ==".FITS"):
@@ -137,6 +139,7 @@ class AstroImage:
 			#self.imageCV = cvSpace.linear(self.fitsFile[0].data)
 			#self.imageCV = cvSpace.asinh(self.fitsFile[0].data,0.1)
 			self.imageCV = cvSpace.sqrt(self.fitsFile[0].data)
+			self.eqName = "sqrt"
 			#self.imageCV = cvSpace.log(self.fitsFile[0].data)
 			NaNs = np.isnan(self.imageCV)
 			self.imageCV[NaNs] = 0
@@ -339,40 +342,42 @@ class AstroCanvas:
 	def createGui(self):
 		###main menu
 		self.menubar = tk.Menu(root)
-		filemenu = tk.Menu(self.menubar, tearoff=0)
-		filemenu.add_command(label="Open File", command= self.signalOpenImage)
-		filemenu.add_command(label="Save Project", command = self.signalSaveProject)
-		filemenu.add_command(label="Save Image")
-		filemenu.add_separator()
-		filemenu.add_command(label="Options")
-		filemenu.add_separator()
-		filemenu.add_command(label="Exit", command=self.exit)
-		self.menubar.add_cascade(label="File", menu=filemenu)
+		self.filemenu = tk.Menu(self.menubar, tearoff=0)
+		self.filemenu.add_command(label="Open File", command= self.signalOpenImage)
+		self.filemenu.add_separator()
+		self.filemenu.add_command(label="Save Project", command = self.signalSaveProject)
+		self.filemenu.add_command(label="Save Fits as PNG", command = self.saveFitsAsPNG)
+		self.filemenu.entryconfig("Save Fits as PNG", state="disabled")
+
+		#filemenu.add_command(label="Options")
+		self.filemenu.add_separator()
+		self.filemenu.add_command(label="Exit", command=self.exit)
+		self.menubar.add_cascade(label="File", menu=self.filemenu)
 
 		self.colFreeSpace = tk.BooleanVar()
 		self.colDiffuse = tk.BooleanVar()
 		self.colPeaks = tk.BooleanVar()
 		previewmenu = tk.Menu(self.menubar, tearoff=0)
-		previewmenu.add_checkbutton(label="Colorize Free-Space", onvalue=1, offvalue=0, variable=self.colFreeSpace)
-		previewmenu.add_checkbutton(label="Colorize Diffuse area", onvalue=1, offvalue=0, variable=self.colDiffuse)
-		previewmenu.add_checkbutton(label="Colorize Peaks", onvalue=1, offvalue=0, variable=self.colPeaks)
-		previewmenu.add_separator()
+		#previewmenu.add_checkbutton(label="Colorize Free-Space", onvalue=1, offvalue=0, variable=self.colFreeSpace)
+		#previewmenu.add_checkbutton(label="Colorize Diffuse area", onvalue=1, offvalue=0, variable=self.colDiffuse)
+		#previewmenu.add_checkbutton(label="Colorize Peaks", onvalue=1, offvalue=0, variable=self.colPeaks)
+		#previewmenu.add_separator()
 		previewmenu.add_command(label="Invert image", command=self.signalInvertImg)
-		previewmenu.add_command(label="Flip Image", command=self.signalFlipImg)
+		#previewmenu.add_command(label="Flip Image", command=self.signalFlipImg)
 		self.menubar.add_cascade(label="Preview", menu=previewmenu)
 
 		helpmenu = tk.Menu(self.menubar, tearoff=0)
-		helpmenu.add_command(label="Help Index")
-		helpmenu.add_command(label="About...")
+		#helpmenu.add_command(label="Help Index")
+		helpmenu.add_command(label="About...", command=self.about)
 		self.menubar.add_cascade(label="Help", menu = helpmenu)
 		
 		###Zona de manipulacion de la imagen###
 		noteFrame = tk.LabelFrame(root, text="Image Manipulation")
 		noteFrame.grid(column=0,row=0, padx=5)
 		note = notebookExample.Notebook(noteFrame, width= 700, height =680, activefg = 'black', inactivefg = 'grey')  #Create a Note book Instance
-		self.tabProcessing = note.add_tab(text = "Proccesing")
+		self.tabProcessing = note.add_tab(text = "Processing")
 		self.tabVector = note.add_tab(text = "Vector")
-		self.tabOutput = note.add_tab(text = "Output")
+		#self.tabOutput = note.add_tab(text = "Output")
 		
 		#Vector Tab#################
 		self.vectorCanvas =  tk.Canvas(self.tabVector, width=672, height=672, bg = 'white')#, cursor="X_cursor")
@@ -516,7 +521,10 @@ class AstroCanvas:
 		self.miniCanDifusse.grid(column=1,row=0,padx=50)
 		self.miniCanPeak = tk.Canvas(self.miniCanvasFrame, width=100, height=100, bg = 'yellow', cursor="rtl_logo")
 		self.miniCanPeak.grid(column=2,row=0,padx=50)
-		
+	
+	def about(self):
+		print "About..."
+		tkMessageBox.showinfo("About", "Simple Space Object Cataloger v:1.0   sv:20160918\n A helper tool for astronomical image\n\nYou can get this software at:\n\nhttps://github.com/carlosgregoriorodriguez/OpenCV/tree/master/2015-2016/vrg ")
 	def setCanvas(self, astroIm, update=False):
 		#Raster Main image
 		self.internalAstroImg = astroIm
@@ -648,9 +656,11 @@ class AstroCanvas:
 		
 	def setStateHistogramSelector(self, stat=True):
 		if stat == True:
-			self.dropDown.configure(state="active")	
+			self.dropDown.configure(state="active")
+			self.filemenu.entryconfig("Save Fits as PNG", state="normal")
 		else:
 			self.dropDown.configure(state="disabled")	
+			self.filemenu.entryconfig("Save Fits as PNG", state="disabled")
 		
 	def signalInvertImg(self):
 		self.internalAstroImg.invertImage()
@@ -731,25 +741,40 @@ class AstroCanvas:
 	def signalSaveProject(self):
 		#todo: open modal dialog window to ask project name....
 		print "Saving project"
+		directory = "projects"
+		if not os.path.exists(directory):
+			os.makedirs(directory)
+		name = self.internalAstroImg.name.split(".")[0]
 		#Equalized image
-		cv2.imwrite('output/cvMainImage.png',self.internalAstroImg.imageCV)
+		cv2.imwrite(directory+"/"+name+".png",self.internalAstroImg.imageCV)
 		#Dark image
 		print self.matPlotHistogram.getLines()[0]
 		#dark = cvSpace.erode(self.internalAstroImg.generateDarkImage(self.matPlotHistogram.getLines()[0]))
 		dark = self.internalAstroImg.generateDarkImage(self.matPlotHistogram.getLines()[0])
-		cv2.imwrite('output/cvDarkImage.png',dark)
+		cv2.imwrite(directory+"/"+name+"_dark.png",dark)
 		#halo or difusse image
 		diffuse = self.internalAstroImg.generateDiffuseImage(self.matPlotHistogram.getLines()[0],100)
-		cv2.imwrite('output/CUTcvDiffuseImage.png',diffuse)
+		cv2.imwrite(directory+"/"+name+"_diffuse.png",diffuse)
 		diffuseEroded = cvSpace.dilate(diffuse,2)
 		diffuseEroded = cvSpace.erode(diffuseEroded,10)
-		cv2.imwrite('output/cvDiffuseImage.png',diffuseEroded)
+		cv2.imwrite(directory+name+"_diffuseEroded.png",diffuseEroded)
 		#save 4 images
-		#save file with histogram dark, diffuse and peak lines. In this file, store star and galaxies with categorization.
-	
+		cv2.imwrite(directory+"/"+name+"_vector.png",self.internalAstroImg.contourImage)
+		tkMessageBox.showinfo("Project Images Saved", "Project Images saved as:\n "+directory+self.internalAstroImg.name+"_[dark, diffuse, diffuseEroded, vector].png\nat folder "+directory)
+		
 	def changeHistogramSignal(self, value):
 		print "Histogram change to "+str(value)
+		self.internalAstroImg.eqName = value
 		self.changeHistogramEqu(value)
+		
+	def saveFitsAsPNG(self):
+		fileName = str(self.internalAstroImg.name[:-5])+"_"+str(self.internalAstroImg.eqName)+".png"
+		print "Saving file as "+fileName
+		directory = "fits2png"
+		if not os.path.exists(directory):
+			os.makedirs(directory)
+		cv2.imwrite(directory+"/"+fileName,self.internalAstroImg.imageCV)
+		tkMessageBox.showinfo("Image Saved", "Image saved as: "+fileName+" at folder "+directory)
 		
 if __name__ == "__main__":		
 	root = tk.Tk()
