@@ -87,19 +87,42 @@ Aunque en el camino se ha ido variando el rumbo del proyecto en multitud de ocas
 \section{Herramientas usadas}
 
 En esta sección se informa brevemente de las herramientas que he utilizado a lo largo del proyecto, tanto los tipos de ficheros (FITS), como las librerías usadas (Astropy, OpenCV, Numpy, Matplotlib).
-\subsection{Ficheros FITS}
+\subsection{Ficheros FITS} >>http://fits.gsfc.nasa.gov<<
 \label{sec:FITS}
 
-FITS son las siglas de Flexible Image Transport System, un formato de archivo que sirve para recoger, transportar y procesar datos consistentes en arrays multidimensionales y tablas que almacenan información con la estructura clave-valor, siendo éstos principalmente imágenes científicas y metadatos.
+FITS son las siglas de Flexible Image Transport System, un formato de archivo que sirve para recoger, transportar y procesar datos consistentes en arrays multidimensionales y tablas de metadatos. Surgió de la necesidad de disponer de un formato estándar con el que transferir datos astronómicos entre instalaciones cinentíficas.
+
+En 1982 la Unión Astronómica Internacional (IAU por sus sigals en inglés) decidió respaldar formalmente este sistema de intercambio de datos, y desde su asamblea general de 1988 existe un comité derivado de su comisión de datos astronómicos que se encarga expresamente de mantener los estándares de FITS y revisar, aprobar y mantener su futuras extensiones, el IAU Working Group 
+
+Un fichero FITS se compone de segmentos llamados HDU (Header/Data Unit). El primero es llamado 'Primary HDU', y generalmente consiste en un array que contiene un espectro de una dimensión, una imagen en dos dimensiones o un conjunto de datos en tres dimensiones.
+
+Este HDU primario puede ir seguido de cualquier número de HDUs. Éstos se denominan \textit{extensiones} y actualmente pueden ser de tres tipos:
+\begin{itemize}
+\item Una imagen, consistente en array de píxeles de dimensión 0-999
+\item Una tabla ASCII, que almacena información numérica en formato ASCII
+\item Una tabla binaria, en cuyas celdas pueden almacenarse arrays 1-dimensionales siempre que las dimensiones en una misma columna de la tabla coincidan
+\end{itemize}
+Cada HDU consiste en un encabezado en formato ASCII (Header Unit) seguido de una sección opcional que almacena el array de píxeles de la imagen (Data Unit). Cada Header Unit contiene una secuencia de claves con sus valores correspondientes con el siguiente formato
+\begin{center}
+CLAVE = valor / comentario en forma de string
+\end{center}
+En estas claves se almacena, entre otros, información sobre las características del telescopio que tomó la imagen, coordenadas de la región a la que se apuntaba en el momento de producirse la observación y dimensiones y formato de la imagen generada.
+Por otro lado, los píxeles de la imagen almacenada en el Primary HDU o en las eventuales extensiones de tipo imagen, serán de uno de los cinco siguientes tipos actualmente soportados: enteros sin signo 8-bit, enteros con signo 16-bit, enteros con signo 32-bit, 32-bit IEEE float y 64-bit IEEE float.
+
+Las imágenes usadas en este trabajo vienen almacenadas en el HDU primario y son 2-dimensionales y float 32. En el código adjunto imageInfo.py se muestra el contenido de los HDU del fichero frame-i-002830-6-0398.fits, usado a lo largo de esta memoria.
 \subsubsection{Astropy}
+Para poder interactuar con los ficheros FITS a través de Python he usado el paquete \textbf{astropy.io.fits} de la librería Astropy\footnote{\url{http://www.astropy.org/}}, que es un proyecto libre escrito en Python y diseñado para trabajar en Astronomía.
+
+Este paquete es de un manejo sencillo y su uso se muestra en la sección \ref{sec:Procesado}.
 \subsection{OpenCV}
-\subsubsection{Kernel en imágenes}
-\label{sec:Kernel}
-\subsection{Numpy}
-\subsection{Matplotlib}
+OpenCV\footnote{\url{http://opencv.org/}} es una librería multiplataforma de código abierto escrita en C y C++ que permite trabajar con imágenes y visión artificial. Surgió originariamente en 1999 como un proyecto de Intel para mejorar el rendimiento de la CPU y ejecuciones en tiempo real y actualmente cuenta con más de 2500 algoritmos específicos de \textit{computer visión} optimizados, abarcando tareas como el reconocimiento de objetos en imágenes y vídeos, el seguimiento de objetos en vídeo, comparación de imágenes con una base de datos dada, procesado de imágenes para mejorar su calidad, o incluso extraer modelos 3d de objetos. Tiene una comunidad de más de 47.000 usuarios, más de 7 millones de descargas y es actualmente usada por empresas privadas, grupos de investigación e incluso gobiernos. Su desarrollo actual está dirigido por Itseez.
+
+En este trabajo se usa la versión 2.4 de la API para Python.
+\subsection{NumPy}
+NumPy\footnote{\url{http://www.numpy.org/}} es una librería de código abierto resultado de la mejora de en 2005 de la reescritura de Numeric por parte de Travis Oliphant. Es una librería que permite trabajar con arrays multidimensionales e incorpora gran cantidad de funciones de alto nivel sobre estos arrays.
 \section{Desarrollo del proyecto}
 \subsection{Procesado de los ficheros FITS}
-
+\label{sec:Procesado}
 El proceso de tratado de las imágenes empieza con la carga y lectura de los ficheros FITS. Esto se hace por medio de la librería Astropy. Como se explica en la sección \ref{sec:FITS}, la matriz que representa la imagen que se usará aquí se corresponde con el primer HDU. Así, el siguiente código carga en 'img' el ndarray de numpy contenido en el archivo FITS de muestra:
 
 \lstinputlisting[language=Python, frame= single, firstline=1, lastline=5]{basicLoading.py}
@@ -118,14 +141,27 @@ La figura \ref{fig:img1} muestra la imagen cargada con el script anterior.
 
 \subsection{Uso de un filtro customizado}
 
-Ante la problemática surgida en lo que respecta a la eliminación del ruido de las imágenes haciendo uso de las herramientas predefinidas en la librería OpenCV (como se muestra en la sección \ref{sec:Problemas}), creé un filtro con el que obtengo resultados más cercanos a lo que quería. En concreto consiste en el uso del método \textbf{filter2D}\footnote{\url{http://docs.opencv.org/2.4/modules/imgproc/doc/filtering.html#filter2d}} de OpenCV. Dicho método sirve para crear un filtro a partir de un kernel (véase la sección \ref{sec:Kernel}) dado.
+Ante la problemática surgida en lo que respecta a la eliminación del ruido de las imágenes haciendo uso de las herramientas predefinidas en la librería OpenCV (como se muestra en la sección \ref{sec:Problemas}), creé un filtro con el que obtengo resultados más cercanos a lo que quería. En concreto consiste en el uso del método \textbf{filter2D}\footnote{\url{http://docs.opencv.org/2.4/modules/imgproc/doc/filtering.html#filter2d}} de OpenCV. Dicho método sirve para crear un filtro a partir de un una matriz dada.
+
+La aplicación de un filtro a una imagen consiste principalmente en la combinación de una matriz, llamada kernel en este contexto, con la imagen original por medio de una convolución. Una convolución es una operación que consiste en combinar los valores del kernel con secciones de la imagen de igual dimensión para obtener unos nuevos valores para los píxeles de la imagen. Partiendo de una imagen y un kernel con uno de sus elementos marcado como \textit{pivote}, el proceso es el siguiente:
+
+\begin{enumerate}
+\item Se superpone el elemento pivote del kernel con un píxel de la imagen original, con los elementos del resto del kernel superpuestos a los correspondientes píxeles de la imagen.
+\item Se multiplican los coeficientes del kernel por el valor de los píxeles correspondientes de la imagen y se suma el resultado.
+\item El resultado anterior se fija como nuevo valor del píxel de la imagen sobre el que se situó el pivote.
+\item Se repiten los puntos 1, 2 y 3 para el resto de píxeles de la imagen original.
+\end{enumerate}
+
+El resultado es una nueva imagen en la que los valores de los píxeles dependen tanto de los coeficientes del kernel como de la imagen anterior. Es por esto por lo que los filtros vienen dados principalmente por el kernel que los representa.
+
 En concreto, creé el kernel
 $\begin{pmatrix}
 0 & 1 & 0 \\
 1 & 0 & 1 \\
 0 & 1 & 0
 \end{pmatrix}$
-y lo usé en la primera etapa del procesado de las imágenes.
+después de observar que el intenso granulado innato de las imágenes que tomaba de los FITS hacía que al aplicar los filtros predefinidos de OpenCV el resultado fuera una imagen con gran cantidad de ruido añadido. Intentando destacar regiones luminosas y no tanto conservar las pequeñas regiones de pocos píxeles, decidí ponderar solo los píxeles de alrededor (arriba, abajo, izquierda y derecha) en lugar de considerar más píxeles vecinos, que era lo que añadía el ruido en el caso de los otros filtros.
+
 Tomando la imagen resultado de aplicar este filtro a la imagen leída de los archivos FITS, y aplicando técnicas de segmentación, obtuve resultados con los que pude seguir avanzando.
 
 \subsection{Segmentación}
