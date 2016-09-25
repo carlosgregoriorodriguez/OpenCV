@@ -16,7 +16,6 @@ def getContours(imOrig, maxContours=10, t1=200, maxCtNumber = 1000):
 	contours=[cv2.approxPolyDP(ctn,epsilon,True)for ctn in contours]
 	area = np.zeros(len(contours))
 	isParent = np.zeros(len(contours))
-
 	index = 0
 	for cnt in contours:
 		if (hierarchy[[0],[index],[3]]==-1):

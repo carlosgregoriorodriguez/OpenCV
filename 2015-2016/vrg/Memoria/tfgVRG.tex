@@ -363,12 +363,34 @@
 	Para aprovechar lo mejor posible el area de ventana se habilitará una zona con pestañas en la que se mostrará la imagen original y procesada (para más detalle ver subsección \ref{GUI}).
 	
 	\subsection{Prueba de los algoritmos sobre una muestra de imágenes}
-%TODOCG
-%Aumentar, explayar. De donde son las fuentes.
-%OJO revisar
 	Para determinar la validez de los algoritmos, sería deseable disponer de imágenes que incluyen tanto imágenes FITS como imágenes genéricas.\\
 	Se partirá de una pequeña batería de imágenes, sobre la cual se aplicarán los algoritmos que se desarrollarán (para más detalle ver sección \ref{ownLib}), de este modo podremos afinar su precisión.
 	Esta fase ha permitido realizar la automatización del proceso afinando los algoritmos de clasificación.
+	Las imágenes usadas como batería de test han sido:
+	\begin{enumerate}
+		\item \textbf{m10.fits:} cúmulo globular NGC 6254.
+		\item \textbf{218wmos.fits:} Imagen ultravioleta tomada de NASA/ESA Hubble Space Telescope WFPC2.
+		\item \textbf{casa0.5-1.5keV.fits y casa1.5-3.0keV.fits:} imágenes de Cassiopeia A (Cas A). Muestra un remanente de supernova. La imagen proviene del Hubble Legacy Archive (https://hla.stsci.edu/).
+		\item \textbf{blue.fits y red.fits:} imágenes de NGC4038 o galaxia Antennae de la constelación de Corvus, obtenidas mediante dos filtros (rojo y verde). Ambas imágenes fueron tomadas del proyecto NAO-IRAF.
+		\item \textbf{Gravitational lensing in the galaxy cluster Abell 370.jpg:} cúmulo de galaxias Abell 1689, presenta una lente gravitatoria. Fuente de la imagen: Hubble Space Telescope (https://www.spacetelescope.org/images/heic0910b/).
+		\item \textbf{noReal.jpg:} imagen de simulación de galaxia espiral.
+		\item \textbf{image 3417 1e-LEDA-1852.jpg:} Galaxia espiral MCG+01-02-015 Fuente: ESA/Hubble, NASA and N. Gorin (STScI). http://www.spacetelescope.org/images/potw1545a/
+		\item \textbf{o-HUBBLE-UV-900.jpg:} Imagen compuesta por multiples frecuencias (del ultravioleta al infrarojo), Fuente: Hubble Ultra Deep Field.\\ http://apod.nasa.gov/apod/ap140605.html
+		\item \textbf{spiral-galaxy-eso-137-hubble.jpg:} Galaxia espiral ESO 137-001 del Supercúmulo de Virgo, aparece en la parte superior izquierda la anomalía conocida como \textit{El gran atractor}. Fuente: E.S.A.\\Z
+		http://sci.esa.int/hubble/53751-spiral-galaxy-spills-blood-and-guts-heic1404/
+		\item \textbf{potw1143a.jpg:} Galaxia enanas en la constelación del Phoenix.\\
+		Fuente:  ESA/Hubble y NASA. (https://www.spacetelescope.org/images/potw1143a/)
+		\item \textbf{hubble-galaxy 1743872i.jpg:} Galaxia en la constelación del Agula (IRAS 19399-1026).\\ Imagen simulada.
+		Fuente: E.S.A. NASA.\\ http://www.nasa.gov/sites/default/files/thumbnails/image/hubble\char`_friday\char`_05062016.jpg
+	\end{enumerate}
+	Se han tenido en cuenta tanto imágenes FITS (4 imágenes con dos variantes de filtros)como imágenes raster (7 imágenes) de contenido astronómico (una de ellas es simulada).\\
+	Estos ficheros acompañan a la aplicación.
+	\begin{figure}[!htb]
+		\centering
+		\includegraphics[width=1.2\textwidth]{images/imgFuentesSnap/compoFuentes.png}
+		\caption{\label{fig:IntergalacticStar}{\small Muestra de imágenes usadas.}}
+	\end{figure}
+	\clearpage
 
 	\subsection{Arquitectura interna de la aplicación}
 	Todo el desarrollo se ha centrado en el uso del lenguaje Python: es un lenguaje maduro con una gran cantidad de bibliotecas de apoyo. Tanto las bibliotecas usadas como el interprete de Python son de código abierto.\\
@@ -552,10 +574,7 @@
 	\end{figure}
 	\newpage
 	\item \textbf{getContours}:	\\
-	{\scriptsize getContours} aplica búsquedas de contornos sobre la imagen transformada para detectar formaciones de galaxias e internamente realiza operaciones de erosión, dilatación y cierres de contornos.\\
-	\newline
-	Bajo estas lineas, a modo descriptivo del proceso, se presenta el código usado.
-	\newpage
+	{\scriptsize getContours} aplica búsquedas de contornos sobre la imagen transformada para detectar formaciones de galaxias e internamente realiza operaciones de erosión, dilatación y cierres de contornos.A modo descriptivo del proceso, se presenta el código usado.
 	\end{enumerate}
 	\lstinputlisting[language=Python, frame= single, columns=fullflexible, firstline=1, lastline=36]{getContoursSimplified.py}
 
@@ -638,7 +657,6 @@
 	\textbf{Clasificación de galaxias:}\\
 	Para la clasificación de galaxias se hace un uso intensivo de búsqueda de contornos, que una vez obtenidos, en base al área media y a su número, se realiza un proceso de eliminación de contornos que no representan galaxias. La parte encargada de la eliminación hace uso de herramientas estadísticas sencillas en nuestro caso hacemos uso de la media de las áreas de los contornos, este valor actúa como umbral, descartándose las áreas inferiores a la mitad del área media, este valor se ha obtenido en base a prueba y error sobre la batería de imágenes.
 
-	\\
 	\subsection{Interfaz gráfica}\label{GUI}
 	Tanto para el usuario final como para la validación de los algoritmos en tiempo real se ha creado una interfaz (Ver figura \ref{fig:GUI_limpia}) que permite: visualización de la imagen, ajuste de una serie de parámetros y presentación visual de los elementos astronómicos detectados.\\
 	\begin{figure}[!htb]
@@ -744,7 +762,7 @@
 	\item Los ajustes estadísticos, realizados en base a un pequeño conjutno de imágenes, requieren afinamiento, no se descarta tomar nuevas estrategias \cite{SSDImgPro}, por ejemplo en la obtención de los contornos de los candidatos a galaxias establecer una relación entre el área y el perímetro para de este modo detectar estructuras que presenten crestas o pliegues (ver en figura \ref{fig:MembraneNebulae}, página \pageref{fig:MembraneNebulae})
 		\begin{figure}[!htb]
 			\centering
-			\includegraphics[width=0.9\textwidth]{images/nebulaMembrana2.jpg}
+			\includegraphics[width=0.7\textwidth]{images/nebulaMembrana2.jpg}
 			\caption{\label{fig:MembraneNebulae}{\small El comportamiento de los contornos presenta excesivos pliegues en la imagen de la derecha (tono azul) en comparación con el comportamiento de la imagen de la izquierda (tono violeta).El contorno de la derecha es un claro ejemplo de contorno erróneo.}}
 		\end{figure}
 	\item Mejoras de optimización. Un claro ejemplo es la detección de estrellas y galaxias que se pueden unificar en una única función, o la gestión de las imágenes internas que en algunos (thumbnails) casos se duplican innecesariamente ocupando temporalmente memoria.
@@ -757,11 +775,11 @@
 	\item Otro punto interesante podría ser la creación de un método que detecte los destellos de lente o lens flare (ver figura \ref{fig:lensflare}), ya que nuestro algoritmo los puede interpretar como galaxias, por su halo en determinados casos.
 			\begin{figure}[!htb]
 				\centering
-				\includegraphics[width=0.3\textwidth]{images/HubbleProximaCentauri_LENSFLARE}
+				\includegraphics[width=0.2\textwidth]{images/HubbleProximaCentauri_LENSFLARE}
 				\caption{\label{fig:lensflare}Lens flare en una captura producida pro el telescopio Hubble de Proxima Centaury. Imagen cortesía de  ESA/Hubble NASA.}
 			\end{figure}
 	\end{itemize} 
-	
+
 	%Agradecimientos#######################################################
 	\newpage
 	\section{Agradecimientos}
