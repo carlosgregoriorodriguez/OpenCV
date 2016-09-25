@@ -257,9 +257,7 @@
 		\item \textbf{Lectura y calibración automática de imágenes en formato FITS:}\\
 		El software ha de ser capaz de transformar el contenido de imagen del fichero FITS a un array de numPy \\
 		Tras la lectura se procede al proceso de calibración de la imagen así como una transformación del espacio de color:
-%TODOCG
-%Centrar fromulas
-%I^2xI^2xI^2-->I^2
+
 		\begin{center}
 		{\large 	$F:\mathfrak{\;\mathfrak{R^{2}}\rightarrow\mathfrak{\mathfrak{R'}^{2}}}$}
 		\end{center}
@@ -533,8 +531,9 @@
 		\item Aplicación de blur a la región de interés.
 		\item Búsqueda del máximo local en intensidad.
 	\end{enumerate}
-%TODOCFG-VRG:meter pie de página explicando que es blur
-	Es necesario realizar un blur \footnote{\cite{OpenCV}} o difuminado, como se aprecia en las imágenes \ref{fig:galaxiCenterFromImage_01_ERROR} \ref{fig:galaxiCenterFromImage_02_Blur} y \ref{fig:galaxiCenterFromImage_03_Correct}.\\
+	Este proceso se basa, en cierta puntos en el algoritmo \textit{Algorithm for segmentation through histogram thresholding} descrito en \cite{BrainThreshold}.\\
+
+	Es necesario realizar un blur \footnote{Blur: es una operación simple y frecuente en el procesado de imágenes para eliminar el ruido aplicando un suavizado. El suavizado se consigue  mediante la siguiente transformación: $g(i,j)=\sum_{k,l}f(i+k,j+l)*h(k,l)$ siendo $h(k,l)$ los coeficientes del filtro (también denominados Kernel)} o difuminado, como se aprecia en las imágenes \ref{fig:galaxiCenterFromImage_01_ERROR} \ref{fig:galaxiCenterFromImage_02_Blur} y \ref{fig:galaxiCenterFromImage_03_Correct}.\\
 	En caso de no aplicar el suavizado a la imagen, el pico de mayor intensidad no tendría por qué estar situado en el centro de la galaxia. Al aplicar el suavizado, se pondera en media el valor de cada pixel con su vecindad y aumentará la probabilidad de que el centro calculado se ajuste al centro de la galaxia. Esto es debido a que en el centro de la galaxia se acumula la mayor área lumínica.
 	\begin{figure}[!htb]
 		\centering
@@ -553,8 +552,9 @@
 	\end{figure}
 	\newpage
 	\item \textbf{getContours}:	\\
-	{\scriptsize getContours} aplica búsquedas de contornos sobre la imagen transformada para detectar formaciones de galaxias e internamente realiza operaciones de erosión, dilatación y cierres de contornos.
-	Bajo estas lineas se presenta el código usado.
+	{\scriptsize getContours} aplica búsquedas de contornos sobre la imagen transformada para detectar formaciones de galaxias e internamente realiza operaciones de erosión, dilatación y cierres de contornos.\\
+	\newline
+	Bajo estas lineas, a modo descriptivo del proceso, se presenta el código usado.
 	\newpage
 	\end{enumerate}
 	\lstinputlisting[language=Python, frame= single, columns=fullflexible, firstline=1, lastline=36]{getContoursSimplified.py}
@@ -562,8 +562,7 @@
 	\subsubsection{Eliminación de ruido y Point Spread Function (PSF)}
 	\begin{enumerate}
 	\item Eliminación de ruido:
-%TODO: meter código y explicar la eurística
-	Mediante heurística y en base al resultado del algoritmo de búsqueda de contornos, se eliminan áreas carentes de interés y producto del ruido.
+	En base al resultado del algoritmo de búsqueda de contornos, se eliminan áreas carentes de interés y producto del ruido.
 	\\El algoritmo realiza cálculos incrementales del número de contornos, estimando el ruido por el crecimiento a cada iteración. Si de una iteración a la siguiente el número de contornos crece en un factor de más del doble, se estima que se ha llegado a un umbral correcto.
 	\\
 	La eliminación del ruido en nuestro caso es una tarea compleja, ya que la diferencia entre una región de ruido y una región que contiene una estrella resulta difícil hasta para un ojo entrenado.
@@ -571,27 +570,17 @@
 	\item Eliminación de PSF:\\
     Aplicando operaciones morfológicas sobre la imágen, concretamente una dilatación seguida de una erosión, se eliminan los puntos detectados erróneamente como válidos.
     \\
-    El parámetro clave para la eliminación de la PSF es el kernel aplicado tanto a la dilatación como a la erosión que es de un tamaño de 5.
+    Para la eliminación de la PSF se ha estimado, en base a los test realizados, usar un kernel\footnote{Kernel es una matríz bi-dimensional de coeficientes} de tamaño 5.
     	\begin{figure}[!htb]
     		\centering
-    		\includegraphics[width=0.7\textwidth]{images/PSFUnificadas.png}
+    		\includegraphics[width=1\textwidth]{images/PSFUnificadas.png}
     		\caption{\label{fig:psfInfrared}{\small Distintas PSF (5) de un instrumento astronómico al aplicar diferentes filtros físicos de longitud de onda. La última imagen (inferior derecha) se corresponde con la simulación de reducción de PSF}}
     	\end{figure}
 	Como se aprecia en la figura (\ref{fig:psfInfrared}), la forma que toma la PSF varía según el filtro físico usado al captar la imagen dese el telescópio, presentando formas cercanas a una Normal N-Dimensional.
-    Un kernel es una matriz que se aplica a cada pixel de la imagen. 
-	\\
-    Expresando este procedimiento en una ecuación tenemos:
-%TODO: explicar el kernel a nivel técnico. Cambiar I*1/25 y quitar nota.
-    \begin{center}
-	    {\large $ K(i,j) = \frac{1}{25} * I$}\\
-	    {\large $ H(x,y) = \sum_{i=0}^{M_{i}-1}\sum_{j=0}^{M_{j}-1}I(x+i-a_{i},y+j-a_{i})*K(i,j) $}
-    \end{center}
-
-	%Explicar como aplicamos kernel.
-	El resultado de aplicar un kernel sobre una imagen es una nueva imagen con las mismas dimensiones que la imagen de origen (ver figura \ref{fig:psfInfrared3Resolved}), pero con posibles valores distintos en cada pixel; estos valores dependen tanto del kernel elegido como de las características de la imagen.
 
 	\end{enumerate}
 	%\subsubsection{Determinación de forma en las galaxias}
+	\clearpage
 	\subsection{Procesado de imágenes}
 	\subsubsection{Pre-procesado base}
 	El siguiente esquema detalla el proceso que sigue cada imagen y al que llamaremos pre-procesado base. (Ver figura \ref{fig:esquemaPreprocesado})\\
@@ -647,11 +636,9 @@
 	Con los datos generados de ambas aproximaciones se hace un último filtrado que elimina el posible ruido catalogado como candidato. Para ello se hace uso de la imagen-matriz de zonas oscuras, eliminando los puntos que recaen en zonas catalogadas como espacio vacío o ruido.
 	\\
 	\textbf{Clasificación de galaxias:}\\
-	Para la clasificación de galaxias se hace un uso intensivo de búsqueda de contornos, que una vez obtenidos, en base al área media y a su número, se realiza un proceso de eliminación de contornos que no representan galaxias. La parte encargada de la eliminación hace uso de herramientas estadísticas sencillas tales como la media y varianza.
-%TODO-CG: Detallarl estadística como herramientas sencillas. porque y para qué.
+	Para la clasificación de galaxias se hace un uso intensivo de búsqueda de contornos, que una vez obtenidos, en base al área media y a su número, se realiza un proceso de eliminación de contornos que no representan galaxias. La parte encargada de la eliminación hace uso de herramientas estadísticas sencillas en nuestro caso hacemos uso de la media de las áreas de los contornos, este valor actúa como umbral, descartándose las áreas inferiores a la mitad del área media, este valor se ha obtenido en base a prueba y error sobre la batería de imágenes.
+
 	\\
-	\clearpage
-	\newpage
 	\subsection{Interfaz gráfica}\label{GUI}
 	Tanto para el usuario final como para la validación de los algoritmos en tiempo real se ha creado una interfaz (Ver figura \ref{fig:GUI_limpia}) que permite: visualización de la imagen, ajuste de una serie de parámetros y presentación visual de los elementos astronómicos detectados.\\
 	\begin{figure}[!htb]
@@ -736,7 +723,7 @@
 	También ha sido una búsqueda de soluciones a los errores y problemas que se presentaban.\\ \\
 	Trabajar con OpenCV me ha hecho conocer una librería excelente, su wrapper de python sorprende por su sencillez y velocidad.\\ \\
 	EL uso de la bilioteca TkInter ha resultado ser muy flexible, permitiéndome un desarrollo rápido y usable con poco esfuerzo.\\
-	Se ha conseguido, partiendo de una idea muy ambiciosa, llegar a un prototipo que integra la mayoría de funcionalidades.
+	Se ha conseguido, partiendo de una idea muy ambiciosa, llegar a un prototipo que integra la mayoría de funcionalidades. Este prototipo está abierto a realizar nuevas mejoras tal como se detallará en la sub-sección \ref{sec:futureWork}.
 	\\
 	\newline
 
@@ -750,17 +737,18 @@
 			Las imágenes fuente pueden incluir, en el caso de pertenecer a alguna misión astronómica, zonas sobre-expuestas, esto es debido a que el aparato de captación fue configurado para obtener datos de un punto poco luminoso, haciendo que el resultado sea una imagen que contiene sobre-exposición en zonas más luminosa. Este es uno de los muchos inconvenientes con los que el software se encuentra a la hora de calibrar la imagen y obtener las lineas de intensidad sobre, datos con los que se realiza todo el proceso.
 	\end{itemize}
 	\subsection{Trabajo futuro}
+	\label{sec:futureWork}
 	Tal y como se ha comentado anteriormente, se ha dejado una puerta abierta a mejoras:
 	\begin{itemize} 
-%TODOCG: describir los ajustes heurísticos.
-	\item Los ajustes heurísticos requieren afinamiento, no se descarta tomar nuevas estrategias, por ejemplo en la obtención de los contornos de los candidatos a galaxias establecer una relación entre el área y el perímetro para de este modo detectar estructuras que presenten crestas o pliegues (ver en figura \ref{fig:MembraneNebulae}, página \pageref{fig:MembraneNebulae})
+	\item Para la detección de espacio vacio o \textit{sky substraction} se ha echo uso de un estimador basado en la media de intesidad de la imagen, para un mejor funcionamiento sería necesario analizar el artículo \cite{BlantonSubstraction}, concretamente el apartado \textit{2.2. Masking the data} y adaptarlo a nuestro procesamiento de imágenes.
+	\item Los ajustes estadísticos, realizados en base a un pequeño conjutno de imágenes, requieren afinamiento, no se descarta tomar nuevas estrategias \cite{SSDImgPro}, por ejemplo en la obtención de los contornos de los candidatos a galaxias establecer una relación entre el área y el perímetro para de este modo detectar estructuras que presenten crestas o pliegues (ver en figura \ref{fig:MembraneNebulae}, página \pageref{fig:MembraneNebulae})
 		\begin{figure}[!htb]
 			\centering
 			\includegraphics[width=0.9\textwidth]{images/nebulaMembrana2.jpg}
 			\caption{\label{fig:MembraneNebulae}{\small El comportamiento de los contornos presenta excesivos pliegues en la imagen de la derecha (tono azul) en comparación con el comportamiento de la imagen de la izquierda (tono violeta).El contorno de la derecha es un claro ejemplo de contorno erróneo.}}
 		\end{figure}
 	\item Mejoras de optimización. Un claro ejemplo es la detección de estrellas y galaxias que se pueden unificar en una única función, o la gestión de las imágenes internas que en algunos (thumbnails) casos se duplican innecesariamente ocupando temporalmente memoria.
-	\item Añadir la funcionalidad de clasificación acorde a la secuencia de Hubble (ver figura \ref{fig:EsquemaHubble}), para ello, todo el proceso previo ha de ser óptimo en sus resultados.
+	\item Añadir la funcionalidad de clasificación acorde a la secuencia de Hubble (ver figura \ref{fig:EsquemaHubble}), para ello, todo el proceso previo ha de ser óptimo en sus resultados y se ha de contar con sistema de categorización de contornos ellipticos como los descritos en \cite{JeanPierreElliptical}.
 				\begin{figure}[!htb]
 					\centering
 					\includegraphics[width=0.5\textwidth]{images/EsquemaHubble.jpg}
@@ -820,41 +808,38 @@
   		\\RA-MA Editorial.
   		\\2.001
 
+		%NO REFERENCIADA
   		\bibitem{AstroData}\textsc{Jean-Luc Starck, Fionn Murtagh} \\
   		\textit{Astronomical image and Data Analysis. (Second edition)}
   		\\ISBM: 3-540-42885-2
   		\\Springer-Verlag Berlin Heidelber.
   		\\2.006
 
-	  	
+	  	%REFERENCIADA
 	  	\bibitem{SSDImgPro}\textsc{Robert Lupton.} \\
 	  	\textit{SDSS Image Processing I: The Deblender.}
 	  	\\http://www.astro.princeton.edu/~rhl/photomisc/deblender.pdf
 		\\Princeton University Observatory
 	  	\\2.001
-	  	
-	  	\bibitem{AliDeconv}\textsc{Ali Mosleh, J.M. Pierre Langlois, Paul Green2} \\
-	  	\textit{Image Deconvolution Ringing Artifact Detection and Removal via PSF Frequency Analysis.}
-	  	\\http://www.groupes.polymtl.ca/amosleh/papers/ECCV14.pdf
-	  	\\Polytechnique Montréal
-	  	\\2.014
+	  
 	  		  		
   		\bibitem{NasaFITS}\textsc{NASA/GSFC} \\
   		\textit{The FITS Support Office - Documentación oficial formato FITS.}
   		\\http://fits.gsfc.nasa.gov/
-	  	  		
+	  	
+	  	%REFERENCIADA  		
 	  	\bibitem{JeanPierreElliptical}\textsc{ Jean-Pierre Jesse, Victor-Valeriu Patriciu et al.} \\
 	  	\textit{Detection and Identification of Elliptical Structure Arrangements in Images : Theory and Algorithms.}
 	  	\\http://ethesis.inp-toulouse.fr/archive/00001847/01/Patraucean.pdf
 	  	\\Institut National Polytechnique de Toulouse
 	  	\\2.012
-	  	
+	  	%REFERENCIADA
 	  	\bibitem{BlantonSubstraction}\textsc{Michael R. Blanton et all.} \\
 	  	\textit{Improved background subtraction for the Sloan Digital Sky Survey images.}
 	  	\\http://arxiv.org/pdf/1105.1960.pdf 
 	  	\\2.011
 	  		  	
-
+		%Referenciada
 	  	\bibitem{stellarOutcast}\textsc{ David A. Aguilar, Christine PulliamPublic } \\
 	  	\textit{First Stellar Outcast Discovered by Astronomers}
 	  	\\https://www.cfa.harvard.edu/news/2005-05
@@ -864,7 +849,6 @@
 	  	\bibitem{BrainThreshold}\textsc{ Harvard-Smithsonian Center for Astrophysics (CfA) } 
 	  	\textit{Brain Tumor Detection Using Histogram Thresholding to Get the Threshold point.}
 	  	\\http://www.iosrjournals.org/iosr-jeee/Papers/Vol9-issue5/Version-3/D09531419.pdf
-	  	\\https://www.cfa.harvard.edu/news/2005-05
 	  	\\2.005
 	\end{thebibliography}
 \end{document}
