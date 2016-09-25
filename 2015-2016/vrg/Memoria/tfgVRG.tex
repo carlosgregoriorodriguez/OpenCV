@@ -223,7 +223,9 @@
 	\\
 	Estas imágenes son capturadas usando tecnología de consumo general, en la mayoría de los casos sensores CCD RGB.
 	\\
-	\newpage 
+	\clearpage
+
+ 
 
 	\section{Objetivos}
 	\label{sec:objetivos}
@@ -240,7 +242,7 @@
 	Tras determinar la lista de puntos de interés en la imagen, el software catalogará los objetos mediante la exploración de las vecindades de los puntos destacados y haciendo uso de los algoritmos de visión por computador y criterios estadísticos.
 	
 	\subsection{Objetivos Específicos}
-	Llevar a cabo todo el proceso implica una serie de pasos los cuales se detallan escuetamente a continuación:
+	Llevar a cabo todo el proceso implica una serie de pasos los cuales se describen a continuación:
 	%description mejor
 	\begin{itemize}
 		\item \textbf{Lectura de imágenes genéricas:}\\
@@ -249,79 +251,72 @@
 %%Ampliar
 		{\large $G:\mathfrak{\;R^{2}\rightarrow\mathfrak{K^{2}}}$}
 		\end{center}
-		Siendo G la transformación de un espacio de dimensión 2 del cuerpo $R$ a un espacio de dimensión 2 del cuerpo de los enteros acotado {[}0, $2^{8})$.
+		Siendo G la transformación de un espacio de dimensión 2 del cuerpo $\mathfrak{\;R}$ a un espacio de dimensión 2 del cuerpo de los enteros $\mathfrak{\;K}$ acotado {[}0, $2^{8})$.
 		
 		\item \textbf{Lectura y calibración automática de imágenes en formato FITS:}\\
-		El software ha de ser capaz de determinar que el fichero FITS contiene
-		una imagen. \\
-		Tras la lectura se procede al proceso de calibración de la imagen
-		así como una transformación del espacio de color:\\
+		El software ha de ser capaz de transformar el contenido de imagen del fichero FITS a un array de numPy \\
+		Tras la lectura se procede al proceso de calibración de la imagen así como una transformación del espacio de color:
 %TODOCG
 %Centrar fromulas
 %I^2xI^2xI^2-->I^2
 		\begin{center}
-		{\large 	$F:\mathfrak{\;I^{2}\mathrm{x\mathfrak{R}}\rightarrow\mathfrak{I^{2}\mathrm{x\;\mathfrak{R'}}}}$\\}
+		{\large 	$F:\mathfrak{\;\mathfrak{R^{2}}\rightarrow\mathfrak{\mathfrak{R'}^{2}}}$}
 		\end{center}
-		Siendo $\mathfrak{R}$' la transformación de un espacio de dimensión
-		1 a un espacio de dimensión 1 usando diferentes técnicas según las
-		propiedades del histograma. En este caso $\mathfrak{R}$ contiene
-		valores no acotados, cuyo máximo y granularidad dependen del instrumento
-		con el que fue capturada la imagen.
-		
-		\item \textbf{Detección del espacio vacío:}\\
-		Para un correcto tratamiento de la imagen y facilitar la detección de elementos de interés mediante técnicas de suavizado y análisis por sectores, se determina un rango de color y nivel de ruido que posteriormente se eliminará de la imagen.
+		La función $F$ se encargará de descartar los valores menores que cero (posibles errores en el detector o guardado del fichero) en $\mathfrak{R^{2}}$.\\
+		En nuestro caso $\mathfrak{R^{2}}$ contiene valores no acotados, cuyo máximo y granularidad dependen del instrumento con el que fue capturada la imagen.\\
+		$\mathfrak{R'}^{2}$ almacenará la calibración de la imagen en base a la equalización elegida, bien automáticamente o bien por el usuario.
+
 		
 		\item \textbf{Detección de zonas que representen gases o polvo:}\\
-		Las estrellas por su naturaleza, iluminan sus proximidades, permitiendo	ver el polvo o gas que las rodea. Cuando un cúmulo de estrellas tienen en sus proximidades polvo o gases en suspensión, éstos se ven iluminados. A estas zonas difusas de las imágenes las denominaremos halos.
+		Las estrellas por su naturaleza, iluminan sus proximidades, permitiendo	ver el polvo o gas que las rodea; cuando un cúmulo de estrellas tienen en sus proximidades polvo o gases en suspensión, éstos se ven iluminados. A estas zonas difusas de las imágenes las denominaremos \textbf{halos}.
 		\\
-		El halo galáctico es un componente extendido, más o menos esférico que se extiende en las proximidades de una galaxia \cite{NASADISKHALO}.
+		El halo galáctico es un componente extendido, más o menos esférico que se extiende en las proximidades de una galaxia (para más información ver \cite{NASADISKHALO}).
 		\\
-		La distinción entre el Halo y el cuerpo de la galaxia queda claramente definido en las galaxias espirales (ver figura \ref{fig:ESA_GALAXY_Espiral}), donde la forma esférica del halo contrasta con el disco plano o \texttt {flat-disc}. En las galaxias elípticas esta distinción no es clara(ver figura \ref{fig:ESO_GALAXY_Eliptica}), ya que no hay una transición marcada entre el cuerpo de la galaxia y el halo.
-		\begin{figure}[!htb]
+		La distinción entre el halo y el cuerpo de la galaxia queda claramente definido en las galaxias espirales (ver figura \ref{fig:ESA_GALAXY_Espiral}), donde la forma esférica del halo contrasta con el disco plano o \texttt {flat-disc}. En las galaxias elípticas esta distinción no es clara(ver figura \ref{fig:ESO_GALAXY_Eliptica}), ya que no hay una transición marcada entre el cuerpo de la galaxia y el halo.
+		\begin{figure}[!hp]
 			\centering
 			\includegraphics[width=0.3\textwidth]{images/Messier100_NGC5457Galaxy.jpg}
 			\caption{\label{fig:ESA_GALAXY_Espiral}{\small Galaxia espiral NGC5457 con halo. Imagen cortesía de la E.S.A.}}
 		\end{figure}
 
-		\begin{figure}[!htb]
+		\begin{figure}[!hb]
 			\centering
-			\includegraphics[width=0.3\textwidth]{images/ElipticalGalaxyESO325-G004.jpg}
+			\includegraphics[width=0.28\textwidth]{images/ElipticalGalaxyESO325-G004.jpg}
 			\caption{\label{fig:ESO_GALAXY_Eliptica}{\small Galaxia elíptica ESO 325-G004 (en el centro) con halo. Imagen cortesía de NASA/ESA} }
 		\end{figure}
 
-		Una característica que usarán nuestros algoritmos, es analizar el gradiente local de los halos alrededor de los puntos de máxima intensidad para determinar la existencia de galaxias.
-%TODOCG
-%Meter imagen explicativa		
+		Una característica que usarán nuestros algoritmos, es analizar el gradiente local de los halos alrededor de los puntos de máxima intensidad (ver figura \ref{fig:gradiente}) para determinar la existencia de galaxias.
+		
+			\begin{figure}[!h]
+				\centering
+				\includegraphics[width=0.4\textwidth]{images/gradiente_GalaxyClusterCLj10001+0220.png}
+				\caption{\label{fig:gradiente}{\small Cluster de Galaxias CL J1001+0220, a la derecha detalle del gradiente. Imagen cortesía de NASA/CXC/CEA/T}}
+			\end{figure}		
 
 
 		%ok
 		\item \textbf{Eliminación de la función de dispersión de punto (PSF):}\\
-		La función de dispersión de punto es un fenómeno que provoca que, dado un punto lumínico y un receptor electrónico, se den dispersiones de	los fotones a celdas adyacentes del detector (ver figura \ref{fig:PSF}). 
-			\begin{figure}[!htb]
+		La función de dispersión de punto es un fenómeno que provoca que, dado un punto lumínico y un receptor electrónico, se den dispersiones de los fotones a celdas adyacentes del detector (ver figura \ref{fig:PSF}). 
+			\begin{figure}[!h]
 				\centering
-				\includegraphics[width=1\textwidth]{images/PSF-explicada2.jpg}
+				\includegraphics[width=0.9\textwidth]{images/PSF-explicada2.jpg}
 				\caption{\label{fig:PSF}{\small Corrección de PSF o función de dispersión de punto}}
 			\end{figure}
 		\\Un buen detector tendrá una menor PSF que un mal detector.\\
 		Eliminando la función de dispersión del punto obtendremos unos resultados que se aproximen más a la realidad.\\
 
+		\item \textbf{Detección del espacio vacío:}\\
+		Para un correcto tratamiento de la imagen y facilitar la detección de elementos de interés mediante técnicas de suavizado y análisis por sectores, se determina un rango de color y nivel de ruido que posteriormente se eliminará de la imagen.
 		
 		\item \textbf{Detección de estrellas puntuales y galaxias:}\\
-		Las galaxias son aglomeraciones de estrellas que tienen un movimiento
-		por el espacio conjunto. En las inmediaciones de cada estrella perteneciente
-		a una galaxia.\\
-		Es habitual encontrar polvo o gas atrapado por las fuerzas 	de gravitación existentes (ver figuras \ref{fig:GalaxiHalo} y \ref{fig:IntergalacticStar}).\\
-		\begin{figure}[!htb]
-			\centering
-			\includegraphics[width=0.2\textwidth]{images/twoGalaxyHalo.jpg}
-			\caption{\label{fig:GalaxiHalo}\small Galaxia con halo producido por la iluminación de polvo o nubes de gas cercanas}
-		\end{figure}
-		%Meter referencia y marcar en otro figura
+		Las galaxias son aglomeraciones de estrellas, cuerpos celestes y materia cósmica localizadas en una zona del espacio por efecto de la fuerza de la gravedad y que tienen un movimiento por el espacio en conjunto.\\
+		En las inmediaciones de cada estrella perteneciente a una galaxia, es habitual encontrar polvo o gas atrapado por las fuerzas de gravitación existentes (ver figuras \ref{fig:ESO_GALAXY_Eliptica} y \ref{fig:gradiente}).\\
+
 		Las estrellas que no pertenecen a una galaxia se denominan Stellar Outcast\cite{stellarOutcast} ó Intergalactic Stars que al no pertenecer a una galaxia no son capaces de atraer individualmente polvo o nubes de gas.\\
 		Aprovechando el gradiente generado por las nubes de polvo y gas, el	algoritmo se encarga de distinguir entre estrellas y galaxias.
 		\begin{figure}[!htb]%meter de donde proviene.
 			\centering
-			\includegraphics[width=0.5\textwidth]{images/star.jpg}
+			\includegraphics[width=0.4\textwidth]{images/star.jpg}
 			\caption{\label{fig:IntergalacticStar}{\small Stellar Outcast SDSS J090745.0+24507}}
 		\end{figure}
 
@@ -335,14 +330,15 @@
 	\subsubsection{Antecedentes }
 	
 	El único proyecto que hemos encontrado de similares características	es el proyecto Galaxy Zoo. \\
-	Galaxy Zoo(https://www.galaxyzoo.org/) comenzó su andadura en 2007. Es un proyecto online de astronomía que invita a sus miembros a ayudar a clasificar alrededor de un millón de galaxias. Es un ejemplo de ciencia ciudadana ya que utiliza la ayuda de gente anónima para ayudar a la investigación científica. 
+	Galaxy Zoo(https://www.galaxyzoo.org/) comenzó su andadura en 2007. Es un proyecto online de astronomía que invita a sus miembros a ayudar a clasificar alrededor de un millón de galaxias. Es un ejemplo de ciencia ciudadana ya que utiliza la ayuda de gente anónima para ayudar a la investigación científica. \\
 	Gran parte del software astronómico hace uso de meta-datos para localizar y dar una clasificación de estrellas y galaxias en función a una base de datos. \\
-	\\Nuestro objetivo es evitar la dependencia de la interacción humana o el uso de bases de datos, supliéndola con técnicas de visión artificial.\\
+	Nuestro objetivo es \textit{evitar la dependencia de la interacción humana o el uso de bases de datos}, supliéndola con técnicas de visión artificial.\\
 
 	%
 	\subsubsection{Dificultades encontradas}
-	Las peculiaridades de las imágenes astronómicas hacen que los algoritmos existentes en las librerías clásicas de visión por computador no se adapten a lo esperado, esto hace que las imágenes tengan que ser transformadas. Esta transformación no es trivial y es particular para cada paso.
+	Las peculiaridades de las imágenes astronómicas hacen que los algoritmos existentes en las librerías clásicas de visión por computador no se adapten a lo esperado, esto hace que las imágenes tengan que ser transformadas. Esta transformación no es trivial y cada caso puede presentar peculiaridades.
 	\newline
+	\\
 	Destacamos entre otras, las siguientes dificultades:
 	\begin{enumerate}
 	%Describir en detalle

@@ -4,11 +4,11 @@
 \contentsline {section}{\numberline {1}Introducci\IeC {\'o}n}{3}
 \contentsline {subsection}{\numberline {1.1}Im\IeC {\'a}genes Astron\IeC {\'o}micas cient\IeC {\'\i }ficas}{4}
 \contentsline {subsection}{\numberline {1.2}Im\IeC {\'a}genes astron\IeC {\'o}micas amateur}{7}
-\contentsline {section}{\numberline {2}Objetivos}{8}
+\contentsline {section}{\numberline {2}Objetivos}{9}
 \contentsline {subsection}{\numberline {2.1}Objetivos Generales}{9}
 \contentsline {subsection}{\numberline {2.2}Objetivos Espec\IeC {\'\i }ficos}{9}
-\contentsline {section}{\numberline {3}Plan de trabajo}{12}
-\contentsline {subsection}{\numberline {3.1}An\IeC {\'a}lisis }{12}
+\contentsline {section}{\numberline {3}Plan de trabajo}{13}
+\contentsline {subsection}{\numberline {3.1}An\IeC {\'a}lisis }{13}
 \contentsline {subsubsection}{\numberline {3.1.1}Antecedentes }{13}
 \contentsline {subsubsection}{\numberline {3.1.2}Dificultades encontradas}{13}
 \contentsline {section}{\numberline {4}Desarrollo}{14}
