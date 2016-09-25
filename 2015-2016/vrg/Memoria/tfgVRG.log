@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9) (preloaded format=pdflatex 2016.8.29)  25 SEP 2016 18:49
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9) (preloaded format=pdflatex 2016.8.29)  25 SEP 2016 20:02
 entering extended mode
 **./tfgVRG.tex
 (tfgVRG.tex
@@ -802,41 +802,41 @@ Package pdftex.def Info: images/star.jpg used on input line 318.
  [11 <./images/ElipticalGalaxyESO325-G004.jpg>] [12 <./images/gradiente_GalaxyC
 lusterCLj10001+0220.png (PNG copy)> <./images/PSF-explicada2.jpg> <./images/sta
 r.jpg>]
-Underfull \hbox (badness 10000) in paragraph at lines 331--335
+Underfull \hbox (badness 10000) in paragraph at lines 330--334
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 338--342
+Underfull \hbox (badness 10000) in paragraph at lines 337--341
 
  []
 
 [13] [14] [15]
-Overfull \hbox (83.25871pt too wide) in paragraph at lines 375--376
+Overfull \hbox (83.25871pt too wide) in paragraph at lines 374--375
 \OT1/cmr/m/n/12 ima-gen: Hub-ble Spa-ce Te-les-co-pe (https://www.spacetelescop
 e.org/images/heic0910b/). 
  []
 
 
-Overfull \hbox (44.1567pt too wide) in paragraph at lines 379--381
+Overfull \hbox (44.1567pt too wide) in paragraph at lines 378--380
 \OT1/cmr/m/n/12 Z http://sci.esa.int/hubble/53751-spiral-galaxy-spills-blood-an
 d-guts-heic1404/ 
  []
 
 
-Overfull \hbox (75.66576pt too wide) in paragraph at lines 381--383
+Overfull \hbox (75.66576pt too wide) in paragraph at lines 380--382
 \OT1/cmr/m/n/12 Fuente: ESA/Hub-ble y NA-SA. (https://www.spacetelescope.org/im
 ages/potw1143a/) 
  []
 
 
-Overfull \hbox (85.21729pt too wide) in paragraph at lines 383--385
+Overfull \hbox (85.21729pt too wide) in paragraph at lines 382--384
 \OT1/cmr/m/n/12 http://www.nasa.gov/sites/default/files/thumbnails/image/hubble
 _friday_05062016.jpg 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 386--387
+Underfull \hbox (badness 10000) in paragraph at lines 385--386
 
  []
 
@@ -845,15 +845,15 @@ File: images/imgFuentesSnap/compoFuentes.png Graphic file (type png)
 
 <use images/imgFuentesSnap/compoFuentes.png>
 Package pdftex.def Info: images/imgFuentesSnap/compoFuentes.png used on input l
-ine 390.
+ine 389.
 (pdftex.def)             Requested size: 467.99881pt x 542.03493pt.
 
-Overfull \hbox (77.99881pt too wide) in paragraph at lines 390--391
+Overfull \hbox (77.99881pt too wide) in paragraph at lines 389--390
  [][] 
  []
 
 
-LaTeX Warning: Float too large for page by 20.36824pt on input line 392.
+LaTeX Warning: Float too large for page by 20.36824pt on input line 391.
 
 [16] [17 <./images/imgFuentesSnap/compoFuentes.png (PNG copy)>]
 Underfull \hbox (badness 10000) in paragraph at lines 406--407
@@ -1152,79 +1152,73 @@ File: images/gui/rightBar.png Graphic file (type png)
 Package pdftex.def Info: images/gui/rightBar.png used on input line 727.
 (pdftex.def)             Requested size: 77.99881pt x 201.56175pt.
  [38 <./images/gui/Vector.png>] [39 <./images/gui/rightBar.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 738--746
+Underfull \hbox (badness 10000) in paragraph at lines 738--745
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 738--746
+Underfull \hbox (badness 10000) in paragraph at lines 738--745
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 738--746
+Underfull \hbox (badness 10000) in paragraph at lines 747--751
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 738--746
+Underfull \hbox (badness 10000) in paragraph at lines 747--751
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 748--751
+Underfull \hbox (badness 10000) in paragraph at lines 753--756
 
  []
 
-[40]
-
-LaTeX Warning: Citation `BlantonSubstraction' on page 41 undefined on input lin
-e 760.
-
-<images/nebulaMembrana2.jpg, id=210, 1003.75pt x 473.77pt>
+[40] <images/nebulaMembrana2.jpg, id=210, 1003.75pt x 473.77pt>
 File: images/nebulaMembrana2.jpg Graphic file (type jpg)
 
 <use images/nebulaMembrana2.jpg>
-Package pdftex.def Info: images/nebulaMembrana2.jpg used on input line 764.
+Package pdftex.def Info: images/nebulaMembrana2.jpg used on input line 769.
 (pdftex.def)             Requested size: 272.99881pt x 128.85216pt.
- [41 <./images/nebulaMembrana2.jpg>]
-<images/EsquemaHubble.jpg, id=214, 376.40625pt x 311.1625pt>
+
+<images/EsquemaHubble.jpg, id=211, 376.40625pt x 311.1625pt>
 File: images/EsquemaHubble.jpg Graphic file (type jpg)
 
 <use images/EsquemaHubble.jpg>
-Package pdftex.def Info: images/EsquemaHubble.jpg used on input line 771.
+Package pdftex.def Info: images/EsquemaHubble.jpg used on input line 776.
 (pdftex.def)             Requested size: 195.0pt x 161.20244pt.
-
+ [41]
 <images/HubbleProximaCentauri_LENSFLARE.jpg, id=215, 949.5475pt x 931.48pt>
 File: images/HubbleProximaCentauri_LENSFLARE.jpg Graphic file (type jpg)
 
 <use images/HubbleProximaCentauri_LENSFLARE.jpg>
 Package pdftex.def Info: images/HubbleProximaCentauri_LENSFLARE.jpg used on inp
-ut line 777.
+ut line 782.
 (pdftex.def)             Requested size: 77.99881pt x 76.50977pt.
- [42 <./images/EsquemaHubble.jpg> <./images/HubbleProximaCentauri_LENSFLARE.jpg
->]
-Underfull \hbox (badness 10000) in paragraph at lines 786--792
+ [42 <./images/nebulaMembrana2.jpg> <./images/EsquemaHubble.jpg>]
+Underfull \hbox (badness 10000) in paragraph at lines 791--797
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 786--792
+Underfull \hbox (badness 10000) in paragraph at lines 791--797
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 786--792
+Underfull \hbox (badness 10000) in paragraph at lines 791--797
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 786--792
+Underfull \hbox (badness 10000) in paragraph at lines 791--797
 
  []
 
-[43]
-Overfull \hbox (37.42613pt too wide) in paragraph at lines 798--803
+[43 <./images/HubbleProximaCentauri_LENSFLARE.jpg>]
+Overfull \hbox (37.42613pt too wide) in paragraph at lines 803--808
 \OT1/cmr/m/n/12 http://articles.adsabs.harvard.edu//full/1988ApJ...331..699B/00
 00699.000.html 
  []
@@ -1236,17 +1230,14 @@ LaTeX Info: Redefining \. on input line 14.
 LaTeX Info: Redefining \% on input line 14.
 )
 
-LaTeX Warning: There were undefined references.
-
-
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 16347 strings out of 493335
- 305235 string characters out of 3136683
- 380481 words of memory out of 3000000
- 19493 multiletter control sequences out of 15000+200000
+ 16346 strings out of 493335
+ 305224 string characters out of 3136683
+ 380609 words of memory out of 3000000
+ 19492 multiletter control sequences out of 15000+200000
  17381 words of font info for 67 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  62i,8n,75p,833b,1505s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -1267,7 +1258,7 @@ eX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Program Files (x86)/MiKTeX
 /fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Program Files (x86)/MiKTeX 2.9/f
 onts/type1/public/amsfonts/cm/cmtt12.pfb><C:/Program Files (x86)/MiKTeX 2.9/fon
 ts/type1/public/amsfonts/euler/eufm10.pfb>
-Output written on tfgVRG.pdf (45 pages, 8760404 bytes).
+Output written on tfgVRG.pdf (45 pages, 8777632 bytes).
 PDF statistics:
  281 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)

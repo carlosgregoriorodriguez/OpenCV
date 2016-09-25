@@ -209,7 +209,7 @@
 	
 
 	\subsection{Imágenes astronómicas amateur}
-	Fuera del ámbito académico o técnico, lo habitual es obtener imágenes astronómicas en formatos de imagen genérico tales como TIFF, PNG , o JPG, siendo este último el menos adecuado (el algoritmo de compresión Jpeg destruirá valiosa información de luminancia tal y como  se aprecia en la figura \ref{fig:destroyJPG}).
+	Fuera del ámbito académico o técnico, lo habitual es obtener imágenes astronómicas en formatos de imagen genérico tales como TIFF, PNG , o JPG, siendo este último el menos adecuado (el algoritmo de compresión Jpeg destruirá valiosa información \cite{PajaresCruzUCM} de luminancia tal y como  se aprecia en la figura \ref{fig:destroyJPG}).
 	\begin{figure}[!htb]
 		\centering
 		\includegraphics[width=1\textwidth]{images/FITScomprimidoJPG.png}
@@ -323,10 +323,9 @@
 
 	\vfill
 
-	\section{Plan de trabajo}
-	\subsection{Análisis }
-		En esta sección se muestra casos conocidos de éxito de aproximaciones similares al ejercicio tratado y dificultades detectadas para la resolución del problema que va a ser tratado.
-	\subsubsection{Antecedentes }
+	\section{Análisis del problema y plan de trabajo}
+
+	\subsection{Antecedentes }
 	
 	El único proyecto que hemos encontrado de similares características	es el proyecto Galaxy Zoo. \\
 	Galaxy Zoo(https://www.galaxyzoo.org/) comenzó su andadura en 2007. Es un proyecto online de astronomía que invita a sus miembros a ayudar a clasificar alrededor de un millón de galaxias. Es un ejemplo de ciencia ciudadana ya que utiliza la ayuda de gente anónima para ayudar a la investigación científica. \\
@@ -334,7 +333,7 @@
 	Nuestro objetivo es \textit{evitar la dependencia de la interacción humana o el uso de bases de datos}, supliéndola con técnicas de visión artificial.\\
 
 	%
-	\subsubsection{Dificultades encontradas}
+	\subsection{Dificultades identificadas}
 	Las peculiaridades de las imágenes astronómicas hacen que los algoritmos existentes en las librerías clásicas de visión por computador no se adapten a lo esperado, esto hace que las imágenes tengan que ser transformadas. Esta transformación no es trivial y cada caso puede presentar peculiaridades.
 	\newline
 	\\
@@ -351,18 +350,18 @@
 	Las bases de datos astronómicas existentes contienen grandes cantidades de imágenes cuya forma de acceso se realiza mediante sus coordenadas astronómicas; dando como resultado de la búsqueda una larga lista de imágenes FITS.\\Además el peso de las mismas hace difícil su gestión.
 	\end{enumerate}
 	\newpage
-	\section{Desarrollo}
-	\subsection{Decisiones de diseño: la interfáz de usuario}
+
+	\subsection{Diseño de la interfáz de usuario}
 	Queremos crear una interfaz de trabajo, la interfáz gráfica ha de tener un doble propósito:
 	\begin{enumerate}
 		\item Facilitar la configuración de los algoritmos y visualizar el histograma resultante para la correcta automatización.\\ En un futuro trabajo se pretende hacer uso de técnicas de aprendizaje automático. La interfaz serviría como punto de inicio para obtener los parámetros base necesarios para el aprendizaje automático.
 		\item Permitir al usuario no especializado trabajar con sus imágenes y obtener el resultado de forma visual.
 	\end{enumerate}
 	Sería deseable que la interfaz visual sea agradable en apariencia y de fácil manejo, mostrando  las opciones de manipulación que necesita el usuario y los datos más significativos para  nuestros algoritmos.\\
-	Se valoraron diferentes tecnologías (QT en sus variante PyQT y PySide), optando por TkInter por su versatilidad.\\
+	Se valoraron diferentes tecnologías (QT en sus variante PyQT y PySide), optando por Tkinter por su versatilidad.\\
 	Para aprovechar lo mejor posible el area de ventana se habilitará una zona con pestañas en la que se mostrará la imagen original y procesada (para más detalle ver subsección \ref{GUI}).
 	
-	\subsection{Prueba de los algoritmos sobre una muestra de imágenes}
+	\subsection{Prueba de los algoritmos}
 	Para determinar la validez de los algoritmos, sería deseable disponer de imágenes que incluyen tanto imágenes FITS como imágenes genéricas.\\
 	Se partirá de una pequeña batería de imágenes, sobre la cual se aplicarán los algoritmos que se desarrollarán (para más detalle ver sección \ref{ownLib}), de este modo podremos afinar su precisión.
 	Esta fase ha permitido realizar la automatización del proceso afinando los algoritmos de clasificación.
@@ -392,7 +391,8 @@
 	\end{figure}
 	\clearpage
 
-	\subsection{Arquitectura interna de la aplicación}
+	\section{Desarrollo}
+	\subsection{Arquitectura interna}
 	Todo el desarrollo se ha centrado en el uso del lenguaje Python: es un lenguaje maduro con una gran cantidad de bibliotecas de apoyo. Tanto las bibliotecas usadas como el interprete de Python son de código abierto.\\
 	La aplicación se divide en dos ficheros:
 	\begin{itemize}
@@ -420,7 +420,7 @@
 	Astropy es un proyecto comunitario para acercar a python al mundo de la astronomía. Su núcleo está desarrollado en C y Python. El proyecto Astropy busca crear un framework robusto con las funcionalidades generales que se requieren en astronomía. Sus desarrolladores y usuarios principales son profesionales de las astronomía y al ser un proyecto comunitario cubre muchos de sus ámbitos (fotometría, spectrografía, sistemas de coordenadas, etc).\\
 	La principal funcionalidad que usamos de Astropy es un módulo que nos permite la carga de ficheros FITS.\\
 	La licencia de astropy es BSD.\\
-	\paragraph{TkInter}
+	\paragraph{Tkinter}
 	Es la librería de facto ( y más usada ) para desarrollar interfaces gráficas en python. Se basa en TcL/Tk lo que le permite ser multiplataforma y crear interfaces nativas sobre el sistema operativo en el que se esté ejecutando. Toda la interfáz gráfica se apoya en esta librería.\\	
 	La licencia de Tkinter es Python License.
 	\vfill
@@ -430,7 +430,7 @@
 	El desarrollo englobado en esta sección está directamente relacionado con los objetivos propuestos, partiendo de la lectura de imágenes genéricas como de imágenes en formato astronómico FITS, así como los algoritmos que se encargarán del preprocesado necesario para disponer de una imagen transformada que finalmente será procesada por los algoritmos de clasificación.\\
 	El resultado de esta secuencia de procesos nos dará una clasificación de los elementos de interés. \\
 	Los algoritmos desarrollados los hemos englobado en el fichero cvSpace.py cuyo cometido es realizar todas las tareas de Visión por computador que nos planteamos en los objetivos y estadística; se destacan:
-	\subsubsection{Ajuste de rango dinámico}
+	\paragraph{Ajuste de rango dinámico}
 	Su principal cometido es trasladar el rango de intensidades de cada elemento de la matriz imagen a unos rangos normalizados. De especial interés en este \\
 	
 
@@ -521,14 +521,14 @@
 			\end{figure}
 	\end{enumerate}
 
-	\subsubsection{Búsqueda de puntos de interés, estrellas y galaxias}
+	\paragraph{Búsqueda de puntos de interés, estrellas y galaxias}
 	%meter referencias, introducir de que es cada puntyo.
 	En este punto se detallan las funciones creadas para obtener el objetivo del trabajo, la determinación de objetos de interés.
 	\\Varias funciones son las encargadas de buscar, descartar y catalogar las posibles estrellas y galaxias.\\
 	Destacamos por su interés \emph{getObjectList}, \emph{getGalaxyCenter} y \emph{getcontours}.\\
 	\begin{enumerate}
 	\item \textbf{getObjectList}\\
-	La función getObjectList presente en cvSpace.py hace uso de la técnica detección de blobs de openCV para localizar puntos de interés, concretamente los textit{candidatos a estrellas}.\\
+	La función getObjectList presente en cvSpace.py hace uso de la técnica detección de blobs de OpenCV \cite{OpenCV} para localizar puntos de interés, concretamente los \textit{candidatos a estrellas}.\\
 	La búsqueda mediante blobs\footnote{Un blob es una región de la imagen que difiere en sus propiedades como color o intensidad, con respecto a sus vecindades} se centra en la variación de la intensidad de cada pixel con su vecindad; el proceso en detalle realiza las siguientes operaciones:
 	\begin{enumerate}
 		\item Convierte la imagen a una imagen binaria.
@@ -577,7 +577,7 @@
 	\end{enumerate}
 	\lstinputlisting[language=Python, frame= single, columns=fullflexible, firstline=1, lastline=36]{getContoursSimplified.py}
 
-	\subsubsection{Eliminación de ruido y Point Spread Function (PSF)}
+	\paragraph{Eliminación de ruido y Point Spread Function (PSF)}
 	\begin{enumerate}
 	\item Eliminación de ruido:
 	En base al resultado del algoritmo de búsqueda de contornos, se eliminan áreas carentes de interés y producto del ruido.
@@ -600,7 +600,7 @@
 	%\subsubsection{Determinación de forma en las galaxias}
 	\clearpage
 	\subsection{Procesado de imágenes}
-	\subsubsection{Pre-procesado base}
+	\paragraph{Pre-procesado base}
 	El siguiente esquema detalla el proceso que sigue cada imagen y al que llamaremos pre-procesado base. (Ver figura \ref{fig:esquemaPreprocesado})\\
 	\begin{figure}[!htb]
 		\centering
@@ -629,7 +629,7 @@
 	\end{figure}
 	\\
 	\newpage
-	\subsubsection{Algoritmo de clasificación}
+	\paragraph{Algoritmo de clasificación}
 	Partiendo de una imagen adaptada por el pre-procesado base, se realizan los siguientes pasos que se detallan en el esquema.(Ver figura \ref{fig:esquemaClasificaciosn})\\
 	\begin{figure}[!htb]
 		\centering
@@ -735,12 +735,17 @@
 	\newpage
 	\section{Conclusiones}
 	%
+	Se han desarrollado una serie de funciones y métodos para, dada una imagen con contenido astronómico, detectar elementos astronómicos tales como estrellas y galaxias, todo ello se ha acompañado de una interfaz gráfica que permite visualizar y modificar la ecualización de la imagen para obtener los elementos astronómicos buscados.
+	%MODIFICAR
 	El desarrollo de este trabajo ha resultado ser un medio de aprendizaje y
-	adquisición de nuevos conocimientos.\\
-	También ha sido una búsqueda de soluciones a los errores y problemas que se presentaban.\\ \\
-	Trabajar con OpenCV me ha hecho conocer una librería excelente, su wrapper de python sorprende por su sencillez y velocidad.\\ \\
-	EL uso de la bilioteca TkInter ha resultado ser muy flexible, permitiéndome un desarrollo rápido y usable con poco esfuerzo.\\
-	Se ha conseguido, partiendo de una idea muy ambiciosa, llegar a un prototipo que integra la mayoría de funcionalidades. Este prototipo está abierto a realizar nuevas mejoras tal como se detallará en la sub-sección \ref{sec:futureWork}.
+	adquisición de nuevos conocimientos teóricos relativos a la astronomía, tales como la existencia de los ficheros FITS, la compresión de su contenido, la clasificación de galaxias según la secuencia de Hubble ( o diagrama diapasón), necesarios para el desarrollo de este trabajo.
+	El uso de OpenCV ha hecho que adquiera conocimientos en el área de visión artificial, concretamente destaco la detección de contornos.
+	El hecho de desarrollar un proyecto con interfaz gráfica, ha provocado que adquiera conocimientos en el área de usabilidad y programación de librerías gráficas, en este caso concreto con Tkinter.
+	También ha sido una búsqueda de soluciones a los errores y problemas que se presentaban, principalmente en la ecualización de las imágenes FITS en los que se ha hecho uso de conocimientos matemáticos en las transformaciones de dominio.\\ \\
+
+	%MODIFICAR
+	Se ha conseguido, llegar a un prototipo de software, abierto a realizar nuevas mejoras tal como se detallará en la sección \ref{sec:futureWork}, aplicando técnicas conocidas durante el desarrollo de este trabajo, pero que no ha sido posible incorporar tales como la substracción de cielo.
+	%FIN MODIFICAR
 	\\
 	\newline
 
@@ -812,11 +817,6 @@
   		\\ISBM: 84-7897-472-5.
   		\\2.001 RA-MA Editorial.
 
-  		\bibitem{AstroData}\textsc{Jean-Luc Starck, Fionn Murtagh} \\
-  		\textit{Astronomical image and Data Analysis. (Second edition)}
-  		\\ISBM: 3-540-42885-2
-  		\\2.006 Springer-Verlag Berlin Heidelber.
-
 	  	\bibitem{SSDImgPro}\textsc{Robert Lupton.} \\
 	  	\textit{SDSS Image Processing I: The Deblender.}
 	  	\\http://www.astro.princeton.edu/~rhl/photomisc/deblender.pdf
@@ -833,5 +833,9 @@
 	  	\\https://www.cfa.harvard.edu/news/2005-05
 	  	\\2.005 Harvard-Smithsonian Center for Astrophysics
 	  
+  	  	\bibitem{BlantonSubstraction}\textsc{Michael R. Blanton et all.} \\
+  	  	\textit{Improved background subtraction for the Sloan Digital Sky Survey images.}
+  	  	\\http://arxiv.org/pdf/1105.1960.pdf 
+  	  	\\2.011
 	\end{thebibliography}
 \end{document}
