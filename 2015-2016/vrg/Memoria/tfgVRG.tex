@@ -39,6 +39,7 @@
 \usepackage{graphicx}
 \usepackage[colorinlistoftodos]{todonotes}
 \usepackage[section]{placeins}
+\usepackage{listings}
 %\usepackage{hyperref}
 
 
@@ -351,7 +352,7 @@
 	\item \textbf{Dificultad para conseguir ficheros de prueba:} \\
 	Las bases de datos astronómicas existentes contienen grandes cantidades de imágenes cuya forma de acceso se realiza mediante sus coordenadas astronómicas; dando como resultado de la búsqueda una larga lista de imágenes FITS.\\Además el peso de las mismas hace difícil su gestión.
 	\end{enumerate}
-
+	\newpage
 	\section{Desarrollo}
 	\subsection{Decisiones de diseño: la interfáz de usuario}
 	Queremos crear una interfaz de trabajo, la interfáz gráfica ha de tener un doble propósito:
@@ -406,32 +407,34 @@
 	\newpage
 	\subsection{Bibliotecas propias}\label{ownLib}
 	%Vincular con objetivos
+	El desarrollo englobado en esta sección está directamente relacionado con los objetivos propuestos, partiendo de la lectura de imágenes genéricas como de imágenes en formato astronómico FITS, así como los algoritmos que se encargarán del preprocesado necesario para disponer de una imagen transformada que finalmente será procesada por los algoritmos de clasificación.\\
+	El resultado de esta secuencia de procesos nos dará una clasificación de los elementos de interés. \\
 	Los algoritmos desarrollados los hemos englobado en el fichero cvSpace.py cuyo cometido es realizar todas las tareas de Visión por computador que nos planteamos en los objetivos y estadística; se destacan:
 	\subsubsection{Ajuste de rango dinámico}
-	Su principal cometido es trasladar el rango de intensidades de cada elemento de la matriz imagen a unos rangos normalizados.\\
+	Su principal cometido es trasladar el rango de intensidades de cada elemento de la matriz imagen a unos rangos normalizados. De especial interés en este \\
+	
 
 	\begin{enumerate}
 		\item \textbf{Lineal}\\
 		Conocidos el máximo $M$ y el mínimo $m$ valor en la matriz, realiza
-		la siguiente transformación (Ver figura \ref{fig:HDRLineal})\\
-%TODOCG: explicar que es cada cosa y que es la r.
+		la siguiente transformación dando como resultado la figura \ref{fig:HDRLineal}.
 			\begin{center}
-				{\large $Pixel[x,y]=\frac{2^{r}*(Pixel[x,y]-m)}{(M-m)}$}				
+				{\large $Pixel'[x,y]=\frac{2^{8}*(Pixel[x,y]-m)}{(M-m)}$}				
 			\end{center}
+			
 			\begin{figure}[!htb]
 				\centering
-				\includegraphics[width=0.5\textwidth]{images/HDREQ/chandraLineal.PNG}
+				\includegraphics[width=0.4\textwidth]{images/HDREQ/chandraLineal.PNG}
 				\caption{\label{fig:HDRLineal}{\small Ajuste de rango dinámico lineal}}
 			\end{figure}
 		\newpage
 		\item \textbf{Raíz cuadrada}\\
 		Conocidos el máximo $M$ y el mínimo $m$ valor en la matriz, realiza
 		la siguiente transformación (Ver figura \ref{fig:HDRSQRT}):
-%TODOCG: explicar que es cada cosa y que es la r.
+		El resultado del valor del nuevo pixel se almacena en $Pixel'[x,y]$.
 			\begin{center}
-			{\large $Pixel[x,y]=\frac{2^{r}*(Pixel[x,y]-m)}{\sqrt{M-m}}$}			
+			{\large $Pixel'[x,y]=\frac{2^{8}*(Pixel[x,y]-m)}{\sqrt{M-m}}$}			
 			\end{center}
-		
 			\begin{figure}[!htb]
 				\centering
 				\includegraphics[width=0.5\textwidth]{images/HDREQ/chandraSqrt.PNG}
@@ -440,10 +443,9 @@
 		\item \textbf{{}Logaritmo}\\
 		Conocidos el máximo $M$ y el mínimo $m$ valor en la matriz, realiza
 		la siguiente transformación (Ver figura \ref{fig:HDRLOG}):
-%TODOCG: diferenciar pixel origen y pixel destino
 			\begin{center}
 				{\large $Factor=log_{10}(M-m)$\\
-				$Pixel[x,y]=\frac{log_{10}(Pixel[x,y])}{Factor}$
+				$Pixel'[x,y]=\frac{log_{10}(Pixel[x,y])}{Factor}$
 				}
 			\end{center}	
 			\begin{figure}[!htb]
@@ -459,7 +461,7 @@
 		\begin{center}
 			{\large $Factor=\frac{1}{(M-n)^{n}}$}
 			\\
-			{\large $Pixel[x,y]=(Pixel[x,y]-m)^{n}*Factor$}
+			{\large $Pixel'[x,y]=(Pixel[x,y]-m)^{n}*Factor$}
 		\end{center}
 			\begin{figure}[!htb]
 				\centering
@@ -485,7 +487,7 @@
 			\begin{center}
 				{\large $Factor=\frac{arcSinH((M-m)}{nL}$}
 				\\
-				{\large $Pixel[x,y]=\frac{\frac{arcSinH(Pixel[x,y]-m)}{nL}}{Factor}$}
+				{\large $Pixel'[x,y]=\frac{\frac{arcSinH(Pixel[x,y]-m)}{nL}}{Factor}$}
 			\end{center}
 		\vfill
 
@@ -501,12 +503,13 @@
 
 	\subsubsection{Búsqueda de puntos de interés, estrellas y galaxias}
 	%meter referencias, introducir de que es cada puntyo.
-	En este punto se detallan las funciones creadas para obtener el objetivo del trabajo, la determinación de objetos de interés.\\
-	Destacamos \emph{getObjectList}, \emph{getGalaxyCenter} y \emph{getcontours}.\\
+	En este punto se detallan las funciones creadas para obtener el objetivo del trabajo, la determinación de objetos de interés.
+	\\Varias funciones son las encargadas de buscar, descartar y catalogar las posibles estrellas y galaxias.\\
+	Destacamos por su interés \emph{getObjectList}, \emph{getGalaxyCenter} y \emph{getcontours}.\\
 	\begin{enumerate}
 	\item \textbf{getObjectList}\\
-	La función getObjectList presente en cvSpace.py hace uso de la técnica detección de blobs de openCV para localizar puntos de interés, concretamente \emph{candidatos a estrellas}.\\
-	La búsqueda mediante blobs se centra en la variación de la intensidad de cada pixel con su vecindad; el proceso en detalle realiza las siguientes operaciones:
+	La función getObjectList presente en cvSpace.py hace uso de la técnica detección de blobs de openCV para localizar puntos de interés, concretamente los textit{candidatos a estrellas}.\\
+	La búsqueda mediante blobs\footnote{Un blob es una región de la imagen que difiere en sus propiedades como color o intensidad, con respecto a sus vecindades} se centra en la variación de la intensidad de cada pixel con su vecindad; el proceso en detalle realiza las siguientes operaciones:
 	\begin{enumerate}
 		\item Convierte la imagen a una imagen binaria.
 		\item Extrae las componentes conectadas en base a un cálculo de contornos.
@@ -522,15 +525,13 @@
 		
 		\item Para cada grupo de blobs nos devuelve tanto su centro como su área.
 	\end{enumerate}
-	\item getGalaxyCenter y getcontours:	\\
+	\item \textbf{getGalaxyCenter}:	\\
 	%hacer una macro para los nombres de las funciones
-	La función {\scriptsize getGalaxyCenter} se encarga de determinar el centro de las candidatas a galáxias. Mientras que la función \textbf {getContours} de nuestra librería devuelve una lista de contornos que contienen las posibles galaxias detectadas.\\
-	El proceso que realiza {\scriptsize getcontours}, se resume en los siguientes pasos:
+	La función {\scriptsize getGalaxyCenter} se encarga de determinar el centro de las candidatas a galáxias.\\
+	El proceso que realiza {\scriptsize getGalaxyCenter}, se resume en los siguientes pasos:
 	\begin{enumerate}
 		\item Aplicación de blur a la región de interés.
 		\item Búsqueda del máximo local en intensidad.
-	\end{enumerate}
-%TODOCFG-VRG: meter código.	
 	\end{enumerate}
 %TODOCFG-VRG:meter pie de página explicando que es blur
 	Es necesario realizar un blur \footnote{\cite{OpenCV}} o difuminado, como se aprecia en las imágenes \ref{fig:galaxiCenterFromImage_01_ERROR} \ref{fig:galaxiCenterFromImage_02_Blur} y \ref{fig:galaxiCenterFromImage_03_Correct}.\\
@@ -550,7 +551,14 @@
 		\includegraphics[width=0.5\textwidth]{images/galaxiCenterFromImage_03_Correct.png}
 		\caption{\label{fig:galaxiCenterFromImage_03_Correct}{\small Obtención correcta del centro de la galaxia (marcado con una circunferencia) al aplicar la función {\scriptsize getGalaxyCenter} sobre la imagen procesada con un filtro de suavizado.}}
 	\end{figure}
-	{\scriptsize getcontours} aplica búsquedas de contornos sobre la imagen transformada para detectar formaciones de galaxias e internamente realiza operaciones de erosión, dilatación y cierres de contornos.
+	\newpage
+	\item \textbf{getContours}:	\\
+	{\scriptsize getContours} aplica búsquedas de contornos sobre la imagen transformada para detectar formaciones de galaxias e internamente realiza operaciones de erosión, dilatación y cierres de contornos.
+	Bajo estas lineas se presenta el código usado.
+	\newpage
+	\end{enumerate}
+	\lstinputlisting[language=Python, frame= single, columns=fullflexible, firstline=1, lastline=36]{getContoursSimplified.py}
+
 	\subsubsection{Eliminación de ruido y Point Spread Function (PSF)}
 	\begin{enumerate}
 	\item Eliminación de ruido:

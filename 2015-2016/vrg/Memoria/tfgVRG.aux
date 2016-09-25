@@ -50,15 +50,15 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.1}An\IeC {\'a}lisis }{13}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.1}Antecedentes }{13}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.2}Dificultades encontradas}{13}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Desarrollo}{14}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Decisiones de dise\IeC {\~n}o: la interf\IeC {\'a}z de usuario}{14}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Desarrollo}{15}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Decisiones de dise\IeC {\~n}o: la interf\IeC {\'a}z de usuario}{15}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Prueba de los algoritmos sobre una muestra de im\IeC {\'a}genes}{15}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Arquitectura interna de la aplicaci\IeC {\'o}n}{15}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Bibliotecas externas}{15}}
-\@writefile{toc}{\contentsline {paragraph}{OpenCV}{15}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Bibliotecas externas}{16}}
+\@writefile{toc}{\contentsline {paragraph}{OpenCV}{16}}
 \@writefile{toc}{\contentsline {paragraph}{NumPy}{16}}
-\@writefile{toc}{\contentsline {paragraph}{Matplotlib}{16}}
-\@writefile{toc}{\contentsline {paragraph}{Astropy}{16}}
+\@writefile{toc}{\contentsline {paragraph}{Matplotlib}{17}}
+\@writefile{toc}{\contentsline {paragraph}{Astropy}{17}}
 \@writefile{toc}{\contentsline {paragraph}{TkInter}{17}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Bibliotecas propias}{18}}
 \newlabel{ownLib}{{4.5}{18}}
@@ -83,58 +83,59 @@
 \citation{OpenCV}
 \@writefile{lof}{\contentsline {figure}{\numberline {20}{\ignorespaces {\relax \fontsize  {10.95}{13.6}\selectfont  \abovedisplayskip 11\p@ plus3\p@ minus6\p@ \abovedisplayshortskip \z@ plus3\p@ \belowdisplayshortskip 6.5\p@ plus3.5\p@ minus3\p@ \def \leftmargin \leftmargini \parsep 5\p@ plus2.5\p@ minus\p@ \topsep 10\p@ plus4\p@ minus6\p@ \itemsep 5\p@ plus2.5\p@ minus\p@ {\leftmargin \leftmargini \topsep 9\p@ plus3\p@ minus5\p@ \parsep 4.5\p@ plus2\p@ minus\p@ \itemsep \parsep }\belowdisplayskip \abovedisplayskip Obtenci\IeC {\'o}n err\IeC {\'o}nea del centro de la galaxia (marcado con una circunferencia) al aplicar la funci\IeC {\'o}n {\relax \fontsize  {8}{9.5}\selectfont  getGalaxyCenter} sobre la imagen sin procesar con un filtro de suavizado.}}}{24}}
 \newlabel{fig:galaxiCenterFromImage_01_ERROR}{{20}{24}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.5.3}Eliminaci\IeC {\'o}n de ruido y Point Spread Function (PSF)}{24}}
 \@writefile{lof}{\contentsline {figure}{\numberline {21}{\ignorespaces La imagen original ha sufrido el proceso de suavizado.}}{25}}
 \newlabel{fig:galaxiCenterFromImage_02_Blur}{{21}{25}}
 \@writefile{lof}{\contentsline {figure}{\numberline {22}{\ignorespaces {\relax \fontsize  {10.95}{13.6}\selectfont  \abovedisplayskip 11\p@ plus3\p@ minus6\p@ \abovedisplayshortskip \z@ plus3\p@ \belowdisplayshortskip 6.5\p@ plus3.5\p@ minus3\p@ \def \leftmargin \leftmargini \parsep 5\p@ plus2.5\p@ minus\p@ \topsep 10\p@ plus4\p@ minus6\p@ \itemsep 5\p@ plus2.5\p@ minus\p@ {\leftmargin \leftmargini \topsep 9\p@ plus3\p@ minus5\p@ \parsep 4.5\p@ plus2\p@ minus\p@ \itemsep \parsep }\belowdisplayskip \abovedisplayskip Obtenci\IeC {\'o}n correcta del centro de la galaxia (marcado con una circunferencia) al aplicar la funci\IeC {\'o}n {\relax \fontsize  {8}{9.5}\selectfont  getGalaxyCenter} sobre la imagen procesada con un filtro de suavizado.}}}{25}}
 \newlabel{fig:galaxiCenterFromImage_03_Correct}{{22}{25}}
-\@writefile{lof}{\contentsline {figure}{\numberline {23}{\ignorespaces {\relax \fontsize  {10.95}{13.6}\selectfont  \abovedisplayskip 11\p@ plus3\p@ minus6\p@ \abovedisplayshortskip \z@ plus3\p@ \belowdisplayshortskip 6.5\p@ plus3.5\p@ minus3\p@ \def \leftmargin \leftmargini \parsep 5\p@ plus2.5\p@ minus\p@ \topsep 10\p@ plus4\p@ minus6\p@ \itemsep 5\p@ plus2.5\p@ minus\p@ {\leftmargin \leftmargini \topsep 9\p@ plus3\p@ minus5\p@ \parsep 4.5\p@ plus2\p@ minus\p@ \itemsep \parsep }\belowdisplayskip \abovedisplayskip Distintas PSF (5) de un instrumento astron\IeC {\'o}mico al aplicar diferentes filtros f\IeC {\'\i }sicos de longitud de onda. La \IeC {\'u}ltima imagen (inferior derecha) se corresponde con la simulaci\IeC {\'o}n de reducci\IeC {\'o}n de PSF}}}{26}}
-\newlabel{fig:psfInfrared}{{23}{26}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}Procesado de im\IeC {\'a}genes}{27}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.6.1}Pre-procesado base}{27}}
-\@writefile{lof}{\contentsline {figure}{\numberline {24}{\ignorespaces Flujo de pre-procesado}}{27}}
-\newlabel{fig:esquemaPreprocesado}{{24}{27}}
-\@writefile{lof}{\contentsline {figure}{\numberline {25}{\ignorespaces {\relax \fontsize  {10.95}{13.6}\selectfont  \abovedisplayskip 11\p@ plus3\p@ minus6\p@ \abovedisplayshortskip \z@ plus3\p@ \belowdisplayshortskip 6.5\p@ plus3.5\p@ minus3\p@ \def \leftmargin \leftmargini \parsep 5\p@ plus2.5\p@ minus\p@ \topsep 10\p@ plus4\p@ minus6\p@ \itemsep 5\p@ plus2.5\p@ minus\p@ {\leftmargin \leftmargini \topsep 9\p@ plus3\p@ minus5\p@ \parsep 4.5\p@ plus2\p@ minus\p@ \itemsep \parsep }\belowdisplayskip \abovedisplayskip De izquierda a derecha, imagen ecualizada linealmente, aplicando ra\IeC {\'\i }z cuadrada y aplicando arco seno hiperb\IeC {\'o}lico.}}}{28}}
-\newlabel{fig:distintasEqu}{{25}{28}}
-\@writefile{lof}{\contentsline {figure}{\numberline {26}{\ignorespaces {\relax \fontsize  {10.95}{13.6}\selectfont  \abovedisplayskip 11\p@ plus3\p@ minus6\p@ \abovedisplayshortskip \z@ plus3\p@ \belowdisplayshortskip 6.5\p@ plus3.5\p@ minus3\p@ \def \leftmargin \leftmargini \parsep 5\p@ plus2.5\p@ minus\p@ \topsep 10\p@ plus4\p@ minus6\p@ \itemsep 5\p@ plus2.5\p@ minus\p@ {\leftmargin \leftmargini \topsep 9\p@ plus3\p@ minus5\p@ \parsep 4.5\p@ plus2\p@ minus\p@ \itemsep \parsep }\belowdisplayskip \abovedisplayskip Lineas de ecualizaci\IeC {\'o}n sobre histograma.}}}{28}}
-\newlabel{fig:histLines}{{26}{28}}
-\@writefile{lof}{\contentsline {figure}{\numberline {27}{\ignorespaces {\relax \fontsize  {10.95}{13.6}\selectfont  \abovedisplayskip 11\p@ plus3\p@ minus6\p@ \abovedisplayshortskip \z@ plus3\p@ \belowdisplayshortskip 6.5\p@ plus3.5\p@ minus3\p@ \def \leftmargin \leftmargini \parsep 5\p@ plus2.5\p@ minus\p@ \topsep 10\p@ plus4\p@ minus6\p@ \itemsep 5\p@ plus2.5\p@ minus\p@ {\leftmargin \leftmargini \topsep 9\p@ plus3\p@ minus5\p@ \parsep 4.5\p@ plus2\p@ minus\p@ \itemsep \parsep }\belowdisplayskip \abovedisplayskip Im\IeC {\'a}genes o matrices autogeneradas que se usar\IeC {\'a}n para la catalogaci\IeC {\'o}n.}}}{28}}
-\newlabel{fig:imagenesAutoGeneradas}{{27}{28}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.6.2}Algoritmo de clasificaci\IeC {\'o}n}{29}}
-\@writefile{lof}{\contentsline {figure}{\numberline {28}{\ignorespaces Flujo de clasificaci\IeC {\'o}n}}{29}}
-\newlabel{fig:esquemaClasificaciosn}{{28}{29}}
-\@writefile{lof}{\contentsline {figure}{\numberline {29}{\ignorespaces {\relax \fontsize  {10.95}{13.6}\selectfont  \abovedisplayskip 11\p@ plus3\p@ minus6\p@ \abovedisplayshortskip \z@ plus3\p@ \belowdisplayshortskip 6.5\p@ plus3.5\p@ minus3\p@ \def \leftmargin \leftmargini \parsep 5\p@ plus2.5\p@ minus\p@ \topsep 10\p@ plus4\p@ minus6\p@ \itemsep 5\p@ plus2.5\p@ minus\p@ {\leftmargin \leftmargini \topsep 9\p@ plus3\p@ minus5\p@ \parsep 4.5\p@ plus2\p@ minus\p@ \itemsep \parsep }\belowdisplayskip \abovedisplayskip Resultado de la clasificaci\IeC {\'o}n. Marcado en rojo parecen las estrellas, los contornos denotan las galaxias.}}}{30}}
-\newlabel{fig:estrellasContornos}{{29}{30}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.7}Interfaz gr\IeC {\'a}fica}{32}}
-\newlabel{GUI}{{4.7}{32}}
-\@writefile{lof}{\contentsline {figure}{\numberline {30}{\ignorespaces Interf\IeC {\'a}z gr\IeC {\'a}fica}}{32}}
-\newlabel{fig:GUI_limpia}{{30}{32}}
-\@writefile{lof}{\contentsline {figure}{\numberline {31}{\ignorespaces {\relax \fontsize  {10.95}{13.6}\selectfont  \abovedisplayskip 11\p@ plus3\p@ minus6\p@ \abovedisplayshortskip \z@ plus3\p@ \belowdisplayshortskip 6.5\p@ plus3.5\p@ minus3\p@ \def \leftmargin \leftmargini \parsep 5\p@ plus2.5\p@ minus\p@ \topsep 10\p@ plus4\p@ minus6\p@ \itemsep 5\p@ plus2.5\p@ minus\p@ {\leftmargin \leftmargini \topsep 9\p@ plus3\p@ minus5\p@ \parsep 4.5\p@ plus2\p@ minus\p@ \itemsep \parsep }\belowdisplayskip \abovedisplayskip Menu Superior con una imagen raster cargada, la opci\IeC {\'o}n Save Fits as PNG aparece desactivada.}}}{33}}
-\newlabel{fig:menuFile}{{31}{33}}
-\@writefile{lof}{\contentsline {figure}{\numberline {32}{\ignorespaces {\relax \fontsize  {10.95}{13.6}\selectfont  \abovedisplayskip 11\p@ plus3\p@ minus6\p@ \abovedisplayshortskip \z@ plus3\p@ \belowdisplayshortskip 6.5\p@ plus3.5\p@ minus3\p@ \def \leftmargin \leftmargini \parsep 5\p@ plus2.5\p@ minus\p@ \topsep 10\p@ plus4\p@ minus6\p@ \itemsep 5\p@ plus2.5\p@ minus\p@ {\leftmargin \leftmargini \topsep 9\p@ plus3\p@ minus5\p@ \parsep 4.5\p@ plus2\p@ minus\p@ \itemsep \parsep }\belowdisplayskip \abovedisplayskip Si cargamos una imagen FITS se activa la opci\IeC {\'o}n de convertir y guardar en formato PNG.}}}{33}}
-\newlabel{fig:menuFileActive}{{32}{33}}
-\@writefile{lof}{\contentsline {figure}{\numberline {33}{\ignorespaces }}{33}}
-\newlabel{fig:menuPreview}{{33}{33}}
-\@writefile{lof}{\contentsline {figure}{\numberline {34}{\ignorespaces }}{34}}
-\newlabel{fig:menHelp}{{34}{34}}
-\@writefile{lof}{\contentsline {figure}{\numberline {35}{\ignorespaces {\relax \fontsize  {10.95}{13.6}\selectfont  \abovedisplayskip 11\p@ plus3\p@ minus6\p@ \abovedisplayshortskip \z@ plus3\p@ \belowdisplayshortskip 6.5\p@ plus3.5\p@ minus3\p@ \def \leftmargin \leftmargini \parsep 5\p@ plus2.5\p@ minus\p@ \topsep 10\p@ plus4\p@ minus6\p@ \itemsep 5\p@ plus2.5\p@ minus\p@ {\leftmargin \leftmargini \topsep 9\p@ plus3\p@ minus5\p@ \parsep 4.5\p@ plus2\p@ minus\p@ \itemsep \parsep }\belowdisplayskip \abovedisplayskip Histograma e im\IeC {\'a}genes segmentadas}}}{34}}
-\newlabel{fig:histSegImg}{{35}{34}}
-\@writefile{lof}{\contentsline {figure}{\numberline {36}{\ignorespaces {\relax \fontsize  {10.95}{13.6}\selectfont  \abovedisplayskip 11\p@ plus3\p@ minus6\p@ \abovedisplayshortskip \z@ plus3\p@ \belowdisplayshortskip 6.5\p@ plus3.5\p@ minus3\p@ \def \leftmargin \leftmargini \parsep 5\p@ plus2.5\p@ minus\p@ \topsep 10\p@ plus4\p@ minus6\p@ \itemsep 5\p@ plus2.5\p@ minus\p@ {\leftmargin \leftmargini \topsep 9\p@ plus3\p@ minus5\p@ \parsep 4.5\p@ plus2\p@ minus\p@ \itemsep \parsep }\belowdisplayskip \abovedisplayskip Herramientas de navegaci\IeC {\'o}n y selectores de segmentaci\IeC {\'o}n}}}{34}}
-\newlabel{fig:tools}{{36}{34}}
-\@writefile{lof}{\contentsline {figure}{\numberline {37}{\ignorespaces {\relax \fontsize  {10.95}{13.6}\selectfont  \abovedisplayskip 11\p@ plus3\p@ minus6\p@ \abovedisplayshortskip \z@ plus3\p@ \belowdisplayshortskip 6.5\p@ plus3.5\p@ minus3\p@ \def \leftmargin \leftmargini \parsep 5\p@ plus2.5\p@ minus\p@ \topsep 10\p@ plus4\p@ minus6\p@ \itemsep 5\p@ plus2.5\p@ minus\p@ {\leftmargin \leftmargini \topsep 9\p@ plus3\p@ minus5\p@ \parsep 4.5\p@ plus2\p@ minus\p@ \itemsep \parsep }\belowdisplayskip \abovedisplayskip Secci\IeC {\'o}n Vector: Resultado del procesado y catalogaci\IeC {\'o}n.}}}{35}}
-\newlabel{fig:vector}{{37}{35}}
-\@writefile{lof}{\contentsline {figure}{\numberline {38}{\ignorespaces }}{36}}
-\newlabel{fig:BarraDerecha}{{38}{36}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Conclusiones}{37}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Cumplimiento de objetivos}{37}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Trabajo futuro}{38}}
-\@writefile{lof}{\contentsline {figure}{\numberline {39}{\ignorespaces {\relax \fontsize  {10.95}{13.6}\selectfont  \abovedisplayskip 11\p@ plus3\p@ minus6\p@ \abovedisplayshortskip \z@ plus3\p@ \belowdisplayshortskip 6.5\p@ plus3.5\p@ minus3\p@ \def \leftmargin \leftmargini \parsep 5\p@ plus2.5\p@ minus\p@ \topsep 10\p@ plus4\p@ minus6\p@ \itemsep 5\p@ plus2.5\p@ minus\p@ {\leftmargin \leftmargini \topsep 9\p@ plus3\p@ minus5\p@ \parsep 4.5\p@ plus2\p@ minus\p@ \itemsep \parsep }\belowdisplayskip \abovedisplayskip El comportamiento de los contornos presenta excesivos pliegues en la imagen de la derecha (tono azul) en comparaci\IeC {\'o}n con el comportamiento de la imagen de la izquierda (tono violeta).El contorno de la derecha es un claro ejemplo de contorno err\IeC {\'o}neo.}}}{38}}
-\newlabel{fig:MembraneNebulae}{{39}{38}}
-\@writefile{lof}{\contentsline {figure}{\numberline {40}{\ignorespaces {\relax \fontsize  {10.95}{13.6}\selectfont  \abovedisplayskip 11\p@ plus3\p@ minus6\p@ \abovedisplayshortskip \z@ plus3\p@ \belowdisplayshortskip 6.5\p@ plus3.5\p@ minus3\p@ \def \leftmargin \leftmargini \parsep 5\p@ plus2.5\p@ minus\p@ \topsep 10\p@ plus4\p@ minus6\p@ \itemsep 5\p@ plus2.5\p@ minus\p@ {\leftmargin \leftmargini \topsep 9\p@ plus3\p@ minus5\p@ \parsep 4.5\p@ plus2\p@ minus\p@ \itemsep \parsep }\belowdisplayskip \abovedisplayskip Secuencia del doctor Hubble para la clasificaci\IeC {\'o}n de galaxias.}}}{39}}
-\newlabel{fig:EsquemaHubble}{{40}{39}}
-\@writefile{lof}{\contentsline {figure}{\numberline {41}{\ignorespaces Lens flare en una captura producida pro el telescopio Hubble de Proxima Centaury. Imagen cortes\IeC {\'\i }a de ESA/Hubble NASA.}}{39}}
-\newlabel{fig:lensflare}{{41}{39}}
-\@writefile{toc}{\contentsline {section}{\numberline {6}Agradecimientos}{40}}
+\@writefile{lol}{\contentsline {lstlisting}{getContoursSimplified.py}{26}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.5.3}Eliminaci\IeC {\'o}n de ruido y Point Spread Function (PSF)}{27}}
+\@writefile{lof}{\contentsline {figure}{\numberline {23}{\ignorespaces {\relax \fontsize  {10.95}{13.6}\selectfont  \abovedisplayskip 11\p@ plus3\p@ minus6\p@ \abovedisplayshortskip \z@ plus3\p@ \belowdisplayshortskip 6.5\p@ plus3.5\p@ minus3\p@ \def \leftmargin \leftmargini \parsep 5\p@ plus2.5\p@ minus\p@ \topsep 10\p@ plus4\p@ minus6\p@ \itemsep 5\p@ plus2.5\p@ minus\p@ {\leftmargin \leftmargini \topsep 9\p@ plus3\p@ minus5\p@ \parsep 4.5\p@ plus2\p@ minus\p@ \itemsep \parsep }\belowdisplayskip \abovedisplayskip Distintas PSF (5) de un instrumento astron\IeC {\'o}mico al aplicar diferentes filtros f\IeC {\'\i }sicos de longitud de onda. La \IeC {\'u}ltima imagen (inferior derecha) se corresponde con la simulaci\IeC {\'o}n de reducci\IeC {\'o}n de PSF}}}{28}}
+\newlabel{fig:psfInfrared}{{23}{28}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}Procesado de im\IeC {\'a}genes}{28}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.6.1}Pre-procesado base}{28}}
+\@writefile{lof}{\contentsline {figure}{\numberline {24}{\ignorespaces Flujo de pre-procesado}}{29}}
+\newlabel{fig:esquemaPreprocesado}{{24}{29}}
+\@writefile{lof}{\contentsline {figure}{\numberline {25}{\ignorespaces {\relax \fontsize  {10.95}{13.6}\selectfont  \abovedisplayskip 11\p@ plus3\p@ minus6\p@ \abovedisplayshortskip \z@ plus3\p@ \belowdisplayshortskip 6.5\p@ plus3.5\p@ minus3\p@ \def \leftmargin \leftmargini \parsep 5\p@ plus2.5\p@ minus\p@ \topsep 10\p@ plus4\p@ minus6\p@ \itemsep 5\p@ plus2.5\p@ minus\p@ {\leftmargin \leftmargini \topsep 9\p@ plus3\p@ minus5\p@ \parsep 4.5\p@ plus2\p@ minus\p@ \itemsep \parsep }\belowdisplayskip \abovedisplayskip De izquierda a derecha, imagen ecualizada linealmente, aplicando ra\IeC {\'\i }z cuadrada y aplicando arco seno hiperb\IeC {\'o}lico.}}}{29}}
+\newlabel{fig:distintasEqu}{{25}{29}}
+\@writefile{lof}{\contentsline {figure}{\numberline {26}{\ignorespaces {\relax \fontsize  {10.95}{13.6}\selectfont  \abovedisplayskip 11\p@ plus3\p@ minus6\p@ \abovedisplayshortskip \z@ plus3\p@ \belowdisplayshortskip 6.5\p@ plus3.5\p@ minus3\p@ \def \leftmargin \leftmargini \parsep 5\p@ plus2.5\p@ minus\p@ \topsep 10\p@ plus4\p@ minus6\p@ \itemsep 5\p@ plus2.5\p@ minus\p@ {\leftmargin \leftmargini \topsep 9\p@ plus3\p@ minus5\p@ \parsep 4.5\p@ plus2\p@ minus\p@ \itemsep \parsep }\belowdisplayskip \abovedisplayskip Lineas de ecualizaci\IeC {\'o}n sobre histograma.}}}{30}}
+\newlabel{fig:histLines}{{26}{30}}
+\@writefile{lof}{\contentsline {figure}{\numberline {27}{\ignorespaces {\relax \fontsize  {10.95}{13.6}\selectfont  \abovedisplayskip 11\p@ plus3\p@ minus6\p@ \abovedisplayshortskip \z@ plus3\p@ \belowdisplayshortskip 6.5\p@ plus3.5\p@ minus3\p@ \def \leftmargin \leftmargini \parsep 5\p@ plus2.5\p@ minus\p@ \topsep 10\p@ plus4\p@ minus6\p@ \itemsep 5\p@ plus2.5\p@ minus\p@ {\leftmargin \leftmargini \topsep 9\p@ plus3\p@ minus5\p@ \parsep 4.5\p@ plus2\p@ minus\p@ \itemsep \parsep }\belowdisplayskip \abovedisplayskip Im\IeC {\'a}genes o matrices autogeneradas que se usar\IeC {\'a}n para la catalogaci\IeC {\'o}n.}}}{30}}
+\newlabel{fig:imagenesAutoGeneradas}{{27}{30}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.6.2}Algoritmo de clasificaci\IeC {\'o}n}{31}}
+\@writefile{lof}{\contentsline {figure}{\numberline {28}{\ignorespaces Flujo de clasificaci\IeC {\'o}n}}{31}}
+\newlabel{fig:esquemaClasificaciosn}{{28}{31}}
+\@writefile{lof}{\contentsline {figure}{\numberline {29}{\ignorespaces {\relax \fontsize  {10.95}{13.6}\selectfont  \abovedisplayskip 11\p@ plus3\p@ minus6\p@ \abovedisplayshortskip \z@ plus3\p@ \belowdisplayshortskip 6.5\p@ plus3.5\p@ minus3\p@ \def \leftmargin \leftmargini \parsep 5\p@ plus2.5\p@ minus\p@ \topsep 10\p@ plus4\p@ minus6\p@ \itemsep 5\p@ plus2.5\p@ minus\p@ {\leftmargin \leftmargini \topsep 9\p@ plus3\p@ minus5\p@ \parsep 4.5\p@ plus2\p@ minus\p@ \itemsep \parsep }\belowdisplayskip \abovedisplayskip Resultado de la clasificaci\IeC {\'o}n. Marcado en rojo parecen las estrellas, los contornos denotan las galaxias.}}}{32}}
+\newlabel{fig:estrellasContornos}{{29}{32}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.7}Interfaz gr\IeC {\'a}fica}{34}}
+\newlabel{GUI}{{4.7}{34}}
+\@writefile{lof}{\contentsline {figure}{\numberline {30}{\ignorespaces Interf\IeC {\'a}z gr\IeC {\'a}fica}}{34}}
+\newlabel{fig:GUI_limpia}{{30}{34}}
+\@writefile{lof}{\contentsline {figure}{\numberline {31}{\ignorespaces {\relax \fontsize  {10.95}{13.6}\selectfont  \abovedisplayskip 11\p@ plus3\p@ minus6\p@ \abovedisplayshortskip \z@ plus3\p@ \belowdisplayshortskip 6.5\p@ plus3.5\p@ minus3\p@ \def \leftmargin \leftmargini \parsep 5\p@ plus2.5\p@ minus\p@ \topsep 10\p@ plus4\p@ minus6\p@ \itemsep 5\p@ plus2.5\p@ minus\p@ {\leftmargin \leftmargini \topsep 9\p@ plus3\p@ minus5\p@ \parsep 4.5\p@ plus2\p@ minus\p@ \itemsep \parsep }\belowdisplayskip \abovedisplayskip Menu Superior con una imagen raster cargada, la opci\IeC {\'o}n Save Fits as PNG aparece desactivada.}}}{35}}
+\newlabel{fig:menuFile}{{31}{35}}
+\@writefile{lof}{\contentsline {figure}{\numberline {32}{\ignorespaces {\relax \fontsize  {10.95}{13.6}\selectfont  \abovedisplayskip 11\p@ plus3\p@ minus6\p@ \abovedisplayshortskip \z@ plus3\p@ \belowdisplayshortskip 6.5\p@ plus3.5\p@ minus3\p@ \def \leftmargin \leftmargini \parsep 5\p@ plus2.5\p@ minus\p@ \topsep 10\p@ plus4\p@ minus6\p@ \itemsep 5\p@ plus2.5\p@ minus\p@ {\leftmargin \leftmargini \topsep 9\p@ plus3\p@ minus5\p@ \parsep 4.5\p@ plus2\p@ minus\p@ \itemsep \parsep }\belowdisplayskip \abovedisplayskip Si cargamos una imagen FITS se activa la opci\IeC {\'o}n de convertir y guardar en formato PNG.}}}{35}}
+\newlabel{fig:menuFileActive}{{32}{35}}
+\@writefile{lof}{\contentsline {figure}{\numberline {33}{\ignorespaces }}{35}}
+\newlabel{fig:menuPreview}{{33}{35}}
+\@writefile{lof}{\contentsline {figure}{\numberline {34}{\ignorespaces }}{36}}
+\newlabel{fig:menHelp}{{34}{36}}
+\@writefile{lof}{\contentsline {figure}{\numberline {35}{\ignorespaces {\relax \fontsize  {10.95}{13.6}\selectfont  \abovedisplayskip 11\p@ plus3\p@ minus6\p@ \abovedisplayshortskip \z@ plus3\p@ \belowdisplayshortskip 6.5\p@ plus3.5\p@ minus3\p@ \def \leftmargin \leftmargini \parsep 5\p@ plus2.5\p@ minus\p@ \topsep 10\p@ plus4\p@ minus6\p@ \itemsep 5\p@ plus2.5\p@ minus\p@ {\leftmargin \leftmargini \topsep 9\p@ plus3\p@ minus5\p@ \parsep 4.5\p@ plus2\p@ minus\p@ \itemsep \parsep }\belowdisplayskip \abovedisplayskip Histograma e im\IeC {\'a}genes segmentadas}}}{36}}
+\newlabel{fig:histSegImg}{{35}{36}}
+\@writefile{lof}{\contentsline {figure}{\numberline {36}{\ignorespaces {\relax \fontsize  {10.95}{13.6}\selectfont  \abovedisplayskip 11\p@ plus3\p@ minus6\p@ \abovedisplayshortskip \z@ plus3\p@ \belowdisplayshortskip 6.5\p@ plus3.5\p@ minus3\p@ \def \leftmargin \leftmargini \parsep 5\p@ plus2.5\p@ minus\p@ \topsep 10\p@ plus4\p@ minus6\p@ \itemsep 5\p@ plus2.5\p@ minus\p@ {\leftmargin \leftmargini \topsep 9\p@ plus3\p@ minus5\p@ \parsep 4.5\p@ plus2\p@ minus\p@ \itemsep \parsep }\belowdisplayskip \abovedisplayskip Herramientas de navegaci\IeC {\'o}n y selectores de segmentaci\IeC {\'o}n}}}{36}}
+\newlabel{fig:tools}{{36}{36}}
+\@writefile{lof}{\contentsline {figure}{\numberline {37}{\ignorespaces {\relax \fontsize  {10.95}{13.6}\selectfont  \abovedisplayskip 11\p@ plus3\p@ minus6\p@ \abovedisplayshortskip \z@ plus3\p@ \belowdisplayshortskip 6.5\p@ plus3.5\p@ minus3\p@ \def \leftmargin \leftmargini \parsep 5\p@ plus2.5\p@ minus\p@ \topsep 10\p@ plus4\p@ minus6\p@ \itemsep 5\p@ plus2.5\p@ minus\p@ {\leftmargin \leftmargini \topsep 9\p@ plus3\p@ minus5\p@ \parsep 4.5\p@ plus2\p@ minus\p@ \itemsep \parsep }\belowdisplayskip \abovedisplayskip Secci\IeC {\'o}n Vector: Resultado del procesado y catalogaci\IeC {\'o}n.}}}{37}}
+\newlabel{fig:vector}{{37}{37}}
+\@writefile{lof}{\contentsline {figure}{\numberline {38}{\ignorespaces }}{38}}
+\newlabel{fig:BarraDerecha}{{38}{38}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Conclusiones}{39}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Cumplimiento de objetivos}{39}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Trabajo futuro}{40}}
+\@writefile{lof}{\contentsline {figure}{\numberline {39}{\ignorespaces {\relax \fontsize  {10.95}{13.6}\selectfont  \abovedisplayskip 11\p@ plus3\p@ minus6\p@ \abovedisplayshortskip \z@ plus3\p@ \belowdisplayshortskip 6.5\p@ plus3.5\p@ minus3\p@ \def \leftmargin \leftmargini \parsep 5\p@ plus2.5\p@ minus\p@ \topsep 10\p@ plus4\p@ minus6\p@ \itemsep 5\p@ plus2.5\p@ minus\p@ {\leftmargin \leftmargini \topsep 9\p@ plus3\p@ minus5\p@ \parsep 4.5\p@ plus2\p@ minus\p@ \itemsep \parsep }\belowdisplayskip \abovedisplayskip El comportamiento de los contornos presenta excesivos pliegues en la imagen de la derecha (tono azul) en comparaci\IeC {\'o}n con el comportamiento de la imagen de la izquierda (tono violeta).El contorno de la derecha es un claro ejemplo de contorno err\IeC {\'o}neo.}}}{40}}
+\newlabel{fig:MembraneNebulae}{{39}{40}}
+\@writefile{lof}{\contentsline {figure}{\numberline {40}{\ignorespaces {\relax \fontsize  {10.95}{13.6}\selectfont  \abovedisplayskip 11\p@ plus3\p@ minus6\p@ \abovedisplayshortskip \z@ plus3\p@ \belowdisplayshortskip 6.5\p@ plus3.5\p@ minus3\p@ \def \leftmargin \leftmargini \parsep 5\p@ plus2.5\p@ minus\p@ \topsep 10\p@ plus4\p@ minus6\p@ \itemsep 5\p@ plus2.5\p@ minus\p@ {\leftmargin \leftmargini \topsep 9\p@ plus3\p@ minus5\p@ \parsep 4.5\p@ plus2\p@ minus\p@ \itemsep \parsep }\belowdisplayskip \abovedisplayskip Secuencia del doctor Hubble para la clasificaci\IeC {\'o}n de galaxias.}}}{41}}
+\newlabel{fig:EsquemaHubble}{{40}{41}}
+\@writefile{lof}{\contentsline {figure}{\numberline {41}{\ignorespaces Lens flare en una captura producida pro el telescopio Hubble de Proxima Centaury. Imagen cortes\IeC {\'\i }a de ESA/Hubble NASA.}}{41}}
+\newlabel{fig:lensflare}{{41}{41}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Agradecimientos}{42}}
 \bibcite{NASADISKHALO}{1}
 \bibcite{OpenCV}{2}
 \bibcite{PajaresCruzUCM}{3}
