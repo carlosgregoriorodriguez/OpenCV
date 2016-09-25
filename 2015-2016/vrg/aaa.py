@@ -757,10 +757,10 @@ class AstroCanvas:
 		cv2.imwrite(directory+"/"+name+"_diffuse.png",diffuse)
 		diffuseEroded = cvSpace.dilate(diffuse,2)
 		diffuseEroded = cvSpace.erode(diffuseEroded,10)
-		cv2.imwrite(directory+name+"_diffuseEroded.png",diffuseEroded)
+		cv2.imwrite(directory+"/"+name+"_diffuseEroded.png",diffuseEroded)
 		#save 4 images
 		cv2.imwrite(directory+"/"+name+"_vector.png",self.internalAstroImg.contourImage)
-		tkMessageBox.showinfo("Project Images Saved", "Project Images saved as:\n "+directory+self.internalAstroImg.name+"_[dark, diffuse, diffuseEroded, vector].png\nat folder "+directory)
+		tkMessageBox.showinfo("Project Images Saved", "Project Images saved as:\n "+directory+"/"+self.internalAstroImg.name+"_[dark, diffuse, diffuseEroded, vector].png\nat folder "+directory)
 		
 	def changeHistogramSignal(self, value):
 		print "Histogram change to "+str(value)
