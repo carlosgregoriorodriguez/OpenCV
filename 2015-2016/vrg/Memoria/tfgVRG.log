@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9) (preloaded format=pdflatex 2016.8.29)  25 SEP 2016 14:36
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9) (preloaded format=pdflatex 2016.8.29)  25 SEP 2016 18:49
 entering extended mode
 **./tfgVRG.tex
 (tfgVRG.tex
@@ -818,12 +818,6 @@ e.org/images/heic0910b/).
  []
 
 
-Overfull \hbox (167.38705pt too wide) in paragraph at lines 377--378
-\OT1/cmr/m/n/12 Fuen-te: ESA/Hub-ble, NA-SA and N. Go-rin (STS-cI). http://www.
-spacetelescope.org/images/potw1545a/ 
- []
-
-
 Overfull \hbox (44.1567pt too wide) in paragraph at lines 379--381
 \OT1/cmr/m/n/12 Z http://sci.esa.int/hubble/53751-spiral-galaxy-spills-blood-an
 d-guts-heic1404/ 
@@ -839,6 +833,11 @@ ages/potw1143a/)
 Overfull \hbox (85.21729pt too wide) in paragraph at lines 383--385
 \OT1/cmr/m/n/12 http://www.nasa.gov/sites/default/files/thumbnails/image/hubble
 _friday_05062016.jpg 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 386--387
+
  []
 
 <images/imgFuentesSnap/compoFuentes.png, id=82, 888.31876pt x 1028.84375pt>
@@ -944,17 +943,13 @@ File: images/removeBadPoints3.png Graphic file (type png)
 <use images/removeBadPoints3.png>
 Package pdftex.def Info: images/removeBadPoints3.png used on input line 541.
 (pdftex.def)             Requested size: 350.99762pt x 350.98357pt.
- [25 <./images/removeBadPoints3.png (PNG copy)>]
-Underfull \hbox (badness 10000) in paragraph at lines 556--557
-
- []
-
-<images/galaxiCenterFromImage_01_ERROR.png, id=132, 602.25pt x 375.65344pt>
+ [25 <./images/removeBadPoints3.png (PNG copy)>] <images/galaxiCenterFromImage_
+01_ERROR.png, id=132, 602.25pt x 375.65344pt>
 File: images/galaxiCenterFromImage_01_ERROR.png Graphic file (type png)
 
 <use images/galaxiCenterFromImage_01_ERROR.png>
 Package pdftex.def Info: images/galaxiCenterFromImage_01_ERROR.png used on inpu
-t line 562.
+t line 561.
 (pdftex.def)             Requested size: 195.0pt x 121.63309pt.
 
 <images/galaxiCenterFromImage_02_Blur.png, id=133, 602.25pt x 376.40625pt>
@@ -962,21 +957,17 @@ File: images/galaxiCenterFromImage_02_Blur.png Graphic file (type png)
 
 <use images/galaxiCenterFromImage_02_Blur.png>
 Package pdftex.def Info: images/galaxiCenterFromImage_02_Blur.png used on input
- line 567.
+ line 566.
 (pdftex.def)             Requested size: 195.0pt x 121.87683pt.
 
 <images/galaxiCenterFromImage_03_Correct.png, id=134, 601.4972pt x 377.15906pt>
 File: images/galaxiCenterFromImage_03_Correct.png Graphic file (type png)
 <use images/galaxiCenterFromImage_03_Correct.png>
 Package pdftex.def Info: images/galaxiCenterFromImage_03_Correct.png used on in
-put line 572.
+put line 571.
 (pdftex.def)             Requested size: 195.0pt x 122.27022pt.
- [26]
-
-LaTeX Warning: Text page 27 contains only floats.
-
-[27 <./images/galaxiCenterFromImage_01_ERROR.png> <./images/galaxiCenterFromIma
-ge_02_Blur.png> <./images/galaxiCenterFromImage_03_Correct.png>]
+ [26 <./images/galaxiCenterFromImage_01_ERROR.png>] [27 <./images/galaxiCenterF
+romImage_02_Blur.png> <./images/galaxiCenterFromImage_03_Correct.png>]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\listings\lstlang1.sty"
 File: lstlang1.sty 2015/06/04 1.6 listings language file
 )
@@ -998,8 +989,10 @@ File: omlcmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <12> not available
 (Font)              Font shape `OML/cmm/m/it' tried instead on input line 6.
-) [28]
-Underfull \hbox (badness 10000) in paragraph at lines 583--589
+) [28
+
+]
+Underfull \hbox (badness 10000) in paragraph at lines 582--588
 
  []
 
@@ -1007,25 +1000,25 @@ Underfull \hbox (badness 10000) in paragraph at lines 583--589
 File: images/PSFUnificadas.png Graphic file (type png)
 
 <use images/PSFUnificadas.png>
-Package pdftex.def Info: images/PSFUnificadas.png used on input line 595.
+Package pdftex.def Info: images/PSFUnificadas.png used on input line 594.
 (pdftex.def)             Requested size: 390.0pt x 512.82837pt.
 
 
-LaTeX Warning: Float too large for page by 19.95753pt on input line 597.
+LaTeX Warning: Float too large for page by 19.95753pt on input line 596.
 
 [29] [30 <./images/PSFUnificadas.png (PNG copy)>]
 <images/tfg2016pipeline1.jpg, id=156, 1185.42876pt x 479.7925pt>
 File: images/tfg2016pipeline1.jpg Graphic file (type jpg)
 
 <use images/tfg2016pipeline1.jpg>
-Package pdftex.def Info: images/tfg2016pipeline1.jpg used on input line 608.
+Package pdftex.def Info: images/tfg2016pipeline1.jpg used on input line 607.
 (pdftex.def)             Requested size: 390.0pt x 157.84882pt.
 
 <images/ecu_lineal_sqr_asinh.jpg, id=157, 1204.5pt x 412.54124pt>
 File: images/ecu_lineal_sqr_asinh.jpg Graphic file (type jpg)
 
 <use images/ecu_lineal_sqr_asinh.jpg>
-Package pdftex.def Info: images/ecu_lineal_sqr_asinh.jpg used on input line 615
+Package pdftex.def Info: images/ecu_lineal_sqr_asinh.jpg used on input line 614
 .
 (pdftex.def)             Requested size: 390.0pt x 133.57701pt.
 
@@ -1033,7 +1026,7 @@ Package pdftex.def Info: images/ecu_lineal_sqr_asinh.jpg used on input line 615
 File: images/histLines.png Graphic file (type png)
 
 <use images/histLines.png>
-Package pdftex.def Info: images/histLines.png used on input line 621.
+Package pdftex.def Info: images/histLines.png used on input line 620.
 (pdftex.def)             Requested size: 390.0pt x 89.51718pt.
 
 <images/imagenesAutoGeneradas.png, id=159, 469.00218pt x 94.85437pt>
@@ -1041,15 +1034,15 @@ File: images/imagenesAutoGeneradas.png Graphic file (type png)
 
 <use images/imagenesAutoGeneradas.png>
 Package pdftex.def Info: images/imagenesAutoGeneradas.png used on input line 62
-8.
+7.
 (pdftex.def)             Requested size: 390.0pt x 78.87527pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 605--632
+Underfull \hbox (badness 10000) in paragraph at lines 604--631
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 605--632
+Underfull \hbox (badness 10000) in paragraph at lines 604--631
 
  []
 
@@ -1061,14 +1054,14 @@ File: images/tfg2016algoritmos_de_catalogaci_n.jpg Graphic file (type jpg)
 
 <use images/tfg2016algoritmos_de_catalogaci_n.jpg>
 Package pdftex.def Info: images/tfg2016algoritmos_de_catalogaci_n.jpg used on i
-nput line 637.
+nput line 636.
 (pdftex.def)             Requested size: 390.0pt x 241.88931pt.
 
 <images/vectorClasifica.png, id=164, 503.63156pt x 502.87875pt>
 File: images/vectorClasifica.png Graphic file (type png)
 
 <use images/vectorClasifica.png>
-Package pdftex.def Info: images/vectorClasifica.png used on input line 649.
+Package pdftex.def Info: images/vectorClasifica.png used on input line 648.
 (pdftex.def)             Requested size: 390.0pt x 389.42007pt.
  [32 <./images/ecu_lineal_sqr_asinh.jpg> <./images/histLines.png> <./images/ima
 genesAutoGeneradas.png>] [33 <./images/tfg2016algoritmos_de_catalogaci_n.jpg>]
@@ -1076,21 +1069,21 @@ genesAutoGeneradas.png>] [33 <./images/tfg2016algoritmos_de_catalogaci_n.jpg>]
 File: images/gui/general.png Graphic file (type png)
 
 <use images/gui/general.png>
-Package pdftex.def Info: images/gui/general.png used on input line 664.
+Package pdftex.def Info: images/gui/general.png used on input line 663.
 (pdftex.def)             Requested size: 390.0pt x 304.89964pt.
  [34 <./images/vectorClasifica.png>]
 <images/gui/menuFileGhost.jpg, id=178, 223.83624pt x 164.615pt>
 File: images/gui/menuFileGhost.jpg Graphic file (type jpg)
 
 <use images/gui/menuFileGhost.jpg>
-Package pdftex.def Info: images/gui/menuFileGhost.jpg used on input line 676.
+Package pdftex.def Info: images/gui/menuFileGhost.jpg used on input line 675.
 (pdftex.def)             Requested size: 117.00119pt x 86.0474pt.
 
 <images/gui/menuFileUnGhost.jpg, id=179, 199.74625pt x 161.60374pt>
 File: images/gui/menuFileUnGhost.jpg Graphic file (type jpg)
 
 <use images/gui/menuFileUnGhost.jpg>
-Package pdftex.def Info: images/gui/menuFileUnGhost.jpg used on input line 681.
+Package pdftex.def Info: images/gui/menuFileUnGhost.jpg used on input line 680.
 
 (pdftex.def)             Requested size: 117.00119pt x 94.65987pt.
 
@@ -1098,27 +1091,27 @@ Package pdftex.def Info: images/gui/menuFileUnGhost.jpg used on input line 681.
 File: images/gui/menuPreview.jpg Graphic file (type jpg)
 
 <use images/gui/menuPreview.jpg>
-Package pdftex.def Info: images/gui/menuPreview.jpg used on input line 688.
+Package pdftex.def Info: images/gui/menuPreview.jpg used on input line 687.
 (pdftex.def)             Requested size: 117.00119pt x 52.70378pt.
 
 <images/gui/menuHelp.jpg, id=181, 228.855pt x 89.33376pt>
 File: images/gui/menuHelp.jpg Graphic file (type jpg)
 
 <use images/gui/menuHelp.jpg>
-Package pdftex.def Info: images/gui/menuHelp.jpg used on input line 695.
+Package pdftex.def Info: images/gui/menuHelp.jpg used on input line 694.
 (pdftex.def)             Requested size: 117.00119pt x 45.67137pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 670--698
+Underfull \hbox (badness 10000) in paragraph at lines 669--697
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 670--698
+Underfull \hbox (badness 10000) in paragraph at lines 669--697
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 670--698
+Underfull \hbox (badness 10000) in paragraph at lines 669--697
 
  []
 
@@ -1128,24 +1121,24 @@ File: images/gui/Histogram_segmentation.png Graphic file (type png)
 
 <use images/gui/Histogram_segmentation.png>
 Package pdftex.def Info: images/gui/Histogram_segmentation.png used on input li
-ne 703.
+ne 702.
 (pdftex.def)             Requested size: 272.99881pt x 117.56175pt.
 
 <images/gui/tools.png, id=187, 47.42719pt x 219.06844pt>
 File: images/gui/tools.png Graphic file (type png)
 
 <use images/gui/tools.png>
-Package pdftex.def Info: images/gui/tools.png used on input line 709.
+Package pdftex.def Info: images/gui/tools.png used on input line 708.
 (pdftex.def)             Requested size: 19.50119pt x 90.07936pt.
 
 <images/gui/Vector.png, id=188, 751.30687pt x 585.68813pt>
 File: images/gui/Vector.png Graphic file (type png)
 
 <use images/gui/Vector.png>
-Package pdftex.def Info: images/gui/Vector.png used on input line 720.
+Package pdftex.def Info: images/gui/Vector.png used on input line 719.
 (pdftex.def)             Requested size: 272.99881pt x 212.8226pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 698--723
+Underfull \hbox (badness 10000) in paragraph at lines 697--722
 
  []
 
@@ -1156,45 +1149,50 @@ m_segmentation.png> <./images/gui/tools.png>]
 File: images/gui/rightBar.png Graphic file (type png)
 
 <use images/gui/rightBar.png>
-Package pdftex.def Info: images/gui/rightBar.png used on input line 728.
+Package pdftex.def Info: images/gui/rightBar.png used on input line 727.
 (pdftex.def)             Requested size: 77.99881pt x 201.56175pt.
  [38 <./images/gui/Vector.png>] [39 <./images/gui/rightBar.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 739--747
+Underfull \hbox (badness 10000) in paragraph at lines 738--746
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 739--747
+Underfull \hbox (badness 10000) in paragraph at lines 738--746
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 739--747
+Underfull \hbox (badness 10000) in paragraph at lines 738--746
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 739--747
+Underfull \hbox (badness 10000) in paragraph at lines 738--746
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 749--752
+Underfull \hbox (badness 10000) in paragraph at lines 748--751
 
  []
 
-[40] <images/nebulaMembrana2.jpg, id=210, 1003.75pt x 473.77pt>
+[40]
+
+LaTeX Warning: Citation `BlantonSubstraction' on page 41 undefined on input lin
+e 760.
+
+<images/nebulaMembrana2.jpg, id=210, 1003.75pt x 473.77pt>
 File: images/nebulaMembrana2.jpg Graphic file (type jpg)
 
 <use images/nebulaMembrana2.jpg>
-Package pdftex.def Info: images/nebulaMembrana2.jpg used on input line 765.
+Package pdftex.def Info: images/nebulaMembrana2.jpg used on input line 764.
 (pdftex.def)             Requested size: 272.99881pt x 128.85216pt.
  [41 <./images/nebulaMembrana2.jpg>]
 <images/EsquemaHubble.jpg, id=214, 376.40625pt x 311.1625pt>
 File: images/EsquemaHubble.jpg Graphic file (type jpg)
 
 <use images/EsquemaHubble.jpg>
-Package pdftex.def Info: images/EsquemaHubble.jpg used on input line 772.
+Package pdftex.def Info: images/EsquemaHubble.jpg used on input line 771.
 (pdftex.def)             Requested size: 195.0pt x 161.20244pt.
 
 <images/HubbleProximaCentauri_LENSFLARE.jpg, id=215, 949.5475pt x 931.48pt>
@@ -1202,56 +1200,53 @@ File: images/HubbleProximaCentauri_LENSFLARE.jpg Graphic file (type jpg)
 
 <use images/HubbleProximaCentauri_LENSFLARE.jpg>
 Package pdftex.def Info: images/HubbleProximaCentauri_LENSFLARE.jpg used on inp
-ut line 778.
+ut line 777.
 (pdftex.def)             Requested size: 77.99881pt x 76.50977pt.
  [42 <./images/EsquemaHubble.jpg> <./images/HubbleProximaCentauri_LENSFLARE.jpg
 >]
-Underfull \hbox (badness 10000) in paragraph at lines 787--793
+Underfull \hbox (badness 10000) in paragraph at lines 786--792
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 787--793
+Underfull \hbox (badness 10000) in paragraph at lines 786--792
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 787--793
+Underfull \hbox (badness 10000) in paragraph at lines 786--792
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 787--793
+Underfull \hbox (badness 10000) in paragraph at lines 786--792
 
  []
 
 [43]
-Overfull \hbox (37.42613pt too wide) in paragraph at lines 811--816
+Overfull \hbox (37.42613pt too wide) in paragraph at lines 798--803
 \OT1/cmr/m/n/12 http://articles.adsabs.harvard.edu//full/1988ApJ...331..699B/00
 00699.000.html 
  []
 
-[44]
-Underfull \hbox (badness 10000) in paragraph at lines 867--871
-\OT1/cmr/m/n/12 http://www.iosrjournals.org/iosr-jeee/Papers/Vol9-issue5/Versio
-n-
- []
-
-[45] (tfgVRG.aux
+[44] (tfgVRG.aux
 LaTeX Info: Redefining \. on input line 6.
 LaTeX Info: Redefining \% on input line 6.
 LaTeX Info: Redefining \. on input line 14.
 LaTeX Info: Redefining \% on input line 14.
 )
 
+LaTeX Warning: There were undefined references.
+
+
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 16351 strings out of 493335
- 305309 string characters out of 3136683
- 380489 words of memory out of 3000000
- 19497 multiletter control sequences out of 15000+200000
+ 16347 strings out of 493335
+ 305235 string characters out of 3136683
+ 380481 words of memory out of 3000000
+ 19493 multiletter control sequences out of 15000+200000
  17381 words of font info for 67 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  62i,8n,75p,833b,1505s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -1272,9 +1267,9 @@ eX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Program Files (x86)/MiKTeX
 /fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Program Files (x86)/MiKTeX 2.9/f
 onts/type1/public/amsfonts/cm/cmtt12.pfb><C:/Program Files (x86)/MiKTeX 2.9/fon
 ts/type1/public/amsfonts/euler/eufm10.pfb>
-Output written on tfgVRG.pdf (46 pages, 8764923 bytes).
+Output written on tfgVRG.pdf (45 pages, 8760404 bytes).
 PDF statistics:
- 284 PDF objects out of 1000 (max. 8388607)
+ 281 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  228 words of extra memory for PDF output out of 10000 (max. 10000000)
 

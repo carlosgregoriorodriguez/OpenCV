@@ -96,7 +96,7 @@
 			%   DATE SECTION
 			%----------------------------------------------------------------------------------------
 			
-			{\large \today}\\[2cm] % Date, change the \today to a set date if you want to be precise
+			%{\large \today}\\[2cm] % Date, change the \today to a set date if you want to be precise
 		\vfill % Fill the rest of the page with whitespace
 		
 	\end{titlepage}
@@ -104,13 +104,13 @@
 
 	\begin{abstract}
 		Con la irrupción de la tecnología digital de captura de imágenes, la astronomía incrementó notablemente tanto el número de imágenes que se obtiene del espacio como la calidad de las mismas.\\ 
-		Este conocimiento en formato digital requiere de sistemas automatizados de tratamiento e interpretación de las mismas para obtener información científica relevante, tal como extracción de fuentes puntuales, análisis de espectroscopía, calibrado, ...
+		Este conocimiento en formato digital requiere de sistemas automatizados de tratamiento e interpretación de las mismas para obtener información científica relevante: extracción de fuentes puntuales, análisis de espectroscopía, calibrado, etc
 		\\ \\
 		El proyecto tiene como objetivo la detección y clasificación de elementos luminosos tales como estrellas y galaxias, tomando como fuente ficheros astronómicos FITS o imágenes astronómicas genéricas.\\ 
 		Proponemos desarrollar un software con interfaz gráfica, que permite un manejo sencillo de las funcionalidades implementadas.\\
 		\\
 		Palabras clave: \\
-		Tratamiento digital de imagen. Astronomía. Detección de elementos astronómicos. Visión artificial. OpenCV. Estrellas. Galaxias. Detección de contornos. FITS. Software de procesado de imágenes.
+		Tratamiento digital de imagen. Astronomía. Detección de elementos astronómicos. Visión artificial. Estrellas. Galaxias. Detección de contornos. FITS. Software de procesado de imágenes.
 	\end{abstract}
 	
 
@@ -119,13 +119,13 @@
 	\begin{otherlanguage}{english}
 	\begin{abstract}
 		With the advent of digital imaging technology , astronomy has significantly increased the number of images obtained from space and the quality of them.\\ 
-		This knowledge in digital format requires automated processing systems and interpretation thereof to obtain relevant scientific information, such as extraction of point sources, spectroscopy analysis, calibration, ...
+		This knowledge in digital format requires automated processing systems and interpretation thereof to obtain relevant scientific information, such as extraction of point sources, spectroscopy analysis, calibration, etc
 		\\ \\
 		The project focuses on the detection and classification of lighting elements such as stars or galaxies, using as source FITS files or generic astronomical images.\\ 
 		The project is accompanied by a software with graphical interface that allows easy management of the implemented features.\\
 		\\
 		Keywords:\\
-		Digital image processing. Astronomy. Astronomical element detection. Artificial vision. OpenCV. Starts. Galaxies. Contour Detection, FITS. Image processing software.
+		Digital image processing. Astronomy. Astronomical element detection. Artificial vision.  Starts. Galaxies. Contour Detection, FITS. Image processing software.
 	\end{abstract}
 	\end{otherlanguage}
 	\vfill % Fill the rest of the page with whitespace
@@ -143,7 +143,7 @@
 	
 	No solo se observa el universo desde la tierra, la humanidad ha posicionado observatorios fuera de la estratosfera, estos factores junto con el avance y abaratamiento de la tecnología ha incrementado el número de adquisiciones de imágenes astronómicas, estas imágenes en muchos casos no llegan a ser analizadas debido al tiempo humano necesario para procesarlas. La irrupción de la imagen digital y su avance en las últimas tres décadas abre el camino al tratamiento automático de las imágenes.
 	
-	El tratamiento automatizado de imágenes astronómicas requiere de tecnologías tales como la visión artificial, campo que avanza rápidamente en ámbitos como la detección facial o seguimiento de objetos, pero que por las peculiaridades de las imágenes astronómicas, no ha progresado del mismo modo, los motivos entre otros son la baja definición de los elementos a tratar, los diferentes rangos dinámicos existentes, las características propias de los múltiples elementos de captación de imágenes, la falta de adecuación de los actuales algortimos de visión artificial, ...
+	El tratamiento automatizado de imágenes astronómicas requiere de tecnologías tales como la visión artificial, campo que avanza rápidamente en ámbitos como la detección facial o seguimiento de objetos, pero que por las peculiaridades de las imágenes astronómicas, no ha progresado del mismo modo, los motivos entre otros son la baja definición de los elementos a tratar, los diferentes rangos dinámicos existentes, las características propias de los múltiples elementos de captación de imágenes, la falta de adecuación de los actuales algoritmos de visión artificial, ...
 	
 	Los observatorios y algunas instituciones académicas se encargan parcialmente de la labor del tratamiento de las imágenes que obtienen, realizando un pre-procesado automático denominado reducción, de los datos obtenidos desde una imagen RAW o cruda a unos datos que permita su uso en un contexto científico muy específico. Esta reducción cumple los requisitos de la misión o del grupo de estudio que preparó la captura de las imágenes. El cometido de la reducción es doble:
 	\begin{itemize}
@@ -160,7 +160,7 @@
 	El elemento base de trabajo serán imágenes de contenido astronómico que hemos considerado interesante dividir en dos grupos según su procedencia. 
 	
 	\subsection{Imágenes Astronómicas científicas}
-	El formato por excelencia dentro de la astronomía no amateur es el conocido como formato FITS, acrónimo de Flexible Image Transport System y estandarizado en el año 1981, que ha evolucionado a la par que los instrumentos astronómicos con diferentes revisiones del standard. Una de las ventajas que nos ofrece este formato es la retro-compatibilidad con revisiones anteriores. \\
+	El formato por excelencia dentro de la astronomía no amateur es el conocido como formato FITS \cite{NasaFITS}, acrónimo de Flexible Image Transport System y estandarizado en el año 1981, que ha evolucionado a la par que los instrumentos astronómicos con diferentes revisiones del standard. Una de las ventajas que nos ofrece este formato es la retro-compatibilidad con revisiones anteriores. \\
 	Es un standard abierto usado para el almacenamiento, la transmisión y procesado de datos astronómicos. A diferencia de otros formatos, FITS se diseñó para contener datos de carácter científico lo que le permite incluir información descriptiva sobre fotometría y calibración espacial.\\
 	Cada fichero consta al menos de una cabecera en formato ASCII, esta cabecera contiene pares de valores que nos permiten conocer de forma estructurada y directa (al requerir únicamente un visor de fichero de texto ASCII) información tal como el origen de la imagen, fecha de obtención, lista de filtros usados, instrumento usado, configuración del instrumento, tamaño de pixel, etc. 
 	
@@ -374,17 +374,17 @@
 		\item \textbf{blue.fits y red.fits:} imágenes de NGC4038 o galaxia Antennae de la constelación de Corvus, obtenidas mediante dos filtros (rojo y verde). Ambas imágenes fueron tomadas del proyecto NAO-IRAF.
 		\item \textbf{Gravitational lensing in the galaxy cluster Abell 370.jpg:} cúmulo de galaxias Abell 1689, presenta una lente gravitatoria. Fuente de la imagen: Hubble Space Telescope (https://www.spacetelescope.org/images/heic0910b/).
 		\item \textbf{noReal.jpg:} imagen de simulación de galaxia espiral.
-		\item \textbf{image 3417 1e-LEDA-1852.jpg:} Galaxia espiral MCG+01-02-015 Fuente: ESA/Hubble, NASA and N. Gorin (STScI). http://www.spacetelescope.org/images/potw1545a/
+		\item \textbf{image 3417 1e-LEDA-1852.jpg:} Galaxia espiral MCG+01-02-015 Fuente: ESA/Hubble, NASA and N. Gorin (STScI). \\http://www.spacetelescope.org/images/potw1545a/
 		\item \textbf{o-HUBBLE-UV-900.jpg:} Imagen compuesta por multiples frecuencias (del ultravioleta al infrarojo), Fuente: Hubble Ultra Deep Field.\\ http://apod.nasa.gov/apod/ap140605.html
 		\item \textbf{spiral-galaxy-eso-137-hubble.jpg:} Galaxia espiral ESO 137-001 del Supercúmulo de Virgo, aparece en la parte superior izquierda la anomalía conocida como \textit{El gran atractor}. Fuente: E.S.A.\\Z
 		http://sci.esa.int/hubble/53751-spiral-galaxy-spills-blood-and-guts-heic1404/
-		\item \textbf{potw1143a.jpg:} Galaxia enanas en la constelación del Phoenix.\\
+		\item \textbf{potw1143a.jpg:} Galaxia de estrellas enanas en la constelación del Phoenix.\\
 		Fuente:  ESA/Hubble y NASA. (https://www.spacetelescope.org/images/potw1143a/)
 		\item \textbf{hubble-galaxy 1743872i.jpg:} Galaxia en la constelación del Agula (IRAS 19399-1026).\\ Imagen simulada.
 		Fuente: E.S.A. NASA.\\ http://www.nasa.gov/sites/default/files/thumbnails/image/hubble\char`_friday\char`_05062016.jpg
 	\end{enumerate}
 	Se han tenido en cuenta tanto imágenes FITS (4 imágenes con dos variantes de filtros)como imágenes raster (7 imágenes) de contenido astronómico (una de ellas es simulada).\\
-	Estos ficheros acompañan a la aplicación.
+
 	\begin{figure}[!htb]
 		\centering
 		\includegraphics[width=1.2\textwidth]{images/imgFuentesSnap/compoFuentes.png}
@@ -553,7 +553,6 @@
 		\item Aplicación de blur a la región de interés.
 		\item Búsqueda del máximo local en intensidad.
 	\end{enumerate}
-	Este proceso se basa, en cierta puntos en el algoritmo \textit{Algorithm for segmentation through histogram thresholding} descrito en \cite{BrainThreshold}.\\
 
 	Es necesario realizar un blur \footnote{Blur: es una operación simple y frecuente en el procesado de imágenes para eliminar el ruido aplicando un suavizado. El suavizado se consigue  mediante la siguiente transformación: $g(i,j)=\sum_{k,l}f(i+k,j+l)*h(k,l)$ siendo $h(k,l)$ los coeficientes del filtro (también denominados Kernel)} o difuminado, como se aprecia en las imágenes \ref{fig:galaxiCenterFromImage_01_ERROR} \ref{fig:galaxiCenterFromImage_02_Blur} y \ref{fig:galaxiCenterFromImage_03_Correct}.\\
 	En caso de no aplicar el suavizado a la imagen, el pico de mayor intensidad no tendría por qué estar situado en el centro de la galaxia. Al aplicar el suavizado, se pondera en media el valor de cada pixel con su vecindad y aumentará la probabilidad de que el centro calculado se ajuste al centro de la galaxia. Esto es debido a que en el centro de la galaxia se acumula la mayor área lumínica.
@@ -572,7 +571,7 @@
 		\includegraphics[width=0.5\textwidth]{images/galaxiCenterFromImage_03_Correct.png}
 		\caption{\label{fig:galaxiCenterFromImage_03_Correct}{\small Obtención correcta del centro de la galaxia (marcado con una circunferencia) al aplicar la función {\scriptsize getGalaxyCenter} sobre la imagen procesada con un filtro de suavizado.}}
 	\end{figure}
-	\newpage
+	\clearpage
 	\item \textbf{getContours}:	\\
 	{\scriptsize getContours} aplica búsquedas de contornos sobre la imagen transformada para detectar formaciones de galaxias e internamente realiza operaciones de erosión, dilatación y cierres de contornos.A modo descriptivo del proceso, se presenta el código usado.
 	\end{enumerate}
@@ -589,7 +588,7 @@
 	\item Eliminación de PSF:\\
     Aplicando operaciones morfológicas sobre la imágen, concretamente una dilatación seguida de una erosión, se eliminan los puntos detectados erróneamente como válidos.
     \\
-    Para la eliminación de la PSF se ha estimado, en base a los test realizados, usar un kernel\footnote{Kernel es una matríz bi-dimensional de coeficientes} de tamaño 5.
+    Para la eliminación de la PSF se ha estimado, en base a los test realizados, usar un kernel\footnote{Kernel es una matriz bi-dimensional (normalmente de pequeño tamaño) de coeficientes, que se usa en la convolución de imágenes. } de tamaño 5.
     	\begin{figure}[!htb]
     		\centering
     		\includegraphics[width=1\textwidth]{images/PSFUnificadas.png}
@@ -758,15 +757,15 @@
 	\label{sec:futureWork}
 	Tal y como se ha comentado anteriormente, se ha dejado una puerta abierta a mejoras:
 	\begin{itemize} 
-	\item Para la detección de espacio vacio o \textit{sky substraction} se ha echo uso de un estimador basado en la media de intesidad de la imagen, para un mejor funcionamiento sería necesario analizar el artículo \cite{BlantonSubstraction}, concretamente el apartado \textit{2.2. Masking the data} y adaptarlo a nuestro procesamiento de imágenes.
-	\item Los ajustes estadísticos, realizados en base a un pequeño conjutno de imágenes, requieren afinamiento, no se descarta tomar nuevas estrategias \cite{SSDImgPro}, por ejemplo en la obtención de los contornos de los candidatos a galaxias establecer una relación entre el área y el perímetro para de este modo detectar estructuras que presenten crestas o pliegues (ver en figura \ref{fig:MembraneNebulae}, página \pageref{fig:MembraneNebulae})
+	\item Para la detección de espacio vacío o \textit{sky substraction} se ha echo uso de un estimador basado en la media de intesidad de la imagen, para un mejor funcionamiento sería necesario analizar el artículo \cite{BlantonSubstraction}, concretamente el apartado \textit{2.2. Masking the data} y adaptarlo a nuestro procesamiento de imágenes.
+	\item Los ajustes estadísticos, realizados en base a un pequeño conjunto de imágenes, requieren afinamiento, no se descarta tomar nuevas estrategias \cite{SSDImgPro}, por ejemplo en la obtención de los contornos de los candidatos a galaxias establecer una relación entre el área y el perímetro para de este modo detectar estructuras que presenten crestas o pliegues (ver en figura \ref{fig:MembraneNebulae}, página \pageref{fig:MembraneNebulae})
 		\begin{figure}[!htb]
 			\centering
 			\includegraphics[width=0.7\textwidth]{images/nebulaMembrana2.jpg}
 			\caption{\label{fig:MembraneNebulae}{\small El comportamiento de los contornos presenta excesivos pliegues en la imagen de la derecha (tono azul) en comparación con el comportamiento de la imagen de la izquierda (tono violeta).El contorno de la derecha es un claro ejemplo de contorno erróneo.}}
 		\end{figure}
 	\item Mejoras de optimización. Un claro ejemplo es la detección de estrellas y galaxias que se pueden unificar en una única función, o la gestión de las imágenes internas que en algunos (thumbnails) casos se duplican innecesariamente ocupando temporalmente memoria.
-	\item Añadir la funcionalidad de clasificación acorde a la secuencia de Hubble (ver figura \ref{fig:EsquemaHubble}), para ello, todo el proceso previo ha de ser óptimo en sus resultados y se ha de contar con sistema de categorización de contornos ellipticos como los descritos en \cite{JeanPierreElliptical}.
+	\item Añadir la funcionalidad de clasificación acorde a la secuencia de Hubble (ver figura \ref{fig:EsquemaHubble}), para ello, todo el proceso previo ha de ser óptimo en sus resultados y se ha de contar con sistema de categorización de contornos ellipticos.
 				\begin{figure}[!htb]
 					\centering
 					\includegraphics[width=0.5\textwidth]{images/EsquemaHubble.jpg}
@@ -785,7 +784,7 @@
 	\section{Agradecimientos}
 	
 	Quiero agradecer a Carlos Gregorio Rodríguez la oportunidad de realizar este trabajo fin de grado, la ayuda y guía que me ha brindado en todo momento y su apoyo en la búsqueda de soluciones y la adquisición de nuevos conocimientos.\\ 
-	\\ A Miguel Angel Valero Espada por darme un enfoque distinto de lo que es el campo de la programación. Ana Inés Gomez de Castro por sus enseñanzas en Astronomía.\\
+	\\ A Miguel Angel Valero Espada por darme un enfoque distinto de lo que es el campo de la programación. Ana Inés Gomez de Castro y a Fátima López Martínez por sus enseñanzas en Astronomía.\\
 	\\ Muy especialmente a Rocío por animarme en todo momento y estar siempre a mi lado, así como a mi familia por su apoyo.\\
 	\\ Sin todos ellos me hubiese resultado muy difícil el desarrollo del proyecto.
 	\\
@@ -796,22 +795,10 @@
 	%Se han usado tanto Pappers académicos de distintos ámbitos, publicaciones y documentación %de las librerías usadas.\\
 
 	\begin{thebibliography}{1}
-%
-%@article{einstein,
-%	author =       "Albert Einstein",
-%	title =        "{Zur Elektrodynamik bewegter K{\"o}rper}. ({German})
-%	[{On} the electrodynamics of moving bodies]",
-%	journal =      "Annalen der Physik",
-%	volume =       "322",
-%	number =       "10",
-%	pages =        "891--921",
-%	year =         "1905",
-%	DOI =          "http://dx.doi.org/10.1002/andp.19053221004"
-%}
 		\bibitem{NASADISKHALO}\textsc{Barnes, Joshua E.} \\
 		\textit{Encounters of disk/halo galaxies}
 		\textit{Astrophysical Journal, Part 1 (ISSN 0004-637X), vol. 331, Aug. 15, 1988, p. 699-717.}
-		\\ 08/1988
+		\\1988
 		\\http://articles.adsabs.harvard.edu//full/1988ApJ...331..699B/0000699.000.html
 		
   		\bibitem{OpenCV}\textsc{Willow Garage et all.} \\
@@ -823,50 +810,28 @@
   		\bibitem{PajaresCruzUCM}\textsc{Gonzalo Pajares, Jesús M. de la Cruz} \\
   		\textit{Visión por computador: Imágenes digitales y aplicaciones}
   		\\ISBM: 84-7897-472-5.
-  		\\RA-MA Editorial.
-  		\\2.001
+  		\\2.001 RA-MA Editorial.
 
-		%NO REFERENCIADA
   		\bibitem{AstroData}\textsc{Jean-Luc Starck, Fionn Murtagh} \\
   		\textit{Astronomical image and Data Analysis. (Second edition)}
   		\\ISBM: 3-540-42885-2
-  		\\Springer-Verlag Berlin Heidelber.
-  		\\2.006
+  		\\2.006 Springer-Verlag Berlin Heidelber.
 
-	  	%REFERENCIADA
 	  	\bibitem{SSDImgPro}\textsc{Robert Lupton.} \\
 	  	\textit{SDSS Image Processing I: The Deblender.}
 	  	\\http://www.astro.princeton.edu/~rhl/photomisc/deblender.pdf
-		\\Princeton University Observatory
-	  	\\2.001
+		\\2.001 Princeton University Observatory
 	  
-	  		  		
   		\bibitem{NasaFITS}\textsc{NASA/GSFC} \\
   		\textit{The FITS Support Office - Documentación oficial formato FITS.}
   		\\http://fits.gsfc.nasa.gov/
 	  	
-	  	%REFERENCIADA  		
-	  	\bibitem{JeanPierreElliptical}\textsc{ Jean-Pierre Jesse, Victor-Valeriu Patriciu et al.} \\
-	  	\textit{Detection and Identification of Elliptical Structure Arrangements in Images : Theory and Algorithms.}
-	  	\\http://ethesis.inp-toulouse.fr/archive/00001847/01/Patraucean.pdf
-	  	\\Institut National Polytechnique de Toulouse
-	  	\\2.012
-	  	%REFERENCIADA
-	  	\bibitem{BlantonSubstraction}\textsc{Michael R. Blanton et all.} \\
-	  	\textit{Improved background subtraction for the Sloan Digital Sky Survey images.}
-	  	\\http://arxiv.org/pdf/1105.1960.pdf 
-	  	\\2.011
 	  		  	
 		%Referenciada
 	  	\bibitem{stellarOutcast}\textsc{ David A. Aguilar, Christine PulliamPublic } \\
 	  	\textit{First Stellar Outcast Discovered by Astronomers}
 	  	\\https://www.cfa.harvard.edu/news/2005-05
-	  	\\Harvard-Smithsonian Center for Astrophysics
-	  	\\2.005
-	  	
-	  	\bibitem{BrainThreshold}\textsc{ Harvard-Smithsonian Center for Astrophysics (CfA) } 
-	  	\textit{Brain Tumor Detection Using Histogram Thresholding to Get the Threshold point.}
-	  	\\http://www.iosrjournals.org/iosr-jeee/Papers/Vol9-issue5/Version-3/D09531419.pdf
-	  	\\2.005
+	  	\\2.005 Harvard-Smithsonian Center for Astrophysics
+	  
 	\end{thebibliography}
 \end{document}
