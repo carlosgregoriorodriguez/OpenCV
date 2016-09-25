@@ -1,41 +1,35 @@
 \select@language {spanish}
 \select@language {english}
 \select@language {spanish}
-\contentsline {section}{\numberline {1}Introduction}{4}
-\contentsline {subsection}{\numberline {1.1}Im\IeC {\'a}genes Astron\IeC {\'o}micas cient\IeC {\'\i }ficas}{5}
-\contentsline {subsubsection}{\numberline {1.1.1}El color en las im\IeC {\'a}genes astron\IeC {\'o}micas}{6}
-\contentsline {subsubsection}{\numberline {1.1.2}Ventajas de un detector profesional}{8}
-\contentsline {subsection}{\numberline {1.2}Im\IeC {\'a}genes astron\IeC {\'o}micas amateur}{8}
-\contentsline {section}{\numberline {2}Objetivos}{9}
+\contentsline {section}{\numberline {1}Introducci\IeC {\'o}n}{3}
+\contentsline {subsection}{\numberline {1.1}Im\IeC {\'a}genes Astron\IeC {\'o}micas cient\IeC {\'\i }ficas}{4}
+\contentsline {subsection}{\numberline {1.2}Im\IeC {\'a}genes astron\IeC {\'o}micas amateur}{7}
+\contentsline {section}{\numberline {2}Objetivos}{8}
 \contentsline {subsection}{\numberline {2.1}Objetivos Generales}{9}
-\contentsline {subsection}{\numberline {2.2}Objetivos Espec\IeC {\'\i }ficos}{10}
-\contentsline {section}{\numberline {3}Plan de trabajo}{13}
-\contentsline {subsection}{\numberline {3.1}Antecedentes: }{13}
-\contentsline {subsection}{\numberline {3.2}Documentaci\IeC {\'o}n y busqueda de algoritmos}{14}
-\contentsline {subsection}{\numberline {3.3}Determinaci\IeC {\'o}n de los puntos de dificil soluci\IeC {\'o}n}{14}
-\contentsline {subsection}{\numberline {3.4}Creaci\IeC {\'o}n de una interfaz de trabajo}{14}
-\contentsline {subsection}{\numberline {3.5}Testeo de los algoritmos sobre un conjunto peque\IeC {\~n}o de im\IeC {\'a}genes}{14}
-\contentsline {subsection}{\numberline {3.6}Test de fiabilidad}{14}
-\contentsline {section}{\numberline {4}Desarrollo}{15}
-\contentsline {subsection}{\numberline {4.1}Arquitectura interna de la aplicaci\IeC {\'o}n}{15}
-\contentsline {subsection}{\numberline {4.2}Bibliotecas externas}{15}
-\contentsline {subsubsection}{\numberline {4.2.1}OpenCV}{15}
-\contentsline {subsubsection}{\numberline {4.2.2}NumPy}{15}
-\contentsline {subsubsection}{\numberline {4.2.3}Matplotlib}{16}
-\contentsline {subsubsection}{\numberline {4.2.4}Astropy}{16}
-\contentsline {subsubsection}{\numberline {4.2.5}Tkinter}{16}
-\contentsline {subsection}{\numberline {4.3}Bibliotecas propias}{16}
-\contentsline {subsubsection}{\numberline {4.3.1}Ajuste de rango din\IeC {\'a}mico}{17}
-\contentsline {subsubsection}{\numberline {4.3.2}B\IeC {\'u}squeda de puntos de inter\IeC {\'e}s}{20}
-\contentsline {subsubsection}{\numberline {4.3.3}Eliminaci\IeC {\'o}n de ruido}{22}
-\contentsline {subsubsection}{\numberline {4.3.4}Eliminaci\IeC {\'o}n de PSF}{24}
-\contentsline {subsubsection}{\numberline {4.3.5}Determinaci\IeC {\'o}n de forma en las galaxias}{24}
-\contentsline {subsection}{\numberline {4.4}Linea de procesado de im\IeC {\'a}genes}{24}
-\contentsline {subsubsection}{\numberline {4.4.1}Pre-procesado base}{24}
-\contentsline {subsubsection}{\numberline {4.4.2}Algoritmo de clasificacci\IeC {\'o}n}{24}
-\contentsline {subsection}{\numberline {4.5}Interfaz gr\IeC {\'a}fica}{25}
-\contentsline {section}{\numberline {5}Conclusiones}{28}
-\contentsline {subsection}{\numberline {5.1}Cumplimiento de objetivos}{28}
-\contentsline {subsection}{\numberline {5.2}Trabajo futuro}{28}
-\contentsline {section}{\numberline {6}Agradecimientos}{29}
-\contentsline {section}{\numberline {7}Referencias bibiogr\IeC {\'a}ficas}{30}
+\contentsline {subsection}{\numberline {2.2}Objetivos Espec\IeC {\'\i }ficos}{9}
+\contentsline {section}{\numberline {3}Plan de trabajo}{12}
+\contentsline {subsection}{\numberline {3.1}An\IeC {\'a}lisis }{12}
+\contentsline {subsubsection}{\numberline {3.1.1}Antecedentes }{13}
+\contentsline {subsubsection}{\numberline {3.1.2}Dificultades encontradas}{13}
+\contentsline {section}{\numberline {4}Desarrollo}{14}
+\contentsline {subsection}{\numberline {4.1}Decisiones de dise\IeC {\~n}o: la interf\IeC {\'a}z de usuario}{14}
+\contentsline {subsection}{\numberline {4.2}Prueba de los algoritmos sobre una muestra de im\IeC {\'a}genes}{15}
+\contentsline {subsection}{\numberline {4.3}Arquitectura interna de la aplicaci\IeC {\'o}n}{15}
+\contentsline {subsection}{\numberline {4.4}Bibliotecas externas}{15}
+\contentsline {paragraph}{OpenCV}{15}
+\contentsline {paragraph}{NumPy}{16}
+\contentsline {paragraph}{Matplotlib}{16}
+\contentsline {paragraph}{Astropy}{16}
+\contentsline {paragraph}{TkInter}{17}
+\contentsline {subsection}{\numberline {4.5}Bibliotecas propias}{18}
+\contentsline {subsubsection}{\numberline {4.5.1}Ajuste de rango din\IeC {\'a}mico}{18}
+\contentsline {subsubsection}{\numberline {4.5.2}B\IeC {\'u}squeda de puntos de inter\IeC {\'e}s, estrellas y galaxias}{22}
+\contentsline {subsubsection}{\numberline {4.5.3}Eliminaci\IeC {\'o}n de ruido y Point Spread Function (PSF)}{24}
+\contentsline {subsection}{\numberline {4.6}Procesado de im\IeC {\'a}genes}{27}
+\contentsline {subsubsection}{\numberline {4.6.1}Pre-procesado base}{27}
+\contentsline {subsubsection}{\numberline {4.6.2}Algoritmo de clasificaci\IeC {\'o}n}{29}
+\contentsline {subsection}{\numberline {4.7}Interfaz gr\IeC {\'a}fica}{32}
+\contentsline {section}{\numberline {5}Conclusiones}{37}
+\contentsline {subsection}{\numberline {5.1}Cumplimiento de objetivos}{37}
+\contentsline {subsection}{\numberline {5.2}Trabajo futuro}{38}
+\contentsline {section}{\numberline {6}Agradecimientos}{40}

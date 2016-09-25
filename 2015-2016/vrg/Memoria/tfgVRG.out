@@ -1,0 +1,28 @@
+\BOOKMARK [1][-]{section.1}{Introducci\363n}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{Im\341genes Astron\363micas cient\355ficas}{section.1}% 2
+\BOOKMARK [2][-]{subsection.1.2}{Im\341genes astron\363micas amateur}{section.1}% 3
+\BOOKMARK [1][-]{section.2}{Objetivos}{}% 4
+\BOOKMARK [2][-]{subsection.2.1}{Objetivos Generales}{section.2}% 5
+\BOOKMARK [2][-]{subsection.2.2}{Objetivos Espec\355ficos}{section.2}% 6
+\BOOKMARK [1][-]{section.3}{Plan de trabajo}{}% 7
+\BOOKMARK [2][-]{subsection.3.1}{An\341lisis }{section.3}% 8
+\BOOKMARK [3][-]{subsubsection.3.1.1}{Antecedentes }{subsection.3.1}% 9
+\BOOKMARK [3][-]{subsubsection.3.1.2}{Dificultades encontradas}{subsection.3.1}% 10
+\BOOKMARK [3][-]{subsubsection.3.1.3}{Soluciones y decisiones}{subsection.3.1}% 11
+\BOOKMARK [1][-]{section.4}{Desarrollo}{}% 12
+\BOOKMARK [2][-]{subsection.4.1}{Creaci\363n de una interfaz de trabajo}{section.4}% 13
+\BOOKMARK [2][-]{subsection.4.2}{Prueba de los algoritmos sobre una muestra de im\341genes}{section.4}% 14
+\BOOKMARK [2][-]{subsection.4.3}{Arquitectura interna de la aplicaci\363n}{section.4}% 15
+\BOOKMARK [2][-]{subsection.4.4}{Bibliotecas externas}{section.4}% 16
+\BOOKMARK [2][-]{subsection.4.5}{Bibliotecas propias}{section.4}% 17
+\BOOKMARK [3][-]{subsubsection.4.5.1}{Ajuste de rango din\341mico}{subsection.4.5}% 18
+\BOOKMARK [3][-]{subsubsection.4.5.2}{B\372squeda de puntos de inter\351s, estrellas y galaxias}{subsection.4.5}% 19
+\BOOKMARK [3][-]{subsubsection.4.5.3}{Eliminaci\363n de ruido y Point Spread Function \(PSF\)}{subsection.4.5}% 20
+\BOOKMARK [2][-]{subsection.4.6}{Procesado de im\341genes}{section.4}% 21
+\BOOKMARK [3][-]{subsubsection.4.6.1}{Pre-procesado base}{subsection.4.6}% 22
+\BOOKMARK [3][-]{subsubsection.4.6.2}{Algoritmo de clasificaci\363n}{subsection.4.6}% 23
+\BOOKMARK [2][-]{subsection.4.7}{Interfaz gr\341fica}{section.4}% 24
+\BOOKMARK [1][-]{section.5}{Conclusiones}{}% 25
+\BOOKMARK [2][-]{subsection.5.1}{Cumplimiento de objetivos}{section.5}% 26
+\BOOKMARK [2][-]{subsection.5.2}{Trabajo futuro}{section.5}% 27
+\BOOKMARK [1][-]{section.6}{Agradecimientos}{}% 28

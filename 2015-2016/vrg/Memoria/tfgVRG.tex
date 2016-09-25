@@ -39,6 +39,7 @@
 \usepackage{graphicx}
 \usepackage[colorinlistoftodos]{todonotes}
 \usepackage[section]{placeins}
+%\usepackage{hyperref}
 
 
 \begin{document}
@@ -67,7 +68,7 @@
 		%----------------------------------------------------------------------------------------
 		
 		\HRule \\[0.2cm]
-		{ \huge \bfseries Visión artificial: Reconocimiento automático de galaxias y estrellas en imágenes astronómicas.} % Title of your document
+		{ \huge \bfseries Reconocimiento automático de galaxias y estrellas en imágenes astronómicas.} % Title of your document
 		\HRule \\[0.4cm]
 		
 		%----------------------------------------------------------------------------------------
@@ -101,28 +102,38 @@
 	%Fin Portada
 
 	\begin{abstract}
-		Con la irrupción de la tecnología digital de captura de imágenes, el mundo de la astronomía incrementó notablemente el número de imágenes que se obtiene del espacio, no solo aumentó la calidad sino que se vio beneficiada de la facilidad de copia y difusión de las mismas.\\
-		Este basto conocimiento en formato digital requiere de sistemas automatizados de tratamiento e interpretación de las mismas.\\
-		El proyecto se centra en la detección y clasificación de elementos luminosos tales como estrellas y galaxias, tomando como fuente ficheros astronómicos FITS o imágenes raster genéricas y mediante técnicas de visión artificial, obtener una lista de fuentes luminosas, su posición relativa a la imagen y características descriptivas de las mismas.\\
-		El proyecto se acompaña de una simple interfaz gráfica que permita a los posibles usuarios un manejo sencillo y en cierta medida un uso didáctico.\\
+		Con la irrupción de la tecnología digital de captura de imágenes, la astronomía incrementó notablemente tanto el número de imágenes que se obtiene del espacio como la calidad de las mismas.\\ 
+		Este conocimiento en formato digital requiere de sistemas automatizados de tratamiento e interpretación de las mismas para obtener información científica relevante, tal como extracción de fuentes puntuales, análisis de espectroscopía, calibrado, ...
+		\\ \\
+		El proyecto tiene como objetivo la detección y clasificación de elementos luminosos tales como estrellas y galaxias, tomando como fuente ficheros astronómicos FITS o imágenes astronómicas genéricas.\\ 
+		Proponemos desarrollar un software con interfaz gráfica, que permite un manejo sencillo de las funcionalidades implementadas.\\
+		\\
+		Palabras clave: \\
+		Tratamiento digital de imagen. Astronomía. Detección de elementos astronómicos. Visión artificial. OpenCV. Estrellas. Galaxias. Detección de contornos. FITS. Software de procesado de imágenes.
 	\end{abstract}
+	
+
 	
 	
 	\begin{otherlanguage}{english}
 	\begin{abstract}
-		With the advent of digital imaging technology , the world of astronomy exponentially increased the number of images obtained from space.\\
-		This vast knowledge in digital format requires automated systems processing and interpretation thereof.\\
-		This project focuses on the detection and classification of light elements such as stars and galaxies , using as source files FITS astronomical images or raster generic .\\
-		The ultimate goal is to obtain a list of light sources , its position relative to the image and descriptive characteristics of the same,  and a graphical interface that allows easy handling to potential users and maybe some didactics workflow.\\
+		With the advent of digital imaging technology , astronomy has significantly increased the number of images obtained from space and the quality of them.\\ 
+		This knowledge in digital format requires automated processing systems and interpretation thereof to obtain relevant scientific information, such as extraction of point sources, spectroscopy analysis, calibration, ...
+		\\ \\
+		The project focuses on the detection and classification of lighting elements such as stars or galaxies, using as source FITS files or generic astronomical images.\\ 
+		The project is accompanied by a software with graphical interface that allows easy management of the implemented features.\\
+		\\
+		Keywords:\\
+		Digital image processing. Astronomy. Astronomical element detection. Artificial vision. OpenCV. Starts. Galaxies. Contour Detection, FITS. Image processing software.
 	\end{abstract}
 	\end{otherlanguage}
 	\vfill % Fill the rest of the page with whitespace
 	
-	
+	\newpage
 	\tableofcontents
 	\newpage
 	
-	\section{Introduction}
+	\section{Introducción}
 	
 	Gran parte del conocimiento del universo deriva de la medida de fotones que plasmamos en forma de imágenes, que más tarde son analizados y estudiados. 
 	
@@ -131,23 +142,25 @@
 	
 	No solo se observa el universo desde la tierra, la humanidad ha posicionado observatorios fuera de la estratosfera, estos factores junto con el avance y abaratamiento de la tecnología ha incrementado el número de adquisiciones de imágenes astronómicas, estas imágenes en muchos casos no llegan a ser analizadas debido al tiempo humano necesario para procesarlas. La irrupción de la imagen digital y su avance en las últimas tres décadas abre el camino al tratamiento automático de las imágenes.
 	
-	El tratamiento automatizado de imágenes astronómicas requiere de tecnologías tales como la visión artificial, campo que avanza rápidamente en ámbitos como la detección facial o seguimiento de objetos, pero que por las peculiaridades de las imágenes astronómicas, no ha progresado del mismo modo.
+	El tratamiento automatizado de imágenes astronómicas requiere de tecnologías tales como la visión artificial, campo que avanza rápidamente en ámbitos como la detección facial o seguimiento de objetos, pero que por las peculiaridades de las imágenes astronómicas, no ha progresado del mismo modo, los motivos entre otros son la baja definición de los elementos a tratar, los diferentes rangos dinámicos existentes, las características propias de los múltiples elementos de captación de imágenes, la falta de adecuación de los actuales algortimos de visión artificial, ...
 	
 	Los observatorios y algunas instituciones académicas se encargan parcialmente de la labor del tratamiento de las imágenes que obtienen, realizando un pre-procesado automático denominado reducción, de los datos obtenidos desde una imagen RAW o cruda a unos datos que permita su uso en un contexto científico muy específico. Esta reducción cumple los requisitos de la misión o del grupo de estudio que preparó la captura de las imágenes. El cometido de la reducción es doble:
 	\begin{itemize}
-	\item Modificar los datos obtenidos: teniendo en cuenta las características propias del instrumento usado, aberraciones en los espejos (primario, secundario, ...), corrección de posibles defectos no previstos en la instrumentación o desgaste a lo largo del tiempo.
+	\item Modificar los datos obtenidos teniendo en cuenta las características propias del instrumento usado, aberraciones en los espejos (primario, secundario, ...), corrección de posibles defectos no previstos en la instrumentación o desgaste a lo largo del tiempo.
 	\item Añadir otros datos (metadatos) tales como tiempo de exposición, posición en el espacio, filtros usados, etc. 
 	\end{itemize}
-	Dando como resultado un fichero válido para su posterior análisis. Los grandes proyectos astronómicos destinos la mayor parte de su presupuesto al desarrollo de instrumentación, dejando abierto el campo a mejoras o nuevas iniciativas en un campo tan amplio y técnico como es la unión de la visión artificial y la astronomía.\\
-	Pequeños observatorios o particulares obtienen igualmente imágenes, normalmente usando equipos de sofisticación media-baja que constan de un CCD adosado a un telescopio terrestre, estas imágenes carecen de metadatos astronómicos más allá de los que proporciona el detector y su definición en muchos casos es baja, buscando en muchos la belleza visual por encima de obtención de datos de uso científico, aunque conteniendo igualmente material digno de estudio.
-	
-	En cualquiera de ambos casos podemos usar sus imágenes para obtener información no intrínseca mediante técnicas de visión artificial, que determinen la existencia de elementos de interés tales como galaxias o estrellas, proporcionándonos además una categorización de estos elementos.
-	
-	El elemento base de trabajo serán imágenes de contenido astronómico, hemos considerado interesante dividir en dos grupos según su procedencia. 
+	Dando como resultado un fichero válido para su posterior análisis.
+	\\
+	Los grandes proyectos astronómicos destinan la mayor parte de su presupuesto al desarrollo de instrumentación dejando sólo una pequeña parte para el desarrollo software, lo que deja abierta una puerta a nuevos avances en el tratamiento de imágenes.\\
+	Los pequeños observatorios obtienen igualmente imágenes, normalmente usando equipos de sofisticación media-baja que constan de un CCD adosado a un telescopio terrestre, estas imágenes carecen de metadatos astronómicos más allá de los que proporciona el detector.
+	\\
+	En cualquiera de los casos podemos usar sus imágenes para obtener información no intrínseca mediante técnicas de visión artificial que determinen la existencia de elementos de interés tales como galaxias o estrellas y que además proporcionen una categorización de los mismos.
+	\\
+	El elemento base de trabajo serán imágenes de contenido astronómico que hemos considerado interesante dividir en dos grupos según su procedencia. 
 	
 	\subsection{Imágenes Astronómicas científicas}
-	El formato por excelencia dentro de la astronomía no amateur es el conocido como formato FITS, acrónimo de Flexible Image Transport System y estandarizado en el año 1981, que ha evolucionado a la par que los instrumentos astronómicos con diferentes revisiones del standard. Uno de los requisitos y gran cualidad de este formato es la retro-compatibilidad con revisiones anteriores. 
-	Es un standard abierto usado para el almacenamiento, la transmisión y procesado de datos astronómicos. A diferencia de otros formatos, FITS se diseñó pensando en contener datos de carácter científico lo que le permite incluir información descriptiva sobre fotometría y calibración espacial.
+	El formato por excelencia dentro de la astronomía no amateur es el conocido como formato FITS, acrónimo de Flexible Image Transport System y estandarizado en el año 1981, que ha evolucionado a la par que los instrumentos astronómicos con diferentes revisiones del standard. Una de las ventajas que nos ofrece este formato es la retro-compatibilidad con revisiones anteriores. \\
+	Es un standard abierto usado para el almacenamiento, la transmisión y procesado de datos astronómicos. A diferencia de otros formatos, FITS se diseñó para contener datos de carácter científico lo que le permite incluir información descriptiva sobre fotometría y calibración espacial.\\
 	Cada fichero consta al menos de una cabecera en formato ASCII, esta cabecera contiene pares de valores que nos permiten conocer de forma estructurada y directa (al requerir únicamente un visor de fichero de texto ASCII) información tal como el origen de la imagen, fecha de obtención, lista de filtros usados, instrumento usado, configuración del instrumento, tamaño de pixel, etc. 
 	
 	Este formato puede contener información mas allá de una imagen raster, tales como espectros (uni-dimensionales), dataCubes (multi-dimensionales), o incluso datos estructurados (muti-tablas). Estos datos se almacenan dentro del fichero FITS en formato binario.
@@ -163,323 +176,373 @@
 	\begin{figure}
 		\centering
 		\includegraphics[width=0.5\textwidth]{images/ccd_and_cmos_sensors_210w.png}
-		\caption{\label{fig:SensorCCD}Sensor CCD 210W y Sensor CMOS 210W.}
+		\caption{\label{fig:SensorCCD}{\small Sensor CCD 210W y Sensor CMOS 210W.}}
 	\end{figure}
-	En general los telescopios (tanto terrestres como fuera de la atmósfera) constan de una o varias ruedas de filtros, en la figura \ref{fig:irfiltwheel_Hubble} situada en la página \pageref{fig:irfiltwheel_Hubble}, podemos observar una rueda de filtro de rango infrarrojo perteneciente al telescopio espacial Hubble.
-
-	\subsubsection{El color en las imágenes astronómicas}
-	La información de imagen que almacenan los ficheros FITS carece de información de color, ya que el valor contenido en cada celda que contiene la imagen, se corresponde con la cuenta de fotones que impactan en un determinado tiempo de exposición a una determinada longitud de onda. Las imágenes en color que generan las instituciones, son el producto de varias, en general 3 o más imágenes en escala de grises, el proceso consiste en asignar un tono a cada imagen y mezclar el resultado en una única imagen. Cada imagen ha sido capturada anteponiendo al detector un filtro físico que deja pasar determinadas longitudes de onda.
-	\begin{figure}
-		\centering
-		\includegraphics[width=0.25\textwidth]{images/irfiltwheel_Hubble.jpg}
-		\caption{\label{fig:irfiltwheel_Hubble}Sensor Rueda Filtros infrarrojos perteneciente al telescopio Hubble.}
-	\end{figure}
-	\begin{figure}
-		\centering
-		\includegraphics[width=0.5\textwidth]{images/Chandra-Compo-Images.jpg}
-		\caption{\label{fig:Chandra Space Telescope Images}Imagenes procedentes de Chandra usando diferentes filtros sobre un mismo apuntado}
-	\end{figure}
-	\begin{figure}
-		\centering
-		\includegraphics[width=0.25\textwidth]{images/Chandra-Composed-Images.jpg}
-		\caption{\label{fig:Chandra_Composed_Images}Composición de imagen en color usando trés imagenes de intensidad, cada imagen se asocia a un color del espectro RGB}
-	\end{figure}
-
-	\subsubsection{Ventajas de un detector profesional}
-	El motivo por el cual las imágenes de instrumentos astronómicos no amateur carecen de color, no es otro que el color - o rango visible - aporta muy poca información al ámbito de la astronomía, es mucho más preciso y aporta más información, obtener un conteo del impacto de fotones en una determinada longitud de onda que una imagen en el espectro visible.
-	\\
-	Otra de las ventajas es que se simplifica la creación de elementos de detección de imagen. Un detector que captura una imagen en rango visible RGB, necesita de tres sensores por cada celdilla, lo que incrementa su coste y reduce su fidelidad, al tener que colocar 3 dispositivos de captura por cada celda, lo que produce inevitablemente desviaciones en la localización exacta de los apuntados o puntos luminosos.
-	\\
-	En contra nos encontramos con imágenes que carecen del alto impacto visual de las que gozan las imágenes en color.
+	En general los telescopios (tanto los terrestres como los situados fuera de la atmósfera) constan de una o varias ruedas de filtros (en la figura \ref{fig:irfiltwheel_Hubble} situada en la página \pageref{fig:irfiltwheel_Hubble}, podemos observar una rueda de filtro de rango infrarrojo perteneciente al telescopio espacial Hubble).
+	\begin{enumerate}
+		\item El color en las imágenes astronómicas:\\
+			La información de imagen que almacenan los ficheros FITS carece de información de color, ya que el valor contenido en cada celda que contiene la imagen, se corresponde con la cuenta de fotones que impactan en un determinado tiempo de exposición a una determinada longitud de onda. 
+			\\Las imágenes en color que generan las instituciones son el producto de varias (en general 3 o más imágenes en escala de grises). El proceso consiste en asignar un tono a cada imagen y mezclar el resultado en una única imagen. Cada imagen ha sido capturada anteponiendo al detector un filtro físico que deja pasar determinadas longitudes de onda.
+			\begin{figure}
+				\centering
+				\includegraphics[width=0.25\textwidth]{images/irfiltwheel_Hubble.jpg}
+				\caption{\label{fig:irfiltwheel_Hubble}{\small Sensor Rueda Filtros infrarrojos perteneciente al telescopio Hubble.}}
+			\end{figure}
+			\begin{figure}
+				\centering
+				\includegraphics[width=0.5\textwidth]{images/Chandra-Compo-Images.jpg}
+				\caption{\label{fig:Chandra Space Telescope Images}{\small Imagenes procedentes de Chandra usando diferentes filtros sobre un mismo apuntado}}
+			\end{figure}
+			\begin{figure}
+				\centering
+				\includegraphics[width=0.25\textwidth]{images/Chandra-Composed-Images.jpg}
+				\caption{\label{fig:Chandra_Composed_Images}{\small Composición de imagen en color usando trés imágenes de intensidades, cada imagen se asocia a un canal del espectro RGB}}
+			\end{figure}
+		\item Detectores profesionales:\\
+		El motivo por el cual las imágenes de instrumentos astronómicos profesionales carecen de color, no es otro que el color - o rango visible - aporta muy poca información al ámbito de la astronomía. Es mucho más preciso y aporta más información, obtener un conteo del impacto de fotones en una determinada longitud de onda que una imagen en el espectro visible.
+		\\
+		Otra de las ventajas es que se simplifica la creación de elementos de detección de imagen. Un detector que captura una imagen en rango visible RGB necesita de tres sensores por cada celdilla, lo que incrementa su coste y reduce su fidelidad al tener que colocar tres dispositivos de captura por cada celda. Esto hace que  inevitablemente desviaciones en la localización exacta de los apuntados o puntos luminosos.
+		\\
+		En contra nos encontramos con imágenes que carecen del alto impacto visual de las que gozan las imágenes en color.
+	\end{enumerate}
+	
 
 	\subsection{Imágenes astronómicas amateur}
-	Fuera del ámbito académico o técnico, lo habitual es obtener imágenes astronómicas en formatos de imagen genérico, tales como TIFF, PNG , o JPG, siendo el menos adecuado este último (el algoritmo de compresión Jpeg destruirá valiosa información de luminancia).
+	Fuera del ámbito académico o técnico, lo habitual es obtener imágenes astronómicas en formatos de imagen genérico tales como TIFF, PNG , o JPG, siendo este último el menos adecuado (el algoritmo de compresión Jpeg destruirá valiosa información de luminancia tal y como  se aprecia en la figura \ref{fig:destroyJPG}).
+	\begin{figure}[!htb]
+		\centering
+		\includegraphics[width=1\textwidth]{images/FITScomprimidoJPG.png}
+		\caption{\label{fig:destroyJPG}{\small Efecto de la compresión jpg, a la izquierda la imagen original, a la derecha la imagen comprimida.}}
+	\end{figure}
 	\begin{figure}[!h]
 		\centering
 		\includegraphics[width=0.65\textwidth]{images/amateur_transit_detection_Schmidt_Cassegrain_765_510pixCCD.jpg}
-		\caption{\label{fig:Amateur Telescope}Telescopio amateur de detección de tránsitos Schmidt-Cassegrain de 8 pulgadas, consta de un CCD de 765x510 pixel}
+		\caption{\label{fig:Amateur Telescope}{\small Telescopio amateur de detección de tránsitos Schmidt-Cassegrain de 8 pulgadas, consta de un CCD de 765x510 pixels}}
 	\end{figure}
-	Estos formatos carecen de información astronómica en sus metadatos y lo más importante, su profundidad de color está generalmente limitada entre 8 bits (paletas indexadas con 256 posibles valores)y 32 bits (8 bits por canal), dividiéndose entre los tres colores base (RGB), con lo que se obtiene (en los casos de 24 y 32 bits) $ 2^8 $ intensidades diferentes, muy lejos de los rangos que manejaremos en el formato FITS.
+	Estos formatos carecen de información astronómica en sus metadatos y lo más importante, su profundidad de color está generalmente limitada entre 8 bits (paletas indexadas con 256 posibles valores) y 32 bits (8 bits por canal), dividiéndose entre los tres colores base (RGB); con lo que se obtiene (en los casos de 24 y 32 bits) $ 2^8 $ intensidades diferentes, muy lejos de los rangos que manejaremos en el formato FITS.
 	\\
 	Estas imágenes son capturadas usando tecnología de consumo general, en la mayoría de los casos sensores CCD RGB.
-
+	\\
 	\newpage 
 
 	\section{Objetivos}
 	\label{sec:objetivos}
 	En este trabajo se busca explorar nuevos métodos de análisis de imágenes astronómicas, creación de nuevos algoritmos de obtención de elementos de interés o adaptación de los ya existentes.\\
-	A parte de los algoritmos se ha desarrollado una interfaz de fácil manejo en la que se muestre tanto el resultado final como parte del proceso intermedio que se realiza, pudiendo variar los parámetros de configuración de los algoritmos fijando las bases a un futuro algoritmo de aprendizaje automático o machine-learning.
+	%Acortar frases, separar.
+	Además de los algoritmos se ha desarrollado una interfaz de fácil manejo en la que se muestre tanto el resultado final como parte del proceso intermedio que se realiza, pudiendo variar los parámetros de configuración de los algoritmos y por lo tanto el resultado final.\\
+	\\
+	El desarrollo se ha planteado de tal forma que está abierto a nuevas funcionalidades, se ha prestado especial atención en que el trabajo realizado, sirva de base futuros algoritmo de aprendizaje automático o machine-learning.
 	
 	\subsection{Objetivos Generales}
 	
-	El objetivo principal es la creación de algoritmos que, dado una imagen que representa una sección del espacio exterior, determinen la existencia de estrellas y galaxias.
+	El objetivo principal es la creación de algoritmos que, dada una imagen que representa una sección del espacio exterior, determinen la existencia de estrellas y galaxias.
 	\\
-	Tras determinar la lista de puntos de interés en la imagen, el software catalogará los objetos, mediante la exploración de las vecindades de los puntos destacados y haciendo uso de los algoritmos de visión por computador y criterios estadísticos.
+	Tras determinar la lista de puntos de interés en la imagen, el software catalogará los objetos mediante la exploración de las vecindades de los puntos destacados y haciendo uso de los algoritmos de visión por computador y criterios estadísticos.
 	
 	\subsection{Objetivos Específicos}
 	Llevar a cabo todo el proceso implica una serie de pasos los cuales se detallan escuetamente a continuación:
+	%description mejor
 	\begin{itemize}
-		\item Lectura de imágenes genéricas:\\
-		Implica la lectura de formatos genéricos de imágenes raster y en caso de poseer información de color, trasformar a un espacio de color unidimensional.\\
-		$G:\mathfrak{\;I^{2}\mathrm{xRxGxB}\rightarrow\mathfrak{I^{2}\mathrm{x\;S}}}$\\
-		Siendo S la transformación de un espacio de dimensión 3 a un espacio de dimensión 1 discreto {[}0, $2^{8})$ 
+		\item \textbf{Lectura de imágenes genéricas:}\\
+		Implica la lectura de formatos genéricos de imágenes raster y en caso de poseer información de color (multidimensional), trasformar esta información a un espacio de color unidimensional.
+		\begin{center}
+%%Ampliar
+		{\large $G:\mathfrak{\;R^{2}\rightarrow\mathfrak{K^{2}}}$}
+		\end{center}
+		Siendo G la transformación de un espacio de dimensión 2 del cuerpo $R$ a un espacio de dimensión 2 del cuerpo de los enteros acotado {[}0, $2^{8})$.
 		
-		\item Lectura y calibración automática de imágenes en formato FITS:\\
+		\item \textbf{Lectura y calibración automática de imágenes en formato FITS:}\\
 		El software ha de ser capaz de determinar que el fichero FITS contiene
-		una imagen, en caso de no contenerla lanzar un error al usuario. \\
+		una imagen. \\
 		Tras la lectura se procede al proceso de calibración de la imagen
 		así como una transformación del espacio de color:\\
-		$F:\mathfrak{\;I^{2}\mathrm{x\mathfrak{R}}\rightarrow\mathfrak{I^{2}\mathrm{x\;\mathfrak{R'}}}}$\\
+%TODOCG
+%Centrar fromulas
+%I^2xI^2xI^2-->I^2
+		\begin{center}
+		{\large 	$F:\mathfrak{\;I^{2}\mathrm{x\mathfrak{R}}\rightarrow\mathfrak{I^{2}\mathrm{x\;\mathfrak{R'}}}}$\\}
+		\end{center}
 		Siendo $\mathfrak{R}$' la transformación de un espacio de dimensión
 		1 a un espacio de dimensión 1 usando diferentes técnicas según las
 		propiedades del histograma. En este caso $\mathfrak{R}$ contiene
-		valores no acotados, cuyo máximo y granuralidad dependen del instrumento
+		valores no acotados, cuyo máximo y granularidad dependen del instrumento
 		con el que fue capturada la imagen.
 		
-		\item Detección del espacio vacío:\\
-		Para un correcto tratamiento de la imagen y facilitar la detección
-		de elementos de interés, mediante técnicas de suavizado y análisis
-		por sectores se determina un rango de color y nivel de ruido que se
-		eliminará de la imagen.
+		\item \textbf{Detección del espacio vacío:}\\
+		Para un correcto tratamiento de la imagen y facilitar la detección de elementos de interés mediante técnicas de suavizado y análisis por sectores, se determina un rango de color y nivel de ruido que posteriormente se eliminará de la imagen.
 		
-		\item Detección de zonas que representen gases o polvo:\\
-		Las estrellas, por su naturaleza iluminan sus proximidades, permitiendo
-		ver el polvo o gas que las rodea, una característica que usa el software
-		para determinar la existencia de galaxias es la existencia de este
-		halo. En su detección interviene la variación de gradiente desde puntos
-		de alta intensidad.
+		\item \textbf{Detección de zonas que representen gases o polvo:}\\
+		Las estrellas por su naturaleza, iluminan sus proximidades, permitiendo	ver el polvo o gas que las rodea. Cuando un cúmulo de estrellas tienen en sus proximidades polvo o gases en suspensión, éstos se ven iluminados. A estas zonas difusas de las imágenes las denominaremos halos.
+		\\
+		El halo galáctico es un componente extendido, más o menos esférico que se extiende en las proximidades de una galaxia \cite{NASADISKHALO}.
+		\\
+		La distinción entre el Halo y el cuerpo de la galaxia queda claramente definido en las galaxias espirales (ver figura \ref{fig:ESA_GALAXY_Espiral}), donde la forma esférica del halo contrasta con el disco plano o \texttt {flat-disc}. En las galaxias elípticas esta distinción no es clara(ver figura \ref{fig:ESO_GALAXY_Eliptica}), ya que no hay una transición marcada entre el cuerpo de la galaxia y el halo.
+		\begin{figure}[!htb]
+			\centering
+			\includegraphics[width=0.3\textwidth]{images/Messier100_NGC5457Galaxy.jpg}
+			\caption{\label{fig:ESA_GALAXY_Espiral}{\small Galaxia espiral NGC5457 con halo. Imagen cortesía de la E.S.A.}}
+		\end{figure}
 
 		\begin{figure}[!htb]
 			\centering
-			\includegraphics[width=0.8\textwidth]{images/PSF-explicada.jpg}
-			\caption{\label{fig:PSF}Corrección de PSF o función de dispersión de punto}
+			\includegraphics[width=0.3\textwidth]{images/ElipticalGalaxyESO325-G004.jpg}
+			\caption{\label{fig:ESO_GALAXY_Eliptica}{\small Galaxia elíptica ESO 325-G004 (en el centro) con halo. Imagen cortesía de NASA/ESA} }
 		\end{figure}
-				
-		\item Eliminación de la función de dispersión de punto (PSF)\\
-		La función de dispersión de punto es un fenómeno que provoca que dado
-		un punto lumínico y un receptor electrónico, se den dispersiones de
-		los fotones a celdas adyacentes del detector. Un buen detector tendrá
-		una menor PSF que un mal detector.\\
-		Eliminando la función de dispersión del punto obtendremos unos resultados
-		más próxima a la realidad. \\
+
+		Una característica que usarán nuestros algoritmos, es analizar el gradiente local de los halos alrededor de los puntos de máxima intensidad para determinar la existencia de galaxias.
+%TODOCG
+%Meter imagen explicativa		
+
+
+		%ok
+		\item \textbf{Eliminación de la función de dispersión de punto (PSF):}\\
+		La función de dispersión de punto es un fenómeno que provoca que, dado un punto lumínico y un receptor electrónico, se den dispersiones de	los fotones a celdas adyacentes del detector (ver figura \ref{fig:PSF}). 
+			\begin{figure}[!htb]
+				\centering
+				\includegraphics[width=1\textwidth]{images/PSF-explicada2.jpg}
+				\caption{\label{fig:PSF}{\small Corrección de PSF o función de dispersión de punto}}
+			\end{figure}
+		\\Un buen detector tendrá una menor PSF que un mal detector.\\
+		Eliminando la función de dispersión del punto obtendremos unos resultados que se aproximen más a la realidad.\\
 
 		
-		\item Detección de estrellas puntuales y galaxias.\\
+		\item \textbf{Detección de estrellas puntuales y galaxias:}\\
 		Las galaxias son aglomeraciones de estrellas que tienen un movimiento
 		por el espacio conjunto. En las inmediaciones de cada estrella perteneciente
-		a una galaxia es habitual encontrar polvo o gas atrapado por las fuerzas
-		de gravitación existentes.(ver figuras \ref{fig:GalaxiHalo} y \ref{fig:IntergalacticStar}, en la página \pageref{fig:GalaxiHalo})\\
+		a una galaxia.\\
+		Es habitual encontrar polvo o gas atrapado por las fuerzas 	de gravitación existentes (ver figuras \ref{fig:GalaxiHalo} y \ref{fig:IntergalacticStar}).\\
 		\begin{figure}[!htb]
 			\centering
-			\includegraphics[width=0.4\textwidth]{images/twoGalaxyHalo.jpg}
-			\caption{\label{fig:GalaxiHalo}Galaxia con halo producido por la iluminación de polvo o nubes de gas cercanas}
+			\includegraphics[width=0.2\textwidth]{images/twoGalaxyHalo.jpg}
+			\caption{\label{fig:GalaxiHalo}\small Galaxia con halo producido por la iluminación de polvo o nubes de gas cercanas}
 		\end{figure}
-		Las estrellas que no pertenecen a una galaxia se denominan "Stellar
-		Outcast" ó "Intergalactic Stars", al no pertenecer a una galaxia
-		no son capaces de atraer individualmente polvo o nubes de gas.\\
-		Aprovechando el gradiente generado por las nubes de polvo y gas, el
-		algoritmo se encarga de distinguir entre estrellas y galaxias.
-		\begin{figure}[!htb]
+		%Meter referencia y marcar en otro figura
+		Las estrellas que no pertenecen a una galaxia se denominan Stellar Outcast\cite{stellarOutcast} ó Intergalactic Stars que al no pertenecer a una galaxia no son capaces de atraer individualmente polvo o nubes de gas.\\
+		Aprovechando el gradiente generado por las nubes de polvo y gas, el	algoritmo se encarga de distinguir entre estrellas y galaxias.
+		\begin{figure}[!htb]%meter de donde proviene.
 			\centering
-			\includegraphics[width=0.4\textwidth]{images/star.jpg}
-			\caption{\label{fig:IntergalacticStar}Estrella no perteneciente a una galaxia}
+			\includegraphics[width=0.5\textwidth]{images/star.jpg}
+			\caption{\label{fig:IntergalacticStar}{\small Stellar Outcast SDSS J090745.0+24507}}
 		\end{figure}
 
-		\item Catalogación de galaxias en base a su morfología:\\
-		El resultado final se centra en la obtención de un listado de galaxias
-		junto con su clasificación en base a la clasificación dada por el
-		astrónomo Hubble (ver figura \ref{fig:HubbleClasification}, en la página \pageref{fig:HubbleClasification}).\\
-		\begin{figure}[!htb]
-			\centering
-			\includegraphics[width=0.7\textwidth]{images/EsquemaHubble.jpg}
-			\caption{\label{fig:HubbleClasification}Esquema de clasificación del Doctor Hubble}
-		\end{figure}
-		La catalogación se basa en la morfología de la galaxias, concretamente
-		divide entre elípticas y espirales y subdivide cada uno de estos
-		grupos en base nuevamente a su morfología, para las elípticas se tiene
-		en cuenta su excentricidad y para las espirales,su extensión relativa al
-		punto de máximo flujo.\\
-		Dependiendo de los segundos de arco que ocupe una galaxia, el algoritmo
-		afinará en mayor o menor medida en la clasificación.
 	\end{itemize}	
 
 	\vfill
 
 	\section{Plan de trabajo}
+	\subsection{Análisis }
+		En esta sección se muestra casos conocidos de éxito de aproximaciones similares al ejercicio tratado y dificultades detectadas para la resolución del problema que va a ser tratado.
+	\subsubsection{Antecedentes }
 	
-	La linea temporal seguida es la siguiente:
-	
-	\subsection{Antecedentes: }
-	
-	El único proyecto que hemos encontrado de similares características	es el proyecto Galaxy Zoo. Galaxy Zoo(https://www.galaxyzoo.org/) comenzó su andadura en 2007 y utiliza una enorme base de datos de imágenes, la idea detrás de este proyecto es alimentar la clasificación con la respuesta de voluntarios para llegar a determinar de forma colectiva la naturaleza de cada elemento que existe en su base de datos, usando técnicas de aprendizaje automático.\\
-	El resto de software astronómico hacen uso de los metadatos para localizar y dar una clasificación de estrellas y galaxias en función a una base de datos, nuestro objetivo es en cierta medida evitar esta dependencia y suplirla con técnicas de visión artificial.\\
+	El único proyecto que hemos encontrado de similares características	es el proyecto Galaxy Zoo. \\
+	Galaxy Zoo(https://www.galaxyzoo.org/) comenzó su andadura en 2007. Es un proyecto online de astronomía que invita a sus miembros a ayudar a clasificar alrededor de un millón de galaxias. Es un ejemplo de ciencia ciudadana ya que utiliza la ayuda de gente anónima para ayudar a la investigación científica. 
+	Gran parte del software astronómico hace uso de meta-datos para localizar y dar una clasificación de estrellas y galaxias en función a una base de datos. \\
+	\\Nuestro objetivo es evitar la dependencia de la interacción humana o el uso de bases de datos, supliéndola con técnicas de visión artificial.\\
 
-	\subsection{Documentación y busqueda de algoritmos}
-	[Redactar correctamente] Se ha buscado información tanto en el ámbito astronómico como en el de visión artificial, completar con bookmarks.
-	\subsection{Determinación de los puntos de dificil solución}
-	Destacamos dificultades en la calibración de la imagen, la baja resolución que pueden presentar los puntos de interés, la falta de información que muchos algoritmos utilizan, como por ejemplo contar con una secuencia temporal de imágenes que permitiese discriminar el fondo y el ruido y sobre todo la calibración de las imágenes FITS a un rango dinámico correcto sobre el cual openCV pueda operar.
-
-	\subsection{Creación de una interfaz de trabajo}
-	Tiene un doble propósito:
+	%
+	\subsubsection{Dificultades encontradas}
+	Las peculiaridades de las imágenes astronómicas hacen que los algoritmos existentes en las librerías clásicas de visión por computador no se adapten a lo esperado, esto hace que las imágenes tengan que ser transformadas. Esta transformación no es trivial y es particular para cada paso.
+	\newline
+	Destacamos entre otras, las siguientes dificultades:
 	\begin{enumerate}
-		\item Facilitar la configuración de los algoritmos y visualizar el histograma resultante para la correcta automatización futura.
+	%Describir en detalle
+	\item \textbf{Calibración de la imagen:}\\
+	La calibración de las imágenes FITS a un rango dinámico correcto sobre el cual las librerías de visión artificial puedan operar.
+	\item \textbf{Baja resolución de los puntos de interés:}\\
+	Los objetos de interés no tienen por qué estar centrados en la imagen, en muchos casos ocupan regiones inferiores a 16x16 pixels. 
+	\item \textbf{Ausencia de algoritmos avanzados en la detección de objetos celestes sobre imágenes raster:}\\
+	Los algoritmos de catalogación hacen uso de las coordenadas astronómicas presentes en la cabecera del fichero FITS para cruzar estas coordenadas con bases de datos en las que están determinados los astros de interés; nuestro objetivo no es posicionar objetos de interés en base a los datos almacenados en una base de datos sino descubrir posibles objetos de interés en una imagen.
+	\item \textbf{Dificultad para conseguir ficheros de prueba:} \\
+	Las bases de datos astronómicas existentes contienen grandes cantidades de imágenes cuya forma de acceso se realiza mediante sus coordenadas astronómicas; dando como resultado de la búsqueda una larga lista de imágenes FITS.\\Además el peso de las mismas hace difícil su gestión.
+	\end{enumerate}
+
+	\section{Desarrollo}
+	\subsection{Decisiones de diseño: la interfáz de usuario}
+	Queremos crear una interfaz de trabajo, la interfáz gráfica ha de tener un doble propósito:
+	\begin{enumerate}
+		\item Facilitar la configuración de los algoritmos y visualizar el histograma resultante para la correcta automatización.\\ En un futuro trabajo se pretende hacer uso de técnicas de aprendizaje automático. La interfaz serviría como punto de inicio para obtener los parámetros base necesarios para el aprendizaje automático.
 		\item Permitir al usuario no especializado trabajar con sus imágenes y obtener el resultado de forma visual.
 	\end{enumerate}
-	  
-	\subsection{Testeo de los algoritmos sobre un conjunto pequeño de imágenes}
-	Para determinar la validez de los algoritmos, se ha contado con una pequeña base de imágenes, estas imágenes han sido tanto ficheros fits como imágenes genéricas.\\
-	 Esta fase ha permitido realizar la automatización del proceso afinando los algoritmos de clasificación.
-	\subsection{Test de fiabilidad}
-	Se ha ejecutado el software sobre un conjunto mayor de imágenes para comprobar su correcto funcionamiento, se adjunta tabla de resultados sobre la fiabilidad obtenida.\\ 
+	Sería deseable que la interfaz visual sea agradable en apariencia y de fácil manejo, mostrando  las opciones de manipulación que necesita el usuario y los datos más significativos para  nuestros algoritmos.\\
+	Se valoraron diferentes tecnologías (QT en sus variante PyQT y PySide), optando por TkInter por su versatilidad.\\
+	Para aprovechar lo mejor posible el area de ventana se habilitará una zona con pestañas en la que se mostrará la imagen original y procesada (para más detalle ver subsección \ref{GUI}).
 	
-	\vfill
-	%Desarrollo
-	\section{Desarrollo}
+	\subsection{Prueba de los algoritmos sobre una muestra de imágenes}
+%TODOCG
+%Aumentar, explayar. De donde son las fuentes.
+%OJO revisar
+	Para determinar la validez de los algoritmos, sería deseable disponer de imágenes que incluyen tanto imágenes FITS como imágenes genéricas.\\
+	Se partirá de una pequeña batería de imágenes, sobre la cual se aplicarán los algoritmos que se desarrollarán (para más detalle ver sección \ref{ownLib}), de este modo podremos afinar su precisión.
+	Esta fase ha permitido realizar la automatización del proceso afinando los algoritmos de clasificación.
 
 	\subsection{Arquitectura interna de la aplicación}
-	Todo el desarrollo se ha centrado en el uso del lenguaje Python: es un lenguaje maduro, con una gran cantidad de bibliotecas de apoyo. Tanto las bibliotecas usadas como el interprete de Python son de código abierto, lo que es un punto más a favor del uso de este lenguaje.\\
-	 Hacemos especial hincapié en el uso de código abierto, ya que dentro de los objetivos del proyecto está la creación de un conjunto de herramientas que puedan ser usadas, modificadas y copiadas libremente por la comunidad, por ello, todo el código desarrollado recae en la licencia BSD.
-	\subsection{Bibliotecas externas}
-	\subsubsection{OpenCV}
-	Es una librería de visión artificial creada inicialmente por Intel, es multiplataforma, su núcleo está desarrollado en C, pero tiene envolturas para gran cantidad de lenguajes, entre ellos Python. Es la librería más avanzada que existe para visión artificial, destacando por su optimización que permite la realización de aplicaciones en tiempo real. OpenCV es una librería madura (se inicio en 1.999) y una innumerable cantidad de proyectos hacen uso de la misma.\\
-	La licencia de openCV es BSD.
-	\subsubsection{NumPy}
-	Numpy es el paquete base fundamental para cálculos científicos en el entorno de Python, al usar Numpy podemos expresar imágenes como matrices multidimensionales. Representar imágenes como arrays de NumPy no solo es eficiente desde el punto de vista computacional, sino también en la gestión de recursos, sino que nos abre la posibilidad de conectar con otras librerías que usan NumPy, sus puntos fuertes son:
+	Todo el desarrollo se ha centrado en el uso del lenguaje Python: es un lenguaje maduro con una gran cantidad de bibliotecas de apoyo. Tanto las bibliotecas usadas como el interprete de Python son de código abierto.\\
+	La aplicación se divide en dos ficheros:
 	\begin{itemize}
-		\item Capacidad de manejo de matrices de datos genéricos, que usaremos para guardar y manipular nuestras imágenes.
+	\item ide.py: contiene la creación de la interfaz gráfica, el flujo que sigue el tratamiento de cada imagen y la parte encargada de la automatización.\\ Se ha usado un enfoque orientado a objetos.
+	\item cvSpace.py: en este fichero se encuentran las funciones encargadas del análisis y tratamiento de las imágenes, funciones que hemos dividido en dos grupos: el grupo de la parte estadística y el grupo del tratamiento de imágenes.\\ Este fichero usa un enfoque imperativo.
+	\end{itemize}
+	
+	 Hacemos especial hincapié en el uso de código abierto, ya que dentro de los objetivos del proyecto está la creación de un conjunto de herramientas que puedan ser usadas, modificadas y copiadas libremente por la comunidad; por ello, todo el código se ha desarrollado bajo la licencia BSD.
+	\subsection{Bibliotecas externas}
+	\paragraph{OpenCV}
+	Es una librería de visión artificial, desarrollada bajo la licencia BSD y creada inicialmente por Intel. Es multiplataforma con su núcleo en C y tiene envolturas para gran cantidad de lenguajes, entre ellos Python. Es la librería más avanzada que existe para visión artificial, destacando por su optimización que permite la realización de aplicaciones en tiempo real. OpenCV es una librería madura (se inicio en 1.999) sobre la que gran cantidad de proyectos se apoyan.\\
+	\paragraph{NumPy}
+	Numpy es el paquete base fundamental para cálculos científicos en el entorno de Python. Al usar Numpy podemos expresar las imágenes como matrices multidimensionales. Esta representación de las imágenes en arrays de NumPy no solo es eficiente desde el punto de vista computacional sino también en la gestión de recursos y nos abre la posibilidad de conectar con otras librerías que usan NumPy. Sus puntos fuertes son:
+	\begin{itemize}
+		\item Capacidad de manejo de matrices de datos genéricos que usaremos para guardar y manipular nuestras imágenes.
 		\item Alta velocidad en las operaciones que se realizan sobre las matrices.
 		\item Multitud de funciones matemáticas implementadas de serie.
 		\item NumPy es la base de otras librerías, como por ejemplo scikit-learning, librería de aprendizaje automático.
 	\end{itemize}
 	La licencia de NumPy es BSD.
-	\subsubsection{Matplotlib}
-	Librería de dibujo en 2D/3D que destaca por su facilidad de manejo y potencia, es la encargada de mostrar en la interfaz los histogramas.\\
+	\paragraph{Matplotlib}
+	Librería de dibujo en 2D/3D que destaca por su facilidad de manejo y potencia. Es la encargada de mostrar los histogramas en la interfaz gráfica.\\
 	La licencia de Matplotlib es BSD.
-	\subsubsection{Astropy}
-	Astropy es un proyecto comunitario para acercar a python al mundo de la astronomía, su núcleo está desarrollado en C y Python, busca aportar un framework robusto con las funcionalidades generales que se requieren en astronomía. Sus desarrolladores y usuarios principales son profesionales de las astronomía. Al ser un proyecto comunitario cubre muchos ámbitos de la astronomía (fotometría, spectrografía, sistemas de coordenadas, etc).\\
-	La principal funcionalidad que usamos de astropy es el módulo fits que nos permite la carga de ficheros fits.\\
+	\paragraph{Astropy}
+	Astropy es un proyecto comunitario para acercar a python al mundo de la astronomía. Su núcleo está desarrollado en C y Python. El proyecto Astropy busca crear un framework robusto con las funcionalidades generales que se requieren en astronomía. Sus desarrolladores y usuarios principales son profesionales de las astronomía y al ser un proyecto comunitario cubre muchos de sus ámbitos (fotometría, spectrografía, sistemas de coordenadas, etc).\\
+	La principal funcionalidad que usamos de Astropy es un módulo que nos permite la carga de ficheros FITS.\\
 	La licencia de astropy es BSD.\\
-	\subsubsection{Tkinter}
-	Es la librería de facto ( y más usada ) para desarrollar interfaces gráficas en python, se basa en TcL/Tk lo que le permite ser multiplataforma y crear interfaces nativas sobre el sistema operativo en el que se esté ejecutando. Toda la interfáz gráfica se apoya en esta librería.\\	
+	\paragraph{TkInter}
+	Es la librería de facto ( y más usada ) para desarrollar interfaces gráficas en python. Se basa en TcL/Tk lo que le permite ser multiplataforma y crear interfaces nativas sobre el sistema operativo en el que se esté ejecutando. Toda la interfáz gráfica se apoya en esta librería.\\	
 	La licencia de Tkinter es Python License.
-	\subsection{Bibliotecas propias}
-	Los algoritmos usados se encuentran en el fichero cvSpace.py, su cometido es realizar todas las tareas de Visión por computador y estadística, se dividen en:
+	\vfill
+	\newpage
+	\subsection{Bibliotecas propias}\label{ownLib}
+	%Vincular con objetivos
+	Los algoritmos desarrollados los hemos englobado en el fichero cvSpace.py cuyo cometido es realizar todas las tareas de Visión por computador que nos planteamos en los objetivos y estadística; se destacan:
 	\subsubsection{Ajuste de rango dinámico}
-	Su principal cometido es trasladar el rango de intensidades de cada elemento de la matríz imagen a unos rangos normalizados, dependiendo de los datos de entrada, se elige uno u otro de los siguientes algoritmos.\\
-	Se ha tomado como referencia para mostrar los cambios una imagen FITS procedente del telescopio Chandra.
+	Su principal cometido es trasladar el rango de intensidades de cada elemento de la matriz imagen a unos rangos normalizados.\\
+
 	\begin{enumerate}
-		\item Lineal\\
+		\item \textbf{Lineal}\\
 		Conocidos el máximo $M$ y el mínimo $m$ valor en la matriz, realiza
 		la siguiente transformación (Ver figura \ref{fig:HDRLineal})\\
-		
-			$Pixel[x,y]=\frac{2^{r}*(Pixel[x,y]-m)}{(M-m)}$
+%TODOCG: explicar que es cada cosa y que es la r.
+			\begin{center}
+				{\large $Pixel[x,y]=\frac{2^{r}*(Pixel[x,y]-m)}{(M-m)}$}				
+			\end{center}
 			\begin{figure}[!htb]
 				\centering
 				\includegraphics[width=0.5\textwidth]{images/HDREQ/chandraLineal.PNG}
-				\caption{\label{fig:HDRLineal}Ajuste de rango dinámico lineal}
+				\caption{\label{fig:HDRLineal}{\small Ajuste de rango dinámico lineal}}
 			\end{figure}
-		\item Raíz cuadrada\\
+		\newpage
+		\item \textbf{Raíz cuadrada}\\
 		Conocidos el máximo $M$ y el mínimo $m$ valor en la matriz, realiza
 		la siguiente transformación (Ver figura \ref{fig:HDRSQRT}):
+%TODOCG: explicar que es cada cosa y que es la r.
+			\begin{center}
+			{\large $Pixel[x,y]=\frac{2^{r}*(Pixel[x,y]-m)}{\sqrt{M-m}}$}			
+			\end{center}
 		
-			$Pixel[x,y]=\frac{2^{r}*(Pixel[x,y]-m)}{\sqrt{M-m}}$
 			\begin{figure}[!htb]
 				\centering
 				\includegraphics[width=0.5\textwidth]{images/HDREQ/chandraSqrt.PNG}
-				\caption{\label{fig:HDRSQRT}Ajuste de rango dinámico Raíz Cuadrada}
+				\caption{\label{fig:HDRSQRT}{\small Ajuste de rango dinámico Raíz Cuadrada}}
 			\end{figure}
-		\item Logaritmo\\
+		\item \textbf{{}Logaritmo}\\
 		Conocidos el máximo $M$ y el mínimo $m$ valor en la matriz, realiza
 		la siguiente transformación (Ver figura \ref{fig:HDRLOG}):
-		\\
-			$Factor=log_{10}(M-m)$\\
-			$Pixel[x,y]=\frac{log_{10}(Pixel[x,y])}{Factor}$
+%TODOCG: diferenciar pixel origen y pixel destino
+			\begin{center}
+				{\large $Factor=log_{10}(M-m)$\\
+				$Pixel[x,y]=\frac{log_{10}(Pixel[x,y])}{Factor}$
+				}
+			\end{center}	
 			\begin{figure}[!htb]
 				\centering
 				\includegraphics[width=0.5\textwidth]{images/HDREQ/chandraLog.PNG}
-				\caption{\label{fig:HDRLOG}Ajuste de rango dinámico logarítmico}
+				\caption{\label{fig:HDRLOG}{\small Ajuste de rango dinámico logarítmico}}
 			\end{figure}
 
-		\item Potencia\\
+		\item \textbf{Potencia}\\
 		Conocidos el máximo $M$ y el mínimo $m$ valor en la matríz y dado
 		un exponente n, realiza la siguiente transformación (Ver figura \ref{fig:HDRPOW}):
 		\\
-			$Factor=\frac{1}{(M-n)^{n}}$
+		\begin{center}
+			{\large $Factor=\frac{1}{(M-n)^{n}}$}
 			\\
-			$Pixel[x,y]=(Pixel[x,y]-m)^{n}*Factor$
+			{\large $Pixel[x,y]=(Pixel[x,y]-m)^{n}*Factor$}
+		\end{center}
 			\begin{figure}[!htb]
 				\centering
-				\includegraphics[width=0.35\textwidth]{images/HDREQ/chandraPow1_5.PNG}
-				\caption{\label{fig:HDRPOW}Ajuste de rango dinámico potencia con valor 1.5}
+				\includegraphics[width=0.5\textwidth]{images/HDREQ/chandraPow1_5.PNG}
+				\caption{\label{fig:HDRPOW}{\small Ajuste de rango dinámico potencia con valor 1.5}}
 			\end{figure}
 
-		
-		\item Arcoseno Hiperbólico\\
+
+		\clearpage
+		\item \textbf{Arcoseno Hiperbólico}\\
 		Conocidos el máximo $M$ y el mínimo $m$ valor en la matríz y dado
 		un factor de no linealidad nL, realiza la siguiente transformación  (Ver figuras \ref{fig:HDRasinh1_5} para nL=1.5 y \ref{fig:HDRasinh5} para nL=5):\\
-			$Factor=\frac{arcSinH((M-m)}{nL}$
-			\\
-			$Pixel[x,y]=\frac{\frac{arcSinH(Pixel[x,y]-m)}{nL}}{Factor}$
-			\\
 			\begin{figure}[!htb]
 				\centering
-				\includegraphics[width=0.5\textwidth]{images/HDREQ/chandraaSinH_0_5.jpg}
-				\caption{\label{fig:HDRasinh1_5}Ajuste de rango dinámico ArcoSeno hiperbólico con valor 1.5}
+				\includegraphics[width=0.4\textwidth]{images/HDREQ/chandraaSinH_0_5.jpg}
+				\caption{\label{fig:HDRasinh1_5}{\small Ajuste de rango dinámico ArcoSeno hiperbólico con valor 1.5}}
 			\end{figure}
 			\begin{figure}[!htb]
 				\centering
-				\includegraphics[width=0.5\textwidth]{images/HDREQ/chandraaSinH_5.PNG}
-				\caption{\label{fig:HDRasinh5}Ajuste de rango dinámico ArcoSeno hiperbólico con valor 1.5}
+				\includegraphics[width=0.4\textwidth]{images/HDREQ/chandraaSinH_5.PNG}
+				\caption{\label{fig:HDRasinh5}{\small Ajuste de rango dinámico ArcoSeno hiperbólico con valor 1.5}}
 			\end{figure}
+			\begin{center}
+				{\large $Factor=\frac{arcSinH((M-m)}{nL}$}
+				\\
+				{\large $Pixel[x,y]=\frac{\frac{arcSinH(Pixel[x,y]-m)}{nL}}{Factor}$}
+			\end{center}
+		\vfill
 
-		\item Ajuste en base al histograma\\
-			La ecualización del histograma de una imagen es una transformación que pretende obtener para una imagen un histograma con una distribución uniforme. Es decir, que exista el mismo número de pixels para cada nivel de gris del histograma de una imagen monocroma (Ver figura \ref{fig:HDRHistograma}).
+
+		\item \textbf{Ajuste en base al histograma}\\
+			La ecualización del histograma de una imagen es una transformación que pretende obtener un histograma de la imagen con una distribución uniforme. Es decir, que exista el mismo número de pixels para cada nivel de gris del histograma de una imagen monocroma, ocupando todo el rango. (Ver figura \ref{fig:HDRHistograma}).
 			\begin{figure}[!htb]
 				\centering
-				\includegraphics[width=0.4\textwidth]{images/HDREQ/chandraaHistEq.PNG}
-				\caption{\label{fig:HDRHistograma}Ajuste de rango dinámico por ecualización de histograma}
+				\includegraphics[width=0.4\textwidth]{images/histEqualizado.jpg}
+				\caption{\label{fig:HDRHistograma}{\small Ajuste de rango dinámico por ecualización de histograma; a la derecha histograma original, a la izquierda histograma equalizado.}}
 			\end{figure}
 	\end{enumerate}
 
-	\subsubsection{Búsqueda de puntos de interés}
-	Se hace uso de las funciones getObjectList y getGalaxyCente.\\ \\
-	{\large getObjectList}: \\
-	La función getObjectList presente en cvSpace.py hace uso de la técnica detección de blobs de openCV para localizar puntos de interés, concretamente candidatos a estrellas.\\
-	La búsqueda mediante blobs se centra en la variación de la intensidad de cada pixel con su vecindad, el proceso, en detalle, realiza las siguientes operaciones:
+	\subsubsection{Búsqueda de puntos de interés, estrellas y galaxias}
+	%meter referencias, introducir de que es cada puntyo.
+	En este punto se detallan las funciones creadas para obtener el objetivo del trabajo, la determinación de objetos de interés.\\
+	Destacamos \emph{getObjectList}, \emph{getGalaxyCenter} y \emph{getcontours}.\\
+	\begin{enumerate}
+	\item \textbf{getObjectList}\\
+	La función getObjectList presente en cvSpace.py hace uso de la técnica detección de blobs de openCV para localizar puntos de interés, concretamente \emph{candidatos a estrellas}.\\
+	La búsqueda mediante blobs se centra en la variación de la intensidad de cada pixel con su vecindad; el proceso en detalle realiza las siguientes operaciones:
 	\begin{enumerate}
 		\item Convierte la imagen a una imagen binaria.
 		\item Extrae las componentes conectadas en base a un cálculo de contornos.
-		\item En caso de blobs muy cercanos entre si, los agrupa en un único blob, esta proceso nos es de especial interés para la agrupación de estrellas que conforman una galaxia.
-		\item Se eliminan aquellos blobs que son detectados de forma errónea, para ello se hace uso de la imagen de espacio vacío generada mediante el método {\large generateDarkImage} de la clase AstroImage.\\
+		\item En caso de blobs muy cercanos entre sí, los agrupa en un único blob. Este proceso  es de especial interés para la agrupación de estrellas que conforman una galaxia.
+		\item Se eliminan aquellos blobs que son detectados de forma errónea; para ello se hace uso de la imagen de espacio vacío generada mediante el método {\scriptsize generateDarkImage} de la clase AstroImage.\\
+		Se descartan aquellos candidatos cuyo centro de coordenadas ha caído sobre la zona marcada como espacio vacío, conservándose el resto (ver figura \ref{fig:removePointsConparation}).
 		\begin{figure}[!htb]
 			\centering
-			\includegraphics[width=0.9\textwidth]{images/removeBadPointsComparation.PNG}
-			\caption{\label{fig:removePointsConparation}Resultado antes y despues de aplicar la detección automática de puntos erróneos.}
+			\includegraphics[width=0.9\textwidth]{images/removeBadPoints3.png}
+			\caption{\label{fig:removePointsConparation}{\small Resultado del proceso de categorización y eliminación de puntos de interés erróneos.}}
 		\end{figure}
-		Se descartan aquellos candidatos cuyo centro de coordenadas ha caído sobre la zona marcada como espacio vacío, conservándose el resto.\\ Ver figuras  \ref{fig:removePointsConparation} y \ref{fig:removePointsDiference}
-		\begin{figure}[!htb]
-			\centering
-			\includegraphics[width=0.45\textwidth]{images/removeBadPointsDiference.PNG}
-			\caption{\label{fig:removePointsDiference}Esta imagen muestra los puntos descartados y complementa a la figura \ref{fig:removePointsConparation}.}
-		\end{figure}		
+
+		
 		\item Para cada grupo de blobs nos devuelve tanto su centro como su área.
 	\end{enumerate}
-	
-	{\large getGalaxyCenter}:	\\
-	La función {\scriptsize getGalaxyCenter} se encarga de determinar el centro de las candidatas a galáxias.\\
-	El proceso que realiza se resume en los siguientes pasos:
+	\item getGalaxyCenter y getcontours:	\\
+	%hacer una macro para los nombres de las funciones
+	La función {\scriptsize getGalaxyCenter} se encarga de determinar el centro de las candidatas a galáxias. Mientras que la función \textbf {getContours} de nuestra librería devuelve una lista de contornos que contienen las posibles galaxias detectadas.\\
+	El proceso que realiza {\scriptsize getcontours}, se resume en los siguientes pasos:
 	\begin{enumerate}
 		\item Aplicación de blur a la región de interés.
 		\item Búsqueda del máximo local en intensidad.
 	\end{enumerate}
-	
-	Es necesario realizar un blur o difuminado sobre la imagen como se aprecia en las imágenes \ref{fig:galaxiCenterFromImage_01_ERROR} \ref{fig:galaxiCenterFromImage_02_Blur} y \ref{fig:galaxiCenterFromImage_03_Correct}.
-	\\
-	En caso de no aplicar el suavizado a la imagen el pico de mayor intensidad no tiene porque estár situado en el centro de la galaxia, al aplicar el suavizado, se pondera en media el valor de cada pixel con su vecindad, con lo que es más probable que el centro el pico de intensidad de ajuste al centro de la galaxia. Esto es debido a que el centro de la galaxia acumula el mayor área lumínica.
+%TODOCFG-VRG: meter código.	
+	\end{enumerate}
+%TODOCFG-VRG:meter pie de página explicando que es blur
+	Es necesario realizar un blur \footnote{\cite{OpenCV}} o difuminado, como se aprecia en las imágenes \ref{fig:galaxiCenterFromImage_01_ERROR} \ref{fig:galaxiCenterFromImage_02_Blur} y \ref{fig:galaxiCenterFromImage_03_Correct}.\\
+	En caso de no aplicar el suavizado a la imagen, el pico de mayor intensidad no tendría por qué estar situado en el centro de la galaxia. Al aplicar el suavizado, se pondera en media el valor de cada pixel con su vecindad y aumentará la probabilidad de que el centro calculado se ajuste al centro de la galaxia. Esto es debido a que en el centro de la galaxia se acumula la mayor área lumínica.
 	\begin{figure}[!htb]
 		\centering
 		\includegraphics[width=0.5\textwidth]{images/galaxiCenterFromImage_01_ERROR.png}
-		\caption{\label{fig:galaxiCenterFromImage_01_ERROR}Obtención errónea del centro de la galaxia (marcado con una circunferencia) al aplicar la función {\scriptsize getGalaxyCenter} sobre la imagen sin procesar con un filtro de suavizado.}
+		\caption{\label{fig:galaxiCenterFromImage_01_ERROR}{\small Obtención errónea del centro de la galaxia (marcado con una circunferencia) al aplicar la función {\scriptsize getGalaxyCenter} sobre la imagen sin procesar con un filtro de suavizado.}}
 	\end{figure}
 	\begin{figure}[!htb]
 		\centering
@@ -489,124 +552,315 @@
 	\begin{figure}[!htb]
 		\centering
 		\includegraphics[width=0.5\textwidth]{images/galaxiCenterFromImage_03_Correct.png}
-		\caption{\label{fig:galaxiCenterFromImage_03_Correct}Obtención correcta del centro de la galaxia (marcado con una circunferencia) al aplicar la función {\scriptsize getGalaxyCenter} sobre la imagen procesada con un filtro de suavizado.}
+		\caption{\label{fig:galaxiCenterFromImage_03_Correct}{\small Obtención correcta del centro de la galaxia (marcado con una circunferencia) al aplicar la función {\scriptsize getGalaxyCenter} sobre la imagen procesada con un filtro de suavizado.}}
 	\end{figure}
-	\subsubsection{Eliminación de ruido}
+	{\scriptsize getcontours} aplica búsquedas de contornos sobre la imagen transformada para detectar formaciones de galaxias e internamente realiza operaciones de erosión, dilatación y cierres de contornos.
+	\subsubsection{Eliminación de ruido y Point Spread Function (PSF)}
+	\begin{enumerate}
+	\item Eliminación de ruido:
+%TODO: meter código y explicar la eurística
 	Mediante heurística y en base al resultado del algoritmo de búsqueda de contornos, se eliminan áreas carentes de interés y producto del ruido.
 	\\El algoritmo realiza cálculos incrementales del número de contornos, estimando el ruido por el crecimiento a cada iteración. Si de una iteración a la siguiente el número de contornos crece en un factor de más del doble, se estima que se ha llegado a un umbral correcto.
 	\\
-	La eliminación del ruido en nuestro caso es una tarea compleja, ya que la diferencia entre una región de ruido y una región que contiene una estrella es compleja hasta para un ojo entrenado.
-	\subsubsection{Eliminación de PSF}
+	La eliminación del ruido en nuestro caso es una tarea compleja, ya que la diferencia entre una región de ruido y una región que contiene una estrella resulta difícil hasta para un ojo entrenado.
+	\newline
+	\item Eliminación de PSF:\\
     Aplicando operaciones morfológicas sobre la imágen, concretamente una dilatación seguida de una erosión, se eliminan los puntos detectados erróneamente como válidos.
     \\
-    El parámetro clave para la eliminación de la PSF es el kernel aplicado tanto a la dilatación como a la erosión, es de un tamaño de 5.
-    \\
-    Un kernel es una matriz que se aplica a cada pixel de la imagen, expresando este procedimiento en una ecuación tenemos:\\ \newline
-    $ K(i,j) = \frac{1}{25} \; \forall\; x,y \; in \; (0,5)$\\ \newline
-    \scriptsize Nota: En nuestro caso $K(i,j)=\frac{1}{25}$ ya que es la matriz unidad ponderada.\\ \newline
-    $ H(x,y) = \sum_{i=0}^{M_{i}-1}\sum_{j=0}^{M_{j}-1}I(x+i-a_{i},y+j-a_{i})*K(i,j) $
+    El parámetro clave para la eliminación de la PSF es el kernel aplicado tanto a la dilatación como a la erosión que es de un tamaño de 5.
+    	\begin{figure}[!htb]
+    		\centering
+    		\includegraphics[width=0.7\textwidth]{images/PSFUnificadas.png}
+    		\caption{\label{fig:psfInfrared}{\small Distintas PSF (5) de un instrumento astronómico al aplicar diferentes filtros físicos de longitud de onda. La última imagen (inferior derecha) se corresponde con la simulación de reducción de PSF}}
+    	\end{figure}
+	Como se aprecia en la figura (\ref{fig:psfInfrared}), la forma que toma la PSF varía según el filtro físico usado al captar la imagen dese el telescópio, presentando formas cercanas a una Normal N-Dimensional.
+    Un kernel es una matriz que se aplica a cada pixel de la imagen. 
 	\\
-	El resultado de aplicar un kernel sobre una imagen es una nueva imagen con las mismas dimensiones que la imagen de origen, pero con posibles valores distintos en cada pixel, estos valores dependen tanto del kernel elegido como de las características de la imagen.
-	\\
-	\subsubsection{Determinación de forma en las galaxias}
+    Expresando este procedimiento en una ecuación tenemos:
+%TODO: explicar el kernel a nivel técnico. Cambiar I*1/25 y quitar nota.
+    \begin{center}
+	    {\large $ K(i,j) = \frac{1}{25} * I$}\\
+	    {\large $ H(x,y) = \sum_{i=0}^{M_{i}-1}\sum_{j=0}^{M_{j}-1}I(x+i-a_{i},y+j-a_{i})*K(i,j) $}
+    \end{center}
 
-	\subsection{Linea de procesado de imágenes}
+	%Explicar como aplicamos kernel.
+	El resultado de aplicar un kernel sobre una imagen es una nueva imagen con las mismas dimensiones que la imagen de origen (ver figura \ref{fig:psfInfrared3Resolved}), pero con posibles valores distintos en cada pixel; estos valores dependen tanto del kernel elegido como de las características de la imagen.
+
+	\end{enumerate}
+	%\subsubsection{Determinación de forma en las galaxias}
+	\subsection{Procesado de imágenes}
 	\subsubsection{Pre-procesado base}
-	El siguiente esquema detalla el proceso que sigue cada imagen, a este proceso lo llamaremos pre-procesado base. (Ver figura \ref{fig:esquemaPreprocesado})\\
+	El siguiente esquema detalla el proceso que sigue cada imagen y al que llamaremos pre-procesado base. (Ver figura \ref{fig:esquemaPreprocesado})\\
 	\begin{figure}[!htb]
 		\centering
 		\includegraphics[width=1\textwidth]{images/tfg2016pipeline1.jpg}
 		\caption{\label{fig:esquemaPreprocesado}Flujo de pre-procesado}
 	\end{figure}
-	En el caso de la carga de una imagen astronómica FITS se realiza un ajuste del rango dinámico, este paso se obvia para las imágenes en formato raster genérico, ya que se presupone que el instrumento de captura tiene por salida una imagen en el rango esperado.\\
-	El resultado de este preprocesado da como resultado 2 matrices o imágenes, que denominaremos imagen Halo e Imagen Candidatos.
-	\subsubsection{Algoritmo de clasificacción}
+	En el caso de la carga de una imagen astronómica FITS se realiza un ajuste del rango dinámico, este paso se obvia para las imágenes en formato raster genérico ya que se presupone que el instrumento de captura tiene por salida una imagen en el rango esperado.\\ \\
+	La imagen FITS se convierte a una matiz de 8 bits, cuyo contenido dependerá de la ecualización aplicada (Ver figura \ref{fig:distintasEqu}).\\
+	\begin{figure}[!htb]
+		\centering
+		\includegraphics[width=1\textwidth]{images/ecu_lineal_sqr_asinh.jpg}
+		\caption{\label{fig:distintasEqu}{\small De izquierda a derecha, imagen ecualizada linealmente, aplicando raíz cuadrada y aplicando arco seno hiperbólico.}}
+	\end{figure}
+	Se calculan los valores del histograma (ver figura \ref{fig:histLines}) que definen los umbrales con los que se generan tres matrices o imágenes, que denominaremos imagen {\scriptsize Espacio vacío}, imagen {\scriptsize Halo} e imagen {\scriptsize Candidatos}.\\ 
+	\begin{figure}[!htb]
+		\centering
+		\includegraphics[width=1\textwidth]{images/histLines.png}
+		\caption{\label{fig:histLines}{\small Lineas de ecualización sobre histograma.}}
+	\end{figure}
+	\\
+	Estas imágenes o matrices  (ver figura \ref{fig:imagenesAutoGeneradas}), serán usadas en el paso de clasificación.
+	\begin{figure}[!htb]
+		\centering
+		\includegraphics[width=1\textwidth]{images/imagenesAutoGeneradas.png}
+		\caption{\label{fig:imagenesAutoGeneradas}{\small Imágenes o matrices autogeneradas que se usarán para la catalogación.}}
+	\end{figure}
+	\\
+	\newpage
+	\subsubsection{Algoritmo de clasificación}
 	Partiendo de una imagen adaptada por el pre-procesado base, se realizan los siguientes pasos que se detallan en el esquema.(Ver figura \ref{fig:esquemaClasificaciosn})\\
 	\begin{figure}[!htb]
 		\centering
 		\includegraphics[width=1\textwidth]{images/tfg2016algoritmos_de_catalogaci_n.jpg}
 		\caption{\label{fig:esquemaClasificaciosn}Flujo de clasificación}
 	\end{figure}
-	\\Obtención de coordenadas de puntos de interés: se genera una lista de candidatos partiendo de la imagen Candidatos obtenida tras el pre-procesado.
+	\\
+	\textbf{Obtención de coordenadas de puntos de interés:} \\
+	Se genera una lista de candidatos partiendo de la imagen {\scriptsize Candidatos} obtenida tras el pre-procesado.
 	
-	Para cada coordenada candidata, se valora mediante su entorno, contenido en la imagen Halo si es un posible candidato a estrella o galaxia. Ciertos puntos se descartarán por ser información espuria (probablemente formados artificialmente en el detector).
-	
-	
-	\subsection{Interfaz gráfica}
-	Tanto para el usuario final como para la validación de los algoritmos en tiempo de desarrollo se ha creado una interfaz, esta permite la visualización de la imagen, ajuste de parámetros y obtención en forma visual de los elementos astronómicos detectados así como su clasificación. Igualmente permite el guardado de la imagen resultante y la exportación del proyecto.(Ver figura \ref{fig:GUI_limpia})\\
-	En las siguientes lineas se detalla su uso: (Por completar cuando la interfaz este cerrada)\\
+	Para cada coordenada candidata se valorará, mediante su entorno (contenido en la imagen {\scriptsize Halo}), si es un posible candidato a estrella o galaxia. Ciertos puntos se descartarán por ser información espuria (probablemente formados artificialmente en el detector).
+	%unificar fig 17 y 18
+	Como resultado obtendremos una imagen en la que viene marcados los puntos catalogados como estrellas y las galaxias resaltadas por su contorno (ver figura \ref{fig:estrellasContornos})
 	\begin{figure}[!htb]
 		\centering
-		\includegraphics[width=1\textwidth]{images/GUI.jpg}
+		\includegraphics[width=1\textwidth]{images/vectorClasifica.png}
+		\caption{\label{fig:estrellasContornos}{\small Resultado de la clasificación. Marcado en rojo parecen las estrellas, los contornos denotan las galaxias.}}
+	\end{figure}
+	\\
+	\textbf{Clasificación de estrellas:}
+	\\Para la clasificación de estrellas se usa una aproximación múltiple, primero la detección en base a un umbral (todo conjunto de puntos que tienen intensidad superior a ese umbral pasan a ser candidatos) y segundo la búsqueda de blobs usando OpenCV.\\
+	Con los datos generados de ambas aproximaciones se hace un último filtrado que elimina el posible ruido catalogado como candidato. Para ello se hace uso de la imagen-matriz de zonas oscuras, eliminando los puntos que recaen en zonas catalogadas como espacio vacío o ruido.
+	\\
+	\textbf{Clasificación de galaxias:}\\
+	Para la clasificación de galaxias se hace un uso intensivo de búsqueda de contornos, que una vez obtenidos, en base al área media y a su número, se realiza un proceso de eliminación de contornos que no representan galaxias. La parte encargada de la eliminación hace uso de herramientas estadísticas sencillas tales como la media y varianza.
+%TODO-CG: Detallarl estadística como herramientas sencillas. porque y para qué.
+	\\
+	\clearpage
+	\newpage
+	\subsection{Interfaz gráfica}\label{GUI}
+	Tanto para el usuario final como para la validación de los algoritmos en tiempo real se ha creado una interfaz (Ver figura \ref{fig:GUI_limpia}) que permite: visualización de la imagen, ajuste de una serie de parámetros y presentación visual de los elementos astronómicos detectados.\\
+	\begin{figure}[!htb]
+		\centering
+		\includegraphics[width=1\textwidth]{images/gui/general.png}
 		\caption{\label{fig:GUI_limpia}Interfáz gráfica}
 	\end{figure}
-	La parte central de la interfaz la ocupa la imagen, es posible aumentar, reducir y trasladar la imagen.
-	
-	Bajo esta, se encuentra el histograma de la imagen, junto con tres líneas que marcan la segmentación, concretamente la línea negra marca el valor de cielo oscuro, la línea verde marca el halo de galaxias o PSF de estrellas y la línea amarilla delimita el mínimo a partir del cual se considera estrellas. Esta información es la que usa el algoritmo de determinación para categorizar los elementos.\\
-	Las tres imágenes situadas bajo el histograma muestran un previo de las zonas de segmentación.\\	
-	Desde el menú superior, podemos cargar nuevas imágenes
+
+	La interfaz gráfica se compone de los siguientes elementos
+	\begin{itemize}
+		\item Menú superior:
+		\newline
+		\\Tiene por secciones File, Preview y Help.
+			\\File: las opciones que se permiten son la carga de imágenes, el guardado del proyecto y la conversión y guardado (si procede) de una imagen FITS (ver figuras  \ref{fig:menuFile} y \ref{fig:menuFileActive}).
+			\begin{figure}[!htb]
+				\centering
+				\includegraphics[width=0.3\textwidth]{images/gui/menuFileGhost.jpg}
+				\caption{\label{fig:menuFile}{\small Menu Superior con una imagen raster cargada, la opción Save Fits as PNG aparece desactivada.}}
+			\end{figure}
+			\begin{figure}[!htb]
+				\centering
+				\includegraphics[width=0.3\textwidth]{images/gui/menuFileUnGhost.jpg}
+				\caption{\label{fig:menuFileActive}{\small Si cargamos una imagen FITS se activa la opción de convertir y guardar en formato PNG.}}
+			\end{figure}
+			\newline
+			\\Preview: Contiene la opción Invert Image, que invierte la imagen mostrada, esta opción es útil para apreciar mejor (en algunos casos) las diferencias de color (ver \ref{fig:menuPreview}).
+			\begin{figure}[!htb]
+				\centering
+				\includegraphics[width=0.3\textwidth]{images/gui/menuPreview.jpg}
+				\caption{\label{fig:menuPreview}}
+			\end{figure}
+			\newline
+			\\Help: Sólo contiene una sección About en la que se informa de la versión del software y dónde descargarlo (ver figura \ref{fig:menHelp}).
+			\begin{figure}[!htb]
+				\centering
+				\includegraphics[width=0.3\textwidth]{images/gui/menuHelp.jpg}
+				\caption{\label{fig:menHelp}}
+			\end{figure}
+		\item Zona central:
+		\\Muestra el área central de procesado y tiene dos sub-secciones: la sección processing y la sección vector.\\
+		La sección Processing es el área principal de trabajo, se muestra la imagen astronómica en tratamiento, el histograma  y las sub-imágenes generadas (ver imagen \ref{fig:histSegImg}) en base a la imagen cargada.\\
+					\begin{figure}[!htb]
+						\centering
+						\includegraphics[width=0.7\textwidth]{images/gui/Histogram_segmentation.png}
+						\caption{\label{fig:histSegImg}{\small Histograma e imágenes segmentadas}}
+					\end{figure}
+		\\Contiene también herramientas de navegación (mover, aumentar y reducir la imagen), así como selectores de intensidad para modificar la segmentación de las imágenes (ver imagen \ref{fig:tools}).
+					\begin{figure}[!htb]
+						\centering
+						\includegraphics[width=0.05\textwidth]{images/gui/tools.png}
+						\caption{\label{fig:tools}{\small Herramientas de navegación y selectores de segmentación}}
+					\end{figure}
+		Cada pipeta se corresponde con una línea de color del histograma, siendo la primera pipeta en color negro, la que se encarga de manejar la línea de intensidad del espacio vacío, la pipeta de color verde la que maneja la línea de intensidad del halo y la pipeta amarilla la encargada de manejar la línea de intensidad pico relacionada con las estrellas.
+		\\
+		Al pulsar sobre cualquiera de las pipetas, el cursor cambiará, permitiendo sobre la imagen de trabajo pulsar en cualquier punto para modificar los valores del procesado.
+		\newline
+		\\
+		La sección Vector es el resultado del proceso, en ella se muestra sobre la imagen cargada y procesada, las estrellas y zonas de galaxias encontradas (ver figura \ref{fig:vector}).
+			\begin{figure}[!htb]
+				\centering
+				\includegraphics[width=0.7\textwidth]{images/gui/Vector.png}
+				\caption{\label{fig:vector}{\small Sección Vector: Resultado del procesado y catalogación.}}
+			\end{figure}
+		\item Elementos de información y control de equalización (ver figura \ref{fig:BarraDerecha}):
+		En la parte derecha de la ventana está presente el cuadro de información que contiene datos estadísticos de la imagen tales como su media y varianza, el número de estrellas o galaxias detectadas y la información del pixel sobre el que tenemos el puntero del ratón.
+		\\
+			\begin{figure}[!htb]
+				\centering
+				\includegraphics[width=0.2\textwidth]{images/gui/rightBar.png}
+				\caption{\label{fig:BarraDerecha}}
+			\end{figure}
+		En la sección inferior está el selector de ecualización, que nos permite ver cómo se transforma la imagen en función de la ecualización que apliquemos. Esta opción está unicamente disponible cuando el fichero fuente es FITS.
+		
+	\end{itemize}
+
 	%Conclusiones#########################################################
+	\newpage
 	\section{Conclusiones}
-	[Por hacer al finalizar el desarrollo]
+	%
+	El desarrollo de este trabajo ha resultado ser un medio de aprendizaje y
+	adquisición de nuevos conocimientos.\\
+	También ha sido una búsqueda de soluciones a los errores y problemas que se presentaban.\\ \\
+	Trabajar con OpenCV me ha hecho conocer una librería excelente, su wrapper de python sorprende por su sencillez y velocidad.\\ \\
+	EL uso de la bilioteca TkInter ha resultado ser muy flexible, permitiéndome un desarrollo rápido y usable con poco esfuerzo.\\
+	Se ha conseguido, partiendo de una idea muy ambiciosa, llegar a un prototipo que integra la mayoría de funcionalidades.
+	\\
+	\newline
 
 	\subsection{Cumplimiento de objetivos}
-	[Completar]
-	Se ha llegado a obtener un software funcional, con sus deficiencias pero que con una mayor dedicación en tiempo podría alcanzar los objetivos iniciales y presentar mejoras de la propuesta inicial por lo aprendido durante el desarrollo.\\
-	Cada una de las facetas propuestas inicialmente cumple su cometido.\\
-	Los motivos por los que no se han alcanzado los objetivos iniciales son:\\
+	El resultado del proyecto es un software funcional, rápido y manejable que cumple con los objetivos básicos planteados y en el que se deja la puerta abierta a mejoras y nuevas funcionalidades que quedaron descartadas debido a la complejidad que presentaban en función del tiempo con el que contaba.
+	\\Cada una de las metas propuestas inicialmente cumple su cometido.\\
+	Los problemas que se han presentado durante la realización han sido:\\
 	\begin{itemize}
 		\item Durante el desarrollo se han tenido que descartar propiedades tales como la clasificación detallada de la morfología de las galaxias, la complejidad es superior a la estimada incialmente, y para obtener un prototipo con las máximas funcionalidades, se han pospuesto.
 		\item Las peculiaridades de la imagen astronómica hacen difícil estimar ciertas características. Un ejemplo claro es el siguiente:\\
 			Las imágenes fuente pueden incluir, en el caso de pertenecer a alguna misión astronómica, zonas sobre-expuestas, esto es debido a que el aparato de captación fue configurado para obtener datos de un punto poco luminoso, haciendo que el resultado sea una imagen que contiene sobre-exposición en zonas más luminosa. Este es uno de los muchos inconvenientes con los que el software se encuentra a la hora de calibrar la imagen y obtener las lineas de intensidad sobre, datos con los que se realiza todo el proceso.
 	\end{itemize}
 	\subsection{Trabajo futuro}
-	El trabajo, aun siendo plenamente funcional presenta aspectos abiertos a mejoras.
+	Tal y como se ha comentado anteriormente, se ha dejado una puerta abierta a mejoras:
 	\begin{itemize} 
-	\item Los ajustes de histograma no funcionan correctamente en todos los casos, sería necesario aumentar el pre-análisis de los datos crudos para detectar cual sería el algoritmo más apropiado.
+%TODOCG: describir los ajustes heurísticos.
 	\item Los ajustes heurísticos requieren afinamiento, no se descarta tomar nuevas estrategias, por ejemplo en la obtención de los contornos de los candidatos a galaxias establecer una relación entre el área y el perímetro para de este modo detectar estructuras que presenten crestas o pliegues (ver en figura \ref{fig:MembraneNebulae}, página \pageref{fig:MembraneNebulae})
 		\begin{figure}[!htb]
 			\centering
 			\includegraphics[width=0.9\textwidth]{images/nebulaMembrana2.jpg}
-			\caption{\label{fig:MembraneNebulae}El comportamiento de los contornos presenta excesivos pliegues en la imagen de la derecha (tono azul) en comparación con el comportamiento de la imagen de la izquierda (tono violeta).El contorno de la derecha es un claro ejemplo de contorno erróneo.}
+			\caption{\label{fig:MembraneNebulae}{\small El comportamiento de los contornos presenta excesivos pliegues en la imagen de la derecha (tono azul) en comparación con el comportamiento de la imagen de la izquierda (tono violeta).El contorno de la derecha es un claro ejemplo de contorno erróneo.}}
 		\end{figure}
-	\item Optimizar, el codigo puede ser mucho más óptimo. Un claro ejemplo es la detección de estrellas y galaxias que se pueden unificar en una única función, o la gestión de las imágenes internas, en algunos (thumbnails) casos se duplican innecesariamente imágenes.
+	\item Mejoras de optimización. Un claro ejemplo es la detección de estrellas y galaxias que se pueden unificar en una única función, o la gestión de las imágenes internas que en algunos (thumbnails) casos se duplican innecesariamente ocupando temporalmente memoria.
+	\item Añadir la funcionalidad de clasificación acorde a la secuencia de Hubble (ver figura \ref{fig:EsquemaHubble}), para ello, todo el proceso previo ha de ser óptimo en sus resultados.
+				\begin{figure}[!htb]
+					\centering
+					\includegraphics[width=0.5\textwidth]{images/EsquemaHubble.jpg}
+					\caption{\label{fig:EsquemaHubble}{\small Secuencia del doctor Hubble para la clasificación de galaxias.}}
+				\end{figure}
+	\item Otro punto interesante podría ser la creación de un método que detecte los destellos de lente o lens flare (ver figura \ref{fig:lensflare}), ya que nuestro algoritmo los puede interpretar como galaxias, por su halo en determinados casos.
+			\begin{figure}[!htb]
+				\centering
+				\includegraphics[width=0.3\textwidth]{images/HubbleProximaCentauri_LENSFLARE}
+				\caption{\label{fig:lensflare}Lens flare en una captura producida pro el telescopio Hubble de Proxima Centaury. Imagen cortesía de  ESA/Hubble NASA.}
+			\end{figure}
 	\end{itemize} 
 	
 	%Agradecimientos#######################################################
 	\newpage
 	\section{Agradecimientos}
 	
-	Quiero agradecer a Carlos Gregorio Rodríguez la oportunidad de realizar este trabajo fin de grado, agradecer de forma especial la ayuda y guía que me ha brindado en todo momento así como el apoyo en la búsqueda de soluciones y la adquisición de nuevos conocimientos.\\ 
-	\\ A Miguel Angel Valero Espada por darme un enfoque distinto de lo que es el campo de la programación.\\
-	\\ Ana Inés Gomez de Castro por sus enseñanzas en Astronomía.\\
-	\\ Muy especialmente a Rocío por animarme en todo momento y a mi familia por su apoyo.\\
-	\\ Sin estos apoyos no hubiese sido posible completar este trabajo.
+	Quiero agradecer a Carlos Gregorio Rodríguez la oportunidad de realizar este trabajo fin de grado, la ayuda y guía que me ha brindado en todo momento y su apoyo en la búsqueda de soluciones y la adquisición de nuevos conocimientos.\\ 
+	\\ A Miguel Angel Valero Espada por darme un enfoque distinto de lo que es el campo de la programación. Ana Inés Gomez de Castro por sus enseñanzas en Astronomía.\\
+	\\ Muy especialmente a Rocío por animarme en todo momento y estar siempre a mi lado, así como a mi familia por su apoyo.\\
+	\\ Sin todos ellos me hubiese resultado muy difícil el desarrollo del proyecto.
 	\\
-	\\Éste trabajo está dedicado especialmente a mi Yaya Mercedes y a mi Yeyo Modesto, por todos los valores que me supieron transmitir.
+	\\Éste trabajo está dedicado especialmente a mi yeyos Mercedes y Modesto por todos los valores que desde bien pequeño me supieron transmitir.
 	\newpage
 %Referencias bibiográficas#############################################
-	\section{Referencias bibiográficas}
-	Listado in formato bibliografico, cambiar.
-	\begin{itemize}
-		\item Improved background subtraction for the Sloan Digital Sky Survey images Michael R. Blanton et all. http://arxiv.org/pdf/1105.1960.pdf
-		\item openCV documentation: http://docs.opencv.org/
-		\item Visión por computador Gonzalo Pajares, Jesús M. de la Cruz
-		\item ...
-	\end{itemize}
+	%\section{Referencias bibiográficas}
+	%Se han usado tanto Pappers académicos de distintos ámbitos, publicaciones y documentación %de las librerías usadas.\\
+
 	\begin{thebibliography}{1}
+%
+%@article{einstein,
+%	author =       "Albert Einstein",
+%	title =        "{Zur Elektrodynamik bewegter K{\"o}rper}. ({German})
+%	[{On} the electrodynamics of moving bodies]",
+%	journal =      "Annalen der Physik",
+%	volume =       "322",
+%	number =       "10",
+%	pages =        "891--921",
+%	year =         "1905",
+%	DOI =          "http://dx.doi.org/10.1002/andp.19053221004"
+%}
+		\bibitem{NASADISKHALO}\textsc{Barnes, Joshua E.} \\
+		\textit{Encounters of disk/halo galaxies}
+		\textit{Astrophysical Journal, Part 1 (ISSN 0004-637X), vol. 331, Aug. 15, 1988, p. 699-717.}
+		\\ 08/1988
+		\\http://articles.adsabs.harvard.edu//full/1988ApJ...331..699B/0000699.000.html
+		
+  		\bibitem{OpenCV}\textsc{Willow Garage et all.} \\
+  		\textit{OpenCV: Open Source Computer Vision. Documentación oficial.}
+  		\\http://docs.opencv.org/
+		\\Intel's research center in Nizhny Novgorod
+  		\\2.000 (v:1.0) - 2015 (v:3.0)
+
+  		\bibitem{PajaresCruzUCM}\textsc{Gonzalo Pajares, Jesús M. de la Cruz} \\
+  		\textit{Visión por computador: Imágenes digitales y aplicaciones}
+  		\\ISBM: 84-7897-472-5.
+  		\\RA-MA Editorial.
+  		\\2.001
+
+  		\bibitem{AstroData}\textsc{Jean-Luc Starck, Fionn Murtagh} \\
+  		\textit{Astronomical image and Data Analysis. (Second edition)}
+  		\\ISBM: 3-540-42885-2
+  		\\Springer-Verlag Berlin Heidelber.
+  		\\2.006
+
 	  	
-	  	\bibitem{notes} John W. Dower {\em Readings compiled for History
-	  		21.479.}  1991.
+	  	\bibitem{SSDImgPro}\textsc{Robert Lupton.} \\
+	  	\textit{SDSS Image Processing I: The Deblender.}
+	  	\\http://www.astro.princeton.edu/~rhl/photomisc/deblender.pdf
+		\\Princeton University Observatory
+	  	\\2.001
 	  	
-	  	\bibitem{impj}  The Japan Reader {\em Imperial Japan 1800-1945} 1973:
-	  	Random House, N.Y.
+	  	\bibitem{AliDeconv}\textsc{Ali Mosleh, J.M. Pierre Langlois, Paul Green2} \\
+	  	\textit{Image Deconvolution Ringing Artifact Detection and Removal via PSF Frequency Analysis.}
+	  	\\http://www.groupes.polymtl.ca/amosleh/papers/ECCV14.pdf
+	  	\\Polytechnique Montréal
+	  	\\2.014
+	  		  		
+  		\bibitem{NasaFITS}\textsc{NASA/GSFC} \\
+  		\textit{The FITS Support Office - Documentación oficial formato FITS.}
+  		\\http://fits.gsfc.nasa.gov/
+	  	  		
+	  	\bibitem{JeanPierreElliptical}\textsc{ Jean-Pierre Jesse, Victor-Valeriu Patriciu et al.} \\
+	  	\textit{Detection and Identification of Elliptical Structure Arrangements in Images : Theory and Algorithms.}
+	  	\\http://ethesis.inp-toulouse.fr/archive/00001847/01/Patraucean.pdf
+	  	\\Institut National Polytechnique de Toulouse
+	  	\\2.012
 	  	
-	  	\bibitem{norman} E. H. Norman {\em Japan's emergence as a modern
-	  		state} 1940: International Secretariat, Institute of Pacific
-	  	Relations.
+	  	\bibitem{BlantonSubstraction}\textsc{Michael R. Blanton et all.} \\
+	  	\textit{Improved background subtraction for the Sloan Digital Sky Survey images.}
+	  	\\http://arxiv.org/pdf/1105.1960.pdf 
+	  	\\2.011
+	  		  	
+
+	  	\bibitem{stellarOutcast}\textsc{ David A. Aguilar, Christine PulliamPublic } \\
+	  	\textit{First Stellar Outcast Discovered by Astronomers}
+	  	\\https://www.cfa.harvard.edu/news/2005-05
+	  	\\Harvard-Smithsonian Center for Astrophysics
+	  	\\2.005
 	  	
-	  	\bibitem{fo} Bob Tadashi Wakabayashi {\em Anti-Foreignism and Western
-	  		Learning in Early-Modern Japan} 1986: Harvard University Press.
-	  	
+	  	\bibitem{BrainThreshold}\textsc{ Harvard-Smithsonian Center for Astrophysics (CfA) } 
+	  	\textit{Brain Tumor Detection Using Histogram Thresholding to Get the Threshold point.}
+	  	\\http://www.iosrjournals.org/iosr-jeee/Papers/Vol9-issue5/Version-3/D09531419.pdf
+	  	\\https://www.cfa.harvard.edu/news/2005-05
+	  	\\2.005
 	\end{thebibliography}
 \end{document}
