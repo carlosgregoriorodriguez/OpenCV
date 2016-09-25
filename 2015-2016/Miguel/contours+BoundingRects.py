@@ -3,7 +3,7 @@ from astropy.io import fits
 import cv2
 import numpy as np
 
-fitsFile="../TFG/frame-i-002830-6-0398.fits"
+fitsFile="../examples/Filters/frame-i-002830-6-0398.fits"
 hdulist = fits.open(fitsFile)
 img = hdulist[0].data
 
@@ -30,8 +30,6 @@ for cnt in contours:
 	cv2.rectangle(binary,(x,y),(x+w,y+h),(0,0,0),1) #Este método dibuja los rectángulos que ajustan los contornos en la imagen binary
 cv2.imshow("Contours with bounding rectangles",binary)
 cv2.waitKey()
-cv2.imwrite("img3.png",255*binary)
 cropped=binary[Y:Y+H,X:X+W]
 cv2.imshow('crop',255*cropped)
-cv2.imwrite("img3Rect.png", 255*cropped)
 cv2.waitKey()

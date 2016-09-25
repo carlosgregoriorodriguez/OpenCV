@@ -6,14 +6,14 @@ import cv2
 import sys
 import numpy as np
 
-fitsFileI="../TFG/frame-i-004264-4-0259.fits" #m81 http://mirror.sdss3.org/fields/name?name=m81
-fitsFileI2="../TFG/frame-i-003804-6-0084.fits" #m66 http://mirror.sdss3.org/fields/name?name=m66
-fitsFileI3='../TFG/frame-i-004381-2-0120.fits' #m91 http://mirror.sdss3.org/fields/name?name=m91
-fitsFileI4='../TFG/frame-i-002830-6-0398.fits' #m109 http://mirror.sdss3.org/fields/name?name=m109
-fitsFileI5='../TFG/frame-i-003805-2-0023.fits' #m59 http://mirror.sdss3.org/fields/name?name=m59
-fitsFileI6='../TFG/frame-i-008112-2-0074.fits' #m33 http://mirror.sdss3.org/fields/name?name=m33
-fitsFileI7='../TFG/frame-i-007845-2-0104.fits' #m74 http://mirror.sdss3.org/fields/name?name=m74
-fitsFileI8='../TFG/frame-i-003836-4-0084.fits' #m95 http://mirror.sdss3.org/fields/name?name=m95
+fitsFileI="../examples/Filters/frame-i-004264-4-0259.fits" #m81 http://mirror.sdss3.org/fields/name?name=m81
+fitsFileI2="../examples/Filters/frame-i-003804-6-0084.fits" #m66 http://mirror.sdss3.org/fields/name?name=m66
+fitsFileI3='../examples/Filters/frame-i-004381-2-0120.fits' #m91 http://mirror.sdss3.org/fields/name?name=m91
+fitsFileI4='../examples/Filters/frame-i-002830-6-0398.fits' #m109 http://mirror.sdss3.org/fields/name?name=m109
+fitsFileI5='../examples/Filters/frame-i-003805-2-0023.fits' #m59 http://mirror.sdss3.org/fields/name?name=m59
+fitsFileI6='../examples/Filters/frame-i-008112-2-0074.fits' #m33 http://mirror.sdss3.org/fields/name?name=m33
+fitsFileI7='../examples/Filters/frame-i-007845-2-0104.fits' #m74 http://mirror.sdss3.org/fields/name?name=m74
+fitsFileI8='../examples/Filters/frame-i-003836-4-0084.fits' #m95 http://mirror.sdss3.org/fields/name?name=m95
 dataset={'i':fitsFileI,'i2':fitsFileI2,'i3':fitsFileI3,'i4':fitsFileI4,'i5':fitsFileI5,'i6':fitsFileI6,'i7':fitsFileI7,'i8':fitsFileI8}
 
 data = fits.getdata(dataset[sys.argv[1]])

@@ -3,7 +3,7 @@ from astropy.io import fits
 import cv2
 import numpy as np
 
-fitsFile="../TFG/frame-i-002830-6-0398.fits"
+fitsFile="../examples/Filters/frame-i-002830-6-0398.fits"
 hdulist = fits.open(fitsFile)
 img = hdulist[0].data
 
@@ -43,5 +43,4 @@ im_with_keypoints = cv2.drawKeypoints(im, keypoints, np.array([]), (0,0,255), cv
  
 cv2.namedWindow("Keypoints",cv2.WINDOW_NORMAL)
 cv2.imshow("Keypoints", im_with_keypoints)
-cv2.imwrite('BLOBTEST.png', im_with_keypoints)
 cv2.waitKey(0)

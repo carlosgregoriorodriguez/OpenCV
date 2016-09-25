@@ -2,7 +2,7 @@ from astropy.io import fits
 import cv2
 import numpy as np
 
-fitsFile="../TFG/frame-i-002830-6-0398.fits"
+fitsFile="../examples/Filters/frame-i-002830-6-0398.fits"
 hdulist = fits.open(fitsFile)
 img = hdulist[0].data
 

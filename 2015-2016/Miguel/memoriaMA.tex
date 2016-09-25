@@ -83,6 +83,7 @@ Este trabajo tenía la tarea radical de servirme de una primera aproximación a 
 \\
 Aunque en el camino se ha ido variando el rumbo del proyecto en multitud de ocasiones, finalmente decidí centrarlo en la detección semi-automática de galaxias tomando como input un fichero FITS\footnote{Ver la sección \ref{sec:FITS}} para una posterior clasificación en un trabajo futuro. El resultado del procesado es la detección de las estructuras candidatas a galaxias a través de sus contornos y la identificación de los objetos más brillantes de la imagen, con el fin de simplificar un trabajo posterior de discriminación de objetos no candidatos a galaxias.
 
+Así pues, mi objetivo era ser capaz de, partiendo de imágenes obtenidas de un telescopio cualquiera, usar OpenCV para crear las herramientas de procesado de imágenes necesarias para conseguir realizar un estudio completo de los objetos que contuviera, centrándome en galaxias y estrellas muy luminosas. Para ello había de ser capaz de encontrar una fuente de ficheros con imágenes astronómicas, a poder ser de acceso libre, y aprender a preparar las imágenes para el procesado. También necesitaba conocer qué métodos de procesado ofrece OpenCV y en qué consiste cada uno, al igual que comprobar cuál era el resultado de aplicarlos a mis imágenes de partida para decidir qué me convenía más usar. Después, necesité ser capaz de extraer la información que me interesaba de las imágenes, al igual que saber qué me podía esperar encontrar en las imágenes según qué tecnica aplicara y qué técnicas se han usado hasta la fecha para tales fines. En este punto decidí centrar mis objetivos documentándome con trabajos publicados\cite{jbraz,liu, luc, devendra, achgill}, una vez conocidas las características de las imágenes con las que iba a trabajar\cite{path, telescopes}.
 \section{Librerías usadas}
 
 En esta sección se informa brevemente de las herramientas que he utilizado a lo largo del proyecto, tanto los tipos de ficheros (FITS), como las librerías usadas (Astropy, OpenCV, Numpy, Matplotlib).
@@ -170,9 +171,9 @@ Tomando la imagen resultado de aplicar este filtro a la imagen leída de los arc
 
 Me encontré con que, junto con la aplicación del filtro que creé, las técnicas de segmentación de las que provee OpenCV eran suficiente para eliminar gran cantidad del ruido existente en las imágenes. Esto me es de gran utilidad en el proceso de la detección de galaxias porque reduce enormemente la cantidad de información no útil para este propósito, como las regiones vacías o en las que los objetos luminosos no aparecen agrupados de forma ordenada.
 
-En concreto uso el método de \textit{thresholding}, que es una técnica de segmentación que consiste en una identificación de los valores de la imagen a través de una relación de equivalencia dada. En términos de Teoría de Conjuntos esto equivale a la construcción del espacio cociente del conjunto de píxeles por medio de la relación de equivalencia que dicte el método, y en el que a los píxeles relacionados se les asignará el mismo valor en el espacio cociente resultante.
+En concreto uso el método de thresholding, que es una técnica de segmentación que consiste en una identificación de los valores de la imagen a través de una relación de equivalencia dada. En términos de Teoría de Conjuntos esto equivale a la construcción del espacio cociente del conjunto de píxeles por medio de la relación de equivalencia que dicte el método, y en el que a los píxeles relacionados se les asignará el mismo valor en el espacio cociente resultante.
 
-Tales relaciones son, en el caso de segmentación por \textit{thresholding}\cite{threshold}, de comparación con un umbral dado. OpenCV ofrece cinco tipos de segmentación usando este método (ver \ref{sec:thresh}).
+Tales relaciones son, en el caso de segmentación por thresholding\cite{threshold}, de comparación con un umbral dado. OpenCV ofrece cinco tipos de segmentación a través de su función \textbf{threshold} (ver \ref{sec:thresh}).
 
 El que me daba mejores resultados y decidí usar es el binario invertido.
 
@@ -193,7 +194,7 @@ Como se puede observar, gran parte del granulado de la imagen original ha desapa
 A fin de conseguir que esta detección fuera automática, introduje el estudio de \textit{contornos} en la imágenes obtenidas, lo que lleva a la siguiente etapa del procesado.
 
 \subsubsection{Detección de las galaxias a través de sus contornos}
-Con el fin de identificar y aislar las regiones oscuras que aparecen aplicando \textit{thresholding}, incorporo el uso del método de OpenCV que detecta contornos, \textbf{findContours}\cite{findcontours}. Esta función toma como input una imagen de 8 bits, un modo y un método y devuelve la lista de contornos. Como modo utilizo el que devuelve los contornos en una estructura anidada (\textbf{RETR\_TREE}), y como método de aproximación de los contornos, uso el que comprime los segmentos para almacenar solo sus extremos (\textbf{CHAIN\_APPROX\_SIMPLE}). El objetivo es usar el método de OpenCV que determina el rectángulo que se ajusta a cada contorno, y entre todos esos rectángulos quedarse con el de mayor área, que es el que contiene al contorno candidato a estructura de interés. Para esto hago uso del método \textbf{boundingRect}\cite{boundingrect}, que dado un contorno, devuelve cuatro parámetros que corresponden a las dos coordenadas del vértice superior izquierdo, la base y la altura del rectángulo horizontal que ajusta al contorno.
+Con el fin de identificar y aislar las regiones oscuras que aparecen aplicando thresholding, incorporo el uso del método de OpenCV que detecta contornos, \textbf{findContours}\cite{findcontours}. Esta función toma como input una imagen de 8 bits, un modo y un método y devuelve la lista de contornos. Como modo utilizo el que devuelve los contornos en una estructura anidada (\textbf{RETR\_TREE}), y como método de aproximación de los contornos, uso el que comprime los segmentos para almacenar solo sus extremos (\textbf{CHAIN\_APPROX\_SIMPLE}). El objetivo es usar el método de OpenCV que determina el rectángulo que se ajusta a cada contorno, y entre todos esos rectángulos quedarse con el de mayor área, que es el que contiene al contorno candidato a estructura de interés. Para esto hago uso del método \textbf{boundingRect}\cite{boundingrect}, que dado un contorno, devuelve cuatro parámetros que corresponden a las dos coordenadas del vértice superior izquierdo, la base y la altura del rectángulo horizontal que ajusta al contorno.
 
 
 El siguiente script muestra su uso:
@@ -223,11 +224,11 @@ La figura \ref{fig:img3Rect} muestra el resultado de recortar la imagen \ref{fig
 \subsection{Detección de candidatos a estrellas}
 Con el fin de identificar todas las posibles galaxias presentes en la imagen, surge la necesidad de determinar cuándo una región luminosa se corresponde con una estrella y cuándo con una galaxia, pues ambos objetos pueden presentar tamaños y formas similares.
 
-A diferencia de la discretización anterior, me centro ahora en la identificación de los objetos que por su luminosidad se destacan sobre su alrededor. Para ello hago un uso combinado del filtro customizado y función de \textit{thresholding} antes mencionados, y lo combino con la función \textbf{morphology}\cite{morphologyex} de OpenCV, que proporciona herramientas para el uso de transformaciones morfológicas.
+A diferencia de la discretización anterior, me centro ahora en la identificación de los objetos que por su luminosidad se destacan sobre su alrededor. Para ello hago un uso combinado del filtro customizado y función \textbf{threshold} antes mencionados, y lo combino con la función \textbf{morphologyex}\cite{morphologyex} de OpenCV, que proporciona herramientas para el uso de transformaciones morfológicas.
 
 Una transformación morfológica es básicamente una operación que provee de información sobre la estructura de una imagen por medio de la aplicación de un elemento estructurador. Generalmente consistirá en la convolución de la imagen de partida con un kernel. La naturaleza de este kernel será lo que determine la imagen resultado.
 
-Las transformaciones implementadas disponibles en \textbf{morphology} se basan en dos operaciones básicas: la \textit{dilatación} y la \textit{erosión}. En ambos casos se convoluciona con un kernel que generalmente tiene forma rectangular o circular y a cada píxel se le asigna un nuevo valor dependiendo de los valores de los píxeles que lo rodeen . En el caso de la dilatación se toma el máximo valor de los píxeles del entorno definido por el kernel, y en el caso de la erosión el mínimo. Cuando la imagen es binaria estos valores se corresponden con 1 y 0 respectivamente.
+Las transformaciones implementadas disponibles en \textbf{morphologyex} se basan en dos operaciones básicas: la \textit{dilatación} y la \textit{erosión}. En ambos casos se convoluciona con un kernel que generalmente tiene forma rectangular o circular y a cada píxel se le asigna un nuevo valor dependiendo de los valores de los píxeles que lo rodeen . En el caso de la dilatación se toma el máximo valor de los píxeles del entorno definido por el kernel, y en el caso de la erosión el mínimo. Cuando la imagen es binaria estos valores se corresponden con 1 y 0 respectivamente.
 
 Combinando estas dos transformaciones, OpenCV provee de varias operaciones de segmentación (ver el apéndice \ref{sec:morph}).
 A través de la experimentación encontré que la operación cierre conseguía descartar la mayor cantidad de ruido de la mayoría de las imágenes, salvo en algunos casos, en los que por la naturaleza de las imágenes los procedimientos aquí usados dan resultados erróneos (véase sección \ref{sec:Problemas}.
@@ -288,7 +289,7 @@ En resumen, se han definido métodos para, partiendo de una imagen de un fichero
 \subsection{Detalle de las opciones de thresholding y morphology}
 \subsubsection{Thresholding}
 \label{sec:thresh}
-Los cinco tipo de segmentación aplicables en el método \textbf{thresholding} son:
+Los cinco tipo de segmentación aplicables en el método \textbf{threshold} son:
 \begin{itemize}
 \item \textbf{Binario:} Fijado un umbral, si el valor de un píxel excede ese umbral, se le asigna un valor fijado como máximo; si no, se le asignará 0.
 \item \textbf{Binario invertido:} Análogo al anterior, pero con las condiciones invertidas.
@@ -406,7 +407,7 @@ En el script 3dExample.py se muestra un primer acercamiento a la clasificación 
 \renewcommand\refname{Bibliografía y referencias}
 \bibliographystyle{unsrt}
 \bibliography{biblio}
-%\nocite{*}
+\nocite{*}
 %\listoffigures
 %\listoftables
 

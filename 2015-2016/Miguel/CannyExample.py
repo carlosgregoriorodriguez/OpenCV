@@ -3,7 +3,7 @@ import sys
 
 def nada(x):
     pass
-img = cv2.imread(sys.argv[1], 0)
+img = cv2.imread("1.png", 0)
 
 
 cv2.namedWindow('canny',cv2.WINDOW_NORMAL)
