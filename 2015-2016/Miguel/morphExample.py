@@ -14,8 +14,9 @@ fitsFileI5='../examples/Filters/frame-i-003805-2-0023.fits' #m59 http://mirror.s
 fitsFileI6='../examples/Filters/frame-i-008112-2-0074.fits' #m33 http://mirror.sdss3.org/fields/name?name=m33
 fitsFileI7='../examples/Filters/frame-i-007845-2-0104.fits' #m74 http://mirror.sdss3.org/fields/name?name=m74
 fitsFileI8='../examples/Filters/frame-i-003836-4-0084.fits' #m95 http://mirror.sdss3.org/fields/name?name=m95
-data= fits.getdata(fitsFileI)
-hdu_list = fits.open(fitsFileI)
+dataset={'i':fitsFileI,'i2':fitsFileI2,'i3':fitsFileI3,'i4':fitsFileI4,'i5':fitsFileI5,'i6':fitsFileI6,'i7':fitsFileI7,'i8':fitsFileI8}
+
+hdu_list = fits.open(dataset[sys.argv[1]])
 img = hdu_list[0].data
 Min=np.amin(img)
 Max=np.amax(img)
