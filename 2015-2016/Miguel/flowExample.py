@@ -19,69 +19,32 @@ fitsFileI8='../examples/Filters/frame-i-003836-4-0084.fits' #m95 http://mirror.s
 dataset={'i':fitsFileI,'i2':fitsFileI2,'i3':fitsFileI3,'i4':fitsFileI4,'i5':fitsFileI5,'i6':fitsFileI6,'i7':fitsFileI7,'i8':fitsFileI8}
 
 
-if len(sys.argv)==2:
-	data = fits.getdata(dataset[sys.argv[1]])
-	#print header
-	hdu_list = fits.open(dataset[sys.argv[1]])
-	#hdu_list.info()
-	img = hdu_list[0].data
-	Min=np.amin(img)
-	Max=np.amax(img)
-	img = 255*(img+abs(Min))/Max
-#else:
-#	img=255*cv2.imread(dataset[sys.argv[1]],0)
-
-print img.shape,type(img),np.amax(img),np.amin(img)
-
-#cv2.namedWindow("img", cv2.WINDOW_NORMAL)
-#cv2.imshow('img',img)
-
-#plt.imshow(img,cmap='spectral', norm=LogNorm(), origin='lower')
-#plt.show()
+hdu_list = fits.open(dataset[sys.argv[1]])
+img = hdu_list[0].data
+Min=np.amin(img)
+Max=np.amax(img)
+img = 255*(img+abs(Min))/Max
 
 
 imgBlur = cv2.blur(img,(3,3))
-print "BLUR: ",imgBlur.shape,type(imgBlur),np.amax(imgBlur),np.amin(imgBlur)
-#cv2.namedWindow("imgBlur", cv2.WINDOW_NORMAL)
-#cv2.imshow('imgBlur',imgBlur)
 
 
 imgFiltered=cv2.filter2D(img,-1,np.array([[0,1,0],[1,0,1],[0,1,0]]))
-print "CUSTOM FILTER: ",imgFiltered.shape,type(imgFiltered),np.amax(imgFiltered),np.amin(imgFiltered)
-#cv2.namedWindow("imgFiltered", cv2.WINDOW_NORMAL)
-#cv2.imshow('imgFiltered',imgFiltered)
 
 
 imgGB=cv2.GaussianBlur(img,(3,3),1)
-print "G. BLUR: ",imgGB.shape,type(imgGB),np.amax(imgGB),np.amin(imgGB)
-#cv2.namedWindow("imgGB", cv2.WINDOW_NORMAL)
-#cv2.imshow('imgGB',imgGB)
 
 
 imgM=cv2.morphologyEx(img, cv2.MORPH_GRADIENT,(3,3))
-print "MORPH:", imgM.shape,type(imgM),np.amax(imgM),np.amin(imgM)
-#cv2.namedWindow("imgM", cv2.WINDOW_NORMAL)
-#cv2.imshow('imgM',imgM)
-
 
 imgL=cv2.Laplacian(img,-1)
-print "LAPLACIAN:",imgL.shape,type(imgL),np.amax(imgL),np.amin(imgL)
-#cv2.namedWindow("imgL", cv2.WINDOW_NORMAL)
-#cv2.imshow('imgL',imgL)
 
 
 imgS=cv2.Sobel(img,-1,3,2,ksize=5)
-print "SOBEL:", imgS.shape,type(imgS),np.amax(imgS),np.amin(imgS)
-#cv2.namedWindow("imgS", cv2.WINDOW_NORMAL)
-#cv2.imshow('imgS',imgS)
 
 
 
 imgH=cv2.cornerHarris(img,3,3,0.0005)
-print "HARRIS: ",imgH.shape,type(imgH),np.amax(imgH),np.amin(imgH)
-
-
-
 
 
 def nada3(t):
