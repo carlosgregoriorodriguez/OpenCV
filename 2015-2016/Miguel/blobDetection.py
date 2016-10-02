@@ -15,6 +15,9 @@ _,imgBase=cv2.threshold(imgFiltered, cv2.THRESH_OTSU, 0, cv2.THRESH_TOZERO_INV)
 
 imgProcessed=cv2.morphologyEx(imgBase, cv2.MORPH_CLOSE, (3,3),iterations=5)
 
+cv2.namedWindow("Base image",cv2.WINDOW_NORMAL)
+cv2.imshow("Base image", imgProcessed)
+cv2.waitKey(0)
 #cv2.imwrite("img4.png",imgProcessed)
 
 
