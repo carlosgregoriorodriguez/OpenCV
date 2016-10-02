@@ -3,9 +3,14 @@ import sys
 
 def nada(x):
     pass
-img = cv2.imread("1.png", 0)
+    
+dataset={'i':"1.png",'i2':"2.png",'i3':"3.png",'i4':"4.png",'i5':"5.png",'i6':"6.png",'i7':"7.png",'i8':"8.png"}
 
 
+img = cv2.imread(dataset[sys.argv[1]], 0)
+
+
+cv2.namedWindow('original',cv2.WINDOW_NORMAL)
 cv2.namedWindow('canny',cv2.WINDOW_NORMAL)
 
 switch = '0 : OFF \n1 : ON'
